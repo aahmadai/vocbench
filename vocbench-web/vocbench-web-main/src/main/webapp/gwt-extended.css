@@ -1,0 +1,461 @@
+.gwt-Button {
+  font-size: 11px;
+}
+.gwt-TextBox {
+  border: 1px solid #CCC; 
+  text-align: left;
+  background: #fafafa; 
+  font-size: 11px; 
+  font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
+}
+.gwt-SuggestBox {
+  border: 1px solid #CCCCCC;
+  padding: 2px;
+  text-align: left;
+  font-size: 11px;
+  font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
+  background: #fafafa;
+}
+.gwt-SuggestBoxPopup {
+  margin-left: 5px;  
+}
+.gwt-SuggestBoxPopup .item {
+  padding: 2px 6px;
+  color: #424242;
+  cursor: default;
+  font-size: 11px;
+}
+.gwt-SuggestBoxPopup .item-selected {
+  background: #D7D7D7;
+}
+.gwt-SuggestBoxPopup .suggestPopupContent {
+  background: white;
+}
+/* --- Dialog --- */
+.gwt-DialogBox .Caption { 
+  display: block;
+  overflow: visible;
+  zoom: 1;
+  background: #949494 url(images/ie6/dialog_topmiddle.png) repeat-x;
+  cursor: move;
+  border-top: 5px solid #969696;
+  border-bottom: 0px solid #969696;
+  color: #FFF;
+  font-weight: bold;
+  font-family: Arial, sans-serif , Tahoma , Trebuchet MS;
+  font-size: 12px;
+  vertical-align: middle;
+}
+.gwt-DialogBox .dialogMiddleCenter {
+  padding: 0px;
+  background: white;
+}
+html>body .gwt-DialogBox .dialogTopLeft {
+  background: url(images/ie6/corner_dialog_topleft_2.png) no-repeat 0px 0px;
+}
+html>body .gwt-DialogBox .dialogTopRight {
+  background: url(images/ie6/corner_dialog_topright_2.png) no-repeat 0px 0px;
+}
+html>body .gwt-DialogBox .dialogBottomLeft {
+  background: url(images/corner.png) no-repeat 0px -15px;
+}
+html>body .gwt-DialogBox .dialogBottomRight {
+  background: url(images/corner.png) no-repeat -5px -15px;
+}
+* html .gwt-DialogBox .dialogTopLeft {
+  width: 5px;
+  overflow: hidden;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/ie6/corner_dialog_topleft_2.png',sizingMethod='crop');
+}
+* html .gwt-DialogBox .dialogTopRight {
+  width: 8px;
+  overflow: hidden;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/ie6/corner_dialog_topright_2.png',sizingMethod='crop');
+}
+/* --------------- */
+.gwt-ListBox {
+  border: 1px solid #CCCCCC;
+  text-align: left; 
+  font-size: 11px ;
+  background: #fafafa;
+}
+.gwt-Tree .gwt-TreeItem {
+  padding: 0px;
+}
+.gwt-TextArea {
+  padding: 2px;
+  font-size: 11px;
+  font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
+  border: 1px solid #CCC;
+  text-align: left;
+  background: #fafafa;
+}
+.gwt-MenuBar .gwt-MenuItem {
+  cursor: hand;
+  cursor: pointer;  
+  text-decoration: none;
+  font-size: 11px;
+  background: transparent;
+  padding: 4px 8px 4px 4px;
+}
+.gwt-MenuBar .gwt-MenuItem-selected {
+  background: transparent;
+  color: #000;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+.gwt-MenuBar td.gwt-MenuItem-selected:hover{
+	-webkit-animation-name: anim1;
+	-webkit-animation-duration: 0.3s;	
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-timing-function: linear;
+	-webkit-box-shadow: inset 1px 1px 4px #888;
+	
+	-moz-animation-name: anim1;
+	-moz-animation-duration: 0.3s;	
+	-moz-animation-iteration-count: 1;
+	-moz-animation-timing-function: linear;
+	-moz-box-shadow: inset 1px 1px 4px #888;	
+	background-color: #B7B7B7;
+}
+.gwt-MenuBar-horizontal {
+  background: transparent;
+  border: 0px solid #FFFFFF;
+}
+.gwt-MenuBar-horizontal .gwt-MenuItem {
+  font-weight: normal;
+  padding: 1px 4px;
+}
+.gwt-MenuBar-horizontal .gwt-MenuItemSeparator {   
+  border-left: 1px solid #888888;
+  background: white;
+}
+.gwt-MenuBar-vertical .subMenuIcon-selected {
+  background: #E0EDFE;
+}
+.gwt-PasswordTextBox {
+  border: 1px solid #CCC;  
+  text-align: left;
+  font-size: 11px;
+  background: #fafafa;
+}
+.gwt-DecoratedTabBar .tabMiddleCenter {
+  font-weight: normal;
+  color: #000;
+}
+.gwt-DecoratedTabBar .gwt-TabBarItem-selected .tabMiddleCenter {
+  color: #FFF;
+}
+/* ----------- ScrollTable ----------------------------------- */
+.gwt-NoBorder {
+  
+}
+
+.gwt-ScrollTable .dataTable td.highlighted {
+ background-color: #F4F4F4;
+ }
+
+.gwt-ScrollTable-NoLink {
+  font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
+  font-size: 11px;
+  cursor: pointer;
+  vertical-align: top;
+}
+
+.gwt-ScrollTable {
+  border-color: #D1D1D1;
+  border-style: solid;
+  border-width: 1px 1px 1px 1px;
+}
+
+.gwt-ScrollTable .headerWrapper {
+  background: #F4F4F4 url('images/bg_grey2.gif') repeat-x;
+  font-weight: bold;
+  color: #000000;
+}
+
+.gwt-ScrollTable .footerWrapper {
+  border-top: 1px solid #aaa;
+  background: #F4F4F4 url('images/bg_grey2.gif') repeat-x bottom left;
+}
+
+.gwt-ScrollTable .dataTable td,.gwt-ScrollTable .headerTable td,.gwt-ScrollTable .footerTable td
+  {
+  border-color: #D1D1D1;
+  border-style: solid;
+  border-width: 0px 1px 1px 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  /*padding: 3px;*/
+}
+
+.gwt-ScrollTable .headerTable td {
+  font-weight: bold;
+}
+
+.gwt-ScrollTable .headerTable td,.gwt-ScrollTable .footerTable td {
+  color: #666666;
+  font-size: 11px;
+}
+
+.gwt-ScrollTable .dataTable tr.hovering {
+  background: #C3D9FF;
+}
+
+.gwt-ScrollTable .dataTable td.hovering {
+  background: #FFFFAA;
+  cursor: hand;
+  cursor: pointer;
+}
+
+.gwt-ScrollTable .dataTable tr.selected {
+  background: #7AA5D6;
+}
+
+.gwt-ScrollTable .dataTable .gwt-NoBorder td {
+  border-width: 0px 0px 0px 0px;
+  align: left;
+}
+
+.gwt-PagingOptions { /*background: #e8eef7;*/
+  background: #F4F4F4 url('images/bg_grey2.gif') repeat-x bottom left;
+  border: none;
+  padding: 1px 0px;
+}
+
+.gwt-PagingOptionsPanel {
+  background: #F4F4F4 url('images/bg_grey2.gif') repeat-x bottom left;
+  border-color: #aaa;
+  border-style: solid;
+  border-width: 0px 1px 1px 1px;
+  padding: 1px 0px;
+}
+
+.gwt-PagingOptions .errorMessage {
+  color: red;
+}
+
+.gwt-PagingOptions .gwt-Image {
+  cursor: hand;
+  cursor: pointer;
+}
+
+.gwt-InlineCellEditor {
+  border: 3px solid #7AA5D6;
+  padding: 4px;
+  background: white;
+  overflow: auto;
+}
+
+.gwt-InlineCellEditor .accept {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-InlineCellEditor .cancel {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-CellEditor {
+  border: 3px solid #7AA5D6;
+  padding: 4px;
+  background: white;
+}
+
+.gwt-CellEditor td {
+  padding: 4px;
+}
+
+/* ------------------------------------------------------------ */
+
+.gwt-PopupPanelGlass {
+   /* Override glass panel color to be `black` */
+    background-color: #000 !important;
+
+    /* Override glass panel to 10% opacity (= 70% transparency) */
+  	filter: alpha(opacity = 70) !important; /* IE */
+    opacity: 0.7 !important; /* non-IE */
+ }
+ 
+ .gwt-DisclosurePanel .header td {
+ 	color: black;
+ }
+ 
+ 
+ .gwt-CellTablePagerPanel {
+  background: #F4F4F4 url('images/bg_grey2.gif') repeat-x bottom left;
+  border-color: #aaa;
+  border-style: solid;
+  border-width: 1px 0px 0px 0px;
+  padding: 1px 0px;
+}
+
+.gwt-CellTablePanel {
+  border-color: #aaa;
+  border-style: solid;
+  border-width: 1px;
+}
+
+/* ------------------GWTUPLOAD----------------------- */
+
+.GWTUpld, table.GWTUpld td {
+	font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
+  	font-size: 11px;
+}
+
+.GWTUpld form, 
+.GWTUpld .upld-form-elements {
+	padding: 0px;
+	vertical-align: top;
+	margin-top: 0; 
+	margin-bottom: 0; 
+}
+
+.GWTUpld .upld-status {
+	font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
+  	font-size: 11px;
+	font-weight: normal;
+}
+.GWTUpld .upld-status div.cancel {
+	background: url(images/delete-grey.gif) no-repeat;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	margin-top: 1px;
+}
+
+* html .GWTUpld .upld-status div.cancel {
+	width: 18px;
+	height: 18px;
+	margin-top: 2px;
+}
+
+.GWTUpld .upld-status div.cancel:hover {
+	background: url(images/delete-grey.gif) no-repeat;
+}
+
+.GWTUpld .upld-status .filename {
+	overflow: hidden;
+	white-space: nowrap;
+	margin-left: 8px;
+	margin-right: 11px;
+	height: 100%;
+	font-size: 11px;
+}
+.GWTUpld .upld-status .status {
+	padding-left: 8px;
+	white-space: nowrap;
+	height: 100%;
+	font-size: 11px;
+}
+.GWTUpld .upld-status .status-success {
+	color: green;
+}
+.GWTUpld .upld-status .status-error,
+.GWTUpld .upld-status .status-canceled {
+	color: red;
+}
+
+.GWTUpld .prgbar-back {
+	background: #ffffff none repeat scroll 0 0;
+	border: 1px solid #999999;
+	height: 11px;
+	overflow: hidden;
+	padding: 1px;
+	width: 100px;
+	float: left;
+}
+* html .GWTUpld .prgbar-back {
+	height: 12px;
+	margin-top: 2px;
+}
+.GWTUpld .prgbar-done {
+	background: #d4e4ff none repeat scroll 0 0;
+	font-size: 0;
+	height: 100%;
+	float: left;
+}
+.GWTUpld .prgbar-msg {
+	position: absolute;
+	z-index: 9;
+	font-size: 9px;
+	font-weight: normal;
+	margin-left: 3px;
+}
+
+* html .GWTUpld .prgbar-msg {
+	top: 0px;
+	left: 4px;
+}
+
+.GWTUpld .changed {
+	color: red;
+	font-weight: bold;  
+	text-decoration: blink;
+}
+.gwt-PopupPanel .GWTUpld {
+	border: 2px groove #F6A828;
+	padding: 11px;
+	background: #bf984c;
+  -moz-border-radius-bottomleft: 6px;
+  -moz-border-radius-bottomright: 6px;
+  -moz-border-radius-topleft: 6px;
+  -moz-border-radius-topright: 6px;
+	
+}
+
+.GWTUpld .DecoratedFileUpload {
+	margin-right: 5px;
+}
+
+.GWTUpld .DecoratedFileUpload .gwt-Button,
+.GWTUpld .DecoratedFileUpload .gwt-Anchor,
+.GWTUpld .DecoratedFileUpload .gwt-Label {
+	white-space: nowrap;
+	font-size: 11px;
+}
+
+.GWTUpld .gwt-Button, .GWTUpld .gwt-FileUpload {
+	font-size: 11px;
+	min-height: 15px;
+}
+
+.GWTUpld .DecoratedFileUpload .gwt-Anchor,
+.GWTUpld .DecoratedFileUpload .gwt-Label {
+	color: blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.GWTUpld .gwt-Button:HOVER,
+.GWTUpld .DecoratedFileUpload .gwt-Button-over,
+.GWTUpld .DecoratedFileUpload .gwt-Anchor-over,
+.GWTUpld .DecoratedFileUpload .gwt-Label-over {
+	color: #af6b29;
+}
+
+.GWTUpld .DecoratedFileUpload-disabled .gwt-Button,
+.GWTUpld .DecoratedFileUpload-disabled .gwt-Anchor,
+.GWTUpld .DecoratedFileUpload-disabled .gwt-Label {
+	color: grey;
+}
+
+.gwt-PopupPanelGlass {
+  background-color: #d4e4ff;
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+}
+
+.GWTUpld input[type="file"] {
+	cursor: pointer;
+}
+    
+
+
+/* ------------------GWTUPLOAD----------------------- */
+
+ 
+
+ 
+ 

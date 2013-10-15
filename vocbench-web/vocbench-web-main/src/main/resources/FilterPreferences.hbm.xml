@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 21, 2012 1:15:45 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.fao.aoscs.domain.FilterPreferences" table="filter_preferences">
+        <composite-id name="id" class="org.fao.aoscs.domain.FilterPreferencesId">
+            <key-property name="filterId" type="int">
+                <column name="filter_id" />
+            </key-property>
+            <key-property name="userId" type="int">
+                <column name="user_id" />
+            </key-property>
+            <key-property name="ontologyId" type="int">
+                <column name="ontology_id" />
+            </key-property>
+        </composite-id>
+        <property name="preferenceValue" type="string">
+            <column name="preference_value" length="45" />
+        </property>
+    </class>
+</hibernate-mapping>

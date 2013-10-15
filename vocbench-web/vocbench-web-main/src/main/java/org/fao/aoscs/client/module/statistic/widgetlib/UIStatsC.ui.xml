@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		/* Add CSS here. See the GWT docs on UI Binder for more details */
+	</ui:style>
+	<g:HTMLPanel>
+		<g:VerticalPanel spacing="10" width="100%">
+			<g:FlexTable width="100%" borderWidth="0" styleName="thinBorderTable" ui:field="conceptRelationCount" />
+			<g:FlexTable width="100%" borderWidth="0" styleName="thinBorderTable" ui:field="conceptRelationOccurrences"/>
+			<g:FlexTable width="100%" borderWidth="0" styleName="thinBorderTable" ui:field="termRelationCount" />
+			<g:FlexTable width="100%" borderWidth="0" styleName="thinBorderTable" ui:field="termRelationOccurrences" />
+			<g:FlexTable width="100%" borderWidth="0" styleName="thinBorderTable" ui:field="conceptAttributesCount" />
+			<g:FlexTable width="100%" borderWidth="0" styleName="thinBorderTable" ui:field="conceptAttributesOccurrences" />
+			<g:FlexTable width="100%" borderWidth="0" styleName="thinBorderTable" ui:field="termAttributesCount" />
+			<g:FlexTable width="100%" borderWidth="0" styleName="thinBorderTable" ui:field="termAttributesOccurrences" />
+		</g:VerticalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

@@ -1,0 +1,5 @@
+This file contains a mapping between vocbench-st-osgibundle versions and SVN revision:
+
+0.0.3 = 66381  
+0.0.4-SNAPSHOT = 66382 -> 66400 
+0.0.5-SNAPSHOT = 66401 -> XX
