@@ -37,7 +37,6 @@ import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFLiteral;
 import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFNode;
 import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFNodeFactory;
 import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFResource;
-import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFURI;
 import it.uniroma2.art.semanticturkey.project.Project;
 import it.uniroma2.art.semanticturkey.project.ProjectManager;
 import it.uniroma2.art.semanticturkey.servlet.Response;
@@ -63,6 +62,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -3599,6 +3599,8 @@ public class VOCBENCH extends SKOSXL {
 				
 				// the parameter "i" in the FILTER means case insensitive
 				// this filter uses just the searchMode and the caseInsensitive parameter
+				String escapedString = escapeCharactersForQuery(searchString);
+				String delimitedString;
 				if(!useIndexes){
 					String caseInsensitiveFilterParam="";
 					if(caseInsensitive )
@@ -3606,55 +3608,58 @@ public class VOCBENCH extends SKOSXL {
 					if(searchMode.toLowerCase().contains("exact")){
 						if(searchMode.toLowerCase().contains("match")){
 							if(caseInsensitive)
-								query += "\nFILTER ( lcase(str(?useForSearch)) = \""+
-										searchString.toLowerCase()+"\")";
+								query += "\nFILTER ( lcase(str(?useForSearch)) = \""
+										+ searchString.toLowerCase() + "\")";
 							else
-								query += "\nFILTER ( str(?useForSearch) = \""+
-										searchString+"\")";
-						} else{ // searchMode.toLowerCase().contains("word")
-							query += "\nFILTER regex(str(?useForSearch), \"\\\\b"+searchString+"\\\\b\""+
-									caseInsensitiveFilterParam+")";
+								query += "\nFILTER ( str(?useForSearch) = \"" + searchString + "\")";
+						} else { // searchMode.toLowerCase().contains("word")
+							delimitedString = addBeginEndWordDelimiter(escapedString);
+							query += "\nFILTER regex(str(?useForSearch), \"" + delimitedString + "\""
+									+ caseInsensitiveFilterParam + ")";
 						}
-					} else if(searchMode.toLowerCase().contains("start")){
-						query += "\nFILTER regex(str(?useForSearch), \"\\\\b"+searchString+"\""+
-								caseInsensitiveFilterParam+")";
-					} else if(searchMode.toLowerCase().contains("contain")){
-						query += "\nFILTER regex(str(?useForSearch), \""+searchString+"\""+
-								caseInsensitiveFilterParam+")";
-					} else if(searchMode.toLowerCase().contains("end")){
-						query += "\nFILTER regex(str(?useForSearch), \""+searchString+"\\\\b\""+
-								caseInsensitiveFilterParam+")";
+					} else if (searchMode.toLowerCase().contains("start")) {
+						delimitedString = addBeginWordDelimiter(escapedString);
+						query += "\nFILTER regex(str(?useForSearch), \"" + delimitedString + "\""
+								+ caseInsensitiveFilterParam + ")";
+					} else if (searchMode.toLowerCase().contains("contain")) {
+						query += "\nFILTER regex(str(?useForSearch), \"" + escapedString + "\""
+								+ caseInsensitiveFilterParam + ")";
+					} else if (searchMode.toLowerCase().contains("end")) {
+						delimitedString = addEndWordDelimiter(escapedString);
+						query += "\nFILTER regex(str(?useForSearch), \"" + delimitedString + "\""
+								+ caseInsensitiveFilterParam + ")";
 					}
-				}
-				else{ // use the OLWIM indexes
-					String caseInsensitiveFilterParam="";
-					if(caseInsensitive )
+				} else { // use the OLWIM indexes
+					String caseInsensitiveFilterParam = "";
+					if (caseInsensitive)
 						caseInsensitiveFilterParam = " , \"i\"";
-					if(searchMode.toLowerCase().contains("exact")){
-						query +="\n?useForSearch <"+LUCENEINDEX+"> \""+searchString+"\" .";
-						if(searchMode.toLowerCase().contains("match")){
-							if(caseInsensitive)
-								query += "\nFILTER ( lcase(str(?useForSearch)) = \""+
-										searchString.toLowerCase()+"\")";
+					if (searchMode.toLowerCase().contains("exact")) {
+						query += "\n?useForSearch <" + LUCENEINDEX + "> \"" + searchString + "\" .";
+						if (searchMode.toLowerCase().contains("match")) {
+							if (caseInsensitive)
+								query += "\nFILTER ( lcase(str(?useForSearch)) = \""
+										+ searchString.toLowerCase() + "\")";
 							else
-								query += "\nFILTER ( str(?useForSearch) = \""+
-										searchString+"\")";
-						} else{ // searchMode.toLowerCase().contains("word")
-							query += "\nFILTER regex(str(?useForSearch), \"\\\\b"+searchString+"\\\\b\""+
-									caseInsensitiveFilterParam+")";
+								query += "\nFILTER ( str(?useForSearch) = \"" + searchString + "\")";
+						} else { // searchMode.toLowerCase().contains("word")
+							delimitedString = addBeginEndWordDelimiter(escapedString);
+							query += "\nFILTER regex(str(?useForSearch), \"" + delimitedString + "\""
+									+ caseInsensitiveFilterParam + ")";
 						}
-					} else if(searchMode.toLowerCase().contains("start")){
-						query +="\n?useForSearch <"+LUCENEINDEX+"> \""+searchString+"*\" ."+
-								"\nFILTER regex(str(?useForSearch), \"\\\\b"+searchString+"\""+
-								caseInsensitiveFilterParam+")";
-					} else if(searchMode.toLowerCase().contains("contain")){
-						query +="\n?useForSearch <"+LUCENEINDEX+"> \"*"+searchString+"*\" ."+
-								"\nFILTER regex(str(?useForSearch), \""+searchString+"\""+
-								caseInsensitiveFilterParam+")";
-					} else if(searchMode.toLowerCase().contains("end")){
-						query +="\n?useForSearch <"+LUCENEINDEX+"> \"*"+searchString+"\" ."+
-								"\nFILTER regex(str(?useForSearch), \""+searchString+"\\\\b\""+
-								caseInsensitiveFilterParam+")";
+					} else if (searchMode.toLowerCase().contains("start")) {
+						delimitedString = addBeginWordDelimiter(escapedString);
+						query += "\n?useForSearch <" + LUCENEINDEX + "> \"" + escapedString + "\" ."
+								+ "\nFILTER regex(str(?useForSearch), \"" + delimitedString + "\""
+								+ caseInsensitiveFilterParam + ")";
+					} else if (searchMode.toLowerCase().contains("contain")) {
+						query += "\n?useForSearch <" + LUCENEINDEX + "> \"" + escapedString + "\" ."
+								+ "\nFILTER regex(str(?useForSearch), \"" + escapedString + "\""
+								+ caseInsensitiveFilterParam + ")";
+					} else if (searchMode.toLowerCase().contains("end")) {
+						delimitedString = addEndWordDelimiter(escapedString);
+						query += "\n?useForSearch <" + LUCENEINDEX + "> \"" + escapedString + "\" ."
+								+ "\nFILTER regex(str(?useForSearch), \"" + delimitedString + "\""
+								+ caseInsensitiveFilterParam + ")";
 					}
 				}
 				
@@ -3705,8 +3710,7 @@ public class VOCBENCH extends SKOSXL {
 			for(ARTURIResource concept : conceptUriList){
 				if(!oldApproach){
 					constructConceptInfo(skosxlModel, conceptListElement, concept);
-				}
-				else{
+				} else {
 					ARTURIResource propInScheme = skosxlModel.createURIResource(INSCHEME);
 					//ARTURIResource propInScheme = retrieveExistingURIResource(skosxlModel, INSCHEME);
 	
@@ -3814,62 +3818,66 @@ public class VOCBENCH extends SKOSXL {
 			
 			// the parameter "i" in the FILTER means case insensitive
 			// this filter uses just the searchMode and the caseInsensitive parameter
+			String escapedString = escapeCharactersForQuery(searchString);
+			String delimitedString;
 			if(!useIndexes){
 				String caseInsensitiveFilterParam="";
 				if(caseInsensitive )
 					caseInsensitiveFilterParam = " , \"i\"";
-				if(searchMode.toLowerCase().contains("exact")){
-					if(searchMode.toLowerCase().contains("match")){
-						if(caseInsensitive)
-							query += "\nFILTER ( lcase(str(?label)) = "+
-									searchString.toLowerCase()+")";
+				if (searchMode.toLowerCase().contains("exact")) {
+					if (searchMode.toLowerCase().contains("match")) {
+						if (caseInsensitive)
+							query += "\nFILTER ( lcase(str(?label)) = " + searchString.toLowerCase() + ")";
 						else
-							query += "\nFILTER ( str(?label) = "+
-									searchString+")";
-					} else{ // searchMode.toLowerCase().contains("word")
-						query += "\nFILTER regex(str(?label), \"\\\\b"+searchString+"\\\\b\""+
-								caseInsensitiveFilterParam+")";
+							query += "\nFILTER ( str(?label) = " + searchString + ")";
+					} else { // searchMode.toLowerCase().contains("word")
+						delimitedString = addBeginEndWordDelimiter(escapedString);
+						query += "\nFILTER regex(str(?label), \"" + delimitedString + "\""
+								+ caseInsensitiveFilterParam + ")";
 					}
-				} else if(searchMode.toLowerCase().contains("start")){
-					query += "\nFILTER regex(str(?label), \"\\\\b"+searchString+"\""+
-							caseInsensitiveFilterParam+")";
-				} else if(searchMode.toLowerCase().contains("contain")){
-					query += "\nFILTER regex(str(?label), \""+searchString+"\""+
-							caseInsensitiveFilterParam+")";
-				} else if(searchMode.toLowerCase().contains("end")){
-					query += "\nFILTER regex(str(?label), \""+searchString+"\\\\b\""+
-							caseInsensitiveFilterParam+")";
+				} else if (searchMode.toLowerCase().contains("start")) {
+					delimitedString = addBeginWordDelimiter(escapedString);
+					query += "\nFILTER regex(str(?label), \"" + delimitedString + "\""
+							+ caseInsensitiveFilterParam + ")";
+				} else if (searchMode.toLowerCase().contains("contain")) {
+					query += "\nFILTER regex(str(?label), \"" + escapedString + "\""
+							+ caseInsensitiveFilterParam + ")";
+				} else if (searchMode.toLowerCase().contains("end")) {
+					delimitedString = addEndWordDelimiter(escapedString);
+					query += "\nFILTER regex(str(?label), \"" + delimitedString + "\""
+							+ caseInsensitiveFilterParam + ")";
 				}
-			}
-			else{ // use the OLWIM indexes
-				String caseInsensitiveFilterParam="";
-				if(caseInsensitive )
+			} else { // use the OLWIM indexes
+				String caseInsensitiveFilterParam = "";
+				if (caseInsensitive)
 					caseInsensitiveFilterParam = " , \"i\"";
-				if(searchMode.toLowerCase().contains("exact")){
-					query +="\n?label <"+LUCENEINDEX+"> \""+searchString+"\" .";
-					if(searchMode.toLowerCase().contains("match")){
-						if(caseInsensitive)
-							query += "\nFILTER ( lcase(str(?label)) = \""+
-									searchString.toLowerCase()+"\")";
+				if (searchMode.toLowerCase().contains("exact")) {
+					query += "\n?label <" + LUCENEINDEX + "> \"" + searchString + "\" .";
+					if (searchMode.toLowerCase().contains("match")) {
+						if (caseInsensitive)
+							query += "\nFILTER ( lcase(str(?label)) = \"" + searchString.toLowerCase()
+									+ "\")";
 						else
-							query += "\nFILTER ( str(?label) = \""+
-									searchString+"\")";
-					} else{ // searchMode.toLowerCase().contains("word")
-						query += "\nFILTER regex(str(?label), \"\\\\b"+searchString+"\\\\b\""+
-								caseInsensitiveFilterParam+")";
+							query += "\nFILTER ( str(?label) = \"" + searchString + "\")";
+					} else { // searchMode.toLowerCase().contains("word")
+						delimitedString = addBeginEndWordDelimiter(escapedString);
+						query += "\nFILTER regex(str(?label), \"" + delimitedString + "\""
+								+ caseInsensitiveFilterParam + ")";
 					}
-				} else if(searchMode.toLowerCase().contains("start")){
-					query +="\n?label <"+LUCENEINDEX+"> \""+searchString+"*\" ."+
-							"\nFILTER regex(str(?label), \"\\\\b"+searchString+"\""+
-							caseInsensitiveFilterParam+")";
-				} else if(searchMode.toLowerCase().contains("contain")){
-					query +="\n?label <"+LUCENEINDEX+"> \"*"+searchString+"*\" ."+
-							"\nFILTER regex(str(?label), \""+searchString+"\""+
-							caseInsensitiveFilterParam+")";
-				} else if(searchMode.toLowerCase().contains("end")){
-					query +="\n?label <"+LUCENEINDEX+"> \"*"+searchString+"\" ."+
-							"\nFILTER regex(str(?label), \""+searchString+"\\\\b\""+
-							caseInsensitiveFilterParam+")";
+				} else if (searchMode.toLowerCase().contains("start")) {
+					delimitedString = addBeginWordDelimiter(escapedString);
+					query += "\n?label <" + LUCENEINDEX + "> \"" + escapedString + "\" ."
+							+ "\nFILTER regex(str(?label), \"" + delimitedString + "\""
+							+ caseInsensitiveFilterParam + ")";
+				} else if (searchMode.toLowerCase().contains("contain")) {
+					query += "\n?label <" + LUCENEINDEX + "> \"*" + escapedString + "\" ."
+							+ "\nFILTER regex(str(?label), \"" + escapedString + "\""
+							+ caseInsensitiveFilterParam + ")";
+				} else if (searchMode.toLowerCase().contains("end")) {
+					delimitedString = addEndWordDelimiter(escapedString);
+					query += "\n?label <" + LUCENEINDEX + "> \"" + escapedString + "\" ."
+							+ "\nFILTER regex(str(?label), \"" + delimitedString + "\""
+							+ caseInsensitiveFilterParam + ")";
 				}
 			}
 			
@@ -4427,6 +4435,74 @@ public class VOCBENCH extends SKOSXL {
 	}
 	
 	/*** generic functions, which can be use by other functions to get and add Info regarding a xl-label ***/
+
+	private String escapeCharactersForQuery(String originalString) {
+
+		String finalString = originalString;
+
+		List<String> specialCharList = new ArrayList<String>();
+		specialCharList.add("\\");
+		specialCharList.add("(");
+		specialCharList.add(")");
+		specialCharList.add("[");
+		specialCharList.add("]");
+		specialCharList.add("{");
+		specialCharList.add("}");
+		specialCharList.add("\"");
+		specialCharList.add(".");
+		specialCharList.add("*");
+		specialCharList.add("+");
+		specialCharList.add("?");
+		specialCharList.add("|");
+		specialCharList.add("^");
+		specialCharList.add("$");
+		specialCharList.add("<");
+		specialCharList.add(">");
+		specialCharList.add("=");
+
+		for (String specialChar : specialCharList) {
+			finalString = finalString.replace(specialChar, "\\\\" + specialChar);
+		}
+
+		return finalString;
+	}
+
+	private String addBeginWordDelimiter(String originalString) {
+		String finalString;
+
+		String firstChar = originalString.charAt(0) + "";
+
+		if (Pattern.compile("\\w").matcher(firstChar).find())
+			finalString = "\\\\b" + originalString;
+		else
+			finalString = "\\\\B" + originalString;
+		return finalString;
+	}
+
+	private String addEndWordDelimiter(String originalString) {
+		String finalString;
+
+		String lastChar;
+		if (originalString.length() > 0)
+			lastChar = originalString.charAt(originalString.length() - 1) + "";
+		else
+			lastChar = "";
+
+		if (Pattern.compile("\\w").matcher(lastChar).find())
+			finalString = originalString + "\\\\b";
+		else
+			finalString = originalString + "\\\\B";
+		return finalString;
+	}
+
+	private String addBeginEndWordDelimiter(String originalString) {
+		String finalString;
+
+		finalString = addBeginWordDelimiter(originalString);
+		finalString = addEndWordDelimiter(finalString);
+
+		return finalString;
+	}
 
 	private Element addInfoStatusAndLabels(SKOSXLModel skosxlModel, STRDFResource stConcept,
 			ARTURIResource concept, ARTResource[] graphs, Element extCollection, boolean date,
