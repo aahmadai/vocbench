@@ -3648,16 +3648,16 @@ public class VOCBENCH extends SKOSXL {
 						}
 					} else if (searchMode.toLowerCase().contains("start")) {
 						delimitedString = addBeginWordDelimiter(escapedString);
-						query += "\n?useForSearch <" + LUCENEINDEX + "> \"" + escapedString + "\" ."
+						query += "\n?useForSearch <" + LUCENEINDEX + "> \"" + escapedString + "*\" ."
 								+ "\nFILTER regex(str(?useForSearch), \"" + delimitedString + "\""
 								+ caseInsensitiveFilterParam + ")";
 					} else if (searchMode.toLowerCase().contains("contain")) {
-						query += "\n?useForSearch <" + LUCENEINDEX + "> \"" + escapedString + "\" ."
+						query += "\n?useForSearch <" + LUCENEINDEX + "> \"*" + escapedString + "*\" ."
 								+ "\nFILTER regex(str(?useForSearch), \"" + escapedString + "\""
 								+ caseInsensitiveFilterParam + ")";
 					} else if (searchMode.toLowerCase().contains("end")) {
 						delimitedString = addEndWordDelimiter(escapedString);
-						query += "\n?useForSearch <" + LUCENEINDEX + "> \"" + escapedString + "\" ."
+						query += "\n?useForSearch <" + LUCENEINDEX + "> \"*" + escapedString + "\" ."
 								+ "\nFILTER regex(str(?useForSearch), \"" + delimitedString + "\""
 								+ caseInsensitiveFilterParam + ")";
 					}
@@ -3866,16 +3866,16 @@ public class VOCBENCH extends SKOSXL {
 					}
 				} else if (searchMode.toLowerCase().contains("start")) {
 					delimitedString = addBeginWordDelimiter(escapedString);
-					query += "\n?label <" + LUCENEINDEX + "> \"" + escapedString + "\" ."
+					query += "\n?label <" + LUCENEINDEX + "> \"" + escapedString + "*\" ."
 							+ "\nFILTER regex(str(?label), \"" + delimitedString + "\""
 							+ caseInsensitiveFilterParam + ")";
 				} else if (searchMode.toLowerCase().contains("contain")) {
-					query += "\n?label <" + LUCENEINDEX + "> \"*" + escapedString + "\" ."
+					query += "\n?label <" + LUCENEINDEX + "> \"*" + escapedString + "*\" ."
 							+ "\nFILTER regex(str(?label), \"" + escapedString + "\""
 							+ caseInsensitiveFilterParam + ")";
 				} else if (searchMode.toLowerCase().contains("end")) {
 					delimitedString = addEndWordDelimiter(escapedString);
-					query += "\n?label <" + LUCENEINDEX + "> \"" + escapedString + "\" ."
+					query += "\n?label <" + LUCENEINDEX + "> \"*" + escapedString + "\" ."
 							+ "\nFILTER regex(str(?label), \"" + delimitedString + "\""
 							+ caseInsensitiveFilterParam + ")";
 				}
