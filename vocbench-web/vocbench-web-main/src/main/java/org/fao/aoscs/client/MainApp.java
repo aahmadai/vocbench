@@ -1015,7 +1015,7 @@ public class MainApp extends Composite { // Application container
         
         if (menuMap.containsKey("Schemes"))
         {
-            iconContainer.addMenu("Schemes", "Schemes", "Schemes");
+            iconContainer.addMenu(constants.toolbarSchemes(), constants.toolbarSchemesTitle(), "Schemes");
         }
         else
         {
@@ -1157,8 +1157,8 @@ public class MainApp extends Composite { // Application container
     	LinkedHashMap<String, String> user = new LinkedHashMap<String, String>();
         user.put("Users", constants.menuUsers());
         user.put("Groups", constants.menuGroups());
-        user.put("Ontology", "Ontology");
-        user.put("Configuration", "Configuration");
+        user.put("Ontology", constants.menuOntology());
+        user.put("Configuration", constants.menuConfiguration());
         //user.put("Comments", constants.menuComments());
         //user.put("Logs", constants.menuLogViewer());
 

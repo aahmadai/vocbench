@@ -71,6 +71,8 @@ public interface LocaleConstants extends Constants{
 	public String menuAbout();
 	public String menuWebServices();
 	public String menuUsers();
+	public String menuOntology();
+	public String menuConfiguration();
 	public String menuGroups();
 	public String menuPreferences();
 	public String menuComments();
