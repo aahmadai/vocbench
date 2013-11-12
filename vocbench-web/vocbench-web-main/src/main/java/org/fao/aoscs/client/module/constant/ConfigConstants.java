@@ -40,6 +40,8 @@ public class ConfigConstants {
 	// Exception Details
 	public static boolean EXCEPTIONDETAILSSHOW;
 	
+	public static String ZIPSIZE;
+	
 	public static int SEARCHTIMEOUT;
 	public static boolean ISINDEXING;
 
@@ -95,6 +97,8 @@ public class ConfigConstants {
 		COPYRIGHTLINK					= (String)cMap.get("COPYRIGHTLINK").getValue();
 		
 		EXCEPTIONDETAILSSHOW			= cMap.get("EXCEPTION.DETAILS.SHOW").getValue().equalsIgnoreCase("true")? true : false;
+		
+		ZIPSIZE							= (String)cMap.get("ZIPSIZE").getValue();
 
 		SEARCHTIMEOUT					= Integer.parseInt(cMap.get("SEARCHTIMEOUT").getValue());
 		ISINDEXING						= Boolean.parseBoolean((String)cMap.get("ISINDEXING").getValue());

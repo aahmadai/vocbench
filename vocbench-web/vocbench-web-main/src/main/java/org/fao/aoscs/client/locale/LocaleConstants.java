@@ -492,6 +492,7 @@ public interface LocaleConstants extends Constants{
 	public String exportSQL();
 	public String exportPreview();
 	public String exportButton();
+	public String exportUseZip();
 	public String exportPreviewButton();
 	public String exportIncludeChildren();
 	public String exportIncludeLabelsOfRelatedConcepts();

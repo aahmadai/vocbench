@@ -6,6 +6,7 @@ import java.util.Date;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
+import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.constant.ExportFormat;
 import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.utility.ExceptionManager;
@@ -109,12 +110,15 @@ public class ExportOptionTable extends Composite{
 		exportOption.add(GridStyle.setTableRowStyle(table, "#F4F4F4", "#E8E8E8", 3));
 		
 		final Button export = new Button(constants.exportButton());
+		final CheckBox chkZip = new CheckBox("Use zip compression");
 			
 		HorizontalPanel bottombar = new HorizontalPanel();
 		bottombar.setSpacing(5);
+		bottombar.add(chkZip);
 		bottombar.add(export);
 		bottombar.setSize("100%", "100%");
 		bottombar.setStyleName("bottombar");
+		bottombar.setCellHorizontalAlignment(chkZip, HasHorizontalAlignment.ALIGN_LEFT);
 		bottombar.setCellHorizontalAlignment(export, HasHorizontalAlignment.ALIGN_RIGHT);
 		bottombar.setCellVerticalAlignment(export, HasVerticalAlignment.ALIGN_MIDDLE);
 		
@@ -238,7 +242,7 @@ public class ExportOptionTable extends Composite{
 							else if(formattype.equals(ExportFormat.RDBMS_SQL_FORMAT))
 								filename += ".sql";
 							
-							Window.open(GWT.getHostPageBaseURL()+"downloadExportData?filename="+filename+"&key="+key, "_download","");
+							Window.open(GWT.getHostPageBaseURL()+"downloadExportData?filename="+filename+"&key="+key+"&size="+ConfigConstants.ZIPSIZE+"&forcezip="+chkZip.getValue(), "_download","");
 							showLoading(false);
 						}
 						public void onFailure(Throwable caught){
