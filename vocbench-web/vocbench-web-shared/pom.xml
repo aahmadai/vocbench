@@ -120,6 +120,7 @@
 				<!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
 					documentation at codehaus.org -->
 				<configuration>
+					<module>org.fao.aoscs.Shared</module>
 					<runTarget>Shared.html</runTarget>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
 					<!--i18nMessagesBundle>org.fao.aoscs.client.Messages</i18nMessagesBundle -->

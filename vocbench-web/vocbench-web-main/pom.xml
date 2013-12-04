@@ -173,6 +173,8 @@
 				<!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
 					documentation at codehaus.org -->
 				<configuration>
+					<module>org.fao.aoscs.Main</module>
+					<extraJvmArgs>-Xmx1g</extraJvmArgs>
 					<runTarget>index.html</runTarget>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
 					<i18nConstantsBundles>org.fao.aoscs.client.locale.LocaleConstants</i18nConstantsBundles>
