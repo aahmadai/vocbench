@@ -1,12 +1,12 @@
 package org.fao.aoscs.model.semanticturkey.service.manager.response;
 
-import java.util.ArrayList;
-
 import it.uniroma2.art.owlart.vocabulary.RDFTypesEnum;
 import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 import it.uniroma2.art.semanticturkey.servlet.main.Property;
 import it.uniroma2.art.semanticturkey.servlet.main.Resource;
+
+import java.util.ArrayList;
 
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.util.STModel;

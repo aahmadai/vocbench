@@ -76,6 +76,9 @@ public class Main implements EntryPoint {
 		AsyncCallback<ArrayList<LanguageInterface>> callback = new AsyncCallback<ArrayList<LanguageInterface>>()
 		{
 			public void onSuccess(ArrayList<LanguageInterface> result) {
+				
+				Window.setTitle(constants.mainPageTitle()+" :: "+constants.mainVersion()+" "+ (ConfigConstants.DISPLAYVERSION!=null?ConfigConstants.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
+
 				centerContainer.clear();
 				
 				//Main Content
@@ -90,12 +93,12 @@ public class Main implements EntryPoint {
 				briefLeft.add(getVocbenchDescription());
 				if(!ConfigConstants.ISVISITOR)
 					briefLeft.add(getVisitorInfo());
-				if(ConfigConstants.MODE.equals(ConfigConstants.PRO))
+				if(ConfigConstants.MODE.equals(MainApp.PRO))
 				{
 					if(!ConfigConstants.SANDBOXLINK.equals(""))
 						briefLeft.add(getSandboxInfo());
 				}
-				if(ConfigConstants.MODE.equals(ConfigConstants.SANDBOX))
+				if(ConfigConstants.MODE.equals(MainApp.SANDBOX))
 					briefLeft.add(getAnonymousInfo());
 
 				Image flyer = new Image("images/flyer.jpg");
@@ -229,7 +232,7 @@ public class Main implements EntryPoint {
 				langInterfacePanel.add(getLanguageBar(result));
 			}
 		    public void onFailure(Throwable caught) {
-		    	checkConfig(configObjectMap);
+		    	loadConfigContainer(configObjectMap);
 		    	ExceptionManager.showException(caught, constants.mainDBError());
 		    }
 		};
@@ -237,44 +240,29 @@ public class Main implements EntryPoint {
 		Service.systemService.getInterfaceLang(callback);
 	}
 	
-	private static void checkConfig(final HashMap<String, ConfigObject> configObjectMap)
+	private static boolean checkConfig(final HashMap<String, ConfigObject> configObjectMap)
 	{
 		int i=0;
 		for(String key : configObjectMap.keySet())
 		{
 			ConfigObject configObject = configObjectMap.get(key);
-			String cfgkey = configObject.getKey();
-			if(cfgkey.startsWith("CFG."))
+			if((configObject.getValue()==null || configObject.getValue().equals(""))) 
 			{
 				i++;
 			}
 		}
-		if(i>0)
+		return i>0;
+	}
+	
+	private static void loadContainer(final HashMap<String, ConfigObject> configObjectMap)
+	{
+		if(checkConfig(configObjectMap))
 		{
 			loadConfigContainer(configObjectMap);
 		}
 		else
 		{
-			configObjectMap.get("ISCONFIGSET").setValue("true");
-			AsyncCallback<Void> callback = new AsyncCallback<Void>()
-			{
-				public void onSuccess(Void result) {
-					loadCenterContainer(configObjectMap);
-				}
-			    public void onFailure(Throwable caught) {
-			    	ExceptionManager.showException(caught, constants.configConfigurationFail());
-			    }
-			};
-			
-			Service.systemService.updateConfigConstants(configObjectMap, callback);
-		}
-		
-	}
-	
-	private static void loadContainer(final HashMap<String, ConfigObject> configObjectMap)
-	{
-		if(ConfigConstants.ISCONFIGSET)
-		{
+			ConfigConstants.loadConstants(configObjectMap);
 			/* User data from session for feed to profile query */
 			AsyncCallback<UserLogin> callback = new AsyncCallback<UserLogin>() {
 			    public void onSuccess(UserLogin userLoginObj) {
@@ -282,7 +270,7 @@ public class Main implements EntryPoint {
 			    	if(userLoginObj==null){
 			    		loadCenterContainer(configObjectMap);
 			    	}else{
-		    			// Get information from session
+			    		// Get information from session
 						MainApp mainApp = new MainApp(userLoginObj);
 						new LogManager().startLog(""+userLoginObj.getUserid());
 						mainApp.setWidth("100%");
@@ -295,8 +283,6 @@ public class Main implements EntryPoint {
 			 };
 			Service.systemService.checkSession(MainApp.USERLOGINOBJECT_SESSIONNAME, callback); // Get userlogin from session
 		}
-		else
-			checkConfig(configObjectMap);
 	}
 
 	private static void initLayout()
@@ -304,9 +290,6 @@ public class Main implements EntryPoint {
 		AsyncCallback<HashMap<String, ConfigObject>> callback = new AsyncCallback<HashMap<String, ConfigObject>>()
 		{
 			public void onSuccess(final HashMap<String, ConfigObject> configObjectMap) {
-				ConfigConstants.loadConstants(configObjectMap);
-				Window.setTitle(constants.mainPageTitle()+" :: "+constants.mainVersion()+" "+ConfigConstants.VERSIONTEXT);
-
 				centerContainer = new VerticalPanel();
 				centerContainer.setSize("100%", "100%");
 				LoadingDialog load = new LoadingDialog();

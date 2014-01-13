@@ -14,49 +14,60 @@ public class ConfigObject extends LightEntity{
 	
 	private String value;
 	
-	private String comment;
+	private String description;
+	
+	private String defaultValue;
+	
+	private String separator;
+	
+	private boolean isMandatory;
 
-	/**
-	 * @return the key
-	 */
 	public String getKey() {
 		return key;
 	}
 
-	/**
-	 * @param key the key to set
-	 */
 	public void setKey(String key) {
 		this.key = key;
 	}
 
-	/**
-	 * @return the value
-	 */
 	public String getValue() {
 		return value;
 	}
 
-	/**
-	 * @param value the value to set
-	 */
 	public void setValue(String value) {
 		this.value = value;
 	}
 
-	/**
-	 * @return the comment
-	 */
-	public String getComment() {
-		return comment;
+	public String getDescription() {
+		return description;
 	}
 
-	/**
-	 * @param comment the comment to set
-	 */
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-	
-	
+
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
+	public String getSeparator() {
+		return separator;
+	}
+
+	public void setSeparator(String separator) {
+		this.separator = separator;
+	}
+
+	public boolean isMandatory() {
+		return isMandatory;
+	}
+
+	public void setMandatory(boolean isMandatory) {
+		this.isMandatory = isMandatory;
+	}
+
 }

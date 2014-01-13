@@ -5,16 +5,11 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.PropertiesConfigurationLayout;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
@@ -38,7 +33,6 @@ import org.fao.aoscs.domain.RecentChangeData;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
-import org.fao.aoscs.domain.VBConfig;
 import org.fao.aoscs.domain.ValidationFilter;
 import org.fao.aoscs.hibernate.DatabaseUtil;
 import org.fao.aoscs.hibernate.EncriptFunction;
@@ -47,6 +41,7 @@ import org.fao.aoscs.hibernate.QueryFactory;
 import org.fao.aoscs.server.ProjectServiceImpl;
 import org.fao.aoscs.server.utility.Encrypt;
 import org.fao.aoscs.server.utility.MailUtil;
+import org.fao.aoscs.system.util.ConfigUtility;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
@@ -214,88 +209,7 @@ public class SystemServiceSystemImpl {
 		return owlStatusConstants;
 	}
 	
-	/**
-	 * @return
-	 */
-	public LinkedHashMap<String, ConfigObject> loadConfigConstants()
-	{
-		LinkedHashMap<String, ConfigObject> mcMap = new LinkedHashMap<String, ConfigObject>();
-		try {
-			PropertiesConfiguration rb = getConfigPropertiesConfiguration();
-			mcMap = createConfigConstants(rb);
-			ConfigConstants.loadConstants(mcMap);
-		} catch (ConfigurationException e) {
-			logger.error(e.getLocalizedMessage());
-		}
-		return mcMap;
-	}
 	
-	/**
-	 * @param configObjectMap
-	 */
-	public void updateConfigConstants(HashMap<String, ConfigObject> configObjectMap)
-	{
-		try {
-			PropertiesConfiguration config = getConfigPropertiesConfiguration();
-			for(String key : configObjectMap.keySet())
-			{
-				ConfigObject configObj = configObjectMap.get(key);
-				//System.out.println(configObj.getKey() +" : "+ configObj.getValue());
-				config.setProperty(configObj.getKey(), configObj.getValue());
-			}
-			config.save();
-			loadConfigConstants();
-			HibernateUtilities.closeSessionFactory();
-			HibernateUtilities.createSessionFactory();
-		} catch (ConfigurationException e) {
-			logger.error(e.getLocalizedMessage());
-		}
-	}
-	
-	/**
-	 * @return
-	 * @throws ConfigurationException
-	 */
-	public PropertiesConfiguration getConfigPropertiesConfiguration() throws ConfigurationException
-	{
-		return new PropertiesConfiguration("Config.properties");
-	}
-	
-	/**
-	 * @param pc
-	 * @return
-	 */
-	public LinkedHashMap<String, ConfigObject> createConfigConstants(PropertiesConfiguration rb)
-	{
-		LinkedHashMap<String, ConfigObject> mcMap = new LinkedHashMap<String, ConfigObject>();
-		PropertiesConfigurationLayout pcl = rb.getLayout();
-		Iterator<?> en = rb.getKeys();
-		while (en.hasNext()) {
-			String key = (String) en.next();
-			ConfigObject configObj = new ConfigObject();
-			configObj.setKey(key);
-			configObj.setValue(rb.getString(key));
-			if(pcl.getComment(key)!=null)
-			{
-				configObj.setComment(pcl.getComment(key));
-			}
-			String mapkey = key;
-			if(mapkey.startsWith("CFG."))
-				mapkey = mapkey.replaceFirst("CFG.", "");
-			mcMap.put(mapkey, configObj);
-		}
-		return mcMap;
-	}
-	
-	/**
-	 * @param filename
-	 * @return
-	 * @throws ConfigurationException
-	 */
-	public LinkedHashMap<String, ConfigObject> getConfigConstants(String filename) throws ConfigurationException
-	{
-		return createConfigConstants(new PropertiesConfiguration(filename));
-	}
 	
 	/*public HashMap<String, String> loadModelConstants()
 	{
@@ -1601,50 +1515,26 @@ public class SystemServiceSystemImpl {
 		return list;
 	} */
 	
-	/**
-	 * @param vbConfig
-	 */
-	public void updateVBConfig(VBConfig vbConfig)
+	public HashMap<String, ConfigObject> loadConfigConstants()
 	{
-		try {
-			PropertiesConfiguration config = getConfigPropertiesConfiguration();
-			
-			config.setProperty("CFG.MAIL.HOST", vbConfig.getVbMailHost());
-			config.setProperty("CFG.MAIL.PORT", vbConfig.getVbMailPort());
-			config.setProperty("CFG.MAIL.USER", vbConfig.getVbMailUser());
-			config.setProperty("CFG.MAIL.PASSWORD", vbConfig.getVbMailPassword());
-			config.setProperty("CFG.MAIL.FROM", vbConfig.getVbMailFrom());
-			config.setProperty("CFG.MAIL.FROM_ALIAS", vbConfig.getVbMailFromAlias());
-			config.setProperty("CFG.MAIL.ADMIN", vbConfig.getVbMailAdmin());
-			
-			config.save();
-		} catch (ConfigurationException e) {
-			logger.error(e.getLocalizedMessage());
-		}
+		return ConfigUtility.loadConfigConstants();
 	}
-	
-	/**
-	 * @return VBConfig
+
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.system.service.SystemService#updateConfigConstants(java.util.HashMap)
 	 */
-	public VBConfig getVBConfig()
-	{
-		VBConfig vbConfig = new VBConfig();
-		try {
-			PropertiesConfiguration config = getConfigPropertiesConfiguration();
-			vbConfig.setVbMailHost(config.getString("CFG.MAIL.HOST"));
-			vbConfig.setVbMailPort(config.getString("CFG.MAIL.PORT"));
-			vbConfig.setVbMailUser(config.getString("CFG.VUSER"));
-			vbConfig.setVbMailPassword(config.getString("CFG.MAIL.PASSWORD"));
-			vbConfig.setVbMailFrom(config.getString("CFG.MAIL.FROM"));
-			vbConfig.setVbMailFromAlias(config.getString("CFG.MAIL.FROM_ALIAS"));
-			vbConfig.setVbMailAdmin(StringUtils.join(config.getStringArray("CFG.MAIL.ADMIN"), ","));
-			
-		} catch (ConfigurationException e) {
-			logger.error(e.getLocalizedMessage());
-		}
-		return vbConfig;
+	public void updateConfigConstants(
+			HashMap<String, ConfigObject> configObjectMap) {
+		ConfigUtility.updateConfigConstants(configObjectMap);
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.system.service.SystemService#getConfigConstants(java.lang.String)
+	 */
+	public HashMap<String, ConfigObject> getConfigConstants(String filename)
+			throws Exception {
+		return ConfigUtility.getConfigConstants(filename);
+	}
 	 
 }
 

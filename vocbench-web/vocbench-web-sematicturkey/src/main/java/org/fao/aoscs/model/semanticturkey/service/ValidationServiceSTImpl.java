@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.domain.AttributesObject;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.DomainRangeObject;
@@ -33,7 +34,6 @@ import org.fao.aoscs.domain.ValidationPermission;
 import org.fao.aoscs.hibernate.DatabaseUtil;
 import org.fao.aoscs.hibernate.HibernateUtilities;
 import org.fao.aoscs.hibernate.QueryFactory;
-import org.fao.aoscs.model.semanticturkey.ConfigConstants;
 import org.fao.aoscs.model.semanticturkey.STModelConstants;
 import org.fao.aoscs.model.semanticturkey.service.manager.PropertyManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.SKOSManager;

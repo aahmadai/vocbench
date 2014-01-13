@@ -17,7 +17,6 @@ import org.fao.aoscs.domain.PermissionFunctionalityMap;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
-import org.fao.aoscs.domain.VBConfig;
 import org.fao.aoscs.domain.ValidationFilter;
 
 import com.google.gwt.core.client.GWT;
@@ -73,8 +72,6 @@ public interface SystemService extends RemoteService {
 	public HashMap<String, ConfigObject> loadConfigConstants() throws Exception;
 	public void updateConfigConstants(HashMap<String, ConfigObject> configObjectMap) throws Exception;
 	public HashMap<String, ConfigObject> getConfigConstants(String filename) throws Exception;
-	public void updateVBConfig(VBConfig vbConfig) throws Exception;
-	public VBConfig getVBConfig() throws Exception;
 	public ArrayList<OntologyInfo> getOntology(String userid) throws Exception;
 	public OntologyInfo addOntology(String userid, OntologyInfo ontoInfo) throws Exception;
 	public ArrayList<OntologyInfo> deleteOntology(String userid, int ontologyId) throws Exception;

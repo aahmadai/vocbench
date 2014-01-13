@@ -41,7 +41,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.fao.aims.aos.vocbench.services.Agrovoc;
 import org.fao.aims.aos.vocbench.services.VOCBENCH;
-import org.fao.aoscs.model.semanticturkey.ConfigConstants;
 import org.fao.aoscs.model.semanticturkey.STModelConstants;
 import org.fao.aoscs.model.semanticturkey.service.wrappers.ServiceDirectWrapper;
 import org.fao.aoscs.model.semanticturkey.service.wrappers.ServiceHttpWrapper;
@@ -91,7 +90,6 @@ public class STModel {
 	 */
 	public void initialize(String stServerScheme, String stServerIP, int stServerPort, String stServerPath) throws STInitializationException, IOException {
 
-		initConfigConstants();
 		initModelConstants();
 
 		/*this.accessType = ConfigConstants.STMETHOD;
@@ -139,31 +137,6 @@ public class STModel {
 		STModelConstants.loadConstants(mcMap);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.model.BasicModelManager#initConfigConstants()
-	 */
-	public void initConfigConstants() {
-		HashMap<String, String> mcMap = new HashMap<String, String>();
-		PropertiesConfiguration config;
-		try {
-			config = new PropertiesConfiguration("Config.properties");
-			Iterator<?> it = config.getKeys();
-			while(it.hasNext())
-			{
-				String key = (String) it.next();
-				String mapkey = key;
-				if(mapkey.startsWith("CFG."))
-					mapkey = mapkey.replaceFirst("CFG.", "");
-				mcMap.put(mapkey, config.getString(key));
-			}
-		} catch (ConfigurationException e) {
-			logger.error(e.getLocalizedMessage());
-		}
-		
-		ConfigConstants.loadConstants(mcMap);
-	}
-	
-
 	/**
 	 * @return
 	 */

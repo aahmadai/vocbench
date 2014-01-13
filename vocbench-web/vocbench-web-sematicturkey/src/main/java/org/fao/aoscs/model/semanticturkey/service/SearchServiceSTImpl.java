@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.ConceptShowObject;
 import org.fao.aoscs.domain.InitializeSearchData;
@@ -19,7 +20,6 @@ import org.fao.aoscs.domain.SearchResponse;
 import org.fao.aoscs.domain.SearchResultObject;
 import org.fao.aoscs.domain.SearchResultObjectList;
 import org.fao.aoscs.hibernate.QueryFactory;
-import org.fao.aoscs.model.semanticturkey.ConfigConstants;
 import org.fao.aoscs.model.semanticturkey.service.manager.ObjectManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.PropertyManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.SKOSManager;

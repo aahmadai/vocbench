@@ -8,10 +8,10 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.fao.aoscs.client.module.constant.ConfigConstants;
 
 public class MailUtil {
 	
@@ -34,18 +34,17 @@ public class MailUtil {
 	{
 		try
 		{
-			PropertiesConfiguration config = new PropertiesConfiguration("Config.properties");
-
-			final String host = config.getString("CFG.MAIL.HOST");
-			final int port = config.getInt("CFG.MAIL.PORT");
-			final String user = config.getString("CFG.MAIL.USER");
-			final String password = config.getString("CFG.MAIL.PASSWORD");
-			String from = config.getString("CFG.MAIL.FROM");
-			String from_alias = config.getString("CFG.MAIL.FROM_ALIAS");
+			
+			final String host = ConfigConstants.EMAIL_HOST;
+			final int port = ConfigConstants.EMAIL_PORT;
+			final String user = ConfigConstants.EMAIL_USER;
+			final String password = ConfigConstants.EMAIL_PASSWORD;
+			String from = ConfigConstants.EMAIL_FROM;
+			String from_alias = ConfigConstants.EMAIL_FROM_ALIAS;
 			String toAdmin = to;
 			if(to.equals("ADMIN"))
 			{
-				toAdmin = StringUtils.join(config.getStringArray("CFG.MAIL.ADMIN"), ",");
+				toAdmin = StringUtils.join(ConfigConstants.EMAIL_ADMIN, ",");
 			}
 			
 			Properties props = new Properties();

@@ -17,14 +17,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.fao.aoscs.domain.LabelObject;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.RelationshipObject;
 import org.fao.aoscs.domain.RelationshipTreeObject;
 import org.fao.aoscs.domain.TreeObject;
-import org.fao.aoscs.model.semanticturkey.ConfigConstants;
 import org.fao.aoscs.model.semanticturkey.service.manager.MetadataManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.ProjectManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.VocbenchManager;
@@ -38,7 +35,7 @@ public class testSemanticTurkey extends STModel{
 
 	static ArrayList<String> langList = new ArrayList<String>();
 	
-	public static HashMap<String, String> loadConfigConstants()
+	/*public static HashMap<String, String> loadConfigConstants()
 	{
 		HashMap<String, String> mcMap = new HashMap<String, String>();
 		try {
@@ -53,7 +50,7 @@ public class testSemanticTurkey extends STModel{
 			logger.error(e.getLocalizedMessage());
 		}
 		return mcMap;
-	}
+	}*/
 	
 	public static void main(String args[]) throws IOException, STInitializationException {
 
@@ -74,7 +71,6 @@ public class testSemanticTurkey extends STModel{
 			 System.out.println("filename = " + aURL.getFile());
 			 System.out.println("ref = " + aURL.getRef());
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -90,7 +86,7 @@ public class testSemanticTurkey extends STModel{
 		System.out.println("dateliteral: "+dateVal+" :: "+DateParser.parseW3CDateTime(dateVal));
 		
 		//Initialize constants
-		loadConfigConstants();
+		//loadConfigConstants();
 		
 		OntologyInfo ontoInfo = new OntologyInfo();
 		

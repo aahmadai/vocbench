@@ -17,7 +17,6 @@ import org.fao.aoscs.domain.PermissionFunctionalityMap;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
-import org.fao.aoscs.domain.VBConfig;
 import org.fao.aoscs.domain.ValidationFilter;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -71,10 +70,8 @@ public interface SystemServiceAsync<T> {
 			AsyncCallback<HashMap<String, ConfigObject>> callback);
 	void updateConfigConstants(HashMap<String, ConfigObject> configObjectMap,
 			AsyncCallback<Void> callback);
-	void updateVBConfig(VBConfig vbConfig, AsyncCallback<Void> callback);
 	void getConfigConstants(String filename,
 			AsyncCallback<HashMap<String, ConfigObject>> callback);
-	void getVBConfig(AsyncCallback<VBConfig> callback);
 	void addOntology(String userid, OntologyInfo ontoInfo,
 			AsyncCallback<OntologyInfo> callback);
 	void deleteOntology(String userid, int ontologyId, AsyncCallback<ArrayList<OntologyInfo>> callback);

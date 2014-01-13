@@ -23,7 +23,6 @@ import org.fao.aoscs.domain.PermissionFunctionalityMap;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
-import org.fao.aoscs.domain.VBConfig;
 import org.fao.aoscs.domain.ValidationFilter;
 import org.fao.aoscs.hibernate.HibernateUtilities;
 import org.fao.aoscs.system.service.SystemServiceSystemImpl;
@@ -49,10 +48,8 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	public void init() throws ServletException
 	{
 		super.init();
-		
-	//	Bean Manager initialization
+		//Bean Manager initialization
 		setBeanManager(GwtConfigurationHelper.initGwtStatelessBeanManager( new HibernateUtil(HibernateUtilities.getSessionFactory())));;
-	
 		systemServiceSystemImpl = new SystemServiceSystemImpl();
 		
 	}
@@ -77,14 +74,6 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	public HashMap<String, String> getHelpURL()
 	{
 		return systemServiceSystemImpl.getHelpURL();
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.system.service.SystemService#loadConfigConstants()
-	 */
-	public HashMap<String, ConfigObject> loadConfigConstants()
-	{
-		return systemServiceSystemImpl.loadConfigConstants();
 	}
 	
 	/* (non-Javadoc)
@@ -382,20 +371,6 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	}
 
 	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.system.service.SystemService#updateVBConfig(org.fao.aoscs.domain.VBConfig)
-	 */
-	public void updateVBConfig(VBConfig vbConfig) {
-		systemServiceSystemImpl.updateVBConfig(vbConfig);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.system.service.SystemService#getVBConfig()
-	 */
-	public VBConfig getVBConfig() {
-		return systemServiceSystemImpl.getVBConfig();
-	}
-
-	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.system.service.SystemService#addOntology(java.lang.String, org.fao.aoscs.domain.OntologyInfo)
 	 */
 	public OntologyInfo addOntology(String userid, OntologyInfo ontoInfo) {
@@ -414,6 +389,14 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	 */
 	public ArrayList<OntologyInfo> getOntology(String userid) {
 		return systemServiceSystemImpl.getOntology(userid);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.system.service.SystemService#loadConfigConstants()
+	 */
+	public HashMap<String, ConfigObject> loadConfigConstants()
+	{
+		return systemServiceSystemImpl.loadConfigConstants();
 	}
 
 	/* (non-Javadoc)

@@ -742,6 +742,12 @@ public interface LocaleConstants extends Constants{
 	public String configDefaultValue();
 	public String configImportedValue();
 	
+	public String configLoadBtn();
+	public String configExportBtn();
+	public String configConfirmBtn();
+	public String configAllPresetBtn();
+	public String configPresetBtn();
+	
 	public String configVBConfiguration();
 	public String configMailConfiguration();
 	public String configConfigurationSuccess();
@@ -749,15 +755,8 @@ public interface LocaleConstants extends Constants{
 	public String configConfigurationLoadFail();
 	public String configNoData();
 	public String configAdminEmailSeparator();
-	
-	public String configVbMailHost();
-	public String configVbMailPort();
-	public String configVbMailUser();
-	public String configVbMailPassword();
-	public String configVbMailFrom();
-	public String configVbMailFromAlias();
-	public String configVbMailAdmin();
-	
+	public String configSaveMsg();
+		
 	//Ontology
 	public String ontologyManagement();
 	public String ontologyDefaultConfigurationManagement();

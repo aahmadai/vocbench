@@ -23,6 +23,7 @@ public class ImportConfig extends FormDialogBox{
 	private static LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	private VerticalPanel panel = new VerticalPanel();
 	private MultiUploader uploader;
+	private String message;
 
 	public ImportConfig(){
 		super(constants.importButton(), constants.buttonCancel());
@@ -43,9 +44,10 @@ public class ImportConfig extends FormDialogBox{
 		uploader = new MultiUploader();
 		uploader.setMaximumFiles(1);
 		uploader.addOnFinishUploadHandler(new OnFinishUploaderHandler() {
-			public void onFinish(IUploader uploader) {
+			public void onFinish(IUploader uploader1) {
 				
-		    	if (uploader.getStatus() == Status.SUCCESS) {
+		    	if (uploader1.getStatus() == Status.SUCCESS) {
+		    		message = uploader1.getServerInfo().message;
 		    		ImportConfig.this.submit.setEnabled(true);
 		    	}
 		    }
@@ -68,6 +70,7 @@ public class ImportConfig extends FormDialogBox{
 		content.add(GridStyle.setTableRowStyle(table, "#F4F4F4", "#E8E8E8", 5));
 		DOM.setStyleAttribute(content.getElement(), "border", "1px solid #F59131");
 		
+		panel.clear();
 		panel.setSize("100%","100%");		
 		panel.add(content);			
 		panel.setSpacing(5);
@@ -81,6 +84,16 @@ public class ImportConfig extends FormDialogBox{
 	public MultiUploader getUploader()
 	{
 		return uploader;
+	}
+	
+	public String getMessage()
+	{
+		return message;
+	}
+	
+	public void clearMessage()
+	{
+		message = "";
 	}
 	
 	public HandlerRegistration addSubmitClickHandler(ClickHandler handler) {

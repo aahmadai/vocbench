@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.domain.AttributesObject;
 import org.fao.aoscs.domain.ClassObject;
 import org.fao.aoscs.domain.ConceptDetailObject;
@@ -38,7 +39,6 @@ import org.fao.aoscs.domain.Validation;
 import org.fao.aoscs.hibernate.DatabaseUtil;
 import org.fao.aoscs.hibernate.HibernateUtilities;
 import org.fao.aoscs.hibernate.QueryFactory;
-import org.fao.aoscs.model.semanticturkey.ConfigConstants;
 import org.fao.aoscs.model.semanticturkey.STModelConstants;
 import org.fao.aoscs.model.semanticturkey.service.manager.MetadataManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.ObjectManager;

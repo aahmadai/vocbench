@@ -55,6 +55,6 @@ public class Style {
 	public static String filter_panel_border 	 = "filter-panel-border";
 	public static String filter_scroll_background= "filter-scroll-background";
 	
-	
+	public static String label_color_gray= "label-gray";
 	
 }

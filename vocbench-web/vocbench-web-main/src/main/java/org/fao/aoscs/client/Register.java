@@ -494,7 +494,7 @@ public class Register extends Composite implements ClickHandler {
 			Window.alert(constants.registerNoContactAddress());
 			txtaddress.setFocus(true);
 			isComplete = false;
-		} else if (lstcountry.getSelectedIndex() == 0) {
+		} else if (lstcountry.getValue(lstcountry.getSelectedIndex()).equals("")) {
 			Window.alert(constants.registerNoCountry());
 			lstcountry.setFocus(true);
 			isComplete = false;

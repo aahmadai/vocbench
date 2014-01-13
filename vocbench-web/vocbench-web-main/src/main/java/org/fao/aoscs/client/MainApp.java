@@ -86,6 +86,10 @@ public class MainApp extends Composite { // Application container
 	public static LocaleMessages messages = (LocaleMessages) GWT.create(LocaleMessages.class);
     public static AOSImageBundle aosImageBundle = (AOSImageBundle) GWT.create(AOSImageBundle.class);
     
+    public static String DEV = "DEV";
+	public static String PRO = "PRO";
+	public static String SANDBOX = "SANDBOX";
+    
     private VerticalPanel panel = new VerticalPanel();
     public static ArrayList<String> userMenu = new ArrayList<String>();
     public static int userId;
@@ -807,7 +811,7 @@ public class MainApp extends Composite { // Application container
         //title.setWidth("100%");
         title.setWordWrap(false);
         
-        HTML version = new HTML(constants.mainVersionAllCaps()+ "&nbsp;" + ConfigConstants.VERSIONTEXT);
+        HTML version = new HTML(constants.mainVersionAllCaps()+ "&nbsp;" + ConfigConstants.DISPLAYVERSION + " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
         version.setStyleName("header-mini-version");
         version.setWordWrap(false);
         

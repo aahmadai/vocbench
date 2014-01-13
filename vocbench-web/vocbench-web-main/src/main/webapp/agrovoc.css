@@ -468,6 +468,10 @@ table.quick-link:hover{
   	font-size: 11px;
 }
 
+.label-gray{
+	color:  #AAA;
+}
+
 /* Styles used in org.fao.aoscs.client.utility.GridStyle */
 /* Grid with unique style in first row only*/
 .gstPanel1{

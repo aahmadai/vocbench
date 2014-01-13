@@ -1,6 +1,6 @@
 package org.fao.aoscs.hibernate;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -20,31 +20,23 @@ public class HibernateUtilities
 	public static Configuration hbConfig;
 	public static final ThreadLocal<Session> session = new ThreadLocal<Session>();
 	
-	private static String dbUrl;
-	private static String dbUsername; 
-	private static String dbPassword; 
-	
     static {
         createSessionFactory();
     }
-	
+    
 	public static void createSessionFactory()
 	{
 		try {
 			
-			// Get database properties from config file
-        	PropertiesConfiguration config = new PropertiesConfiguration("Config.properties");
-        	
-    		dbUrl = config.getString("CFG.DB.CONNECTIONURL");
-    		dbUsername = config.getString("CFG.DB.USERNAME");
-    		dbPassword = config.getString("CFG.DB.PASSWORD");
-
 			hbConfig = new Configuration();
-        	hbConfig.setProperty("hibernate.connection.url", dbUrl);
-        	hbConfig.setProperty("hibernate.connection.username", dbUsername);
-        	hbConfig.setProperty("hibernate.connection.password", dbPassword);
-        	hbConfig.configure(CONFIGURATION_FILE);
-        	
+			if(ConfigConstants.DB_CONNECTIONURL!=null)
+				hbConfig.setProperty("hibernate.connection.url", ConfigConstants.DB_CONNECTIONURL);
+			if(ConfigConstants.DB_USERNAME!=null)
+				hbConfig.setProperty("hibernate.connection.username", ConfigConstants.DB_USERNAME);
+			if(ConfigConstants.DB_PASSWORD!=null)
+				hbConfig.setProperty("hibernate.connection.password", ConfigConstants.DB_PASSWORD);
+	    	hbConfig.configure(CONFIGURATION_FILE);
+	    	
 			// Create the SessionFactory from hibernate.cfg.xml				
         	sessionFactory = hbConfig.buildSessionFactory();
 		} 
