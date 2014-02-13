@@ -115,7 +115,6 @@ public class SearchOption extends Composite{
 	private AddValue addTermValue;
 	
 	public static String ADVANCED_SEARCH = "ADVANCED_SEARCH";
-	
 	public static String SEARCH_RESULT = "SEARCH_RESULT";
 	
 	public static String CONCEPTDOMAINEDITORIALDATATYPEPROPERTY = "C";
@@ -156,10 +155,11 @@ public class SearchOption extends Composite{
 		{
 			panel.showWidget(panel.getWidgetIndex(vvp));
 		}
-		else
+		else if(show.equals(SEARCH_RESULT))
 		{
 			loadSearchResultPanel(searchObj);
 		}
+		
 		initWidget(panel);		
 	}
 	
@@ -236,7 +236,9 @@ public class SearchOption extends Composite{
 		simpleSearchTopPanel.add(this.getSearchButton());
 		simpleSearchTopPanel.add(this.getClearButton());
 		if(MainApp.groupId == 1)
+		{
 			simpleSearchTopPanel.add(this.getIndexButton());
+		}
 		
 		VerticalPanel simpleSearchPanel = new VerticalPanel();
 		simpleSearchPanel.setSpacing(10);

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import net.sf.gilead.pojo.gwt.LightEntity;
 
 import org.fao.aoscs.domain.ConfigObject;
+import org.fao.aoscs.domain.DBMigrationObject;
 import org.fao.aoscs.domain.InitializeSystemData;
 import org.fao.aoscs.domain.InitializeUsersPreferenceData;
 import org.fao.aoscs.domain.LanguageCode;
@@ -75,6 +76,10 @@ public interface SystemService extends RemoteService {
 	public ArrayList<OntologyInfo> getOntology(String userid) throws Exception;
 	public OntologyInfo addOntology(String userid, OntologyInfo ontoInfo) throws Exception;
 	public ArrayList<OntologyInfo> deleteOntology(String userid, int ontologyId) throws Exception;
+	
+	public Boolean checkDBConnection() throws Exception;
+	public ArrayList<DBMigrationObject> getDBMigrationList() throws Exception;
+	public ArrayList<DBMigrationObject> runDBMigration(String initVersion) throws Exception;
 	
 	public static class SystemServiceUtil{
 		private static SystemServiceAsync<?> instance;

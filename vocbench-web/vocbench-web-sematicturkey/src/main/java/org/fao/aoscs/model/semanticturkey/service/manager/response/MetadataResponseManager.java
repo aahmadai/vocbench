@@ -86,6 +86,16 @@ public class MetadataResponseManager extends ResponseManager {
 	 * @param ontoInfo
 	 * @return
 	 */
+	public static XMLResponseREPLY getNamedGraphsRequest(OntologyInfo ontoInfo)
+	{
+		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getNamedGraphsRequest);
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @return
+	 */
 	public static XMLResponseREPLY getImportsRequest(OntologyInfo ontoInfo)
 	{
 		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getImportsRequest);

@@ -12,6 +12,7 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 
 import org.fao.aoscs.client.module.system.service.SystemService;
 import org.fao.aoscs.domain.ConfigObject;
+import org.fao.aoscs.domain.DBMigrationObject;
 import org.fao.aoscs.domain.InitializeSystemData;
 import org.fao.aoscs.domain.InitializeUsersPreferenceData;
 import org.fao.aoscs.domain.LanguageCode;
@@ -413,6 +414,18 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	public HashMap<String, ConfigObject> getConfigConstants(String filename)
 			throws Exception {
 		return systemServiceSystemImpl.getConfigConstants(filename);
+	}
+
+	public ArrayList<DBMigrationObject> getDBMigrationList() throws Exception {
+		return systemServiceSystemImpl.getDBMigrationList();
+	}
+
+	public ArrayList<DBMigrationObject> runDBMigration(String initVersion) throws Exception {
+		return systemServiceSystemImpl.runDBMigration(initVersion);
+	}
+
+	public Boolean checkDBConnection() throws Exception {
+		return systemServiceSystemImpl.checkDBConnection();
 	}
 
 }

@@ -1,6 +1,7 @@
 package org.fao.aoscs.hibernate;
 
 import org.fao.aoscs.client.module.constant.ConfigConstants;
+import org.fao.aoscs.system.util.ConfigUtility;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -27,7 +28,7 @@ public class HibernateUtilities
 	public static void createSessionFactory()
 	{
 		try {
-			
+			ConfigUtility.loadConfigConstants();
 			hbConfig = new Configuration();
 			if(ConfigConstants.DB_CONNECTIONURL!=null)
 				hbConfig.setProperty("hibernate.connection.url", ConfigConstants.DB_CONNECTIONURL);

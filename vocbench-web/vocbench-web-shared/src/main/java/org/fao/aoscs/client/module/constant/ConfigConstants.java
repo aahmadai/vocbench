@@ -6,12 +6,16 @@ import java.util.HashMap;
 import org.fao.aoscs.domain.ConfigObject;
 import org.fao.aoscs.domain.VBConfigInfo;
 
+/**
+ * @author sachit
+ *
+ */
 public class ConfigConstants {
 	
 	@VBConfigInfo(key="AGROVOC.NAMESPACE", description="AGROVOC NAMESPACE", defaultValue="http://aims.fao.org/aos/agrovoc/", mandatory=false)
 	public static String AGROVOCNAMESPACE;
 	
-	@VBConfigInfo(key="DB.CONNECTIONURL", description="Database Connection URL", defaultValue="jdbc:mysql://localhost:3306/administrator_version20?requireSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8", mandatory=true)
+	@VBConfigInfo(key="DB.CONNECTIONURL", description="Database Connection URL", defaultValue="jdbc:mysql://localhost:3306/administrator_version20?createDatabaseIfNotExist=true&requireSSL=false&useUnicode=true&characterEncoding=utf-8", mandatory=true)
 	public static String DB_CONNECTIONURL;
 	
 	@VBConfigInfo(key="DB.USERNAME", description="Database Username", defaultValue="root", mandatory=true)
@@ -70,6 +74,9 @@ public class ConfigConstants {
 	
 	@VBConfigInfo(key="PAGE.COPYRIGHTLINK", description="Link for copyright page", defaultValue="http://www.fao.org/corp/copyright/en/", mandatory=false)
 	public static String COPYRIGHTLINK;
+	
+	@VBConfigInfo(key="PAGE.PARTNERS", description="Partner folder", defaultValue="default", mandatory=false)
+	public static String PARTNERS;
 	
 	@VBConfigInfo(key="VB.ONTOLOGY.VERSION", description="Specify VocBench version", defaultValue="2.0", mandatory=true)
 	public static String VERSION;
@@ -137,6 +144,7 @@ public class ConfigConstants {
 			VOCBENCHINFO					= getStringValue(cMap.get("PAGE.VOCBENCHINFO"));
 			CONTACTUS						= getStringValue(cMap.get("PAGE.CONTACTUS"));
 			COPYRIGHTLINK					= getStringValue(cMap.get("PAGE.COPYRIGHTLINK"));
+			PARTNERS							= getStringValue(cMap.get("PAGE.PARTNERS"));
 			
 			PERMISSIONCHECK  				= getStringValue(cMap.get("PERMISSION.CHECK")).equalsIgnoreCase("true")? true : false;
 			PERMISSIONHIDE  				= getStringValue(cMap.get("PERMISSION.HIDE")).equalsIgnoreCase("true")? true : false;
@@ -164,11 +172,6 @@ public class ConfigConstants {
 			GUESTPASSWORD					= getStringValue(cMap.get("VISITOR.GUESTPASSWORD"));
 			VISITORGROUPID					= getStringValue(cMap.get("VISITOR.GROUPID"));
 			VISITORGROUPNAME				= getStringValue(cMap.get("VISITOR.GROUPNAME"));
-			
-	
-
-			
-		
 		}
 		catch(Exception e)
 		{

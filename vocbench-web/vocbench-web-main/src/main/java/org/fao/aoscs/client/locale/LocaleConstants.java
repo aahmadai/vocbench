@@ -24,6 +24,8 @@ public interface LocaleConstants extends Constants{
 	public String mainHelp();
 	public String mainHelpTitle();
 	public String mainPartner();
+	public String otherPartner();
+	public String fundedBy();
 	public String mainAck1();
 	public String mainAck2();
 	public String mainWelcome();
@@ -84,6 +86,8 @@ public interface LocaleConstants extends Constants{
 	public String toolbarHomeTitle();
 	public String toolbarSearch();
 	public String toolbarSearchTitle();
+	public String toolbarSparql();
+	public String toolbarSparqlTitle();
 	public String toolbarConcepts();
 	public String toolbarConceptsTitle();
 	public String toolbarRelationships();
@@ -362,6 +366,12 @@ public interface LocaleConstants extends Constants{
 	public String searchHelpIncludeDescription();
 	public String searchHelpSearchPreferredOnly();
 	public String searchHelpLanguage();
+	public String searchSparqlSearch();
+	public String searchSparqlQueryLanguage();
+	public String searchSparqlQuery();
+	public String searchSparqlIncludeInferredStatements();
+	public String searchSparqlEmptyQuery();
+	public String searchSparqlResultFail();
 
 	//Search>messages
 	public String searchNoResult();
@@ -756,6 +766,20 @@ public interface LocaleConstants extends Constants{
 	public String configNoData();
 	public String configAdminEmailSeparator();
 	public String configSaveMsg();
+	
+	public String configDBConfiguration();
+	public String configDBVersion();
+	public String configDBDescription();
+	public String configDBType();
+	public String configDBScript();
+	public String configDBChecksum();
+	public String configDBInstalledOn();
+	public String configDBExecutionTime();
+	public String configDBState();
+	public String configDBPreinstalled();
+	public String configDBMigrationFailed();
+	public String configDBGetMigrationListFailed();
+	public String configDBSubmitConfirmation();
 		
 	//Ontology
 	public String ontologyManagement();
@@ -787,6 +811,7 @@ public interface LocaleConstants extends Constants{
 	public String ontologyNSMappingManageFail();
 	public String ontologyImportsLoadFail();
 	public String ontologyImportsManageFail();
+	public String ontologyNamedGraphLoadFail();
 	
 	//LoadingDialog
 	public String ldLoading();

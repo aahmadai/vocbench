@@ -98,7 +98,6 @@ public class ConfigUtility {
 				}
 			}
 			config.save();
-			loadConfigConstants();
 			HibernateUtilities.reloadSessionFactory();
 			
 		} catch (ConfigurationException e) {

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import net.sf.gilead.pojo.gwt.LightEntity;
 
 import org.fao.aoscs.domain.ConfigObject;
+import org.fao.aoscs.domain.DBMigrationObject;
 import org.fao.aoscs.domain.InitializeSystemData;
 import org.fao.aoscs.domain.InitializeUsersPreferenceData;
 import org.fao.aoscs.domain.LanguageCode;
@@ -77,5 +78,9 @@ public interface SystemServiceAsync<T> {
 	void deleteOntology(String userid, int ontologyId, AsyncCallback<ArrayList<OntologyInfo>> callback);
 	void getOntology(String userid,
 			AsyncCallback<ArrayList<OntologyInfo>> callback);
+	
+	void checkDBConnection(AsyncCallback<Boolean> callback);
+	void getDBMigrationList(AsyncCallback<ArrayList<DBMigrationObject>> callback);
+	void runDBMigration(String initVersion, AsyncCallback<ArrayList<DBMigrationObject>> callback);
 	
 }

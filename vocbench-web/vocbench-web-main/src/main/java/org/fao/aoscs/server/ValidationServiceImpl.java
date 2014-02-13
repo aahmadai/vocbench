@@ -104,7 +104,7 @@ public class ValidationServiceImpl extends PersistentRemoteService implements Va
 		return validationService.requestRecentChangesRows(request, vFilter);
 	}
 	
-	public ArrayList<RecentChanges> getRecentChangesData(int ontologyID) throws Exception
+	/*public ArrayList<RecentChanges> getRecentChangesData(int ontologyID) throws Exception
 	{
 		return validationService.getRecentChangesData(ontologyID);
 	}
@@ -112,5 +112,5 @@ public class ValidationServiceImpl extends PersistentRemoteService implements Va
 	public ArrayList<RecentChanges> getRecentChangesData(int ontologyID, int recentChangesID) throws Exception
 	{
 		return validationService.getRecentChangesData(ontologyID, recentChangesID);
-	}
+	}*/
 }

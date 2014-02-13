@@ -29,6 +29,7 @@ import org.fao.aoscs.client.module.preferences.Preferences;
 import org.fao.aoscs.client.module.relationship.Relationship;
 import org.fao.aoscs.client.module.scheme.Scheme;
 import org.fao.aoscs.client.module.search.Search;
+import org.fao.aoscs.client.module.search.Sparql;
 import org.fao.aoscs.client.module.search.widgetlib.ResultPanel;
 import org.fao.aoscs.client.module.search.widgetlib.SearchOption;
 import org.fao.aoscs.client.module.search.widgetlib.SuggestBoxAOS;
@@ -123,6 +124,7 @@ public class MainApp extends Composite { // Application container
     // module
     public DeckPanel modulePanel = new DeckPanel();
     public Search search = null;
+    public Sparql sparql = null;
     public Concept concept = null;
     public Preferences preference = null;
     public Relationship relationship = null;
@@ -533,6 +535,15 @@ public class MainApp extends Composite { // Application container
                 }
             });
         }
+        else if (name.equals("Sparql"))
+        {
+        	if(modulePanel.getWidgetIndex(sparql) == -1 || sparql == null)
+            {
+        		sparql = new Sparql();
+                modulePanel.add(sparql);
+            }
+            modulePanel.showWidget(modulePanel.getWidgetIndex(sparql) );
+        }
         else if (name.equals("Concepts"))
         {
             if (modulePanel.getWidgetIndex(concept) == -1 || concept == null){
@@ -717,8 +728,7 @@ public class MainApp extends Composite { // Application container
         rss.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event)
             {
-                openURL(GWT.getHostPageBaseURL()+"DownloadRSS?type=rss_2.0&ontologyId="
-                        + MainApp.userOntology.getOntologyId());
+                openURL(GWT.getHostPageBaseURL()+"DownloadRSS?format=atom_1.0&ontologyId="+ MainApp.userOntology.getOntologyId());
             }
         });
         final LinkLabel glossary = new LinkLabel("images/glossary.png", constants.menuGlossary(), constants.menuGlossary(), "quick-link");
@@ -1080,6 +1090,15 @@ public class MainApp extends Composite { // Application container
         else
         {
         	iconContainer.disableMenu(constants.toolbarStatistics(), constants.toolbarStatisticsTitle(), "Statistics");
+        }
+        
+        if (menuMap.containsKey("Sparql"))
+        {
+            iconContainer.addMenu(constants.toolbarSparql(), constants.toolbarSparqlTitle(), "Sparql");
+        }
+        else
+        {
+        	iconContainer.disableMenu(constants.toolbarSparql(), constants.toolbarSparqlTitle(), "Sparql");
         }
 
         for (int i = 0; i < iconContainer.getWidgetCount(); i++)

@@ -73,6 +73,14 @@ public class OntologyServiceSTImpl {
 		return MetadataManager.removeNSPrefixMappingRequest(ontoInfo, namespace);
 		
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.ontology.service.OntologyService#getNamedGraphs(org.fao.aoscs.domain.OntologyInfo)
+	 */
+	public ArrayList<String> getNamedGraphs(OntologyInfo ontoInfo)
+			throws Exception {
+		return MetadataManager.getNamedGraphs(ontoInfo);
+	}
 
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.ontology.service.OntologyService#addFromWeb(org.fao.aoscs.domain.OntologyInfo, java.lang.String)

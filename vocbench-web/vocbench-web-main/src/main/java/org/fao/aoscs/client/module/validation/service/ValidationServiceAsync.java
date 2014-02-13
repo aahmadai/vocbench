@@ -27,8 +27,8 @@ public interface ValidationServiceAsync<T> {
 	public void updateValidateQueue(HashMap<Validation, String> value, ValidationFilter vFilter, String subjectPrefix, String bodyPrefix, String bodySuffix, AsyncCallback<Integer> callback);
 	public void requestValidationRows(Request request, ValidationFilter vFilter, AsyncCallback<ArrayList<Validation>> callback);
 	public void getRecentChangesSize(ValidationFilter vFilter, AsyncCallback<Integer> callback);
-	public void getRecentChangesData(int ontologyID, AsyncCallback<ArrayList<RecentChanges>> callback);
-	void getRecentChangesData(int ontologyID, int recentChangesID, AsyncCallback<ArrayList<RecentChanges>> callback);
+	//public void getRecentChangesData(int ontologyID, AsyncCallback<ArrayList<RecentChanges>> callback);
+	//void getRecentChangesData(int ontologyID, int recentChangesID, AsyncCallback<ArrayList<RecentChanges>> callback);
 	public void getRecentChangesInitData(ValidationFilter vFilter, AsyncCallback<RecentChangesInitObject> callback);
 	public void requestRecentChangesRows(Request request, ValidationFilter vFilter, AsyncCallback<ArrayList<RecentChanges>> callback);
 

@@ -52,6 +52,7 @@ public class Main implements EntryPoint {
 	private static VerticalPanel panel;
 	private static HorizontalPanel langInterfacePanel = new HorizontalPanel();
 	private static VerticalPanel centerContainer = new VerticalPanel();
+	private static HashMap<String, ConfigObject> configObjectMap = new HashMap<String, ConfigObject>();
 
 	public void onModuleLoad() {
 		
@@ -64,14 +65,21 @@ public class Main implements EntryPoint {
 	        });
 	}
 	
-	private static void loadConfigContainer(HashMap<String, ConfigObject> configObjectMap)
+	private static void loadConfigContainer()
 	{
 		ConfigContainer configContainer = new ConfigContainer(configObjectMap);
 		centerContainer.clear();
 		centerContainer.add(configContainer);
 	}
 	
-	private static void loadCenterContainer(final HashMap<String, ConfigObject> configObjectMap)
+	private static void loadDBMigration()
+	{
+		DBMigration dbMigration = new DBMigration();
+		centerContainer.clear();
+		centerContainer.add(dbMigration);
+	}
+	
+	private static void loadCenterContainer()
 	{
 		AsyncCallback<ArrayList<LanguageInterface>> callback = new AsyncCallback<ArrayList<LanguageInterface>>()
 		{
@@ -232,7 +240,7 @@ public class Main implements EntryPoint {
 				langInterfacePanel.add(getLanguageBar(result));
 			}
 		    public void onFailure(Throwable caught) {
-		    	loadConfigContainer(configObjectMap);
+		    	loadConfigContainer();
 		    	ExceptionManager.showException(caught, constants.mainDBError());
 		    }
 		};
@@ -254,42 +262,68 @@ public class Main implements EntryPoint {
 		return i>0;
 	}
 	
-	private static void loadContainer(final HashMap<String, ConfigObject> configObjectMap)
+	private static void checkDBConnection()
+	{
+		AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+		    public void onSuccess(Boolean result) {
+		    	if(result)
+		    		loadDBMigration();
+		    	else
+		    	{
+		    		Window.alert("Database connection failed");
+		    		loadConfigContainer();
+		    	}
+		    }
+		    public void onFailure(Throwable caught) {
+		    	loadConfigContainer();
+		    	ExceptionManager.showException(caught, "Database connection failed!");
+		    }
+		 };
+		Service.systemService.checkDBConnection(callback); 
+	}
+	
+	private static void loadContainer()
 	{
 		if(checkConfig(configObjectMap))
 		{
-			loadConfigContainer(configObjectMap);
+			loadConfigContainer();
 		}
 		else
 		{
 			ConfigConstants.loadConstants(configObjectMap);
-			/* User data from session for feed to profile query */
-			AsyncCallback<UserLogin> callback = new AsyncCallback<UserLogin>() {
-			    public void onSuccess(UserLogin userLoginObj) {
-			    	// init page layout
-			    	if(userLoginObj==null){
-			    		loadCenterContainer(configObjectMap);
-			    	}else{
-			    		// Get information from session
-						MainApp mainApp = new MainApp(userLoginObj);
-						new LogManager().startLog(""+userLoginObj.getUserid());
-						mainApp.setWidth("100%");
-						Main.replaceRootPanel(mainApp);
-			    	}
-			    }
-			    public void onFailure(Throwable caught) {
-			    	ExceptionManager.showException(caught, constants.mainSessionExpired());
-			    }
-			 };
-			Service.systemService.checkSession(MainApp.USERLOGINOBJECT_SESSIONNAME, callback); // Get userlogin from session
+			checkDBConnection();
 		}
+	}
+	
+	public static void onSuccess()
+	{
+		/* User data from session for feed to profile query */
+		AsyncCallback<UserLogin> callback = new AsyncCallback<UserLogin>() {
+		    public void onSuccess(UserLogin userLoginObj) {
+		    	// init page layout
+		    	if(userLoginObj==null){
+		    		loadCenterContainer();
+		    	}else{
+		    		// Get information from session
+					MainApp mainApp = new MainApp(userLoginObj);
+					new LogManager().startLog(""+userLoginObj.getUserid());
+					mainApp.setWidth("100%");
+					Main.replaceRootPanel(mainApp);
+		    	}
+		    }
+		    public void onFailure(Throwable caught) {
+		    	ExceptionManager.showException(caught, constants.mainSessionExpired());
+		    }
+		 };
+		Service.systemService.checkSession(MainApp.USERLOGINOBJECT_SESSIONNAME, callback); // Get userlogin from session
 	}
 
 	private static void initLayout()
 	{
 		AsyncCallback<HashMap<String, ConfigObject>> callback = new AsyncCallback<HashMap<String, ConfigObject>>()
 		{
-			public void onSuccess(final HashMap<String, ConfigObject> configObjectMap) {
+			public void onSuccess(final HashMap<String, ConfigObject> result) {
+				configObjectMap = result;
 				centerContainer = new VerticalPanel();
 				centerContainer.setSize("100%", "100%");
 				LoadingDialog load = new LoadingDialog();
@@ -300,7 +334,7 @@ public class Main implements EntryPoint {
 				panel = new VerticalPanel();
 				panel.setSize("100%", "100%");
 				
-				loadContainer(configObjectMap);
+				loadContainer();
 				
 				// Quick links
 				QuickLinks quickLinks = new QuickLinks("header-quickLinks",true);
@@ -347,7 +381,6 @@ public class Main implements EntryPoint {
 	 }
 
 	public static void replaceRootPanel(Widget object){
-		 //RootPanel.get("logcenter").clear();
 		 RootPanel.get().clear();
 		 RootPanel.get().add(object);
 	}
@@ -376,20 +409,7 @@ public class Main implements EntryPoint {
 		  String to = pemail;
 		  String subject = messages.mailChangePasswordSubject(constants.mainPageTitle());
 		  String body = messages.mailChangePasswordBody(fname, lname, constants.mainPageTitle(), userName, password, ConfigConstants.EMAIL_FROM);
-		  
-		  /*String subject = constants.mainPageTitle() + " change password";
-		  String body = "";
-		  body += "Dear "+fname+" "+lname+",";
-		  body += "\n\nYour password has been successfully changed. "+
-		  			"You can now log in to the workbench with the username '" +
-		  			userName+"' and your new password '"+password+"'." +
-					"\n\nThanks for your interest."+
-					"\n\nIf you want to unregister, please send an email with your username and the "+
-					"subject: " + constants.mainPageTitle() + " - Unregister to "+
-					ConfigConstants.EMAIL_FROM;
-		  body += "\n\nRegards,";
-		  body += "\n\nThe " + constants.mainPageTitle() + " team.";*/
-		  
+
 		  AsyncCallback<Void> cbkmail = new AsyncCallback<Void>(){
 			  public void onSuccess(Void result) {
 				  GWT.log("Mail Send Successfully", null);
@@ -400,81 +420,137 @@ public class Main implements EntryPoint {
 			    }
 		  };
 		  Service.systemService.SendMail(to, subject, body, cbkmail);
-
-		  /*to = "ADMIN";
-		  subject = constants.mainPageTitle() + " :User Request";
-		  body = "A new user registration request for " + constants.mainPageTitle() + ".\n\n";
-		  body += constants.mainPageTitle() + " URL : " + GWT.getHostPageBaseURL() + "\n\n";
-		  body += "WB Version : "+ConfigConstants.DISPLAYVERSION+" \n\n";
-		  body += "Username : "+userName+" \n\n";
-		  body += "First Name : "+fname+" \n\n";
-		  body += "Last Name : "+lname+" \n\n";
-		  body += "Email : "+pemail+ "\n\n";
-		  body += "Please assign languages, user groups and activate the account.\n";
-		  body += 	"\n\n Regards,";
-		  body += 	"\n\nThe " + constants.mainPageTitle() + " Team.";
-
-		  AsyncCallback<Object> cbkmail1 = new AsyncCallback<Object>(){
-			  public void onSuccess(Object result) {
-				  GWT.log("Mail Send Successfully", null);
-			    }
-			    public void onFailure(Throwable caught) {
-			    	//ExceptionManager.showException(caught, "Mail Send Failed");
-			    	GWT.log("Mail Send Failed", null);
-			    }
-		  };
-		  Service.systemService.SendMail(to, subject, body, cbkmail1);*/
 	}
 
-	public static Widget getPartners()
-	{
-		HTML ackTitle = new HTML(constants.mainPartner(), false);
-		DOM.setStyleAttribute(ackTitle.getElement(), "paddingTop", "10px");
-		DOM.setStyleAttribute(ackTitle.getElement(), "paddingLeft", "30px");
-		ackTitle.setStyleName("ack-title");
+	 private static Widget getPartners()
+	 {
+		VerticalPanel hp = new VerticalPanel();
+		hp.setSize("100%", "100%");
+		
+		Widget topContainer = getTopContainer();
+		hp.add(topContainer);
+		hp.setCellHorizontalAlignment(topContainer, HasHorizontalAlignment.ALIGN_CENTER);
+		DOM.setStyleAttribute(topContainer.getElement(), "borderBottom", "1px solid #CFD9EB");
 
-		HorizontalPanel top = new HorizontalPanel();
-		top.setSize("100%","100%");
-		DOM.setStyleAttribute(top.getElement(), "padding", "4px");
+		Widget middleContainer = getMiddleContainer();
+		hp.add(middleContainer);
+		hp.setCellHorizontalAlignment(topContainer, HasHorizontalAlignment.ALIGN_CENTER);
+		DOM.setStyleAttribute(middleContainer.getElement(), "borderTop", "1px solid #FFFFFF");
+		
+		if(ConfigConstants.PARTNERS.equalsIgnoreCase("FAO"))
+		{
+			Widget bottomContainer = getBottomContainer();
+			hp.add(bottomContainer);
+			hp.setCellHorizontalAlignment(bottomContainer, HasHorizontalAlignment.ALIGN_CENTER);
+			
+			DOM.setStyleAttribute(middleContainer.getElement(), "borderBottom", "1px solid #CFD9EB");
+			DOM.setStyleAttribute(bottomContainer.getElement(), "borderTop", "1px solid #FFFFFF");
+		}
+		
+		return hp;
+		}
+	 
+	 private static Widget getTopContainer()
+	 {
+		 HTML ackleftTitle = new HTML(constants.mainPageTitle()+" "+constants.mainPartner(), false);
+		DOM.setStyleAttribute(ackleftTitle.getElement(), "paddingTop", "10px");
+		DOM.setStyleAttribute(ackleftTitle.getElement(), "paddingLeft", "30px");
+		ackleftTitle.setStyleName("ack-title");
+		
+		HTML ackrightTitle = new HTML(constants.otherPartner(), false);
+		DOM.setStyleAttribute(ackrightTitle.getElement(), "paddingTop", "10px");
+		DOM.setStyleAttribute(ackrightTitle.getElement(), "paddingLeft", "30px");
+		ackrightTitle.setStyleName("ack-title");
 
 		AcknowledgementWidget ackFao   	= new AcknowledgementWidget("images/logo_fao.gif","Food and Agriculture Organization of the United Nations","Food and Agriculture Organization of the United Nations","for a world without hunger","http://www.fao.org");
+		AcknowledgementWidget ackUnitov 	= new AcknowledgementWidget("images/logo_tv.png","Università degli Studi di Roma","Università degli Studi di Roma","Tor Vergata","http://web.uniroma2.it");
+		
+		HorizontalPanel topleft = new HorizontalPanel();
+		topleft.setSize("100%","100%");
+		DOM.setStyleAttribute(topleft.getElement(), "padding", "4px");
+		topleft.add(ackFao);
+		topleft.add(ackUnitov);
+		topleft.setCellHorizontalAlignment(ackFao, HasHorizontalAlignment.ALIGN_CENTER);
+		topleft.setCellHorizontalAlignment(ackUnitov, HasHorizontalAlignment.ALIGN_LEFT);
+		
 		AcknowledgementWidget ackKu    	= new AcknowledgementWidget("images/logo_ku.gif","Kasetsart University","Kasetsart University","Bangkok, Thailand","http://www.ku.ac.th");
 		AcknowledgementWidget ackAgris 	= new AcknowledgementWidget("images/logo_agris.gif","Thai National Agris Center","Thai National Agris Center","Bangkok, Thailand","http://thaiagris.lib.ku.ac.th/");
 		AcknowledgementWidget ackMimos 	= new AcknowledgementWidget("images/mimos_logo.jpg","MIMOS Berhad","MIMOS Berhad","Kuala Lumpur, Malaysia","http://www.mimos.my/");
-		AcknowledgementWidget ackUnitov 	= new AcknowledgementWidget("images/logo_tv.png","Università degli Studi di Roma","Università degli Studi di Roma","Tor Vergata","http://web.uniroma2.it");
+		
+		HorizontalPanel topright = new HorizontalPanel();
+		topright.setSize("100%","100%");
+		DOM.setStyleAttribute(topright.getElement(), "padding", "4px");
+		topright.add(ackKu);
+		topright.add(ackAgris);
+		topright.add(ackMimos);
+		topright.setCellHorizontalAlignment(ackKu, HasHorizontalAlignment.ALIGN_RIGHT);
+		topright.setCellHorizontalAlignment(ackAgris, HasHorizontalAlignment.ALIGN_RIGHT);
+		topright.setCellHorizontalAlignment(ackMimos, HasHorizontalAlignment.ALIGN_RIGHT);
 
-		top.add(ackFao);
-		top.add(ackKu);
-		top.add(ackAgris);
-		top.add(ackMimos);
-		top.add(ackUnitov);
-
-		top.setCellHorizontalAlignment(ackFao, HasHorizontalAlignment.ALIGN_CENTER);
-		top.setCellHorizontalAlignment(ackKu, HasHorizontalAlignment.ALIGN_LEFT);
-		top.setCellHorizontalAlignment(ackAgris, HasHorizontalAlignment.ALIGN_LEFT);
-		top.setCellHorizontalAlignment(ackMimos, HasHorizontalAlignment.ALIGN_LEFT);
-		top.setCellHorizontalAlignment(ackUnitov, HasHorizontalAlignment.ALIGN_LEFT);
-
-		HTML contrib = new HTML(constants.mainAck2(), false);
+		VerticalPanel topleftContainer = new VerticalPanel();
+		topleftContainer.setSize("100%", "100%");
+		topleftContainer.add(ackleftTitle);
+		topleftContainer.add(topleft);
+		topleftContainer.setCellVerticalAlignment(ackleftTitle, HasVerticalAlignment.ALIGN_TOP);
+		topleftContainer.setCellHorizontalAlignment(ackleftTitle, HasHorizontalAlignment.ALIGN_LEFT);
+		
+		VerticalPanel toprightContainer = new VerticalPanel();
+		toprightContainer.setSize("100%", "100%");
+		toprightContainer.add(ackrightTitle);
+		toprightContainer.add(topright);
+		toprightContainer.setCellVerticalAlignment(ackrightTitle, HasVerticalAlignment.ALIGN_TOP);
+		toprightContainer.setCellHorizontalAlignment(ackrightTitle, HasHorizontalAlignment.ALIGN_LEFT);
+		
+		HorizontalPanel topContainer = new HorizontalPanel();
+		topContainer.setSize("100%", "100%");
+		topContainer.add(topleftContainer);
+		topContainer.add(toprightContainer);
+		return topContainer;
+	 }
+	 
+	 private static Widget getMiddleContainer()
+	 {
+	 	HorizontalPanel middleContainer = new HorizontalPanel();
+		middleContainer.setSize("100%", "100%");
+		
+		VerticalPanel middle = new VerticalPanel();
+		DOM.setStyleAttribute(middle.getElement(), "padding", "10px");
+		DOM.setStyleAttribute(middle.getElement(), "paddingLeft", "30px");
+		middle.setSize("100%","100%");
+		
+		HTML fundedBy = new HTML(constants.mainPageTitle()+" "+constants.fundedBy(), false);
+		fundedBy.setStyleName("ackLabel");
+		fundedBy.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		
+		HorizontalPanel fundedByPanel = new HorizontalPanel();
+		DOM.setStyleAttribute(fundedByPanel.getElement(), "padding", "4px");
+		fundedByPanel.setSize("100%", "100%");
+		
+		AcknowledgementWidget agINFRA = new AcknowledgementWidget("images/agINFRA_logo.jpg","agINFRA","agINFRA","(EC  7th framework program INFRA-2011-1.2.2, Grant agreement no: 283770)","http://aginfra.eu" );
+		agINFRA.setImageSize("47", "36");
+		AcknowledgementWidget SemaGrow = new AcknowledgementWidget("images/SemaGrow_logo.jpg","SemaGrow","SemaGrow","(EC 7th framework program ICT-2011.4.4, Grant agreement no: 318497)","http://www.semagrow.eu" );
+		SemaGrow.setImageSize("112", "36");
+		
+		fundedByPanel.add(agINFRA);
+		fundedByPanel.add(SemaGrow);
+		
+		middle.add(fundedBy);
+		middle.add(fundedByPanel);
+		
+		middleContainer.add(middle);
+		return middleContainer;
+	 }
+	 
+	 private static Widget getBottomContainer()
+	 {
+	 	HTML contrib = new HTML(constants.mainAck2(), false);
 		contrib.setStyleName("ackLabel");
 		contrib.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 
 		HTML ack = new HTML(constants.mainAck1(), false);
 		ack.setStyleName("ackLabel");
-		ack.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-
-		HTML agINFRA1 = new HTML("VocBench is partially funded by the  agINFRA project", false);
-		agINFRA1.setStyleName("ackLabel");
-		agINFRA1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		
-		AcknowledgementWidget agINFRA2 = new AcknowledgementWidget("images/agINFRA_logo.jpg","agINFRA","agINFRA","(EC  7th framework program INFRA-2011-1.2.2, Grant agreement no: 283770)","http://aginfra.eu" );
-		agINFRA2.setImageSize("47", "36");
-		
-		VerticalPanel farleftBottom = new VerticalPanel();
-		farleftBottom.setSpacing(3);
-		farleftBottom.add(agINFRA1);
-		farleftBottom.add(agINFRA2);
-		
+		ack.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);	
+	 
 		VerticalPanel leftBottom = new VerticalPanel();
 		leftBottom.add(contrib);
 		leftBottom.add(new AcknowledgementWidget("images/logo_icrisat.png","ICRISAT","ICRISAT","International Crops Research Institute for the Semi-Arid Tropics","http://www.icrisat.org" ));
@@ -487,39 +563,18 @@ public class Main implements EntryPoint {
 		HorizontalPanel bottom = new HorizontalPanel();
 		DOM.setStyleAttribute(bottom.getElement(), "padding", "10px");
 		DOM.setStyleAttribute(bottom.getElement(), "paddingLeft", "30px");
-
 		bottom.setSize("100%","100%");
-		bottom.add(farleftBottom);
 		bottom.add(leftBottom);
 		bottom.add(rightBottom);
-
-		VerticalPanel topContainer = new VerticalPanel();
-		topContainer.setSize("100%", "100%");
-		DOM.setStyleAttribute(topContainer.getElement(), "borderBottom", "1px solid #CFD9EB");
-		topContainer.add(ackTitle);
-		topContainer.add(top);
-		topContainer.setCellVerticalAlignment(ackTitle, HasVerticalAlignment.ALIGN_TOP);
-		topContainer.setCellVerticalAlignment(top, HasVerticalAlignment.ALIGN_BOTTOM);
-
+		
 		HorizontalPanel bottomContainer = new HorizontalPanel();
 		bottomContainer.setSize("100%", "100%");
-		DOM.setStyleAttribute(bottomContainer.getElement(), "borderTop", "1px solid #FFFFFF");
 		bottomContainer.add(bottom);
+		
+		return bottomContainer;
+	 }
 
-
-
-		VerticalPanel hp = new VerticalPanel();
-		hp.setSize("100%", "100%");
-		hp.add(topContainer);
-		hp.add(bottomContainer);
-		hp.setCellHeight(topContainer, "50%");
-		hp.setCellHeight(bottomContainer, "50%");
-		hp.setCellHorizontalAlignment(topContainer, HasHorizontalAlignment.ALIGN_CENTER);
-		hp.setCellHorizontalAlignment(bottomContainer, HasHorizontalAlignment.ALIGN_CENTER);
-		return hp;
-	}
-
-	public static HorizontalPanel getLanguageBar(final ArrayList<LanguageInterface> langList)
+	private static HorizontalPanel getLanguageBar(final ArrayList<LanguageInterface> langList)
 	{
 		final ListBox langMenuBar = new ListBox();
 		for(int i=0 ; i<langList.size() ; i++)
@@ -555,7 +610,7 @@ public class Main implements EntryPoint {
 		return langPanel;
 	}
 
-	public static VerticalPanel getVocbenchDescription(){
+	private static VerticalPanel getVocbenchDescription(){
 		HTML desc = new HTML(constants.mainBrief());
 		DOM.setStyleAttribute(desc.getElement(), "fontSize", "12px");
 
@@ -573,7 +628,7 @@ public class Main implements EntryPoint {
 		return vp;
 	}
 
-	public static VerticalPanel getVisitorInfo(){
+	private static VerticalPanel getVisitorInfo(){
 		HTML ca = new HTML("&nbsp;"+constants.mainMustRegister()+"&nbsp;");
 		ca.setStyleName("link-label-blue");
 		ca.addClickHandler(new ClickHandler(){
@@ -601,7 +656,7 @@ public class Main implements EntryPoint {
 		return vp;
 	}
 
-	public static VerticalPanel getSandboxInfo(){
+	private static VerticalPanel getSandboxInfo(){
 		HTML sandboxText = new HTML(constants.mainSandboxInfo());
 		DOM.setStyleAttribute(sandboxText.getElement(), "fontSize", "12px");
 
@@ -620,7 +675,7 @@ public class Main implements EntryPoint {
 		return vp;
 	}
 
-	public static VerticalPanel getAnonymousInfo(){
+	private static VerticalPanel getAnonymousInfo(){
 		HTML text = new HTML(constants.mainAnonymousInfo());
 		DOM.setStyleAttribute(text.getElement(), "fontSize", "12px");
 		VerticalPanel vp = new VerticalPanel();

@@ -16,6 +16,7 @@ import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.constant.OWLActionConstants;
 import org.fao.aoscs.client.module.constant.OWLStatusConstants;
 import org.fao.aoscs.domain.ConfigObject;
+import org.fao.aoscs.domain.DBMigrationObject;
 import org.fao.aoscs.domain.FilterPreferences;
 import org.fao.aoscs.domain.FilterPreferencesId;
 import org.fao.aoscs.domain.InitializeSystemData;
@@ -42,6 +43,7 @@ import org.fao.aoscs.server.ProjectServiceImpl;
 import org.fao.aoscs.server.utility.Encrypt;
 import org.fao.aoscs.server.utility.MailUtil;
 import org.fao.aoscs.system.util.ConfigUtility;
+import org.fao.aoscs.system.util.DBMigrationUtility;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
@@ -1534,6 +1536,47 @@ public class SystemServiceSystemImpl {
 	public HashMap<String, ConfigObject> getConfigConstants(String filename)
 			throws Exception {
 		return ConfigUtility.getConfigConstants(filename);
+	}
+	
+	/**
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean checkDBConnection() {
+		try
+		{
+			int size = QueryFactory.getHibernateSQLQuery("SELECT 1").size();
+			//System.out.println("test: "+size);
+			if(size>0)
+			{
+				//System.out.println("true");
+				return true;
+			}
+			else
+			{
+				//System.out.println("false");
+				return false;
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * @return
+	 * @throws Exception
+	 */
+	public ArrayList<DBMigrationObject> getDBMigrationList() throws Exception {
+		DBMigrationUtility dbmUtility = new DBMigrationUtility(ConfigConstants.DB_CONNECTIONURL, ConfigConstants.DB_USERNAME, ConfigConstants.DB_PASSWORD);
+		return dbmUtility.getDBMigrationList();
+	}
+	
+	public ArrayList<DBMigrationObject> runDBMigration(String initVersion) throws Exception {
+		DBMigrationUtility dbmUtility = new DBMigrationUtility(ConfigConstants.DB_CONNECTIONURL, ConfigConstants.DB_USERNAME, ConfigConstants.DB_PASSWORD);
+		return dbmUtility.runDBMigrate(initVersion);
 	}
 	 
 }

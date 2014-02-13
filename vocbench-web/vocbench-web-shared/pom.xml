@@ -86,6 +86,13 @@
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
 		</dependency>
+		
+		<!-- Flyway DB Migration -->
+		<dependency>
+            <groupId>com.googlecode.flyway</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>2.3</version>
+        </dependency>
 
 		<!-- Gilead -->
 		<dependency>

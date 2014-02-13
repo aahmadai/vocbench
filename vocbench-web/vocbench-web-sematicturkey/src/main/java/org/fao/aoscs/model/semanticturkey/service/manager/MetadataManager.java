@@ -2,6 +2,7 @@ package org.fao.aoscs.model.semanticturkey.service.manager;
 
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -116,6 +117,25 @@ public class MetadataManager extends ResponseManager {
 		XMLResponseREPLY resp = MetadataResponseManager.removeNSPrefixMappingRequest(ontoInfo, namespace);
 		boolean result = resp.isAffirmative();
 		return result;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @return
+	 */
+	public static ArrayList<String> getNamedGraphs(OntologyInfo ontoInfo)
+	{
+		ArrayList<String> namedGraphList = new ArrayList<String>();
+		XMLResponseREPLY reply = MetadataResponseManager.getNamedGraphsRequest(ontoInfo);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(Element propElement : STXMLUtility.getChildElementByTagName(dataElement, "namedgraph"))
+			{
+				namedGraphList.add(propElement.getAttribute("uri"));
+			}
+		}
+		return namedGraphList;
 	}
 	
 	/**

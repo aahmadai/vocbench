@@ -26,6 +26,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 		public Boolean editNSPrefixMapping(OntologyInfo ontoInfo, String namespace, String prefix) throws Exception;
 		public Boolean deleteNSPrefixMapping(OntologyInfo ontoInfo, String namespace) throws Exception;
 		
+		public ArrayList<String> getNamedGraphs(OntologyInfo ontoInfo) throws Exception;
+		
 		public ImportPathObject getImports(OntologyInfo ontoInfo) throws Exception;
 		public Boolean addFromWeb(OntologyInfo ontoInfo, String baseuri, String altURL) throws Exception;
 		public Boolean addFromWebToMirror(OntologyInfo ontoInfo, String baseuri, String mirrorFile, String altURL) throws Exception;

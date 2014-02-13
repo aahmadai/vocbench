@@ -19,8 +19,8 @@
 		<!-- GWT needs at least java 1.5 -->
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-   		<buildtimestamp>${maven.build.timestamp}</buildtimestamp>
-	   	<maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
+		<buildtimestamp>${maven.build.timestamp}</buildtimestamp>
+		<maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
 	</properties>
 
 	<dependencies>
@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>${gwtVersion}</version><!--$NO-MVN-MAN-VER$-->
+			<version>${gwtVersion}</version><!--$NO-MVN-MAN-VER$ -->
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -69,12 +69,6 @@
 			<version>2.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
-		<!-- dependency>
-			<groupId>org.fao.aoscs</groupId>
-			<artifactId>vocbench-web-protege</artifactId>
-			<version>2.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency -->
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -134,7 +128,7 @@
 		<dependency>
 			<groupId>rome</groupId>
 			<artifactId>rome</artifactId>
-			<version>0.9</version>
+			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
@@ -149,18 +143,18 @@
 		<!-- Generate compiled stuff in the folder used for developing mode -->
 		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
 		<resources>
-	      <resource>
-	        <directory>src/main/resources</directory>
-	        <filtering>true</filtering>
-	      </resource>
-	    </resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
 
 			<!-- GWT Maven Plugin -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.5.1</version><!--$NO-MVN-MAN-VER$-->
+				<version>2.5.1</version><!--$NO-MVN-MAN-VER$ -->
 				<executions>
 					<execution>
 						<goals>
@@ -186,7 +180,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version><!--$NO-MVN-MAN-VER$-->
+				<version>2.1.1</version><!--$NO-MVN-MAN-VER$ -->
 				<executions>
 					<execution>
 						<phase>compile</phase>

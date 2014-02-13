@@ -75,5 +75,10 @@ public class SearchServiceImpl extends PersistentRemoteService  implements Searc
 	{
 		return searchService.indexOntology(ontoInfo);
 	}
+
+	public ArrayList<ArrayList<String>> getSparqlSearchResults(OntologyInfo ontoInfo,
+			String query, String language, boolean infer) throws Exception {
+		return searchService.getSparqlSearchResults(ontoInfo, query, language, infer);
+	}
 	
 }

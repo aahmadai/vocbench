@@ -22,6 +22,7 @@ public interface OntologyServiceAsync<T> {
 	void addNSPrefixMapping(OntologyInfo ontoInfo, String namespace, String prefix, AsyncCallback<Boolean> callback);
 	void editNSPrefixMapping(OntologyInfo ontoInfo, String namespace, String prefix, AsyncCallback<Boolean> callback);
 	void deleteNSPrefixMapping(OntologyInfo ontoInfo, String namespace, AsyncCallback<Boolean> callback);
+	void getNamedGraphs(OntologyInfo ontoInfo, AsyncCallback<ArrayList<String>> callback);
 	void addFromWeb(OntologyInfo ontoInfo, String baseuri, String altURL, AsyncCallback<Boolean> callback);
 	void addFromWebToMirror(OntologyInfo ontoInfo, String baseuri, String mirrorFile, String altURL, AsyncCallback<Boolean> callback);
 	void addFromLocalFile(OntologyInfo ontoInfo, String baseuri, String localFilePath, String mirrorFile, AsyncCallback<Boolean> callback);

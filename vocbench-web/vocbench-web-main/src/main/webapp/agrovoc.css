@@ -795,7 +795,7 @@ TABLE.monthDates TD {
   font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
   font-size: 11px;
   background: #104A7B;
-  color: #1F71AD;;
+  color: #1F71AD;
   font-weight: bold;
   border-right: 0px solid #BBCDF3;
   border-left: 0px solid #BBCDF3;
@@ -1429,7 +1429,6 @@ BASIC STYLE //////////////////////////////////////////////////////
 }
 
 .filter-title-background {
-  //background-color: #F4F4F4;
   background: #C9C8C8 url('images/bg_grey2.gif') repeat-x top left;
   border-bottom: 1px solid #D1D1D1;
   font-size: 11px;

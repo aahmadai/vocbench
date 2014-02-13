@@ -19,4 +19,6 @@ public interface SearchServiceAsync<T> {
 	public void requestSearchResultsRows (Request request, SearchParameterObject searchObj, OntologyInfo ontoInfo,AsyncCallback<SearchResultObjectList> callback);
 	public void getSuggestions(SearchRequest request, boolean includeNotes, ArrayList<String> languages, OntologyInfo ontoInfo, AsyncCallback<SearchResponse> callback);
 	public void indexOntology (OntologyInfo ontoInfo, AsyncCallback<Integer> callback);
+	public void getSparqlSearchResults(OntologyInfo ontoInfo, String query, String language, boolean infer, AsyncCallback<ArrayList<ArrayList<String>>> callback);
+	
 }

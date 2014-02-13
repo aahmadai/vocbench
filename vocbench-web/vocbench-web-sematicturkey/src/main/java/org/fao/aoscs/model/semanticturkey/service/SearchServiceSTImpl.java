@@ -23,6 +23,7 @@ import org.fao.aoscs.hibernate.QueryFactory;
 import org.fao.aoscs.model.semanticturkey.service.manager.ObjectManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.PropertyManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.SKOSManager;
+import org.fao.aoscs.model.semanticturkey.service.manager.SparqlManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.VocbenchManager;
 import org.fao.aoscs.model.semanticturkey.util.STUtility;
 import org.fao.aoscs.model.semanticturkey.util.STXMLUtility;
@@ -389,5 +390,11 @@ public class SearchServiceSTImpl {
 		}
 		return suggestions;
 	}
+	
+	public ArrayList<ArrayList<String>> getSparqlSearchResults(OntologyInfo ontoInfo, String query, String language, boolean infer)
+	{
+		return SparqlManager.resolveQuery(ontoInfo, query, language, infer);
+	}
+	
 
 }

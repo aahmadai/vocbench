@@ -41,9 +41,8 @@ public interface ValidationService extends RemoteService{
 	
 	public int getRecentChangesSize(ValidationFilter vFilter) throws Exception;
 
-	public ArrayList<RecentChanges> getRecentChangesData(int ontologyID) throws Exception;
-	
-	public ArrayList<RecentChanges> getRecentChangesData(int ontologyID, int recentChangesID) throws Exception;
+	//public ArrayList<RecentChanges> getRecentChangesData(int ontologyID) throws Exception;
+	//public ArrayList<RecentChanges> getRecentChangesData(int ontologyID, int recentChangesID) throws Exception;
 
 	public RecentChangesInitObject getRecentChangesInitData(ValidationFilter vFilter) throws Exception;
 

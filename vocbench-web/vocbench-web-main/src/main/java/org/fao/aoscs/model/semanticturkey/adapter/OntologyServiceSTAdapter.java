@@ -69,6 +69,14 @@ public class OntologyServiceSTAdapter implements OntologyService {
 	public Boolean deleteNSPrefixMapping(OntologyInfo ontoInfo, String namespace) {
 		return ontologyService.deleteNSPrefixMapping(ontoInfo, namespace);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.ontology.service.OntologyService#getNamedGraphs(org.fao.aoscs.domain.OntologyInfo)
+	 */
+	public ArrayList<String> getNamedGraphs(OntologyInfo ontoInfo)
+			throws Exception {
+		return ontologyService.getNamedGraphs(ontoInfo);
+	}
 
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.ontology.service.OntologyService#addFromWeb(org.fao.aoscs.domain.OntologyInfo, java.lang.String)
@@ -121,5 +129,5 @@ public class OntologyServiceSTAdapter implements OntologyService {
 	public ArrayList<OntologyMirror> getOntologyMirror(OntologyInfo ontoInfo) {
 		return ontologyService.getOntologyMirror(ontoInfo);
 	}
-	
+
 }

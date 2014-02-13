@@ -79,12 +79,12 @@ public class ValidationServiceSTAdapter implements ValidationService{
 		return validationService.requestRecentChangesRows(request, vFilter);
 	}
 	
-	public ArrayList<RecentChanges> getRecentChangesData(int ontologyID)
+	/*public ArrayList<RecentChanges> getRecentChangesData(int ontologyID)
 	{
 		return validationService.getRecentChangesData(ontologyID);
 	}
 
 	public ArrayList<RecentChanges> getRecentChangesData(int ontologyID, int recentChangesID) {
 		return validationService.getRecentChangesData(ontologyID, recentChangesID);
-	}
+	}*/
 }

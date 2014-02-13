@@ -92,6 +92,14 @@ public class OntologyServiceImpl extends PersistentRemoteService implements Onto
 	public Boolean deleteNSPrefixMapping(OntologyInfo ontoInfo, String namespace) throws Exception{
 		return ontologyService.deleteNSPrefixMapping(ontoInfo, namespace);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.ontology.service.OntologyService#getNamedGraphs(org.fao.aoscs.domain.OntologyInfo)
+	 */
+	public ArrayList<String> getNamedGraphs(OntologyInfo ontoInfo)
+			throws Exception {
+		return ontologyService.getNamedGraphs(ontoInfo);
+	}
 
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.ontology.service.OntologyService#addFromWeb(org.fao.aoscs.domain.OntologyInfo, java.lang.String)

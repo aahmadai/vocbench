@@ -1,0 +1,30 @@
+.CodeMirror-gutter {
+	width: 3em;
+	background: white;
+}
+
+.CodeMirror {
+	font-size: 14px;
+	/*float: left;*/
+	background: white;
+	margin-right: 0px;
+	border: solid 1px #aaa;
+}
+
+.CodeMirror div div pre {
+	margin: 0px;
+}
+
+.CodeMirror pre {
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	border-width: 0;
+	margin: 0;
+	padding: 0;
+	background: transparent;
+	font-family: inherit;
+	margin: 0;
+}
+

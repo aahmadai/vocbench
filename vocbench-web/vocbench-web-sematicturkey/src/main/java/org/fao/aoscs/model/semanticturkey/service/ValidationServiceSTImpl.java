@@ -1856,68 +1856,6 @@ public class ValidationServiceSTImpl {
 		}
 	}
 	
-	/**
-	 * @param ontologyId
-	 * @param modifiedId
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public ArrayList<RecentChanges> getRecentChangesData(int ontologyId, int modifiedId)
-	{
-		String query = "select * from recent_changes where (ontology_id = '"+ontologyId+"' OR ontology_id = 0) and modified_id = '"+modifiedId+"'";
-		
-		try 
-		{
-			ArrayList<RecentChanges> list = (ArrayList<RecentChanges>) HibernateUtilities.currentSession().createSQLQuery(query).addEntity("rc",RecentChanges.class).list();
-			return setRecentChanges(list);
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-			return new ArrayList<RecentChanges>();
-		}
-		finally 
-		{
-			HibernateUtilities.closeSession();
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.validation.service.ValidationService#getRecentChangesData(int)
-	 */
-	@SuppressWarnings("unchecked")
-	public ArrayList<RecentChanges> getRecentChangesData(int ontologyId)
-	{
-		String query = "select rc.* from recent_changes rc where (ontology_id = '"+ontologyId+"' OR ontology_id = 0)";
-		try 
-		{
-			ArrayList<RecentChanges> list = (ArrayList<RecentChanges>) HibernateUtilities.currentSession().createSQLQuery(query).addEntity("rc",RecentChanges.class).list();
-			return setRecentChanges(list);
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-			return new ArrayList<RecentChanges>();
-		}
-		finally 
-		{
-			HibernateUtilities.closeSession();
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public ArrayList<RecentChanges> setRecentChanges(ArrayList<RecentChanges> list)
-	{
-		ArrayList<RecentChanges> rcList = new ArrayList<RecentChanges>();
-		for(int i=0;i<list.size();i++)
-		{
-			RecentChanges rc = list.get(i);
-			rc.setModifiedObject(DatabaseUtil.getObjectWrappedInArray(rc.getObject()));
-			rc.setObject(null);
-			rcList.add(rc);
-		}
-		return rcList;
-	}
 	
 	/**
 	 * @param vFilter
@@ -2041,6 +1979,20 @@ public class ValidationServiceSTImpl {
 		    }
 
 		  }
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<RecentChanges> setRecentChanges(ArrayList<RecentChanges> list)
+	{
+		ArrayList<RecentChanges> rcList = new ArrayList<RecentChanges>();
+		for(int i=0;i<list.size();i++)
+		{
+			RecentChanges rc = list.get(i);
+			rc.setModifiedObject(DatabaseUtil.getObjectWrappedInArray(rc.getObject()));
+			rc.setObject(null);
+			rcList.add(rc);
+		}
+		return rcList;
+	}
 	  	  	  
 	/**
 	 * @param vFilter
