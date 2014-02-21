@@ -34,6 +34,10 @@ import org.hibernate.Session;
  */
 public class UtilityRSS {
 	
+	public static String FEEDTYPE_ARCHIVED = "archived";
+	public static String FEEDTYPE_COMPLETE = "complete";
+	public static String FEEDTYPE_PAGED = "paged";
+	
 	/**
 	 * @param list
 	 * @return
@@ -461,27 +465,29 @@ public class UtilityRSS {
 	/**
 	 * @param ontologyId
 	 * @param rcid
-	 * @param pagesize
+	 * @param limit
 	 * @param page
 	 * @return
 	 * @throws NumberFormatException
 	 * @throws Exception
 	 */
-	public static ArrayList<FeedEntry> getFeedEntries(int ontologyId, int rcid, int pagesize, int page) throws NumberFormatException, Exception
+	public static ArrayList<FeedEntry> getFeedEntries(int ontologyId, int rcid, int limit, int page) throws NumberFormatException, Exception
 	{
-		int offset = (page - 1) * pagesize;
-		ArrayList<RecentChanges> list = listRecentChanges(ontologyId, rcid, pagesize, offset);
-		HashMap<String, Users> userMap = listUsers(getAllUsers());
-		HashMap<String, OwlAction> actionMap = listActions(getAction());
-		
 		ArrayList<FeedEntry> feedEntries = new ArrayList<FeedEntry>();
 		
+		int offset = (page - 1) * limit;
+		if(offset>=0)
+		{
+		ArrayList<RecentChanges> list = listRecentChanges(ontologyId, rcid, limit, offset);
+		HashMap<String, Users> userMap = listUsers(getAllUsers());
+		HashMap<String, OwlAction> actionMap = listActions(getAction());
 		for (int i = 0; i < list.size(); i++) 
 		{
 			RecentChanges c = (RecentChanges) list.get(i);
 			
 			FeedEntry feedEntry = UtilityRSS.generateFeedEntry(c, actionMap, userMap);
 			feedEntries.add(feedEntry);
+		}
 		}
 		return feedEntries;
 	}

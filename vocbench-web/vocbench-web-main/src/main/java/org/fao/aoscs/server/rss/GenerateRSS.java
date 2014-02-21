@@ -26,21 +26,20 @@ import com.sun.syndication.io.SyndFeedOutput;
 
 public class GenerateRSS {
 
-	public String getFeed(String baseURL, String format, int ontoIogyId, int rcid, int pagesize, int page, String feedtype) {
+	public String getFeed(String baseURL, String format, int ontoIogyId, int rcid, int limit, int page, String feedtype) {
 		String feedString = "";
 		SyndFeedOutput output = new SyndFeedOutput();
 		try {
 			
 			SyndFeed feed;
-			if(feedtype.equalsIgnoreCase("archived"))
-				feed = getArchivedFeed(baseURL, format, ontoIogyId, rcid, page);
-			else if(feedtype.equalsIgnoreCase("complete"))
-				feed = getCompleteFeed(baseURL, format, ontoIogyId, rcid);
+			if(feedtype.equalsIgnoreCase(UtilityRSS.FEEDTYPE_ARCHIVED))
+				feed = getArchivedFeed(baseURL, feedtype, format, ontoIogyId, rcid, page);
+			else if(feedtype.equalsIgnoreCase(UtilityRSS.FEEDTYPE_COMPLETE))
+				feed = getCompleteFeed(baseURL, feedtype, format, ontoIogyId, rcid);
 			else
-				feed = getPagedFeed(baseURL, format, ontoIogyId, rcid, pagesize, page);
+				feed = getPagedFeed(baseURL, UtilityRSS.FEEDTYPE_PAGED, format, ontoIogyId, rcid, limit, page);
 			if (feed != null) {
 				feedString = output.outputString(feed);
-				//System.out.println(feedString);
 			}
 		} catch (FeedException e) {
 			e.printStackTrace();
@@ -48,16 +47,17 @@ public class GenerateRSS {
 		return feedString;
 	}
 	
-	private SyndFeed getPagedFeed(String baseURL, String feedType, int ontologyId, int rcid, int pagesize, int page) {
+	private SyndFeed getPagedFeed(String baseURL, String feedtype, String format, int ontologyId, int rcid, int limit, int page) {
 		try 
 		{
-			SyndFeed feed = getFeed(baseURL, feedType, ontologyId, page);
+			int numberOfItems = UtilityRSS.getFeedSize(ontologyId);
+			int numberOfPages = numberOfItems/limit;
 			
-			//List<Module> feedmodule = new ArrayList<Module>();
-			//feedmodule.add(getSyModule());
-			//feed.setModules(feedmodule);
-			feed.setLinks(getPagedLinks(baseURL, feedType, ontologyId, pagesize, page));
-			feed.setEntries(getEntries(baseURL, feedType, ontologyId, rcid, pagesize, page));
+			page = (page==0)?1:page;
+			
+			SyndFeed feed = getFeed(baseURL, feedtype, format, ontologyId, page);
+			feed.setLinks(getPagedLinks(baseURL, feedtype, format, ontologyId, limit, page, numberOfPages));
+			feed.setEntries(getEntries(baseURL, feedtype, format, ontologyId, rcid, limit, page));
 			return feed;
 
 		} catch (Exception ex) {
@@ -67,18 +67,20 @@ public class GenerateRSS {
 		}
 	}
 	
-	private SyndFeed getArchivedFeed(String baseURL, String feedType, int ontologyId, int rcid, int page) {
+	private SyndFeed getArchivedFeed(String baseURL, String feedtype, String format, int ontologyId, int rcid, int page) {
 		try 
 		{
-			int pagesize = 15;
-			SyndFeed feed = getFeed(baseURL, feedType, ontologyId, page);
+			int limit = 100;
+			int numberOfItems = UtilityRSS.getFeedSize(ontologyId);
+			int numberOfPages = numberOfItems/limit;
 			
 			List<Module> feedmodule = new ArrayList<Module>();
-			//feedmodule.add(getSyModule());
 			feedmodule.add(getFHModule(true, false));
+			
+			SyndFeed feed = getFeed(baseURL, feedtype, format, ontologyId, page);
 			feed.setModules(feedmodule);
-			feed.setLinks(getArchivedLinks(baseURL, feedType, ontologyId, pagesize, page));
-			feed.setEntries(getEntries(baseURL, feedType, ontologyId, rcid, pagesize,  page));
+			feed.setLinks(getArchivedLinks(baseURL, feedtype, format, ontologyId, page, numberOfPages));
+			feed.setEntries(getEntries(baseURL, feedtype, format, ontologyId, rcid, limit,  (numberOfPages+1-page)));
 			feed.setPublishedDate(new Date());
 			return feed;
 
@@ -89,19 +91,19 @@ public class GenerateRSS {
 		}
 	}
 	
-	private SyndFeed getCompleteFeed(String baseURL, String feedType, int ontologyId, int rcid) {
+	private SyndFeed getCompleteFeed(String baseURL, String feedtype, String format, int ontologyId, int rcid) {
 		try 
 		{
-			int pagesize = -1;
+			int limit = -1;
 			int page = -1;
-			SyndFeed feed = getFeed(baseURL, feedType, ontologyId, page);
 			
 			List<Module> feedmodule = new ArrayList<Module>();
-			//feedmodule.add(getSyModule());
 			feedmodule.add(getFHModule(false, true));
+			
+			SyndFeed feed = getFeed(baseURL, feedtype, format, ontologyId, page);
 			feed.setModules(feedmodule);
-			feed.setLinks(getCompleteLinks(baseURL, feedType, ontologyId));
-			feed.setEntries(getEntries(baseURL, feedType, ontologyId, rcid, pagesize,  page));
+			feed.setLinks(getCompleteLinks(baseURL, feedtype, format, ontologyId));
+			feed.setEntries(getEntries(baseURL, feedtype, format, ontologyId, rcid, limit,  page));
 			feed.setPublishedDate(new Date());
 			return feed;
 
@@ -112,16 +114,16 @@ public class GenerateRSS {
 		}
 	}
 	
-	private SyndFeed getFeed(String baseURL, String feedType, int ontologyId, int page)
+	private SyndFeed getFeed(String baseURL, String feedtype, String format, int ontologyId, int page)
 	{
 		SyndFeed feed = new SyndFeedImpl();
-		feed.setFeedType(feedType);
+		feed.setFeedType(format);
 		feed.setTitle("VocBench Recent Changes");
 		feed.setDescription("Recent Changes on VocBench Concept Server.");
 		feed.setLink(baseURL+"/index.html");
 		feed.setLanguage("en");
 		feed.setAuthor("VocBench");
-		feed.setUri(baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId+"&page="+page);
+		feed.setUri(baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId+"&page="+page);
 		return feed;
 	}
 	
@@ -142,7 +144,7 @@ public class GenerateRSS {
 		return fhModule;
 	}
 	
-	private ArrayList<SyndLink> getCompleteLinks(String baseURL, String feedType, int ontologyId) throws NumberFormatException, Exception
+	private ArrayList<SyndLink> getCompleteLinks(String baseURL, String feedtype, String format, int ontologyId) throws NumberFormatException, Exception
 	{
 		ArrayList<SyndLink> linkList = new ArrayList<SyndLink>();
 		
@@ -152,59 +154,53 @@ public class GenerateRSS {
 		
 		SyndLink linkSelf = new SyndLinkImpl();
 		linkSelf.setRel("self");
-		linkSelf.setHref(baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId);
+		linkSelf.setHref(baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId);
 		linkList.add(linkSelf);
 		
 		return linkList;
 	}
 	
-	private ArrayList<SyndLink> getArchivedLinks(String baseURL, String feedType, int ontologyId, int pagesize, int page) throws NumberFormatException, Exception
+	private ArrayList<SyndLink> getArchivedLinks(String baseURL, String feedtype, String format, int ontologyId, int page, int numberOfPages) throws NumberFormatException, Exception
 	{
-		
-		int numberOfItems = UtilityRSS.getFeedSize(ontologyId);
-	    int numberOfPages = numberOfItems/pagesize;
-		
 		ArrayList<SyndLink> linkList = new ArrayList<SyndLink>();
-		
 		SyndLink link = new SyndLinkImpl();
 		link.setHref("index.html");
 		linkList.add(link);
 		
-		SyndLink linkCurrent = new SyndLinkImpl();
-		linkCurrent.setRel("current");
-		linkCurrent.setHref(baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId);
-		linkList.add(linkCurrent);
-		
 		SyndLink linkSelf = new SyndLinkImpl();
 		linkSelf.setRel("self");
-		linkSelf.setHref(baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId+"&pagesize="+pagesize);
+		linkSelf.setHref(baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId);
 		linkList.add(linkSelf);
 		
-		if(page > 1)
+		if(page > 0)
+		{
+			SyndLink linkCurrent = new SyndLinkImpl();
+			linkCurrent.setRel("current");
+			linkCurrent.setHref(baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId);
+			linkList.add(linkCurrent);
+		}
+		
+		if((page == 0 || page > 1) && page <= numberOfPages)
 		{
 			SyndLink linkPrev = new SyndLinkImpl();
 			linkPrev.setRel("prev-archive");
-			linkPrev.setHref(baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId+"&page="+(page-1));
+			linkPrev.setHref(baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId+"&page="+(numberOfPages-page));
 			linkList.add(linkPrev);
 		}
 		
-		if(page < numberOfPages)
+		if(page != 0 && page < numberOfPages)
 		{
 			SyndLink linkNext = new SyndLinkImpl();
 			linkNext.setRel("next-archive");
-			linkNext.setHref(baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId+"&page="+(page+1));
+			linkNext.setHref(baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId+"&page="+(numberOfPages-page));
 			linkList.add(linkNext);
 		}
 		
 		return linkList;
 	}
 	
-	private ArrayList<SyndLink> getPagedLinks(String baseURL, String feedType, int ontologyId, int pagesize, int page) throws NumberFormatException, Exception
+	private ArrayList<SyndLink> getPagedLinks(String baseURL, String feedtype, String format, int ontologyId, int limit, int page, int numberOfPages) throws NumberFormatException, Exception
 	{
-		
-		int numberOfItems = UtilityRSS.getFeedSize(ontologyId);
-	    int numberOfPages = numberOfItems/pagesize;
-		
 		ArrayList<SyndLink> linkList = new ArrayList<SyndLink>();
 		
 		SyndLink link = new SyndLinkImpl();
@@ -213,24 +209,24 @@ public class GenerateRSS {
 		
 		SyndLink linkSelf = new SyndLinkImpl();
 		linkSelf.setRel("self");
-		linkSelf.setHref(baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId);
+		linkSelf.setHref(baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId);
 		linkList.add(linkSelf);
 		
 		SyndLink linkFirst = new SyndLinkImpl();
 		linkFirst.setRel("first");
-		linkFirst.setHref(baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId+"&pagesize="+pagesize);
+		linkFirst.setHref(baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId+"&limit="+limit);
 		linkList.add(linkFirst);
 		
 		SyndLink linkLast = new SyndLinkImpl();
 		linkLast.setRel("last");
-		linkLast.setHref(baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId+"&pagesize="+pagesize+"&page="+numberOfPages);
+		linkLast.setHref(baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId+"&limit="+limit+"&page="+numberOfPages);
 		linkList.add(linkLast);
 		
 		if(page > 1)
 		{
 			SyndLink linkPrev = new SyndLinkImpl();
 			linkPrev.setRel("previous");
-			linkPrev.setHref(baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId+"&pagesize="+pagesize+"&page="+(page-1));
+			linkPrev.setHref(baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId+"&limit="+limit+"&page="+(page-1));
 			linkList.add(linkPrev);
 		}
 		
@@ -238,24 +234,24 @@ public class GenerateRSS {
 		{
 			SyndLink linkNext = new SyndLinkImpl();
 			linkNext.setRel("next");
-			linkNext.setHref(baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId+"&pagesize="+pagesize+"&page="+(page+1));
+			linkNext.setHref(baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId+"&limit="+limit+"&page="+(page+1));
 			linkList.add(linkNext);
 		}
 		
 		return linkList;
 	}
 	
-	private List<SyndEntry> getEntries(String baseURL, String feedType, int ontologyId, int rcid, int pagesize, int page) throws NumberFormatException, Exception
+	private List<SyndEntry> getEntries(String baseURL, String feedtype, String format, int ontologyId, int rcid, int limit, int page) throws NumberFormatException, Exception
 	{
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndEntry entry;
 		SyndContent description;
 		List<DCModule> dcmodulelist;
-		ArrayList<FeedEntry> feedEntries =  UtilityRSS.getFeedEntries(ontologyId, rcid, pagesize, page);
+		ArrayList<FeedEntry> feedEntries =  UtilityRSS.getFeedEntries(ontologyId, rcid, limit, page);
 		for (int i = 0; i < feedEntries.size(); i++) 
 		{
 			FeedEntry feedEntry = feedEntries.get(i);
-			String url = baseURL+"/DownloadRSS?format="+feedType+"&ontologyId="+ontologyId+"&rcid="+feedEntry.getModifiedId();
+			String url = baseURL+"/DownloadRSS?feedtype="+feedtype+"&format="+format+"&ontologyId="+ontologyId+"&rcid="+feedEntry.getModifiedId();
 			entry = new SyndEntryImpl();
 			entry.setTitle(feedEntry.getAction());
 			entry.setLink(url);

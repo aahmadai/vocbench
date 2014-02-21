@@ -1,6 +1,7 @@
 package org.fao.aoscs.model.semanticturkey.service.manager;
 
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
+import it.uniroma2.art.semanticturkey.servlet.main.SPARQL;
 
 import java.util.ArrayList;
 
@@ -33,35 +34,91 @@ public class SparqlManager extends ResponseManager {
 		if(reply!=null)
 		{
 			Element dataElement = reply.getDataElement();
-			for(Element sparqlElement : STXMLUtility.getChildElementByTagName(dataElement, "sparql"))
+			String resulttype = dataElement.getAttribute(SPARQL.resultTypeAttr);
+			if(resulttype.equals("tuple"))
 			{
-				ArrayList<String> headrow = new ArrayList<String>();
-				for(Element headElement : STXMLUtility.getChildElementByTagName(sparqlElement, "head"))
+				for(Element sparqlElement : STXMLUtility.getChildElementByTagName(dataElement, "sparql"))
 				{
-					headrow = new ArrayList<String>();
-					for(Element variableElement : STXMLUtility.getChildElementByTagName(headElement, "variable"))
+					ArrayList<String> headrow = new ArrayList<String>();
+					for(Element headElement : STXMLUtility.getChildElementByTagName(sparqlElement, "head"))
 					{
-						headrow.add(variableElement.getAttribute("name"));
-					}
-				}
-				list.add(headrow);
-				for(Element resultsElement : STXMLUtility.getChildElementByTagName(sparqlElement, "results"))
-				{
-					for(Element resultElement : STXMLUtility.getChildElementByTagName(resultsElement, "result"))
-					{
-						ArrayList<String> row = new ArrayList<String>();
-						for(Element bindingElement : STXMLUtility.getChildElementByTagName(resultElement, "binding"))
+						headrow = new ArrayList<String>();
+						for(Element variableElement : STXMLUtility.getChildElementByTagName(headElement, "variable"))
 						{
-							for(Element uriElement : STXMLUtility.getChildElementByTagName(bindingElement, "uri"))
-							{
-								row.add(uriElement.getTextContent());
-							}
+							headrow.add(variableElement.getAttribute("name"));
 						}
-						list.add(row);
+					}
+					list.add(headrow);
+					for(Element resultsElement : STXMLUtility.getChildElementByTagName(sparqlElement, "results"))
+					{
+						for(Element resultElement : STXMLUtility.getChildElementByTagName(resultsElement, "result"))
+						{
+							ArrayList<String> row = new ArrayList<String>();
+							for(Element bindingElement : STXMLUtility.getChildElementByTagName(resultElement, "binding"))
+							{
+								for(Element uriElement : STXMLUtility.getChildElementByTagName(bindingElement, "uri"))
+								{
+									row.add(uriElement.getTextContent());
+								}
+								for(Element literalElement : STXMLUtility.getChildElementByTagName(bindingElement, "literal"))
+								{
+									String lang = literalElement.getAttribute("xml:lang");
+									lang = lang.equals("")?"":" ("+lang+")";
+									row.add(literalElement.getTextContent()+lang);
+								}
+								for(Element typedLiteralElement : STXMLUtility.getChildElementByTagName(bindingElement, "typed-literal"))
+								{
+									row.add(typedLiteralElement.getTextContent());
+								}
+								for(Element bnodeElement : STXMLUtility.getChildElementByTagName(bindingElement, "bnode"))
+								{
+									row.add(bnodeElement.getTextContent());
+								}
+							}
+							list.add(row);
+						}
 					}
 				}
 			}
-			
+			else if(resulttype.equals("graph"))
+			{
+				ArrayList<String> headrow = new ArrayList<String>();
+				headrow = new ArrayList<String>();
+				headrow.add("subj");
+				headrow.add("pred");
+				headrow.add("obj");
+				list.add(headrow);
+				for(Element stmElement : STXMLUtility.getChildElementByTagName(dataElement, "stm"))
+				{
+					ArrayList<String> row = new ArrayList<String>();
+					for(Element elem : STXMLUtility.getChildElementByTagName(stmElement, "subj"))
+					{
+						row.add(elem.getTextContent());
+					}
+					for(Element elem : STXMLUtility.getChildElementByTagName(stmElement, "pred"))
+					{
+						row.add(elem.getTextContent());
+					}
+					for(Element elem : STXMLUtility.getChildElementByTagName(stmElement, "obj"))
+					{
+						row.add(elem.getTextContent());
+					}
+					list.add(row);
+				}
+			}
+			else if(resulttype.equals("boolean"))
+			{
+				ArrayList<String> headrow = new ArrayList<String>();
+				headrow = new ArrayList<String>();
+				headrow.add("result");
+				list.add(headrow);
+				ArrayList<String> row = new ArrayList<String>();
+				for(Element resultElement : STXMLUtility.getChildElementByTagName(dataElement, "result"))
+				{
+					row.add(resultElement.getTextContent());
+				}
+				list.add(row);
+			}
 		}
 		return list;
 	}

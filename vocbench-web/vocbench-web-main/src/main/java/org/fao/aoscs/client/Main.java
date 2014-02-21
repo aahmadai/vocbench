@@ -9,11 +9,11 @@ import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.logging.LogManager;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.HelpUtility;
-import org.fao.aoscs.client.widgetlib.Main.AcknowledgementWidget;
 import org.fao.aoscs.client.widgetlib.Main.BrowserCompatibilityInfo;
 import org.fao.aoscs.client.widgetlib.Main.Footer;
 import org.fao.aoscs.client.widgetlib.Main.Header;
 import org.fao.aoscs.client.widgetlib.Main.LoginForm;
+import org.fao.aoscs.client.widgetlib.Main.PartnerFooter;
 import org.fao.aoscs.client.widgetlib.Main.QuickLinks;
 import org.fao.aoscs.client.widgetlib.Main.WhatIsNew;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
@@ -109,27 +109,13 @@ public class Main implements EntryPoint {
 				if(ConfigConstants.MODE.equals(MainApp.SANDBOX))
 					briefLeft.add(getAnonymousInfo());
 
-				Image flyer = new Image("images/flyer.jpg");
-				DOM.setStyleAttribute(flyer.getElement(), "cursor", "pointer");
-				flyer.addClickHandler(new ClickHandler()
-				{
-					public void onClick(ClickEvent event) {
-						Window.open("ftp://ftp.fao.org/gi/gil/gilws/aims/references/flyers/csworkbench_en.pdf","_blank","schollbars=0,toolbar=0,resizable=1,status=no" );
-					}}
-				);
-
-				VerticalPanel briefRight= new VerticalPanel();
-				briefRight.setSize("100%","100%");
-				briefRight.add(flyer);
-
 				final HorizontalPanel briefMiddle = new HorizontalPanel();
 				briefMiddle.setSize("100%","100%");
 				briefMiddle.add(briefLeft);
 				briefMiddle.add(new Spacer("20px", "100%"));
-				//briefMiddle.add(briefRight);
 
 				WhatIsNew whatIsNew = new WhatIsNew();
-				whatIsNew.addNewItem(new HTML(constants.mainPageTitle() +" Web Services Beta version has been released for developers of agricultural information management systems to incorporate the " + constants.mainPageTitle() + " into their applications via <a href='"+ConfigConstants.WEBSERVICESINFO+"' target='_blank'>web services</a>."));
+				whatIsNew.addNewItem(new HTML(constants.mainPageTitle() +" Web services has been released for developers to incorporate the " + constants.mainPageTitle() + " into their applications via <a href='"+ConfigConstants.WEBSERVICESINFO+"' target='_blank'>web services</a>."));
 
 				VerticalPanel content = new VerticalPanel();
 				content.setStyleName("front-content");
@@ -424,163 +410,18 @@ public class Main implements EntryPoint {
 
 	 private static Widget getPartners()
 	 {
-		VerticalPanel hp = new VerticalPanel();
-		hp.setSize("100%", "100%");
-		
-		Widget topContainer = getTopContainer();
-		hp.add(topContainer);
-		hp.setCellHorizontalAlignment(topContainer, HasHorizontalAlignment.ALIGN_CENTER);
-		DOM.setStyleAttribute(topContainer.getElement(), "borderBottom", "1px solid #CFD9EB");
+		 PartnerFooter partnerFooter = new PartnerFooter();
+		 partnerFooter.setSize("100%", "100%");
+		 return partnerFooter;
+	}
 
-		Widget middleContainer = getMiddleContainer();
-		hp.add(middleContainer);
-		hp.setCellHorizontalAlignment(topContainer, HasHorizontalAlignment.ALIGN_CENTER);
-		DOM.setStyleAttribute(middleContainer.getElement(), "borderTop", "1px solid #FFFFFF");
-		
-		if(ConfigConstants.PARTNERS.equalsIgnoreCase("FAO"))
-		{
-			Widget bottomContainer = getBottomContainer();
-			hp.add(bottomContainer);
-			hp.setCellHorizontalAlignment(bottomContainer, HasHorizontalAlignment.ALIGN_CENTER);
-			
-			DOM.setStyleAttribute(middleContainer.getElement(), "borderBottom", "1px solid #CFD9EB");
-			DOM.setStyleAttribute(bottomContainer.getElement(), "borderTop", "1px solid #FFFFFF");
-		}
-		
-		return hp;
-		}
-	 
-	 private static Widget getTopContainer()
-	 {
-		 HTML ackleftTitle = new HTML(constants.mainPageTitle()+" "+constants.mainPartner(), false);
-		DOM.setStyleAttribute(ackleftTitle.getElement(), "paddingTop", "10px");
-		DOM.setStyleAttribute(ackleftTitle.getElement(), "paddingLeft", "30px");
-		ackleftTitle.setStyleName("ack-title");
-		
-		HTML ackrightTitle = new HTML(constants.otherPartner(), false);
-		DOM.setStyleAttribute(ackrightTitle.getElement(), "paddingTop", "10px");
-		DOM.setStyleAttribute(ackrightTitle.getElement(), "paddingLeft", "30px");
-		ackrightTitle.setStyleName("ack-title");
-
-		AcknowledgementWidget ackFao   	= new AcknowledgementWidget("images/logo_fao.gif","Food and Agriculture Organization of the United Nations","Food and Agriculture Organization of the United Nations","for a world without hunger","http://www.fao.org");
-		AcknowledgementWidget ackUnitov 	= new AcknowledgementWidget("images/logo_tv.png","Università degli Studi di Roma","Università degli Studi di Roma","Tor Vergata","http://web.uniroma2.it");
-		
-		HorizontalPanel topleft = new HorizontalPanel();
-		topleft.setSize("100%","100%");
-		DOM.setStyleAttribute(topleft.getElement(), "padding", "4px");
-		topleft.add(ackFao);
-		topleft.add(ackUnitov);
-		topleft.setCellHorizontalAlignment(ackFao, HasHorizontalAlignment.ALIGN_CENTER);
-		topleft.setCellHorizontalAlignment(ackUnitov, HasHorizontalAlignment.ALIGN_LEFT);
-		
-		AcknowledgementWidget ackKu    	= new AcknowledgementWidget("images/logo_ku.gif","Kasetsart University","Kasetsart University","Bangkok, Thailand","http://www.ku.ac.th");
-		AcknowledgementWidget ackAgris 	= new AcknowledgementWidget("images/logo_agris.gif","Thai National Agris Center","Thai National Agris Center","Bangkok, Thailand","http://thaiagris.lib.ku.ac.th/");
-		AcknowledgementWidget ackMimos 	= new AcknowledgementWidget("images/mimos_logo.jpg","MIMOS Berhad","MIMOS Berhad","Kuala Lumpur, Malaysia","http://www.mimos.my/");
-		
-		HorizontalPanel topright = new HorizontalPanel();
-		topright.setSize("100%","100%");
-		DOM.setStyleAttribute(topright.getElement(), "padding", "4px");
-		topright.add(ackKu);
-		topright.add(ackAgris);
-		topright.add(ackMimos);
-		topright.setCellHorizontalAlignment(ackKu, HasHorizontalAlignment.ALIGN_RIGHT);
-		topright.setCellHorizontalAlignment(ackAgris, HasHorizontalAlignment.ALIGN_RIGHT);
-		topright.setCellHorizontalAlignment(ackMimos, HasHorizontalAlignment.ALIGN_RIGHT);
-
-		VerticalPanel topleftContainer = new VerticalPanel();
-		topleftContainer.setSize("100%", "100%");
-		topleftContainer.add(ackleftTitle);
-		topleftContainer.add(topleft);
-		topleftContainer.setCellVerticalAlignment(ackleftTitle, HasVerticalAlignment.ALIGN_TOP);
-		topleftContainer.setCellHorizontalAlignment(ackleftTitle, HasHorizontalAlignment.ALIGN_LEFT);
-		
-		VerticalPanel toprightContainer = new VerticalPanel();
-		toprightContainer.setSize("100%", "100%");
-		toprightContainer.add(ackrightTitle);
-		toprightContainer.add(topright);
-		toprightContainer.setCellVerticalAlignment(ackrightTitle, HasVerticalAlignment.ALIGN_TOP);
-		toprightContainer.setCellHorizontalAlignment(ackrightTitle, HasHorizontalAlignment.ALIGN_LEFT);
-		
-		HorizontalPanel topContainer = new HorizontalPanel();
-		topContainer.setSize("100%", "100%");
-		topContainer.add(topleftContainer);
-		topContainer.add(toprightContainer);
-		return topContainer;
-	 }
-	 
-	 private static Widget getMiddleContainer()
-	 {
-	 	HorizontalPanel middleContainer = new HorizontalPanel();
-		middleContainer.setSize("100%", "100%");
-		
-		VerticalPanel middle = new VerticalPanel();
-		DOM.setStyleAttribute(middle.getElement(), "padding", "10px");
-		DOM.setStyleAttribute(middle.getElement(), "paddingLeft", "30px");
-		middle.setSize("100%","100%");
-		
-		HTML fundedBy = new HTML(constants.mainPageTitle()+" "+constants.fundedBy(), false);
-		fundedBy.setStyleName("ackLabel");
-		fundedBy.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		
-		HorizontalPanel fundedByPanel = new HorizontalPanel();
-		DOM.setStyleAttribute(fundedByPanel.getElement(), "padding", "4px");
-		fundedByPanel.setSize("100%", "100%");
-		
-		AcknowledgementWidget agINFRA = new AcknowledgementWidget("images/agINFRA_logo.jpg","agINFRA","agINFRA","(EC  7th framework program INFRA-2011-1.2.2, Grant agreement no: 283770)","http://aginfra.eu" );
-		agINFRA.setImageSize("47", "36");
-		AcknowledgementWidget SemaGrow = new AcknowledgementWidget("images/SemaGrow_logo.jpg","SemaGrow","SemaGrow","(EC 7th framework program ICT-2011.4.4, Grant agreement no: 318497)","http://www.semagrow.eu" );
-		SemaGrow.setImageSize("112", "36");
-		
-		fundedByPanel.add(agINFRA);
-		fundedByPanel.add(SemaGrow);
-		
-		middle.add(fundedBy);
-		middle.add(fundedByPanel);
-		
-		middleContainer.add(middle);
-		return middleContainer;
-	 }
-	 
-	 private static Widget getBottomContainer()
-	 {
-	 	HTML contrib = new HTML(constants.mainAck2(), false);
-		contrib.setStyleName("ackLabel");
-		contrib.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-
-		HTML ack = new HTML(constants.mainAck1(), false);
-		ack.setStyleName("ackLabel");
-		ack.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);	
-	 
-		VerticalPanel leftBottom = new VerticalPanel();
-		leftBottom.add(contrib);
-		leftBottom.add(new AcknowledgementWidget("images/logo_icrisat.png","ICRISAT","ICRISAT","International Crops Research Institute for the Semi-Arid Tropics","http://www.icrisat.org" ));
-
-		VerticalPanel rightBottom = new VerticalPanel();
-		rightBottom.add(ack);
-		rightBottom.add(new Spacer("100%", "10px"));
-		rightBottom.add(new AcknowledgementWidget(null, null, "Prof. Dagobert Soergel","UNIVERSITY OF MARYLAND",null));
-
-		HorizontalPanel bottom = new HorizontalPanel();
-		DOM.setStyleAttribute(bottom.getElement(), "padding", "10px");
-		DOM.setStyleAttribute(bottom.getElement(), "paddingLeft", "30px");
-		bottom.setSize("100%","100%");
-		bottom.add(leftBottom);
-		bottom.add(rightBottom);
-		
-		HorizontalPanel bottomContainer = new HorizontalPanel();
-		bottomContainer.setSize("100%", "100%");
-		bottomContainer.add(bottom);
-		
-		return bottomContainer;
-	 }
-
-	private static HorizontalPanel getLanguageBar(final ArrayList<LanguageInterface> langList)
+	 private static HorizontalPanel getLanguageBar(final ArrayList<LanguageInterface> langList)
 	{
 		final ListBox langMenuBar = new ListBox();
 		for(int i=0 ; i<langList.size() ; i++)
 		{
 			LanguageInterface langInterface = (LanguageInterface) langList.get(i);
-			langMenuBar.addItem(langInterface.getLocalLanguage(), langInterface.getLanguageCode().toLowerCase());
+			langMenuBar.addItem(langInterface.getLanguageNote(), langInterface.getLanguageCode().toLowerCase());
 			if(langList.get(i).getLanguageCode().toLowerCase().equals(constants.mainLocale().toLowerCase()))
 				langMenuBar.setSelectedIndex(i);
 

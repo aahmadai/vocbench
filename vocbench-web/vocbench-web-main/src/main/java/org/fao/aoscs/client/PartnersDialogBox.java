@@ -9,9 +9,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -52,16 +50,6 @@ public class PartnersDialogBox  extends DialogBoxAOS implements ClickHandler{
 	public Widget getPanel()
 	{
 		Partner p = new Partner();
-		VerticalPanel vp = new VerticalPanel();
-		vp.setSize("100%", "100%");
-		vp.add(p);
-		vp.setCellWidth(p, "100%");
-		vp.setCellHeight(p, "100%");
-		vp.setCellVerticalAlignment(p, HasVerticalAlignment.ALIGN_TOP);
-		
-		final ScrollPanel sc = new ScrollPanel();
-		sc.setSize("530px", "500px");			
-		sc.add(vp);
-		return sc;
+		return p;
 	}
 }

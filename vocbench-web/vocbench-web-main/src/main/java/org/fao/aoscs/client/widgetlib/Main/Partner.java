@@ -7,6 +7,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -22,18 +23,26 @@ public class Partner extends VerticalPanel{
 		vp.add(getDevelopedBy());
 		
 		vp.add(new HTML("<hr/>"));
-		vp.add(getCollaboratingPartners());
-		
-		vp.add(new HTML("<hr/>"));
 		vp.add(getFundedBy());		
 		
 		if(ConfigConstants.PARTNERS.equalsIgnoreCase("FAO"))
 		{
 			vp.add(new HTML("<hr/>"));
+			vp.add(getCollaboratingPartners());
+			
+			vp.add(new HTML("<hr/>"));
 			vp.add(getAgrovocParnters());		
 		}
 		
-		this.add(vp);		
+		ScrollPanel sc = new ScrollPanel();
+		sc.setSize("530px", "400px");			
+		sc.add(vp);
+		this.add(sc);
+		
+		/*Frame frame = new Frame();
+		frame.setSize("530px", "400px");
+		frame.setUrl(GWT.getHostPageBaseURL()+ "partner.html");
+		this.add(frame);*/
 	}
 	
 	private Widget getDevelopedBy()
@@ -91,12 +100,17 @@ public class Partner extends VerticalPanel{
 		AcknowledgementWidget SemaGrow = new AcknowledgementWidget("images/SemaGrow_logo.jpg","SemaGrow","SemaGrow","(EC 7th framework program ICT-2011.4.4, Grant agreement no: 318497)","http://www.semagrow.eu" );
 		SemaGrow.setImageSize("112", "36");
 		
+		VerticalPanel vpFunded = new VerticalPanel();
+		vpFunded.setSpacing(10);
+		vpFunded.setSize("100%", "100%");
+		vpFunded.add(agINFRA);	
+		vpFunded.add(SemaGrow);
+		
 		VerticalPanel vp = new VerticalPanel();
 		vp.setSpacing(5);
 		vp.setSize("100%", "100%");
 		vp.add(fundedBy);		
-		vp.add(agINFRA);	
-		vp.add(SemaGrow);
+		vp.add(vpFunded);	
 		return vp;
 	}
 	

@@ -366,7 +366,7 @@ public interface LocaleConstants extends Constants{
 	public String searchHelpIncludeDescription();
 	public String searchHelpSearchPreferredOnly();
 	public String searchHelpLanguage();
-	public String searchSparqlSearch();
+	public String searchSparqlSparqlQuery();
 	public String searchSparqlQueryLanguage();
 	public String searchSparqlQuery();
 	public String searchSparqlIncludeInferredStatements();

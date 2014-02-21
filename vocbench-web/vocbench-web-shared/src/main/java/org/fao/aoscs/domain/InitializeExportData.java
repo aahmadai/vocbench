@@ -9,7 +9,7 @@ public class InitializeExportData extends LightEntity{
 
 	private static final long serialVersionUID = -6367242436017503601L;
 
-	private HashMap<String, String> termCodeProperties = new HashMap<String, String>();
+	//private HashMap<String, String> termCodeProperties = new HashMap<String, String>();
 
 	private ArrayList<String[]> scheme = new ArrayList<String[]>();
 	
@@ -46,18 +46,18 @@ public class InitializeExportData extends LightEntity{
 
 	/**
 	 * @return the termCodeProperties
-	 */
+	 *//*
 	public HashMap<String, String> getTermCodeProperties() {
 		return termCodeProperties;
 	}
 
-	/**
+	*//**
 	 * @param termCodeProperties the termCodeProperties to set
-	 */
+	 *//*
 	public void setTermCodeProperties(HashMap<String, String> termCodeProperties) {
 		this.termCodeProperties = termCodeProperties;
 	}
-
+*/
 	
 
 	

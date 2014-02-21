@@ -202,6 +202,33 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-dependency-plugin</artifactId>
+			    <version>2.5</version>
+			    <executions>
+			      <execution>
+			        <id>copy</id>
+			        <phase>package</phase>
+			        <goals>
+			          <goal>copy</goal>
+			        </goals>
+			        <configuration>
+			          <artifactItems>
+			            <artifactItem>
+			              <groupId>${project.groupId}</groupId>
+			              <artifactId>${project.artifactId}</artifactId>
+			              <version>${project.version}</version>
+			              <overWrite>true</overWrite>
+			              <type>war</type>
+			              <outputDirectory>${basedir}/../target</outputDirectory>
+			              <destFileName>vocbench-${project.version}.war</destFileName>
+			            </artifactItem>
+			          </artifactItems>
+			        </configuration>
+			      </execution>
+			   </executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>

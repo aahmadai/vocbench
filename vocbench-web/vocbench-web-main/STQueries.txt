@@ -631,3 +631,21 @@ http://127.0.0.1:1979/semantic_turkey/resources/stserver/STServer
 &request=loadRDF
 &file=C%3A%5CUsers%5Crajbhandari.FIELD%5CDesktop%5Cdata%5Cagrovoc.rdf
 &baseUri=http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc
+
+#SPARQL
+---------
+http://127.0.0.1:1979/semantic_turkey/resources/stserver/STServer?service=sparql&request=resolveQuery&lang=SPARQL&infer=true&query=PREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#> PREFIX skos: <http://www.w3.org/2004/02/skos/core#> SELECT * WHERE { ?c a skos:Concept .  ?c skosxl:prefLabel ?pl .  ?pl skosxl:literalForm ?lf }  LIMIT 10
+http://127.0.0.1:1979/semantic_turkey/resources/stserver/STServer?service=sparql&request=resolveQuery&lang=SPARQL&infer=true&query=CONSTRUCT {   ?s ?p ?o} WHERE {   ?s ?p ?o} LIMIT 10
+http://127.0.0.1:1979/semantic_turkey/resources/stserver/STServer?service=sparql&request=resolveQuery&lang=SPARQL&infer=true&query=CONSTRUCT {   ?s <http://purl.org/dc/terms/modified> ?o} WHERE {   ?s <http://purl.org/dc/terms/modified> ?o} LIMIT 10
+http://127.0.0.1:1979/semantic_turkey/resources/stserver/STServer?service=sparql&request=resolveQuery&lang=SPARQL&infer=true&query=PREFIX agrovoc: <http://aims.fao.org/aos/agrovoc/> PREFIX dc-term: <http://purl.org/dc/terms/> DELETE { agrovoc:c_4788 dc-term:modified ?o } INSERT {  agrovoc:c_4788 dc-term:modified "2014-01-09T00:16:48Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> } WHERE {   agrovoc:c_4788 dc-term:modified ?o }
+
+DELETE {  <http://aims.fao.org/aos/agrovoc/c_4788> <http://purl.org/dc/terms/modified> ?o 
+}
+INSERT 
+{ 
+  <http://aims.fao.org/aos/agrovoc/c_4788> <http://purl.org/dc/terms/modified> "2014-01-09T00:16:48Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>
+} 
+WHERE 
+{ 
+  <http://aims.fao.org/aos/agrovoc/c_4788> <http://purl.org/dc/terms/modified> "2013-08-09T00:16:48Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>
+}

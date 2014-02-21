@@ -47,10 +47,11 @@ public class SearchSPARQL extends Composite{
 	private TextBox statusArea = new TextBox();
     //private TextArea resultPanel = new TextArea();
 	private HorizontalPanel outputPanel = new HorizontalPanel();
+	private HorizontalPanel displayPanel = new HorizontalPanel();
 	private FlexTable table = new FlexTable();
 	private CheckBox chkBox = new CheckBox(constants.searchSparqlIncludeInferredStatements());
 	private Button clear = new Button(constants.buttonClear());
-	private Button submit = new Button(constants.buttonSearch());
+	private Button submit = new Button(constants.buttonSubmit());
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlintEditorWrapper wrapper;
 	
@@ -59,9 +60,16 @@ public class SearchSPARQL extends Composite{
 	
 	public SearchSPARQL()
 	{
+		displayPanel.clear();
+		displayPanel.setSize("100%", "100%");
+		LoadingDialog load = new LoadingDialog();
+		displayPanel.add(load);
+		displayPanel.setCellHorizontalAlignment(load,HasHorizontalAlignment.ALIGN_CENTER);
+		displayPanel.setCellVerticalAlignment(load, HasVerticalAlignment.ALIGN_MIDDLE);
+		initWidget(displayPanel);
+
 		init();
 		initEditor();
-		initWidget(mainPanel);
 	}
 	
 	private void initEditor()
@@ -84,7 +92,11 @@ public class SearchSPARQL extends Composite{
 							namedGraphs.set(i, new JSONString(result.get(i)));
 						}
 						wrapper = loadFlintEditor(textArea, statusArea, submit, createJSONObjectString(langList.getValue(langList.getSelectedIndex()), nsPrefixMappings, namedGraphs));
-						 //load(queryPanel);
+						
+						displayPanel.clear();
+						displayPanel.add(mainPanel);
+						
+						//load(queryPanel);
 					}
 					public void onFailure(Throwable caught) {
 						ExceptionManager.showException(caught, constants.ontologyNamedGraphLoadFail());
@@ -138,7 +150,7 @@ public class SearchSPARQL extends Composite{
 		outputPanel.setSize("100%","100%");	
 		
 		HorizontalPanel infoTitle = new HorizontalPanel();
-		infoTitle.add(new HTML(constants.searchSparqlSearch()));
+		infoTitle.add(new HTML(constants.searchSparqlSparqlQuery()));
 		infoTitle.setStyleName("loginTitle");
 		
 		VerticalPanel bodyPanel = new VerticalPanel();
@@ -196,7 +208,9 @@ public class SearchSPARQL extends Composite{
 								ArrayList<String> colList = result.get(row);
 								for(int col=0;col< colList.size();col++)
 								{
-									table.setHTML(row, col, colList.get(col));
+									HTML html = new HTML();
+									html.setText(colList.get(col));
+									table.setWidget(row, col, html);
 									DOM.setStyleAttribute(table.getCellFormatter().getElement(row, col),"backgroundColor", "F4F4F4");
 									DOM.setStyleAttribute(table.getCellFormatter().getElement(row, col),"border", "1px solid #E8E8E8");
 								}

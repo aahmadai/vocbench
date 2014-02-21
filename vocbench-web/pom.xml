@@ -78,7 +78,6 @@
 	<modules>
 		<module>vocbench-web-shared</module>
 		<module>vocbench-web-main</module>
-		<!--module>vocbench-web-protege</module-->
 		<module>vocbench-web-sematicturkey</module>
 	</modules>
 </project>

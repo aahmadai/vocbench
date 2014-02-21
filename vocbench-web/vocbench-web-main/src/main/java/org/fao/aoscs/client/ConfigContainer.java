@@ -41,8 +41,8 @@ public class ConfigContainer extends Composite {
 	private VerticalPanel panel = new VerticalPanel();
 	private Button btnImport = new Button(constants.configLoadBtn());
 	private Button btnExport = new Button(constants.configExportBtn());
-	private Button btnChange = new Button(constants.configConfirmBtn());
 	private Button btnPreset = new Button(constants.configAllPresetBtn());
+	private Button btnChange = new Button(constants.configConfirmBtn());
 	private Button btnCancel = new Button(constants.buttonCancel());
 	
 	private HashMap<String, ConfigObject> configObjectMap;
@@ -294,18 +294,24 @@ public class ConfigContainer extends Composite {
 			}
 		});
 		
+		HorizontalPanel othershp = new HorizontalPanel();
+		othershp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		othershp.setSpacing(5);		
+		othershp.add(btnImport);
+		othershp.add(btnExport);
+		othershp.add(btnPreset);
+		
 		HorizontalPanel submithp = new HorizontalPanel();
 		submithp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		submithp.setSpacing(5);		
-		submithp.add(btnImport);
-		submithp.add(btnExport);
 		submithp.add(btnChange);
-		submithp.add(btnPreset);
 		submithp.add(btnCancel);
 		
 		HorizontalPanel buttonContainer = new HorizontalPanel();
 		buttonContainer.setWidth("100%");
+		buttonContainer.add(othershp);
 		buttonContainer.add(submithp);
+		buttonContainer.setCellHorizontalAlignment(othershp, HasHorizontalAlignment.ALIGN_LEFT);
 		buttonContainer.setCellHorizontalAlignment(submithp, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		HTML title = new HTML(constants.mainPageTitle()+" "+constants.configVBConfiguration());
