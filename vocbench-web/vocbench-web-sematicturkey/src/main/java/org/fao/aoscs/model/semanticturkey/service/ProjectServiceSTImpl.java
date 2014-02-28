@@ -63,16 +63,18 @@ public class ProjectServiceSTImpl {
 		return values;
 	}
 	
-	public Boolean isSTServerStarted(OntologyInfo ontoInfo) {
+	public Boolean isSTServerStarted(OntologyInfo ontoInfo)  {
 		String URLName = ontoInfo.getDbDriver();
 		try
 		{
 	      HttpURLConnection.setFollowRedirects(false);
 	      HttpURLConnection con = (HttpURLConnection) new URL(URLName).openConnection();
 	      con.setRequestMethod("HEAD");
+	      logger.debug("Connection response code: "+con.getResponseCode()+"  :: "+ HttpURLConnection.HTTP_OK);
 	      return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
 	    }
 	    catch (Exception e) {
+	    	logger.debug("Connection error:"+e.getLocalizedMessage());
 	       return false;
 	    }
 	}

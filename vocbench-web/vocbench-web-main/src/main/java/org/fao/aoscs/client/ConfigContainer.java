@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import org.fao.aoscs.client.locale.LocaleConstants;
+import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.module.logging.LogManager;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
+import org.fao.aoscs.client.widgetlib.Main.DisclosurePanelVB;
 import org.fao.aoscs.client.widgetlib.Main.ImportConfig;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
 import org.fao.aoscs.client.widgetlib.shared.label.HelpPanel;
@@ -38,6 +40,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ConfigContainer extends Composite {
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
+	private LocaleMessages messages = (LocaleMessages) GWT.create(LocaleMessages.class);
+
 	private VerticalPanel panel = new VerticalPanel();
 	private Button btnImport = new Button(constants.configLoadBtn());
 	private Button btnExport = new Button(constants.configExportBtn());
@@ -329,9 +333,11 @@ public class ConfigContainer extends Composite {
 		DOM.setStyleAttribute(vpMain.getElement(), "border", "1px solid #F59131");
 		vpMain.add(content);
 		
-		VerticalPanel everything = new VerticalPanel();		
+		VerticalPanel everything = new VerticalPanel();	
+		everything.setSize("1000px","100%");		
 		everything.setSpacing(5);		
 		everything.add(header);
+		everything.add(getInstructions());
 		everything.add(vpMain);
 		everything.add(buttonContainer);
 		
@@ -341,6 +347,49 @@ public class ConfigContainer extends Composite {
 		panel.setSpacing(5);
 		panel.setCellHorizontalAlignment(everything,HasHorizontalAlignment.ALIGN_CENTER);
 		initWidget(panel);
+	}
+	
+	private Widget getInstructionWidget(String msgTitle, String msgDesc)
+	{
+		VerticalPanel vp = new VerticalPanel();
+		vp.setSpacing(5);
+		HTML msgTitle1 = new HTML("<b>&raquo; "+msgTitle+"</b>");
+		HTML msgDesc1 = new HTML(msgDesc);
+		DOM.setStyleAttribute(msgDesc1.getElement(), "marginLeft", "15px");
+		vp.add(msgTitle1);
+		vp.add(msgDesc1);
+		return vp;
+	}
+	
+	private Widget getInstructions()
+	{
+		HTML msg = new HTML(constants.configInstructionMsg());
+		
+		VerticalPanel msghp = new VerticalPanel();
+		msghp.setSpacing(10);
+		msghp.add(getInstructionWidget(constants.configInstructionPropertyHeading(), constants.configInstructionPropertyHeadingDesc()));
+		msghp.add(getInstructionWidget(constants.configInstructionPropertyName(), constants.configInstructionPropertyNameDesc()));
+		msghp.add(getInstructionWidget(messages.configInstructionHelpIcon("<img src='images/help.png' valign='middle' border='0'>"),constants.configInstructionHelpIconDesc()));
+		msghp.add(getInstructionWidget(constants.configInstructionPropertyValue(), constants.configInstructionPropertyValueDesc()));
+		msghp.add(getInstructionWidget(constants.configInstructionCheckbox(), constants.configInstructionCheckboxDesc()));
+		msghp.add(getInstructionWidget(constants.configPresetBtn(), constants.configPresetBtnDesc()));
+		msghp.add(new HTML("<hr />"));
+		msghp.add(getInstructionWidget(constants.configAllPresetBtn(), constants.configAllPresetBtnDesc()));
+		msghp.add(getInstructionWidget(constants.configLoadBtn(), constants.configLoadBtnDesc()));
+		msghp.add(getInstructionWidget(constants.configExportBtn(), constants.configExportBtnDesc()));
+		msghp.add(getInstructionWidget(constants.configConfirmBtn(), constants.configConfirmBtnDesc()));
+		msghp.add(getInstructionWidget(constants.buttonCancel(), constants.configCancelBtnDesc()));
+		
+		DisclosurePanelVB msgDisclousePanel = new DisclosurePanelVB(constants.configShowDetailInfo(), constants.configHideDetailInfo(), msghp);
+		
+	    VerticalPanel msgPanel = new VerticalPanel();
+	    msgPanel.setSize("100%","100%");		
+		DOM.setStyleAttribute(msgPanel.getElement(), "border", "1px solid #F59131");
+		DOM.setStyleAttribute(msgPanel.getElement(), "backgroundColor", "#F4F4F4");		
+		msgPanel.setSpacing(10);
+		msgPanel.add(msg);
+		msgPanel.add(msgDisclousePanel);
+		return msgPanel;
 	}
 	
 	private void updateConfigConstants()

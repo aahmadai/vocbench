@@ -767,6 +767,25 @@ public interface LocaleConstants extends Constants{
 	public String configAdminEmailSeparator();
 	public String configSaveMsg();
 	
+	public String configInstructionMsg();
+	public String configInstructionPropertyHeading();
+	public String configInstructionPropertyHeadingDesc();
+	public String configInstructionPropertyName();
+	public String configInstructionPropertyNameDesc();
+	public String configInstructionHelpIconDesc();
+	public String configInstructionPropertyValue();
+	public String configInstructionPropertyValueDesc();
+	public String configInstructionCheckbox();
+	public String configInstructionCheckboxDesc();
+	public String configPresetBtnDesc();
+	public String configAllPresetBtnDesc();
+	public String configLoadBtnDesc();
+	public String configExportBtnDesc();
+	public String configConfirmBtnDesc();
+	public String configCancelBtnDesc();
+	public String configShowDetailInfo();
+	public String configHideDetailInfo();
+
 	public String configDBConfiguration();
 	public String configDBVersion();
 	public String configDBDescription();
@@ -780,6 +799,18 @@ public interface LocaleConstants extends Constants{
 	public String configDBMigrationFailed();
 	public String configDBGetMigrationListFailed();
 	public String configDBSubmitConfirmation();
+	
+	public String configDBInstructionMsg();
+	public String configDBVersionDesc();
+	public String configDBDescriptionDesc();
+	public String configDBScriptDesc();
+	public String configDBInstalledOnDesc();
+	public String configDBStateDesc();
+	public String configDBPreinstalledDesc();
+	public String configDBInstructionMsgTitle();
+	public String configDBInstructionMsgDesc3();
+	public String configDBInstructionNote();
+	public String configDBInstructionNoteDesc();
 		
 	//Ontology
 	public String ontologyManagement();

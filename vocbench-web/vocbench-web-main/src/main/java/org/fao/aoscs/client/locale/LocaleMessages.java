@@ -85,5 +85,10 @@ public interface LocaleMessages extends Messages {
 	//Comments
 	String mailCommentSendSubject(String title, String version);
 	String mailCommentSendBody(String title, String version);
+	
+	//Configuration
+	String configInstructionHelpIcon(String img);
+	String configDBInstructionMsgDesc1(String columnName);
+	String configDBInstructionMsgDesc2(String columnName);
 
 }
