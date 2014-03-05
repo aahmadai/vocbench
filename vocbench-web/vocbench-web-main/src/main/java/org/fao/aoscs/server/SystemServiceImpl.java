@@ -428,5 +428,9 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 		return systemServiceSystemImpl.checkDBConnection();
 	}
 
+	public OntologyInfo manageOntologyIndexing(boolean isIndexing, OntologyInfo ontoInfo) throws Exception {
+		return systemServiceSystemImpl.manageOntologyIndexing(isIndexing, ontoInfo);	
+	}
+
 }
 

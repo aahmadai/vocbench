@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.ConceptShowObject;
 import org.fao.aoscs.domain.InitializeSearchData;
@@ -186,7 +185,7 @@ public class SearchServiceSTImpl {
 			STUtility.convertArrayToString(searchObj.getSelectedLangauge(), STXMLUtility.ST_LANG_SEPARATOR), 
 			!searchObj.getCaseSensitive(), 
 			searchObj.isOnlyPreferredTerm(),
-			ConfigConstants.ISINDEXING,
+			ontoInfo.isIndexing(),
 			false,
 			searchObj.getIncludeNotes(),
 			checkNull(searchObj.getTermCodeRepository()),
@@ -380,7 +379,7 @@ public class SearchServiceSTImpl {
 	{
 		logger.debug("inside getSuggestionList");
 		List<String> suggestions = new ArrayList<String>(req.getLimit());
-		List<String> labelList = VocbenchManager.searchLabel(ontoInfo, "startsWith", req.getQuery().toLowerCase(), STUtility.convertArrayToString(languages, STXMLUtility.ST_LANG_SEPARATOR), true, ConfigConstants.ISINDEXING);
+		List<String> labelList = VocbenchManager.searchLabel(ontoInfo, "startsWith", req.getQuery().toLowerCase(), STUtility.convertArrayToString(languages, STXMLUtility.ST_LANG_SEPARATOR), true, ontoInfo.isIndexing());
 		for (String label: labelList) 
 		{
 			if(suggestions.size()>req.getLimit()-1)

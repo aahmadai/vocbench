@@ -4,10 +4,12 @@
 package org.fao.aoscs.model.semanticturkey.service;
 
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.fao.aoscs.domain.OntologyConfigurationManager;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.service.manager.MetadataManager;
@@ -63,20 +65,43 @@ public class ProjectServiceSTImpl {
 		return values;
 	}
 	
-	public Boolean isSTServerStarted(OntologyInfo ontoInfo)  {
+	/*public Boolean isSTServerStarted(OntologyInfo ontoInfo)  {
 		String URLName = ontoInfo.getDbDriver();
 		try
 		{
 	      HttpURLConnection.setFollowRedirects(false);
 	      HttpURLConnection con = (HttpURLConnection) new URL(URLName).openConnection();
 	      con.setRequestMethod("HEAD");
-	      logger.debug("Connection response code: "+con.getResponseCode()+"  :: "+ HttpURLConnection.HTTP_OK);
+	      con.setConnectTimeout(15000); //set timeout to 15 seconds
+	      con.setReadTimeout(15000);
+	      //logger.debug("Connection response code: "+con.getResponseCode()+"  :: "+ HttpURLConnection.HTTP_OK);
+	      System.out.println("Connection URL: "+URLName);
+	      System.out.println("Connection response code: "+con.getResponseCode()+"  :: "+ HttpURLConnection.HTTP_OK);
 	      return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
 	    }
 	    catch (Exception e) {
-	    	logger.debug("Connection error:"+e.getLocalizedMessage());
+	    	//logger.debug("Connection error:"+e.getLocalizedMessage());
+	    	e.printStackTrace();
 	       return false;
 	    }
+	}*/
+	
+	public Boolean isSTServerStarted(OntologyInfo ontoInfo)  {
+		String URLName = ontoInfo.getDbDriver();
+		DefaultHttpClient httpclient;
+		try
+		{
+			HttpGet httpRequest = new HttpGet(URLName);
+			httpclient = new DefaultHttpClient();
+			HttpResponse response = httpclient.execute(httpRequest);
+			int statusCode = response.getStatusLine().getStatusCode();
+	        logger.debug("Connection response code: "+statusCode+"  :: "+ HttpURLConnection.HTTP_OK+" : "+URLName);
+			return (statusCode == HttpURLConnection.HTTP_OK);
+		}
+		catch (Exception e) {
+			logger.debug("Connection error:"+e.getLocalizedMessage());
+			return false;
+		}
 	}
 	
 	/* (non-Javadoc)

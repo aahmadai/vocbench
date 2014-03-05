@@ -501,9 +501,7 @@ public class SystemServiceSystemImpl {
 		} finally {
 			HibernateUtilities.closeSession();
 		}
-
 	}
-	
 	
 	public OntologyInfo addOntology(String userId, OntologyInfo ontoInfo)
 	{
@@ -539,6 +537,25 @@ public class SystemServiceSystemImpl {
 			e.printStackTrace();
 		}
 		return  getOntology(userid);
+	}
+	
+	public OntologyInfo manageOntologyIndexing(boolean isIndexing, OntologyInfo ontoInfo)
+	{
+		ontoInfo.setIndexing(isIndexing);
+		try
+		{
+			DatabaseUtil.update(ontoInfo, true);
+			ArrayList<OntologyInfo> list = getOntology(ontoInfo.getOntologyId());
+			if(list.size()>0)
+			{
+				return list.get(0);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return ontoInfo;
 	}
 	
 	

@@ -76,6 +76,7 @@ public interface SystemService extends RemoteService {
 	public ArrayList<OntologyInfo> getOntology(String userid) throws Exception;
 	public OntologyInfo addOntology(String userid, OntologyInfo ontoInfo) throws Exception;
 	public ArrayList<OntologyInfo> deleteOntology(String userid, int ontologyId) throws Exception;
+	public OntologyInfo manageOntologyIndexing(boolean isIndexing, OntologyInfo ontoInfo) throws Exception;
 	
 	public Boolean checkDBConnection() throws Exception;
 	public ArrayList<DBMigrationObject> getDBMigrationList() throws Exception;

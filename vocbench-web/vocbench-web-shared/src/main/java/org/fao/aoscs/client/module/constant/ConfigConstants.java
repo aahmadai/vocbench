@@ -87,8 +87,8 @@ public class ConfigConstants {
 	@VBConfigInfo(key="VB.MODE", description="Mode can be either DEV/PRO/SANDBOX (DEV: Development; PRO: Production; SANDBOX: Sandbox version)", defaultValue="DEV", mandatory=true)
 	public static String MODE;
 	
-	@VBConfigInfo(key="SEARCH.ISINDEXING", description="Set to true to enable indexed search (Default: true)", defaultValue="true", mandatory=false)
-	public static Boolean ISINDEXING;
+	//@VBConfigInfo(key="SEARCH.ISINDEXING", description="Set to true to enable indexed search (Default: true)", defaultValue="true", mandatory=false)
+	//public static Boolean ISINDEXING;
 	
 	@VBConfigInfo(key="SEARCH.TIMEOUT", description="Amount of time (in milliseconds) search waits for user to input another character before sending request", defaultValue="300", mandatory=false)
 	public static Integer SEARCHTIMEOUT;
@@ -152,7 +152,7 @@ public class ConfigConstants {
 			PERMISSIONLANGUAGECHECK 		= getStringValue(cMap.get("PERMISSION.LANGUAGECHECK")).equalsIgnoreCase("true")? true : false;
 			
 			SEARCHTIMEOUT					= Integer.parseInt(getStringValue(cMap.get("SEARCH.TIMEOUT")));
-			ISINDEXING						= Boolean.parseBoolean(getStringValue(cMap.get("SEARCH.ISINDEXING")));
+			//ISINDEXING						= Boolean.parseBoolean(getStringValue(cMap.get("SEARCH.ISINDEXING")));
 			
 			EXCEPTIONDETAILSSHOW			= getStringValue(cMap.get("SETTINGS.EXCEPTION.DETAILS.SHOW")).equalsIgnoreCase("true")? true : false;
 			ZIPSIZE							= getStringValue(cMap.get("SETTINGS.ZIP.SIZE"));

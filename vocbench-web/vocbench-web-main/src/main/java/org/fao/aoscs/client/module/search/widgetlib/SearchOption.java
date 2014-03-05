@@ -7,7 +7,6 @@ import java.util.Iterator;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
@@ -27,6 +26,7 @@ import org.fao.aoscs.domain.DomainRangeObject;
 import org.fao.aoscs.domain.InitializeSearchData;
 import org.fao.aoscs.domain.LanguageCode;
 import org.fao.aoscs.domain.NonFuncObject;
+import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.SearchParameterObject;
 
 import com.google.gwt.core.client.GWT;
@@ -50,8 +50,10 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -77,6 +79,12 @@ public class SearchOption extends Composite{
 	private ListBox filterBox = new ListBox();
 	
 	private SuggestBoxAOSWB keyword = new SuggestBoxAOSWB(new MultiWordSuggestOracle());
+	
+	private Button btnIndex = new Button(constants.buttonIndex());
+	
+	private RadioButton rdoEnableIndex = new RadioButton("Index", constants.searchEnableIndex());
+	
+	private RadioButton rdoDisableIndex = new RadioButton("Index", constants.searchDisableIndex());
 	
 	private CheckBox opt1 = new CheckBox(constants.searchCaseSensitive());
 	
@@ -237,7 +245,7 @@ public class SearchOption extends Composite{
 		simpleSearchTopPanel.add(this.getClearButton());
 		if(MainApp.groupId == 1)
 		{
-			simpleSearchTopPanel.add(this.getIndexButton());
+			simpleSearchTopPanel.add(this.getIndexButton(MainApp.userOntology.isIndexing()));
 		}
 		
 		VerticalPanel simpleSearchPanel = new VerticalPanel();
@@ -247,17 +255,73 @@ public class SearchOption extends Composite{
 		simpleSearchPanel.setCellHorizontalAlignment(simpleSearchTopPanel, HasHorizontalAlignment.ALIGN_CENTER);
 		simpleSearchPanel.setCellHorizontalAlignment(simpleSearchPanel.getWidget(1), HasHorizontalAlignment.ALIGN_CENTER);
 
+		
+		VerticalPanel conceptSearchByUriPanel = loadConceptSearchByUri();
 		// simple and advanced search panels 
 		VerticalPanel searchPanel = new VerticalPanel();
-		searchPanel.setSize("100%", "100%");
-		searchPanel.add(simpleSearchPanel);
+		searchPanel.setSize("600px", "100%");
 		searchPanel.add(advsearchPanel);
+		//searchPanel.add(conceptSearchByUriPanel);
 		searchPanel.setCellHorizontalAlignment(simpleSearchPanel, HasHorizontalAlignment.ALIGN_CENTER);
 		searchPanel.setCellHorizontalAlignment(advsearchPanel, HasHorizontalAlignment.ALIGN_CENTER);
+		searchPanel.setCellHorizontalAlignment(conceptSearchByUriPanel, HasHorizontalAlignment.ALIGN_CENTER);
 		searchPanel.setCellVerticalAlignment(advsearchPanel, HasVerticalAlignment.ALIGN_TOP);
 		searchPanel.setCellHeight(advsearchPanel, "100%");
+		
+		VerticalPanel mainSearchPanel = new VerticalPanel();
+		mainSearchPanel.add(simpleSearchPanel);
+		mainSearchPanel.add(searchPanel);
+		mainSearchPanel.setCellHorizontalAlignment(simpleSearchPanel, HasHorizontalAlignment.ALIGN_CENTER);
+		mainSearchPanel.setCellHorizontalAlignment(searchPanel, HasHorizontalAlignment.ALIGN_CENTER);
+		
+		vvp = new BodyPanel(constants.searchShowAdv() , mainSearchPanel , null, MainApp.getBodyPanelWidth()+17, MainApp.getBodyPanelHeight()+5);
+
+	}
+	
+	public VerticalPanel loadConceptSearchByUri()
+	{			
+		Label lblConceptURI = new Label("Concept URI");
+		lblConceptURI.setWidth("100%");
+		
+		TextBox txtConceptURI = new TextBox();
+		txtConceptURI.setWidth("100%");
+		
+		Button btnSearchConceptURI = new Button(constants.buttonSearch());
+		btnSearchConceptURI.addClickHandler(new ClickHandler() {
 			
-		vvp = new BodyPanel(constants.searchShowAdv() , searchPanel , null, MainApp.getBodyPanelWidth()+17, MainApp.getBodyPanelHeight()+5);
+			public void onClick(ClickEvent event) {
+				
+			}
+		});
+		
+		HorizontalPanel searchByUriPanel = new HorizontalPanel();
+		searchByUriPanel.setSize("100%", "100%");
+		searchByUriPanel.setSpacing(5);
+		searchByUriPanel.add(lblConceptURI);
+		searchByUriPanel.add(txtConceptURI);	
+		searchByUriPanel.add(btnSearchConceptURI);
+		searchByUriPanel.setCellVerticalAlignment(lblConceptURI, HasVerticalAlignment.ALIGN_MIDDLE);
+		searchByUriPanel.setCellHorizontalAlignment(txtConceptURI, HasHorizontalAlignment.ALIGN_LEFT);
+		searchByUriPanel.setCellHorizontalAlignment(btnSearchConceptURI, HasHorizontalAlignment.ALIGN_LEFT);
+		DOM.setStyleAttribute(searchByUriPanel.getElement(), "border", "1px solid #F59131");
+
+		
+		HorizontalPanel infoTitle = new HorizontalPanel();
+		infoTitle.add(new HTML("Search by Concept URI"));
+		infoTitle.setStyleName("loginTitle");
+		
+		VerticalPanel panel = new VerticalPanel();
+		panel.setSize("100%", "100%");
+		panel.setSpacing(10);
+		panel.setVisible(true);
+		panel.add(infoTitle);
+		panel.add(searchByUriPanel);
+		panel.setCellHorizontalAlignment(infoTitle, HasHorizontalAlignment.ALIGN_CENTER);
+		panel.setCellHorizontalAlignment(searchByUriPanel, HasHorizontalAlignment.ALIGN_CENTER);
+		panel.setCellVerticalAlignment(infoTitle, HasVerticalAlignment.ALIGN_TOP);
+		panel.setCellHeight(searchByUriPanel, "100%");
+		
+		return panel;
 
 	}
 	
@@ -393,27 +457,74 @@ public class SearchOption extends Composite{
 		return btn;
 	}
 	
-	private Widget getIndexButton()
+	private Widget getIndexButton(final boolean isIndexing)
 	{
-		boolean chk = ConfigConstants.ISINDEXING;
-		if(chk)
-		{
-			Button btn = new Button(constants.buttonIndex());
-			btn.addClickHandler(new ClickHandler() {
-				public void onClick(ClickEvent event) {
-					
-					if(Window.confirm(constants.searchIndexConfirm()))
-					{
-						if(indexingDialog == null || !indexingDialog.isLoaded)
-							indexingDialog = new IndexingDialog();
-						indexingDialog.startIndex();
-					}
+		btnIndex.setEnabled(isIndexing);
+		btnIndex.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(Window.confirm(constants.searchIndexConfirm()))
+				{
+					startIndex();
 				}
-			});	
-			return btn;
-		}
-		else 
-			return new HTML("");
+			}
+		});
+		
+		rdoEnableIndex.setValue(isIndexing);
+		rdoDisableIndex.setValue(!isIndexing);
+		rdoEnableIndex.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(Window.confirm(constants.searchIndexConfirm()))
+				{
+					updateIndex(true);
+				}
+				else
+				{
+					rdoDisableIndex.setValue(true);
+				}
+			}
+		});
+		rdoDisableIndex.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				updateIndex(false);				
+			}
+		});
+		
+		HorizontalPanel hp = new HorizontalPanel();
+		hp.add(btnIndex);
+		hp.add(rdoEnableIndex);
+		hp.add(rdoDisableIndex);
+		hp.setCellVerticalAlignment(btnIndex, HasVerticalAlignment.ALIGN_MIDDLE);
+		hp.setCellVerticalAlignment(rdoEnableIndex, HasVerticalAlignment.ALIGN_MIDDLE);
+		hp.setCellVerticalAlignment(rdoDisableIndex, HasVerticalAlignment.ALIGN_MIDDLE);
+		return hp;
+	}
+		
+	private void updateIndex(final boolean isIndexing)
+	{
+		AsyncCallback<OntologyInfo> callback = new AsyncCallback<OntologyInfo>()
+		{
+			public void onSuccess(OntologyInfo val)
+			{
+				MainApp.userOntology = val;
+				btnIndex.setEnabled(isIndexing);
+				rdoEnableIndex.setValue(isIndexing);
+				if(isIndexing)
+				{
+					startIndex();
+				}
+			}
+			public void onFailure(Throwable caught){
+				ExceptionManager.showException(caught, constants.searchIndexFail());
+			}
+		};
+		Service.systemService.manageOntologyIndexing(isIndexing, MainApp.userOntology, callback);
+	}
+	
+	private void startIndex()
+	{
+		if(indexingDialog == null || !indexingDialog.isLoaded)
+			indexingDialog = new IndexingDialog();
+		indexingDialog.startIndex();
 	}
 	
 	private HorizontalPanel getFilterOption()
@@ -576,7 +687,7 @@ public class SearchOption extends Composite{
 		buttonBarLang.setCellHorizontalAlignment(btnaddlang, HasHorizontalAlignment.ALIGN_RIGHT);
 		buttonBarLang.setCellHorizontalAlignment(btnremovelang, HasHorizontalAlignment.ALIGN_LEFT);
 		
-		langlistCS.setVisibleItemCount(12);			
+		langlistCS.setVisibleItemCount(18);			
 
 		
 		TitleBodyWidget langPanel = new TitleBodyWidget(constants.searchLanguageFilter(), langlistCS, buttonBarLang, "250px" , "100%");

@@ -25,6 +25,8 @@ public class OntologyInfo extends LightEntity {
 	private int ontologyShow;
 	
 	private String version;
+	
+	private boolean indexing = false;
 
 	public String getVersion() {
 		return version;
@@ -108,6 +110,14 @@ public class OntologyInfo extends LightEntity {
 	
 	public String getModelID() {
 		return getOntologyId()+"_"+getDbTableName();
+	}
+
+	public boolean isIndexing() {
+		return indexing;
+	}
+
+	public void setIndexing(boolean indexing) {
+		this.indexing = indexing;
 	}
 	
 }

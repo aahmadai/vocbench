@@ -333,6 +333,8 @@ public interface LocaleConstants extends Constants{
 	public String searchDate();
 	public String searchButton();
 	public String searchGoButton();
+	public String searchEnableIndex();
+	public String searchDisableIndex();
 	public String searchShowAdv();
 	public String searchCaseSensitive();
 	public String searchIncludeNotes();

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.domain.AttributesObject;
 import org.fao.aoscs.domain.ClassObject;
 import org.fao.aoscs.domain.ConceptDetailObject;
@@ -82,7 +81,7 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -136,7 +135,7 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -167,7 +166,7 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -225,7 +224,7 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -288,7 +287,7 @@ public class ConceptServiceSTImpl {
 		conceptObject.addTerm(termObject.getUri(), termObject);
 
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -371,7 +370,7 @@ public class ConceptServiceSTImpl {
 		attObj.setValue(value);
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			if(propertyURI.equals(SKOS.SCOPENOTE))
@@ -496,7 +495,7 @@ public class ConceptServiceSTImpl {
 		termObject.setStatusID(status.getId());
 
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -668,7 +667,7 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -729,7 +728,7 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -761,7 +760,7 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -817,7 +816,7 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -858,7 +857,7 @@ public class ConceptServiceSTImpl {
 		attObj.setValue(oldValue);
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			if(propertyURI.equals(SKOS.SCOPENOTE))
@@ -1022,7 +1021,7 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -1079,7 +1078,7 @@ public class ConceptServiceSTImpl {
 		VocbenchManager.changeTranslationForImage(ontoInfo, newTransObj.getUri(), newTransObj.getLabel(), newTransObj.getLang(), newTransObj.getDescription());
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -1143,7 +1142,7 @@ public class ConceptServiceSTImpl {
 		newAttObj.setValue(newValue);
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			if(propertyURI.equals(SKOS.SCOPENOTE))
@@ -1247,7 +1246,7 @@ public class ConceptServiceSTImpl {
 		newAttObj.setValue(newValue);
 		
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			if(propertyURI.equals(SKOS.SCOPENOTE))
@@ -1317,8 +1316,7 @@ public class ConceptServiceSTImpl {
 		{
 			VocbenchManager.changeLabelInfo(ontoInfo, newObject.getUri(), newObject.getLabel(), newObject.getLang());
 			
-			
-			if(ConfigConstants.ISINDEXING)
+			if(ontoInfo.isIndexing())
 			{
 				//update index
 				VocbenchManager.updateIndexes(ontoInfo);

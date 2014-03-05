@@ -53,5 +53,10 @@
                 <comment></comment>
             </column>
         </property>
+        <property name="indexing" type="boolean">
+            <column name="indexing" default="false" not-null="true">
+                <comment></comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>

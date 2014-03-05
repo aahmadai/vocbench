@@ -78,6 +78,7 @@ public interface SystemServiceAsync<T> {
 	void deleteOntology(String userid, int ontologyId, AsyncCallback<ArrayList<OntologyInfo>> callback);
 	void getOntology(String userid,
 			AsyncCallback<ArrayList<OntologyInfo>> callback);
+	void manageOntologyIndexing(boolean isIndexing, OntologyInfo ontoInfo, AsyncCallback<OntologyInfo> callback);
 	
 	void checkDBConnection(AsyncCallback<Boolean> callback);
 	void getDBMigrationList(AsyncCallback<ArrayList<DBMigrationObject>> callback);

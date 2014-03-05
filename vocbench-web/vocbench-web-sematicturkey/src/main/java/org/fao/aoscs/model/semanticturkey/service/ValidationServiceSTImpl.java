@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.domain.AttributesObject;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.DomainRangeObject;
@@ -1208,7 +1207,7 @@ public class ValidationServiceSTImpl {
         STUtility.setInstanceUpdateDate(ontoInfo, tObj.getUri());
 		STUtility.setInstanceUpdateDate(ontoInfo, val.getConceptObject().getUri());
         
-        if(ConfigConstants.ISINDEXING)
+        if(ontoInfo.isIndexing())
         {
 	      //update index
         	VocbenchManager.updateIndexes(ontoInfo);
@@ -1234,7 +1233,7 @@ public class ValidationServiceSTImpl {
 	{
 		SKOSManager.deleteConcept(ontoInfo, conceptUri);
 
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -1256,7 +1255,7 @@ public class ValidationServiceSTImpl {
 		else
 			SKOSXLManager.removeAltLabel(ontoInfo, conceptUri, tObj.getLabel(), tObj.getLang());
 
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -1304,7 +1303,7 @@ public class ValidationServiceSTImpl {
 				lblList.add(lblObj);
 			}
 			
-			if(ConfigConstants.ISINDEXING)
+			if(ontoInfo.isIndexing())
 			{
 				//update index
 				VocbenchManager.updateIndexes(ontoInfo);
@@ -1334,7 +1333,7 @@ public class ValidationServiceSTImpl {
 		SKOSResponseManager.deleteConceptRequest(ontoInfo, ido.getIDUri());
 		STUtility.setInstanceUpdateDate(ontoInfo, val.getConceptObject().getUri());
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -1353,7 +1352,7 @@ public class ValidationServiceSTImpl {
 		
 		STUtility.setInstanceUpdateDate(ontoInfo, val.getConceptObject().getUri());
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -1373,7 +1372,7 @@ public class ValidationServiceSTImpl {
 		
 		STUtility.setInstanceUpdateDate(ontoInfo, val.getConceptObject().getUri());
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -1418,7 +1417,7 @@ public class ValidationServiceSTImpl {
 		SKOSResponseManager.deleteConceptRequest(ontoInfo, ido.getIDUri());
 		STUtility.setInstanceUpdateDate(ontoInfo, val.getConceptObject().getUri());
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -1453,7 +1452,7 @@ public class ValidationServiceSTImpl {
 				trList.add(transObj);
 			}
 			
-			if(ConfigConstants.ISINDEXING)
+			if(ontoInfo.isIndexing())
 			{
 				//update index
 				VocbenchManager.updateIndexes(ontoInfo);
@@ -1484,7 +1483,7 @@ public class ValidationServiceSTImpl {
 		
 		STUtility.setInstanceUpdateDate(ontoInfo, val.getConceptObject().getUri());
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -1504,7 +1503,7 @@ public class ValidationServiceSTImpl {
 		
 		STUtility.setInstanceUpdateDate(ontoInfo, val.getConceptObject().getUri());
 		
-		if(ConfigConstants.ISINDEXING)
+		if(ontoInfo.isIndexing())
 		{
 			//update index
 			VocbenchManager.updateIndexes(ontoInfo);
@@ -1559,7 +1558,7 @@ public class ValidationServiceSTImpl {
 			
 			STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 			
-			if(ConfigConstants.ISINDEXING)
+			if(ontoInfo.isIndexing())
 			{
 				//update index
 				if(attObj.getRelationshipObject().getUri().equals(SKOS.SCOPENOTE))
@@ -1590,7 +1589,7 @@ public class ValidationServiceSTImpl {
 				
 				STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 				
-				if(ConfigConstants.ISINDEXING)
+				if(ontoInfo.isIndexing())
 				{
 					//update index
 					if(attObj.getRelationshipObject().getUri().equals(SKOS.SCOPENOTE))
