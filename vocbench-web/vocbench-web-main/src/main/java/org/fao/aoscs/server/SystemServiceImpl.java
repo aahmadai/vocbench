@@ -432,5 +432,9 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 		return systemServiceSystemImpl.manageOntologyIndexing(isIndexing, ontoInfo);	
 	}
 
+	public String loadBuildConstants() throws Exception {
+		return systemServiceSystemImpl.loadBuildConstants();
+	}
+
 }
 

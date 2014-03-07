@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.fao.aoscs.client.Main;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
@@ -656,7 +657,7 @@ public class ValidationTemplate extends Composite{
 		body += "Modified date : "+DateTimeFormat.getFormat("dd-MM-yyyy HH:mm:ss").format(v.getDateModified())+" \n\n";
 		if(v.getNote()!=null && !v.getNote().equals("") && !v.getNote().equals("null"))
 			body += "Comments : "+v.getNote()+" \n\n";
-		body += "Version : "+constants.mainPageTitle()+" "+ConfigConstants.DISPLAYVERSION+" \n";
+		body += "Version : "+constants.mainPageTitle()+" "+Main.DISPLAYVERSION+" \n";
 		body += "Link : " + GWT.getHostPageBaseURL() + "\n\n";
 		return body;
 	}

@@ -8,12 +8,12 @@ import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.logging.LogManager;
 import org.fao.aoscs.client.utility.ExceptionManager;
+import org.fao.aoscs.client.utility.HTTPRequestUtility;
 import org.fao.aoscs.client.utility.HelpUtility;
 import org.fao.aoscs.client.widgetlib.Main.BrowserCompatibilityInfo;
 import org.fao.aoscs.client.widgetlib.Main.Footer;
 import org.fao.aoscs.client.widgetlib.Main.Header;
 import org.fao.aoscs.client.widgetlib.Main.LoginForm;
-import org.fao.aoscs.client.widgetlib.Main.PartnerFooter;
 import org.fao.aoscs.client.widgetlib.Main.QuickLinks;
 import org.fao.aoscs.client.widgetlib.Main.WhatIsNew;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
@@ -53,16 +53,27 @@ public class Main implements EntryPoint {
 	private static HorizontalPanel langInterfacePanel = new HorizontalPanel();
 	private static VerticalPanel centerContainer = new VerticalPanel();
 	private static HashMap<String, ConfigObject> configObjectMap = new HashMap<String, ConfigObject>();
+	public static String DISPLAYVERSION;
 
 	public void onModuleLoad() {
 		
-		initLayout();
+		AsyncCallback<String> callback = new AsyncCallback<String>()
+		{
+			public void onSuccess(String buildVersion) {
+				Main.DISPLAYVERSION = buildVersion;
+				initLayout();
+			}
+		    public void onFailure(Throwable caught) {
+		    	ExceptionManager.showException(caught, constants.configConfigurationLoadFail());
+		    }
+		};
+		Service.systemService.loadBuildConstants(callback);
 		
-		 Window.addWindowClosingHandler(new ClosingHandler() {
-				public void onWindowClosing(ClosingEvent event) {
-					new LogManager().endLog();
-				}
-	        });
+		Window.addWindowClosingHandler(new ClosingHandler() {
+			public void onWindowClosing(ClosingEvent event) {
+				new LogManager().endLog();
+			}
+		});
 	}
 	
 	private static void loadConfigContainer()
@@ -85,7 +96,7 @@ public class Main implements EntryPoint {
 		{
 			public void onSuccess(ArrayList<LanguageInterface> result) {
 				
-				Window.setTitle(constants.mainPageTitle()+" :: "+constants.mainVersion()+" "+ (ConfigConstants.DISPLAYVERSION!=null?ConfigConstants.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
+				Window.setTitle(constants.mainPageTitle()+" :: "+constants.mainVersion()+" "+ (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
 
 				centerContainer.clear();
 				
@@ -410,9 +421,12 @@ public class Main implements EntryPoint {
 
 	 private static Widget getPartners()
 	 {
-		 PartnerFooter partnerFooter = new PartnerFooter();
+		/* PartnerFooter partnerFooter = new PartnerFooter();
 		 partnerFooter.setSize("100%", "100%");
-		 return partnerFooter;
+		 return partnerFooter;*/
+		 
+		 return HTTPRequestUtility.getHTMLResponse(GWT.getHostPageBaseURL()+ "partners/partner_footer.html");
+				 
 	}
 
 	 private static HorizontalPanel getLanguageBar(final ArrayList<LanguageInterface> langList)

@@ -1,7 +1,6 @@
 package org.fao.aoscs.client.widgetlib.Main;
 
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.constant.ConfigConstants;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
@@ -31,21 +30,18 @@ public class PartnerFooter extends VerticalPanel{
 		hp.setCellHorizontalAlignment(fundedBy, HasHorizontalAlignment.ALIGN_LEFT);
 		DOM.setStyleAttribute(fundedBy.getElement(), "borderTop", "1px solid #FFFFFF");
 		
-		if(ConfigConstants.PARTNERS.equalsIgnoreCase("FAO"))
-		{
-			Widget collaborator = getCollaborator();
-			hp.add(collaborator);
-			hp.setCellHorizontalAlignment(collaborator, HasHorizontalAlignment.ALIGN_LEFT);
-			DOM.setStyleAttribute(collaborator.getElement(), "borderTop", "1px solid #FFFFFF");
-			DOM.setStyleAttribute(fundedBy.getElement(), "borderBottom", "1px solid #CFD9EB");
-			
-			Widget agrovocPartners = getAgrovocParnters();
-			hp.add(agrovocPartners);
-			hp.setCellHorizontalAlignment(agrovocPartners, HasHorizontalAlignment.ALIGN_CENTER);
-			
-			DOM.setStyleAttribute(collaborator.getElement(), "borderBottom", "1px solid #CFD9EB");
-			DOM.setStyleAttribute(agrovocPartners.getElement(), "borderTop", "1px solid #FFFFFF");
-		}
+		Widget collaborator = getCollaborator();
+		hp.add(collaborator);
+		hp.setCellHorizontalAlignment(collaborator, HasHorizontalAlignment.ALIGN_LEFT);
+		DOM.setStyleAttribute(collaborator.getElement(), "borderTop", "1px solid #FFFFFF");
+		DOM.setStyleAttribute(fundedBy.getElement(), "borderBottom", "1px solid #CFD9EB");
+		
+		Widget agrovocPartners = getAgrovocParnters();
+		hp.add(agrovocPartners);
+		hp.setCellHorizontalAlignment(agrovocPartners, HasHorizontalAlignment.ALIGN_CENTER);
+		
+		DOM.setStyleAttribute(collaborator.getElement(), "borderBottom", "1px solid #CFD9EB");
+		DOM.setStyleAttribute(agrovocPartners.getElement(), "borderTop", "1px solid #FFFFFF");
 		
 		this.add(hp);
 		
@@ -54,6 +50,8 @@ public class PartnerFooter extends VerticalPanel{
 		frame.setUrl(GWT.getHostPageBaseURL()+ "partner_footer.html");
 		this.add(frame);*/
 	}
+	
+	
 	
 	 public static Widget getDevelopedBy()
 	 {

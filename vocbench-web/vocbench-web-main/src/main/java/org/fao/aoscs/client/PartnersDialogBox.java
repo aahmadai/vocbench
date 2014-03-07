@@ -1,7 +1,7 @@
 package org.fao.aoscs.client;
 
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.widgetlib.Main.Partner;
+import org.fao.aoscs.client.utility.HTTPRequestUtility;
 import org.fao.aoscs.client.widgetlib.shared.dialog.DialogBoxAOS;
 
 import com.google.gwt.core.client.GWT;
@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -49,7 +50,11 @@ public class PartnersDialogBox  extends DialogBoxAOS implements ClickHandler{
 	
 	public Widget getPanel()
 	{
-		Partner p = new Partner();
-		return p;
+		/*Partner p = new Partner();
+		return p;*/
+		ScrollPanel sc = new ScrollPanel();
+		sc.setSize("530px", "400px");			
+		sc.add(HTTPRequestUtility.getHTMLResponse(GWT.getHostPageBaseURL()+ "partners/partner.html"));
+		return sc;
 	}
 }

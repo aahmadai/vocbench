@@ -737,7 +737,7 @@ public class Register extends Composite implements ClickHandler {
 		body += "\n\nThe " + constants.mainPageTitle() + " Team.";*/
 		
 		subject = messages.mailAdminUserRegisterSubject(constants.mainPageTitle());
-		body = messages.mailAdminUserRegisterBody(constants.mainPageTitle(), GWT.getHostPageBaseURL(), ConfigConstants.DISPLAYVERSION, txtloginname.getText(), txtfname.getText(), txtlname.getText(), txtemail.getText());
+		body = messages.mailAdminUserRegisterBody(constants.mainPageTitle(), GWT.getHostPageBaseURL(), Main.DISPLAYVERSION, txtloginname.getText(), txtfname.getText(), txtlname.getText(), txtemail.getText());
 
 		AsyncCallback<Void> cbkmail1 = new AsyncCallback<Void>() {
 			public void onSuccess(Void result) {

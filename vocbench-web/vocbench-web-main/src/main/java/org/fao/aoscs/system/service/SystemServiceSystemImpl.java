@@ -1,5 +1,8 @@
 package org.fao.aoscs.system.service;
    
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -10,6 +13,9 @@ import java.util.ResourceBundle;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
@@ -1533,6 +1539,43 @@ public class SystemServiceSystemImpl {
 		}
 		return list;
 	} */
+	
+	public String loadBuildConstants()
+	{
+		String buildVersion = "";
+		PropertiesConfiguration pc;
+		try {
+			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+			URL url = classloader.getResource("./build.properties");
+			File f;
+			if(url==null)
+			{
+				
+				f = new File(classloader.getResource(".").getPath(), "build.properties");
+				if(!f.exists())
+				{
+					try {
+						FileUtils.write(f, "");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				pc = new PropertiesConfiguration(f);
+			}
+			else
+			{
+				pc = new PropertiesConfiguration(url);
+			}
+			
+			buildVersion = pc.getString("BUILD.VERSION");
+			
+		} catch (ConfigurationException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return buildVersion;
+	}
 	
 	public HashMap<String, ConfigObject> loadConfigConstants()
 	{

@@ -75,20 +75,11 @@ public class ConfigConstants {
 	@VBConfigInfo(key="PAGE.COPYRIGHTLINK", description="Link for copyright page", defaultValue="http://www.fao.org/corp/copyright/en/", mandatory=false)
 	public static String COPYRIGHTLINK;
 	
-	@VBConfigInfo(key="PAGE.PARTNERS", description="Partner folder", defaultValue="default", mandatory=false)
-	public static String PARTNERS;
-	
 	@VBConfigInfo(key="VB.ONTOLOGY.VERSION", description="Specify VocBench version", defaultValue="2.0", mandatory=true)
 	public static String VERSION;
 
-	@VBConfigInfo(key="VB.DISPLAY.VERSION", description="VocBench version to be displayed", defaultValue="${pom.version} [Build ${buildtimestamp}]", mandatory=false)
-	public static String DISPLAYVERSION;
-	
 	@VBConfigInfo(key="VB.MODE", description="Mode can be either DEV/PRO/SANDBOX (DEV: Development; PRO: Production; SANDBOX: Sandbox version)", defaultValue="DEV", mandatory=true)
 	public static String MODE;
-	
-	//@VBConfigInfo(key="SEARCH.ISINDEXING", description="Set to true to enable indexed search (Default: true)", defaultValue="true", mandatory=false)
-	//public static Boolean ISINDEXING;
 	
 	@VBConfigInfo(key="SEARCH.TIMEOUT", description="Amount of time (in milliseconds) search waits for user to input another character before sending request", defaultValue="300", mandatory=false)
 	public static Integer SEARCHTIMEOUT;
@@ -144,7 +135,6 @@ public class ConfigConstants {
 			VOCBENCHINFO					= getStringValue(cMap.get("PAGE.VOCBENCHINFO"));
 			CONTACTUS						= getStringValue(cMap.get("PAGE.CONTACTUS"));
 			COPYRIGHTLINK					= getStringValue(cMap.get("PAGE.COPYRIGHTLINK"));
-			PARTNERS							= getStringValue(cMap.get("PAGE.PARTNERS"));
 			
 			PERMISSIONCHECK  				= getStringValue(cMap.get("PERMISSION.CHECK")).equalsIgnoreCase("true")? true : false;
 			PERMISSIONHIDE  				= getStringValue(cMap.get("PERMISSION.HIDE")).equalsIgnoreCase("true")? true : false;
@@ -152,7 +142,6 @@ public class ConfigConstants {
 			PERMISSIONLANGUAGECHECK 		= getStringValue(cMap.get("PERMISSION.LANGUAGECHECK")).equalsIgnoreCase("true")? true : false;
 			
 			SEARCHTIMEOUT					= Integer.parseInt(getStringValue(cMap.get("SEARCH.TIMEOUT")));
-			//ISINDEXING						= Boolean.parseBoolean(getStringValue(cMap.get("SEARCH.ISINDEXING")));
 			
 			EXCEPTIONDETAILSSHOW			= getStringValue(cMap.get("SETTINGS.EXCEPTION.DETAILS.SHOW")).equalsIgnoreCase("true")? true : false;
 			ZIPSIZE							= getStringValue(cMap.get("SETTINGS.ZIP.SIZE"));
@@ -163,7 +152,6 @@ public class ConfigConstants {
 			
 			
 			VERSION							= getStringValue(cMap.get("VB.ONTOLOGY.VERSION"));
-			DISPLAYVERSION					= getStringValue(cMap.get("VB.DISPLAY.VERSION"));
 			MODE							= getStringValue(cMap.get("VB.MODE"));
 	
 			ISVISITOR						= getStringValue(cMap.get("VISITOR.ISVISITOR")).equalsIgnoreCase("true")? true : false;

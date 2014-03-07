@@ -1,0 +1,49 @@
+body {
+  color: black;
+  margin: 0px;
+  border: 0px;
+  padding: 0px;
+  background: #fff;
+  direction: ltr;
+}
+
+body,table td,select {
+  font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
+  font-size: 11px /*instead of 12px*/;
+}
+
+.ack-title {
+  color: #000;
+  font-weight: bold;
+}
+
+.ackLabel {
+  font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
+  font-weight: bold;
+  font-size: 11px;
+  color: #000000;
+}
+
+.term-Label {
+  color:  blue;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 20px;
+  word-wrap: break-word;
+  vertical-align: top;
+}
+
+.faoname {
+  font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
+  font-size: 11px;
+  font-weight: bold;
+  color: #002244;
+}
+
+.faologan {
+  font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
+  font-size: 10px;
+  color: #aa4400;
+  font-style: italic;
+  font-weight: bold;
+}

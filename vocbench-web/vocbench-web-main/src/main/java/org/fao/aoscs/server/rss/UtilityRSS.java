@@ -205,7 +205,7 @@ public class UtilityRSS {
 	 * @param userMap
 	 * @return
 	 */
-	private static FeedEntry generateFeedEntry(RecentChanges recentChanges, HashMap<String, OwlAction> actionMap, HashMap<String, Users> userMap)
+	private static FeedEntry generateFeedEntry(RecentChanges recentChanges, HashMap<String, OwlAction> actionMap, HashMap<String, Users> userMap, String baseURL)
 	{
 		
 		String action = "";
@@ -250,14 +250,14 @@ public class UtilityRSS {
 						contributor =  (user.getFirstName()==null?"":user.getFirstName())+(user.getLastName()==null?"":" "+user.getLastName())+(user.getUsername()==null?"":"("+user.getUsername()+")");
 					}
 					
-					String conceptImg = "<img src='images/concept_logo.gif' border='0'>";
+					String conceptImg = "<img src='"+baseURL+"/images/concept_logo.gif' border='0'>";
 					String conceptLabel = "";
 					HashMap<String, TermObject> tObjList = null;
 					if(val.getConceptObject()!=null)
 					{
 						if(val.getConceptObject().getUri()!=null)
 						{
-							conceptImg = "<img src='"+AOSImageManager.getConceptImageURL(val.getConceptObject().getUri())+"' border='0'>";
+							conceptImg = "<img src='"+baseURL+"/"+AOSImageManager.getConceptImageURL(val.getConceptObject().getUri())+"' border='0'>";
 						}
 						tObjList = (HashMap<String, TermObject>) val.getConceptObject().getTerm();
 					}
@@ -329,9 +329,9 @@ public class UtilityRSS {
 					desc = "";
 					if(user!=null)
 						contributor =  user.getFirstName()==null?"":user.getFirstName()+user.getLastName()==null?"":" "+user.getLastName()+user.getUsername()==null?"":"("+user.getUsername()+")";
-					desc = LabelRSS.makeLabel(rcObj , LabelRSS.ITEMLABEL);
-					desc += LabelRSS.makeLabel(rcObj , LabelRSS.ITEMCHANGE);
-					desc += LabelRSS.makeLabel(rcObj , LabelRSS.ITEMOLD);
+					desc = LabelRSS.makeLabel(rcObj , LabelRSS.ITEMLABEL, baseURL);
+					desc += LabelRSS.makeLabel(rcObj , LabelRSS.ITEMCHANGE, baseURL);
+					desc += LabelRSS.makeLabel(rcObj , LabelRSS.ITEMOLD, baseURL);
 				}							
 			}
 		}
@@ -471,7 +471,7 @@ public class UtilityRSS {
 	 * @throws NumberFormatException
 	 * @throws Exception
 	 */
-	public static ArrayList<FeedEntry> getFeedEntries(int ontologyId, int rcid, int limit, int page) throws NumberFormatException, Exception
+	public static ArrayList<FeedEntry> getFeedEntries(String baseURL, int ontologyId, int rcid, int limit, int page) throws NumberFormatException, Exception
 	{
 		ArrayList<FeedEntry> feedEntries = new ArrayList<FeedEntry>();
 		
@@ -485,7 +485,7 @@ public class UtilityRSS {
 		{
 			RecentChanges c = (RecentChanges) list.get(i);
 			
-			FeedEntry feedEntry = UtilityRSS.generateFeedEntry(c, actionMap, userMap);
+			FeedEntry feedEntry = UtilityRSS.generateFeedEntry(c, actionMap, userMap, baseURL);
 			feedEntries.add(feedEntry);
 		}
 		}

@@ -1,7 +1,6 @@
 package org.fao.aoscs.client.widgetlib.Main;
 
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.constant.ConfigConstants;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
@@ -25,14 +24,11 @@ public class Partner extends VerticalPanel{
 		vp.add(new HTML("<hr/>"));
 		vp.add(getFundedBy());		
 		
-		if(ConfigConstants.PARTNERS.equalsIgnoreCase("FAO"))
-		{
-			vp.add(new HTML("<hr/>"));
-			vp.add(getCollaboratingPartners());
-			
-			vp.add(new HTML("<hr/>"));
-			vp.add(getAgrovocParnters());		
-		}
+		vp.add(new HTML("<hr/>"));
+		vp.add(getCollaboratingPartners());
+		
+		vp.add(new HTML("<hr/>"));
+		vp.add(getAgrovocParnters());		
 		
 		ScrollPanel sc = new ScrollPanel();
 		sc.setSize("530px", "400px");			

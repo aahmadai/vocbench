@@ -247,7 +247,7 @@ public class GenerateRSS {
 		SyndEntry entry;
 		SyndContent description;
 		List<DCModule> dcmodulelist;
-		ArrayList<FeedEntry> feedEntries =  UtilityRSS.getFeedEntries(ontologyId, rcid, limit, page);
+		ArrayList<FeedEntry> feedEntries =  UtilityRSS.getFeedEntries(baseURL, ontologyId, rcid, limit, page);
 		for (int i = 0; i < feedEntries.size(); i++) 
 		{
 			FeedEntry feedEntry = feedEntries.get(i);

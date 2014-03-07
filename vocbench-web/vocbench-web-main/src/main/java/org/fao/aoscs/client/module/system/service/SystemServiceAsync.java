@@ -67,6 +67,7 @@ public interface SystemServiceAsync<T> {
 	void getUnassignedActionStatus(String groupId, String actionId, AsyncCallback<ArrayList<OwlStatus>> callback);
 	void saveFilterPreferences(ValidationFilter vFilter, AsyncCallback<Void> callback);
 	void getHelpURL(AsyncCallback<HashMap<String, String>> callback);
+	void loadBuildConstants(AsyncCallback<String> callback);
 	void loadConfigConstants(
 			AsyncCallback<HashMap<String, ConfigObject>> callback);
 	void updateConfigConstants(HashMap<String, ConfigObject> configObjectMap,

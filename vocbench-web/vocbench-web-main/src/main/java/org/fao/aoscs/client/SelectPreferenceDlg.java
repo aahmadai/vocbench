@@ -114,7 +114,7 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 		ImageAOS deleteButton = new ImageAOS(constants.buttonDelete(), "images/delete-grey.gif", "images/delete-grey-disabled.gif", isAdmin, new ClickHandler() {
 			public void onClick(ClickEvent event) 
 			{
-				if(lstontology.getSelectedIndex()>0)
+				if(lstontology.getSelectedIndex()!=-1)
 				{
 					OntologyInfo ontoInto = (OntologyInfo) lstontology.getObject(lstontology.getSelectedIndex());
 					if(deleteManageProject == null || !deleteManageProject.isLoaded)
@@ -401,15 +401,21 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 			}
 			if(cnt>0)
 				lstontology.setItemSelected(cnt, true);
-	
-			String descOntology = ((OntologyInfo) lstontology.getObject(lstontology.getSelectedIndex())).getOntologyDescription();
-		    lstontology.setTitle(descOntology);
-		    txtontology.setText(descOntology);
+			
+			if(lstontology.getSelectedIndex()!=-1)
+			{
+				String descOntology = ((OntologyInfo) lstontology.getObject(lstontology.getSelectedIndex())).getOntologyDescription();
+			    lstontology.setTitle(descOntology);
+			    txtontology.setText(descOntology);
+			}
 		    lstontology.addChangeHandler(new ChangeHandler(){
 				public void onChange(ChangeEvent event) {
-					String descOntology = ((OntologyInfo) lstontology.getObject(lstontology.getSelectedIndex())).getOntologyDescription();
-					lstontology.setTitle(descOntology);
-					txtontology.setText(descOntology);
+					if(lstontology.getSelectedIndex()!=-1)
+					{
+						String descOntology = ((OntologyInfo) lstontology.getObject(lstontology.getSelectedIndex())).getOntologyDescription();
+						lstontology.setTitle(descOntology);
+						txtontology.setText(descOntology);
+					}
 				}
 		    });
 	    }

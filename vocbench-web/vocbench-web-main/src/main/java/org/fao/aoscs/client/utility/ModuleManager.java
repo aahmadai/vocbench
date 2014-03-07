@@ -126,6 +126,18 @@ public class ModuleManager {
 		}
 	}
 	
+	public static void resetProperties(){
+		MainApp m = getMainApp();
+		if(m!=null)	
+		{
+			if(m.modulePanel.getWidgetIndex(m.relationship) != -1 || m.relationship != null) 
+			{
+				m.modulePanel.remove(m.relationship);
+				m.relationship = null;
+			}
+		}
+	}
+	
 	public static void resetScheme(){
 		MainApp m = getMainApp();
 		if(m!=null)	

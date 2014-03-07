@@ -821,7 +821,7 @@ public class MainApp extends Composite { // Application container
         //title.setWidth("100%");
         title.setWordWrap(false);
         
-        HTML version = new HTML(constants.mainVersionAllCaps()+ "&nbsp;" + ConfigConstants.DISPLAYVERSION + " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
+        HTML version = new HTML(constants.mainVersionAllCaps()+ "&nbsp;" + (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"") + " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
         version.setStyleName("header-mini-version");
         version.setWordWrap(false);
         

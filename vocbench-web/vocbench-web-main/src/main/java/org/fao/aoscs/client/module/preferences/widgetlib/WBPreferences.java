@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.fao.aoscs.client.LanguageFilter;
+import org.fao.aoscs.client.Main;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
-import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.preferences.service.UsersPreferenceService.UserPreferenceServiceUtil;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
@@ -1055,7 +1055,7 @@ public class WBPreferences extends Composite implements ClickHandler{
 		
 		String to = user.getEmail();
 		String subject = messages.mailPreferencesSubject(constants.mainPageTitle());
-		String body = messages.mailPreferencesBody(user.getFirstName(), user.getLastName(), constants.mainPageTitle(), GWT.getHostPageBaseURL(), ConfigConstants.DISPLAYVERSION, type, list);
+		String body = messages.mailPreferencesBody(user.getFirstName(), user.getLastName(), constants.mainPageTitle(), GWT.getHostPageBaseURL(), Main.DISPLAYVERSION, type, list);
 		
 		/*String subject = "Welcome to " + constants.mainPageTitle();
 		String body = "";
@@ -1082,7 +1082,7 @@ public class WBPreferences extends Composite implements ClickHandler{
 
 		to = "ADMIN";
 		subject = messages.mailAdminPreferencesSubject(constants.mainPageTitle(), type);
-		body = messages.mailAdminPreferencesBody(type, constants.mainPageTitle(), GWT.getHostPageBaseURL(), ConfigConstants.DISPLAYVERSION, user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), list);
+		body = messages.mailAdminPreferencesBody(type, constants.mainPageTitle(), GWT.getHostPageBaseURL(), Main.DISPLAYVERSION, user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), list);
 		
 		/*subject = constants.mainPageTitle() + ":"+type+" Request";
 		body = "Dear Admin, \n\n";

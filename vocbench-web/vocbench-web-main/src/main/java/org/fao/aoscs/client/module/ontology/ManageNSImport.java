@@ -15,6 +15,7 @@ import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
+import org.fao.aoscs.client.utility.ModuleManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
 import org.fao.aoscs.client.widgetlib.shared.misc.OlistBox;
 import org.fao.aoscs.domain.OntologyMirror;
@@ -280,6 +281,7 @@ public class ManageNSImport extends FormDialogBox implements ClickHandler{
 					uploader.cancel();
 				if(opener!=null)
 					opener.nsImportDialogBoxSubmit();
+				ModuleManager.resetProperties();
 			}
 			public void onFailure(Throwable caught){
 				if(uploader!=null)

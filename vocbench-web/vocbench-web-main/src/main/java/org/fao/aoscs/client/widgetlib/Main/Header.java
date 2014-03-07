@@ -1,5 +1,6 @@
 package org.fao.aoscs.client.widgetlib.Main;
 
+import org.fao.aoscs.client.Main;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
@@ -18,7 +19,7 @@ public class Header extends VerticalPanel{
 		HTML title = new HTML(constants.mainPageTitle());
 		title.setStyleName("header-title");
 
-		HTML version = new HTML((ConfigConstants.DISPLAYVERSION!=null?constants.mainVersionAllCaps()+ "&nbsp;" +ConfigConstants.DISPLAYVERSION:"") + " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
+		HTML version = new HTML((Main.DISPLAYVERSION!=null?constants.mainVersionAllCaps()+ "&nbsp;" +Main.DISPLAYVERSION:"") + " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
 		version.setStyleName("header-version");
 
 		HorizontalPanel headerTitle = new HorizontalPanel();
