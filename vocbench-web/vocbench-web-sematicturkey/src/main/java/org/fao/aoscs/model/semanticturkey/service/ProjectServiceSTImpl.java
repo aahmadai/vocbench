@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.fao.aoscs.domain.OntologyConfigurationManager;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.service.manager.MetadataManager;
@@ -88,11 +89,11 @@ public class ProjectServiceSTImpl {
 	
 	public Boolean isSTServerStarted(OntologyInfo ontoInfo)  {
 		String URLName = ontoInfo.getDbDriver();
-		DefaultHttpClient httpclient;
+		HttpClient httpclient;
 		try
 		{
 			HttpGet httpRequest = new HttpGet(URLName);
-			httpclient = new DefaultHttpClient();
+			httpclient = HttpClients.createDefault(); 
 			HttpResponse response = httpclient.execute(httpRequest);
 			int statusCode = response.getStatusLine().getStatusCode();
 	        logger.debug("Connection response code: "+statusCode+"  :: "+ HttpURLConnection.HTTP_OK+" : "+URLName);

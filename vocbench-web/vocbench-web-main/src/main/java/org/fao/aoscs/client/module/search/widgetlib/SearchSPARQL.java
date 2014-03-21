@@ -6,8 +6,11 @@ import java.util.HashMap;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
+import org.fao.aoscs.client.module.constant.ConfigConstants;
+import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
+import org.fao.aoscs.client.utility.HelpUtility;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
 
 import com.google.gwt.core.client.GWT;
@@ -31,6 +34,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -137,10 +141,26 @@ public class SearchSPARQL extends Composite{
 		statusArea.setWidth("100%");
 	    statusArea.setReadOnly(true);
 	    
+	    Label artGroupLabel = new Label(constants.searchSparqlFlintEditor());
+	    artGroupLabel.setStyleName(Style.Link);
+	    artGroupLabel.setWidth("100%");
+	    artGroupLabel.addClickHandler(new ClickHandler(){
+    		public void onClick(ClickEvent arg0) {
+    			HelpUtility.openURL(ConfigConstants.FLINTEDITORLINK);
+    		}
+
+    	});
+	    
+	    VerticalPanel hpPanel = new VerticalPanel();
+	    hpPanel.setSize("100%", "100%");
+	    hpPanel.add(statusArea);
+	    hpPanel.add(artGroupLabel);
+	    hpPanel.setCellHorizontalAlignment(artGroupLabel, HasHorizontalAlignment.ALIGN_RIGHT);
+	    
 	    queryPanel.clear();
 	    queryPanel.setSize("100%", "100%");
 	    queryPanel.add(textArea);
-	    queryPanel.add(statusArea);
+	    queryPanel.add(hpPanel);
 	    
 		/*resultPanel.setWidth("100%");
 		resultPanel.setVisibleLines(30);

@@ -1,9 +1,13 @@
 package org.fao.aoscs.model.semanticturkey.service.wrappers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.STServer;
 
-import org.apache.http.client.HttpClient;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 public class PluginHttpWrapper extends ServletExtensionHttpWrapper implements PluginWrapper {
 	
@@ -11,8 +15,8 @@ public class PluginHttpWrapper extends ServletExtensionHttpWrapper implements Pl
 	 * @param id
 	 * @param httpClient
 	 */
-	public PluginHttpWrapper(String id, HttpClient httpClient, String stMethod, String stServerIP, int stServerPort, String stServerPath) {
-		super(id, httpClient, stMethod, stServerIP, stServerPort, stServerPath);
+	public PluginHttpWrapper(String id, String stURL) {
+		super(id, stURL);
 	}
 	
 	/* (non-Javadoc)
@@ -34,9 +38,11 @@ public class PluginHttpWrapper extends ServletExtensionHttpWrapper implements Pl
 	 * @return
 	 */
 	protected Response makeRequest(String request) {
-		String[] parameters = new String[1];
-		parameters[0]= "name="+getId();
-		return askServer("plugin", request, parameters);
+		List<NameValuePair> parameterLists = new ArrayList<NameValuePair>();
+		parameterLists.add(new BasicNameValuePair("name", getId()));
+		parameterLists.add(new BasicNameValuePair("service", "plugin"));
+		parameterLists.add(new BasicNameValuePair("request", request));
+		return askServer(parameterLists);
 	}
 	
 }

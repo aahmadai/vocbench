@@ -50,7 +50,7 @@ public class RemoveConceptToScheme extends FormDialogBox {
 		schemeList.addItem("--Select--", "");
 		schemeList.setWidth("100%");
 		
-		this.initLayout();
+		//this.initLayout();
 	}
 	
 	public void setConcept(String conceptURI)
@@ -63,6 +63,8 @@ public class RemoveConceptToScheme extends FormDialogBox {
 		
 		final AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>() {
 			public void onSuccess(HashMap<String, String> list) {
+				schemeList.clear();
+				schemeList.addItem("--Select--", "");
 				for(String schemeName : list.keySet())
 				{
 					schemeList.addItem(schemeName, list.get(schemeName));

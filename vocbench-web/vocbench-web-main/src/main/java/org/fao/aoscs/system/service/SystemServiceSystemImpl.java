@@ -112,7 +112,7 @@ public class SystemServiceSystemImpl {
 		}
 		catch(Exception e)
 		{
-			//e.printStackTrace();
+			e.printStackTrace();
 			logger.error(e.getLocalizedMessage());
 		}
 		return null;

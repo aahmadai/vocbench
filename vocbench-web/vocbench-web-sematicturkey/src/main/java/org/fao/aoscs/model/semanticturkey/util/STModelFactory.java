@@ -1,9 +1,5 @@
 package org.fao.aoscs.model.semanticturkey.util;
 
-import it.uniroma2.art.semanticturkey.exceptions.STInitializationException;
-
-import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
@@ -36,15 +32,7 @@ public class STModelFactory {
 	 * @return
 	 */
 	public static synchronized STModel createSTModel(OntologyInfo ontoInfo) {
-		STModel stModel = new STModel();
-		try {
-			URL aURL = new URL(ontoInfo.getDbDriver());
-			stModel.initialize(aURL.getProtocol(), aURL.getHost(), aURL.getPort(), aURL.getPath());
-		} catch (STInitializationException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}			
+		STModel stModel = new STModel(ontoInfo.getDbDriver());
 		return stModel;
 	}
 	

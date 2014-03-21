@@ -106,11 +106,19 @@ public class RelationshipServiceSTImpl {
 		// Add label
 		PropertyManager.addPlainLiteralPropValue(ontoInfo, propertyUri, RDFS.LABEL, label, language);
 		
+		LabelObject labelObj = new LabelObject();
+		labelObj.setLabel(label);
+		labelObj.setLanguage(language);
+		
+		ArrayList<LabelObject> labelList = new ArrayList<LabelObject>();
+		labelList.add(labelObj);
+		
 		RelationshipObject newProperty = new RelationshipObject();
 		newProperty.setParent(superPropertyUri);
 		newProperty.setType(type);
 		newProperty.setUri(propertyUri);
 		newProperty.setName(propertyName);
+		newProperty.setLabelList(labelList);
 
 		ArrayList<LightEntity> obj = new ArrayList<LightEntity>();
 		obj.add(newProperty);

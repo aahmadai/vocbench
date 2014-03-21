@@ -2,7 +2,6 @@ package org.fao.aoscs.client.module.statistic.widgetlib;
 
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.module.statistic.service.StatisticsService.StatisticsServiceUtil;
 import org.fao.aoscs.client.utility.ExceptionManager;
@@ -42,6 +41,9 @@ import com.google.gwt.user.client.ui.Widget;
 public class StatisticsView extends Composite{
 
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
+	
+	private static String AGROVOCNAMESPACE = "http://aims.fao.org/aos/agrovoc/";
+	
 	private VerticalPanel panel = new VerticalPanel();
 	private VerticalPanel bodyPanel = new VerticalPanel();
 	private VerticalPanel loadingPanel = new VerticalPanel();
@@ -355,7 +357,7 @@ public class StatisticsView extends Composite{
 		listBox.addItem(constants.statStatsA(), "1");
 		listBox.addItem(constants.statStatsB(), "2");
 		listBox.addItem(constants.statStatsC(), "3");
-		if(MainApp.defaultNamespace.equals(ConfigConstants.AGROVOCNAMESPACE))
+		if(MainApp.defaultNamespace.equals(AGROVOCNAMESPACE))
 			listBox.addItem(constants.statStatsAgrovoc(), "4");
 		listBox.addItem(constants.statStatsD(), "5");
 		

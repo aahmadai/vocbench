@@ -382,13 +382,10 @@ table.quick-link:hover{
   width: 100%;
 }
 
-.footer-copyright{
+.footer-copyright {
 	color: #FFF;
 }
 
-.footer-copyright:hover{
-	text-decoration: underline;
-}
 /*Menu-Label */
 @-webkit-keyframes menu-label-active-anim {
 	from { background: transparent;

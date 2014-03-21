@@ -12,10 +12,7 @@ import org.fao.aoscs.domain.VBConfigInfo;
  */
 public class ConfigConstants {
 	
-	@VBConfigInfo(key="AGROVOC.NAMESPACE", description="AGROVOC NAMESPACE", defaultValue="http://aims.fao.org/aos/agrovoc/", mandatory=false)
-	public static String AGROVOCNAMESPACE;
-	
-	@VBConfigInfo(key="DB.CONNECTIONURL", description="Database Connection URL", defaultValue="jdbc:mysql://localhost:3306/administrator_version20?createDatabaseIfNotExist=true&requireSSL=false&useUnicode=true&characterEncoding=utf-8", mandatory=true)
+	@VBConfigInfo(key="DB.CONNECTIONURL", description="Database Connection URL: modify according to your DB installation", defaultValue="jdbc:mysql://localhost:3306/administrator_version20?createDatabaseIfNotExist=true&requireSSL=false&useUnicode=true&characterEncoding=utf-8", mandatory=true)
 	public static String DB_CONNECTIONURL;
 	
 	@VBConfigInfo(key="DB.USERNAME", description="Database Username", defaultValue="root", mandatory=true)
@@ -24,7 +21,7 @@ public class ConfigConstants {
 	@VBConfigInfo(key="DB.PASSWORD", description="Database Password", defaultValue="", mandatory=true)
 	public static String DB_PASSWORD;
 	
-	@VBConfigInfo(key="EMAIL.HOST", description="Mail Server IP/URL", defaultValue="smtp.gmail.com", mandatory=true)
+	@VBConfigInfo(key="EMAIL.HOST", description="SMTP Mail Server IP/URL", defaultValue="smtp.gmail.com", mandatory=true)
 	public static String EMAIL_HOST;
 	
 	@VBConfigInfo(key="EMAIL.PORT", description="Mail Server Port", defaultValue="465", mandatory=true)
@@ -45,35 +42,41 @@ public class ConfigConstants {
 	@VBConfigInfo(key="EMAIL.ADMIN", description="Mail Administrator Email(s) (For multiple emails use semicolon ';' as a separator)", defaultValue="xxxx@gmail.com", mandatory=true)
 	public static ArrayList<String> EMAIL_ADMIN;
 	
-	@VBConfigInfo(key="MODEL.CLASS", description="Model Manager classname", defaultValue="org.fao.aoscs.model.semanticturkey.STManager", mandatory=false)
+	@VBConfigInfo(key="MODEL.CLASS", description="Model Manager classname: don't modify this unless you really know what you are doing :-)", defaultValue="org.fao.aoscs.model.semanticturkey.STManager", mandatory=true)
 	public static String MODELCLASS;
 	
-	@VBConfigInfo(key="PERMISSION.CHECK", description="Set to true to enable permission checks (Default: true)", defaultValue="true", mandatory=false)
+	@VBConfigInfo(key="PERMISSION.CHECK", description="Set true/false to enable/disable permission checks based on user groups (Default: true)", defaultValue="true", mandatory=true)
 	public static Boolean PERMISSIONCHECK;
 	
-	@VBConfigInfo(key="PERMISSION.HIDE", description="Set to true to hide buttons in case of no permission (Default: false)", defaultValue="false", mandatory=false)
+	@VBConfigInfo(key="PERMISSION.HIDE", description="Set true/false to show/hide button in case of permission allowed/restricted (Default: false)", defaultValue="false", mandatory=true)
 	public static Boolean PERMISSIONHIDE;
 	
-	@VBConfigInfo(key="PERMISSION.DISABLE", description="Set to true to disable buttons in case of no permission (Default: true)", defaultValue="true", mandatory=false)
+	@VBConfigInfo(key="PERMISSION.DISABLE", description="Set true/false to enable/disable buttons in case of permission allowed/restricted (Default: true)", defaultValue="true", mandatory=true)
 	public static Boolean PERMISSIONDISABLE;
 	
-	@VBConfigInfo(key="PERMISSION.LANGUAGECHECK", description="Set to true to enable permission checks on language (Default: true)", defaultValue="true", mandatory=false)
+	@VBConfigInfo(key="PERMISSION.LANGUAGECHECK", description="Set true/false to allow/restrict actions based on user permission langauge (Default: true)", defaultValue="true", mandatory=true)
 	public static Boolean PERMISSIONLANGUAGECHECK;
 	
-	@VBConfigInfo(key="PAGE.SANDBOXLINK", description="Link to Sandbox version of VocBench", defaultValue="http://202.73.13.50:55481/vocbench/", mandatory=false)
+	@VBConfigInfo(key="PAGE.SANDBOXLINK", description="Link to Sandbox version of VocBench", defaultValue="http://202.73.13.50:55481/vocbench/", mandatory=true)
 	public static String SANDBOXLINK;
 	
-	@VBConfigInfo(key="PAGE.WEBSERVICESINFO", description="Link to web services page", defaultValue="http://aims.fao.org/tools/vocbench/access", mandatory=false)
+	@VBConfigInfo(key="PAGE.WEBSERVICESINFO", description="Link to web services page", defaultValue="http://aims.fao.org/tools/vocbench/access", mandatory=true)
 	public static String WEBSERVICESINFO;
 	
-	@VBConfigInfo(key="PAGE.VOCBENCHINFO", description="Link to VocBench page", defaultValue="http://aims.fao.org/tools/vocbench-2", mandatory=false)
+	@VBConfigInfo(key="PAGE.VOCBENCHINFO", description="Link to VocBench page", defaultValue="http://aims.fao.org/tools/vocbench-2", mandatory=true)
 	public static String VOCBENCHINFO;
 	
-	@VBConfigInfo(key="PAGE.CONTACTUS", description="Link to contact page", defaultValue="http://aims.fao.org/contact", mandatory=false)
+	@VBConfigInfo(key="PAGE.CONTACTUS", description="Link to contact page", defaultValue="http://aims.fao.org/contact", mandatory=true)
 	public static String CONTACTUS;
 	
-	@VBConfigInfo(key="PAGE.COPYRIGHTLINK", description="Link for copyright page", defaultValue="http://www.fao.org/corp/copyright/en/", mandatory=false)
+	@VBConfigInfo(key="PAGE.COPYRIGHTLINK", description="Link for FAO copyright page", defaultValue="http://www.fao.org/corp/copyright/en/", mandatory=true)
 	public static String COPYRIGHTLINK;
+	
+	@VBConfigInfo(key="PAGE.ARTGROUPLINK", description="Link for ART Research Group page", defaultValue="http://art.uniroma2.it/", mandatory=true)
+	public static String ARTGROUPLINK;
+	
+	@VBConfigInfo(key="PAGE.FLINTEDITORLINK", description="Link for Flint SPARQL Editor", defaultValue="https://github.com/TSO-Openup/FlintSparqlEditor", mandatory=true)
+	public static String FLINTEDITORLINK;
 	
 	@VBConfigInfo(key="VB.ONTOLOGY.VERSION", description="Specify VocBench version", defaultValue="2.0", mandatory=true)
 	public static String VERSION;
@@ -84,48 +87,46 @@ public class ConfigConstants {
 	@VBConfigInfo(key="SEARCH.TIMEOUT", description="Amount of time (in milliseconds) search waits for user to input another character before sending request", defaultValue="300", mandatory=false)
 	public static Integer SEARCHTIMEOUT;
 	
-	@VBConfigInfo(key="SETTINGS.MANDATORY.DEFINITION.NAMESPACES", description="Namespaces with mandatory Definition's Source/Link (For multiple namespace use semicolon ';' as a separator)", defaultValue="http://aims.fao.org/aos/agrovoc/", mandatory=false)
+	@VBConfigInfo(key="SETTINGS.MANDATORY.DEFINITION.NAMESPACES", description="Any project having its namespace in this list will mandatorily ask for Source/Link values in its skos:definitions (For multiple namespaces use semicolon ';' as a separator)", defaultValue="http://aims.fao.org/aos/agrovoc/", mandatory=false)
 	public static ArrayList<String> MANDATORY_DEFINITION_NAMESPACES;
 	
-	@VBConfigInfo(key="SETTINGS.CODETYPE", description="CODE TYPE ", defaultValue="http://aims.fao.org/aos/agrovoc/AgrovocCode", mandatory=false)
+	@VBConfigInfo(key="SETTINGS.CODETYPE", description="Set this value with custom datatype to set skos:notation property for every term instance created [e.g. For AGROVOC -> http://aims.fao.org/aos/agrovoc/AgrovocCode]", defaultValue="", mandatory=false)
 	public static String CODETYPE;
 	
-	@VBConfigInfo(key="SETTINGS.CUSTOMDATATYPE", description="CUSTOM DATATYPE (For multiple datatype use semicolon ';' as a separator)", defaultValue="http://aims.fao.org/aos/agrovoc/AgrovocCode", mandatory=false)
+	@VBConfigInfo(key="SETTINGS.CUSTOMDATATYPE", description="CUSTOM DATATYPE (For multiple datatype use semicolon ';' as a separator) [e.g. For AGROVOC -> http://aims.fao.org/aos/agrovoc/AgrovocCode]", defaultValue="", mandatory=false)
 	public static ArrayList<String> CUSTOMDATATYPE;
 	
-	@VBConfigInfo(key="SETTINGS.CONCEPTNAVIGATIONHISTORY.MAXSIZE", description="No. of Concepts in navigation history list", defaultValue="25", mandatory=false)
+	@VBConfigInfo(key="SETTINGS.CONCEPTNAVIGATIONHISTORY.MAXSIZE", description="No. of Concepts in navigation history list", defaultValue="25", mandatory=true)
 	public static Integer CONCEPTNAVIGATIONHISTORYMAXSIZE;
 	
-	@VBConfigInfo(key="SETTINGS.EXCEPTION.DETAILS.SHOW", description="Set to true to show exception details", defaultValue="true", mandatory=false)
+	@VBConfigInfo(key="SETTINGS.EXCEPTION.DETAILS.SHOW", description="Set to true to show exception details in case of system malfunctions", defaultValue="true", mandatory=true)
 	public static Boolean EXCEPTIONDETAILSSHOW;
 	
-	@VBConfigInfo(key="SETTINGS.ZIP.SIZE", description="Set file size to force zipped download in bytes", defaultValue="5242880", mandatory=false)
+	@VBConfigInfo(key="SETTINGS.ZIP.SIZE", description="Set this property to force zipped download to be separated into chuck of ZIP.SIZE bytes", defaultValue="5242880", mandatory=true)
 	public static String ZIPSIZE;
 	
-	@VBConfigInfo(key="VISITOR.SHOWGUESTLOGIN", description="Set to true to enable guest login which doesn't require any user credentials (Default: false)", defaultValue="false", mandatory=false)
+	@VBConfigInfo(key="VISITOR.SHOWGUESTLOGIN", description="Set to true to enable guest login which doesn't require any user credentials (Default: false)", defaultValue="false", mandatory=true)
 	public static Boolean SHOWGUESTLOGIN;
 	
-	@VBConfigInfo(key="VISITOR.ISVISITOR", description="Set to true to enable visitor only mode (Default: false)", defaultValue="false", mandatory=false)
+	@VBConfigInfo(key="VISITOR.ISVISITOR", description="Set to true to enable visitor only mode (Default: false)", defaultValue="false", mandatory=true)
 	public static Boolean ISVISITOR;
 	
-	@VBConfigInfo(key="VISITOR.GUESTUSERNAME", description="Visitor's account username", defaultValue="Guest", mandatory=false)
+	@VBConfigInfo(key="VISITOR.GUESTUSERNAME", description="Visitor's account username", defaultValue="Guest", mandatory=true)
 	public static String GUESTUSERNAME;
 	
-	@VBConfigInfo(key="VISITOR.GUESTPASSWORD", description="Visitor's account password", defaultValue="1q2w3e4r", mandatory=false)
+	@VBConfigInfo(key="VISITOR.GUESTPASSWORD", description="Visitor's account password", defaultValue="1q2w3e4r", mandatory=true)
 	public static String GUESTPASSWORD;
 	
-	@VBConfigInfo(key="VISITOR.GROUPID", description="Visitor's group id", defaultValue="12", mandatory=false)
+	@VBConfigInfo(key="VISITOR.GROUPID", description="Visitor's group id", defaultValue="12", mandatory=true)
 	public static String VISITORGROUPID;
 	
-	@VBConfigInfo(key="VISITOR.GROUPNAME", description="Visitor's group name", defaultValue="Visitor", mandatory=false)
+	@VBConfigInfo(key="VISITOR.GROUPNAME", description="Visitor's group name", defaultValue="Visitor", mandatory=true)
 	public static String VISITORGROUPNAME;
 	
 	public static void loadConstants(HashMap<String, ConfigObject> cMap)
 	{
 		try
 		{
-			AGROVOCNAMESPACE 				= getStringValue(cMap.get("AGROVOC.NAMESPACE"));
-			
 			EMAIL_FROM 						= getStringValue(cMap.get("EMAIL.FROM"));
 			
 			MODELCLASS 						= getStringValue(cMap.get("MODEL.CLASS"));
@@ -135,6 +136,8 @@ public class ConfigConstants {
 			VOCBENCHINFO					= getStringValue(cMap.get("PAGE.VOCBENCHINFO"));
 			CONTACTUS						= getStringValue(cMap.get("PAGE.CONTACTUS"));
 			COPYRIGHTLINK					= getStringValue(cMap.get("PAGE.COPYRIGHTLINK"));
+			ARTGROUPLINK					= getStringValue(cMap.get("PAGE.ARTGROUPLINK"));
+			FLINTEDITORLINK					= getStringValue(cMap.get("PAGE.FLINTEDITORLINK"));
 			
 			PERMISSIONCHECK  				= getStringValue(cMap.get("PERMISSION.CHECK")).equalsIgnoreCase("true")? true : false;
 			PERMISSIONHIDE  				= getStringValue(cMap.get("PERMISSION.HIDE")).equalsIgnoreCase("true")? true : false;

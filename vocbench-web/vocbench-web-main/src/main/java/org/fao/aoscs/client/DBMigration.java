@@ -162,6 +162,7 @@ public class DBMigration extends Composite {
 		HTML msgDescTitle = new HTML("<b>"+constants.configDBInstructionMsgTitle()+"</b>:");
 		HTML msgDesc1 = new HTML("&raquo; "+messages.configDBInstructionMsgDesc1(constants.configDBPreinstalled()));
 		HTML msgDesc2 = new HTML("&raquo; "+messages.configDBInstructionMsgDesc2(constants.configDBPreinstalled()));
+		HTML msgDesc2a = new HTML("&raquo; "+constants.configDBInstructionMsgDesc2()+"");
 		HTML msgDesc3 = new HTML("&raquo; "+constants.configDBInstructionMsgDesc3()+"");
 
 		HTML note = new HTML("<b>"+constants.configDBInstructionNote()+"</b> "+constants.configDBInstructionNoteDesc());
@@ -179,11 +180,13 @@ public class DBMigration extends Composite {
 		msghp.add(msgDesc1);
 		msghp.add(msgDesc1);
 		msghp.add(msgDesc2);
+		msghp.add(msgDesc2a);
 		msghp.add(msgDesc3);
 		msghp.add(new HTML("<hr />"));
 		msghp.add(note);
 		
-		DisclosurePanelVB msgDisclousePanel = new DisclosurePanelVB(constants.configShowDetailInfo(), constants.configHideDetailInfo(), msghp);
+		String alertMsg = "&nbsp;<span style='color:red'>"+constants.configDBInstructionMsgDesc1()+"</span>";
+		DisclosurePanelVB msgDisclousePanel = new DisclosurePanelVB(constants.configShowDetailInfo()+alertMsg, constants.configHideDetailInfo()+alertMsg, msghp);
 		
 	    VerticalPanel msgPanel = new VerticalPanel();
 	    msgPanel.setSize("100%","100%");	

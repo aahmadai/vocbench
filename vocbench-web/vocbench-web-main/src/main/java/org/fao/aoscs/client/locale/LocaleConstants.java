@@ -46,6 +46,7 @@ public interface LocaleConstants extends Constants{
 	public String footerContactUs();
 	public String footerCopyRight();
 	public String footerOrganization();
+	public String footerART();
 
 	//Log
 	public String logSiteStatistics();
@@ -372,6 +373,7 @@ public interface LocaleConstants extends Constants{
 	public String searchSparqlQueryLanguage();
 	public String searchSparqlQuery();
 	public String searchSparqlIncludeInferredStatements();
+	public String searchSparqlFlintEditor();
 	public String searchSparqlEmptyQuery();
 	public String searchSparqlResultFail();
 
@@ -810,6 +812,8 @@ public interface LocaleConstants extends Constants{
 	public String configDBStateDesc();
 	public String configDBPreinstalledDesc();
 	public String configDBInstructionMsgTitle();
+	public String configDBInstructionMsgDesc1();
+	public String configDBInstructionMsgDesc2();
 	public String configDBInstructionMsgDesc3();
 	public String configDBInstructionNote();
 	public String configDBInstructionNoteDesc();

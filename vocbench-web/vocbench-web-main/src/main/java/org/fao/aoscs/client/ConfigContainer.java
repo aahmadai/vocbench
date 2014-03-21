@@ -27,7 +27,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -46,7 +45,7 @@ public class ConfigContainer extends Composite {
 	private Button btnImport = new Button(constants.configLoadBtn());
 	private Button btnExport = new Button(constants.configExportBtn());
 	private Button btnPreset = new Button(constants.configAllPresetBtn());
-	private Button btnChange = new Button(constants.configConfirmBtn());
+	private Button btnChange = new Button(constants.buttonSubmit());
 	private Button btnCancel = new Button(constants.buttonCancel());
 	
 	private HashMap<String, ConfigObject> configObjectMap;
@@ -79,7 +78,7 @@ public class ConfigContainer extends Composite {
 				
 				if(isFirstKey) 
 				{
-					flexpanelmain.getFlexCellFormatter().setColSpan(i, 0, 5);
+					flexpanelmain.getFlexCellFormatter().setColSpan(i, 0, 4);
 					flexpanelmain.getRowFormatter().addStyleName(i, "titlebartext");
 					flexpanelmain.setWidget(i, 0, new HTML("--- "+prefix+" PROPERTIES ---"));
 					isFirstKey = false;
@@ -87,7 +86,7 @@ public class ConfigContainer extends Composite {
 				}
 				final ConfigObject configObject = configObjectMap.get(key);
 				
-				CheckBox chkValue = new CheckBox();
+				//CheckBox chkValue = new CheckBox();
 				final TextBox txtBox = new TextBox();
 				txtBox.setSize("600px", "20px");
 				
@@ -95,13 +94,13 @@ public class ConfigContainer extends Composite {
 				{
 					txtBox.setValue(configObject.getDefaultValue());
 					txtBox.addStyleName(Style.label_color_gray);
-					chkValue.setValue(configObject.isMandatory());
+					//chkValue.setValue(configObject.isMandatory());
 				}
 				else
 				{
 					txtBox.setValue(configObject.getValue());
 					txtBox.removeStyleName(Style.label_color_gray);
-					chkValue.setValue(true);
+					//chkValue.setValue(true);
 				}
 					
 				txtBox.addKeyDownHandler(new KeyDownHandler() {
@@ -133,13 +132,13 @@ public class ConfigContainer extends Composite {
 				flexpanelmain.setWidget(i, 0, hp);
 				flexpanelmain.setWidget(i, 1, w);
 				flexpanelmain.setWidget(i, 2, txtBox);
-				flexpanelmain.setWidget(i, 3, chkValue);
-				flexpanelmain.setWidget(i, 4, btnfactoryPreset);
+				//flexpanelmain.setWidget(i, 3, chkValue);
+				flexpanelmain.setWidget(i, 3, btnfactoryPreset);
 				flexpanelmain.getCellFormatter().setHorizontalAlignment(i, 1, HasHorizontalAlignment.ALIGN_CENTER);
 				i++;
 			}
 		}
-		
+		btnChange.setTitle(constants.configConfirmBtnDesc());
 		btnChange.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 
@@ -186,7 +185,7 @@ public class ConfigContainer extends Composite {
 									if(hp.getWidgetCount()>0)
 										key = ((HTML)hp.getWidget(0)).getText();
 									TextBox txtBox = ((TextBox)flexpanelmain.getWidget(row, 2));
-									CheckBox chkValue = ((CheckBox)flexpanelmain.getWidget(row, 3));
+									//CheckBox chkValue = ((CheckBox)flexpanelmain.getWidget(row, 3));
 									String value = txtBox.getValue();
 									ConfigObject configObject = result.get(key);
 									if(configObject!=null)
@@ -200,7 +199,7 @@ public class ConfigContainer extends Composite {
 											{
 												txtBox.setValue(configObject.getValue());
 												txtBox.removeStyleName(Style.label_color_gray);
-												chkValue.setValue(true);
+												//chkValue.setValue(true);
 											}
 										}
 									}
@@ -220,12 +219,14 @@ public class ConfigContainer extends Composite {
 			}
 		});
 		
+		btnImport.setTitle(constants.configLoadBtnDesc());
 		btnImport.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				impConfig.show();
 			}
 		});
 		
+		btnExport.setTitle(constants.configExportBtnDesc());
 		btnExport.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent arg0) {
@@ -266,6 +267,7 @@ public class ConfigContainer extends Composite {
 			}
 		});
 		
+		btnPreset.setTitle(constants.configAllPresetBtnDesc());
 		btnPreset.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				for(int row=0;row<flexpanelmain.getRowCount();row++)
@@ -277,19 +279,20 @@ public class ConfigContainer extends Composite {
 						if(hp.getWidgetCount()>0)
 							key = ((HTML)hp.getWidget(0)).getText();
 						TextBox txtBox = ((TextBox)flexpanelmain.getWidget(row, 2));
-						CheckBox chkValue = ((CheckBox)flexpanelmain.getWidget(row, 3));
+						//CheckBox chkValue = ((CheckBox)flexpanelmain.getWidget(row, 3));
 						final ConfigObject configObject = configObjectMap.get(key);
 						if(configObject!=null)
 						{
 							txtBox.setValue(configObject.getDefaultValue());
 							txtBox.addStyleName(Style.label_color_gray);
-							chkValue.setValue(configObject.isMandatory());
+							//chkValue.setValue(configObject.isMandatory());
 						}
 					}
 				}
 			}
 		});
 		
+		btnCancel.setTitle(constants.configCancelBtnDesc());
 		btnCancel.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
@@ -371,13 +374,13 @@ public class ConfigContainer extends Composite {
 		msghp.add(getInstructionWidget(constants.configInstructionPropertyName(), constants.configInstructionPropertyNameDesc()));
 		msghp.add(getInstructionWidget(messages.configInstructionHelpIcon("<img src='images/help.png' valign='middle' border='0'>"),constants.configInstructionHelpIconDesc()));
 		msghp.add(getInstructionWidget(constants.configInstructionPropertyValue(), constants.configInstructionPropertyValueDesc()));
-		msghp.add(getInstructionWidget(constants.configInstructionCheckbox(), constants.configInstructionCheckboxDesc()));
+		//msghp.add(getInstructionWidget(constants.configInstructionCheckbox(), constants.configInstructionCheckboxDesc()));
 		msghp.add(getInstructionWidget(constants.configPresetBtn(), constants.configPresetBtnDesc()));
 		msghp.add(new HTML("<hr />"));
 		msghp.add(getInstructionWidget(constants.configAllPresetBtn(), constants.configAllPresetBtnDesc()));
 		msghp.add(getInstructionWidget(constants.configLoadBtn(), constants.configLoadBtnDesc()));
 		msghp.add(getInstructionWidget(constants.configExportBtn(), constants.configExportBtnDesc()));
-		msghp.add(getInstructionWidget(constants.configConfirmBtn(), constants.configConfirmBtnDesc()));
+		msghp.add(getInstructionWidget(constants.buttonSubmit(), constants.configConfirmBtnDesc()));
 		msghp.add(getInstructionWidget(constants.buttonCancel(), constants.configCancelBtnDesc()));
 		
 		DisclosurePanelVB msgDisclousePanel = new DisclosurePanelVB(constants.configShowDetailInfo(), constants.configHideDetailInfo(), msghp);

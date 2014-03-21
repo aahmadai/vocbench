@@ -1,14 +1,14 @@
 package org.fao.aoscs.model.semanticturkey.service.wrappers;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-
 import it.uniroma2.art.semanticturkey.servlet.Response;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.client.HttpClient;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.fao.aoscs.model.semanticturkey.util.ParameterPair;
 
 public class ServiceHttpWrapper extends ServletExtensionHttpWrapper implements ServiceWrapper {
@@ -17,56 +17,30 @@ public class ServiceHttpWrapper extends ServletExtensionHttpWrapper implements S
 
 	/**
 	 * @param id
-	 * @param httpclient
+	 * @param stURL
 	 */
-	public ServiceHttpWrapper(String id, HttpClient httpclient, String stServerScheme, String stServerIP, int stServerPort, String stServerPath) {
-		super(id, httpclient, stServerScheme, stServerIP, stServerPort, stServerPath);
+	public ServiceHttpWrapper(String id, String stURL) {
+		super(id, stURL);
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.model.semanticturkey.service.wrappers.ServiceWrapper#makeRequest(java.lang.String, org.fao.aoscs.model.semanticturkey.util.ParameterPair[])
 	 */
 	public Response makeRequest(String request, ParameterPair... pars) {
+		List<NameValuePair> parameterLists = new ArrayList<NameValuePair>();
+		parameterLists.add(new BasicNameValuePair("service", getId()));
+		parameterLists.add(new BasicNameValuePair("request", request));
+		
 		if (pars==null || (pars.length==0))
-			return askServer(getId(), request);		
-		ArrayList<String> parameterLists = new ArrayList<String>();
+			return askServer(parameterLists);	
+		
 		for (ParameterPair pair : pars) {	
 			String value = pair.getParValue();
 			if(value!=null && !value.equals(""))
 			{
-				parameterLists.add(pair.getParName()+"="+escape(value));
+				parameterLists.add(new BasicNameValuePair(pair.getParName(), value));
 			}
 		}
-		String[] parameters = new String[parameterLists.size()];
-		for(int i=0;i<parameterLists.size();i++)
-		{
-			parameters[i] = parameterLists.get(i);
-		}
-		return askServer(getId(), request, parameters);
+		return askServer(parameterLists);
 	}
-	
-	/**
-	 * @param parameter
-	 * @return
-	 */
-	protected String escape(String parameter) {
-		
-		//TODO find a decent escape method somewhere in java
-		try {
-			return URLEncoder.encode(parameter,"UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return parameter;
-		}
-		/*return parameter.replace(" ", "%20")
-						.replace("\n", "%0A")
-						.replace("#", "%23")
-						.replace("\\", "%5C")
-						.replace("\"", "%22")
-						.replace("|", "%7C")
-						.replace("^", "%5E")
-						.replace("<", "%3C")
-						.replace(">", "%3E");*/	
-	}
-
-	
 }

@@ -2,23 +2,28 @@ package org.fao.aoscs.model.semanticturkey.service.wrappers;
 
 import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.ResponseParser;
-import it.uniroma2.art.semanticturkey.utilities.XMLHelp;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.util.EntityUtils;
+import org.fao.aoscs.model.semanticturkey.util.HttpClientFactory;
+import org.fao.aoscs.model.semanticturkey.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -26,25 +31,16 @@ public class ServletExtensionHttpWrapper {
 
 	protected static Log logger = LogFactory.getLog(ServletExtensionHttpWrapper.class);
 	
-	protected HttpClient httpclient;
 	protected String id;
-	
-	protected String stServerScheme;
-	protected String stServerIP;
-	protected int stServerPort;
-	protected String stServerPath;
+	protected String stURL;
 
 	/**
 	 * @param id
-	 * @param httpclient
+	 * @param stURL
 	 */
-	public ServletExtensionHttpWrapper(String id, HttpClient httpclient, String stServerScheme, String stServerIP, int stServerPort, String stServerPath) {
-		this.httpclient = httpclient;
+	public ServletExtensionHttpWrapper(String id, String stURL) {
 		this.id = id;
-		this.stServerScheme = stServerScheme;
-		this.stServerIP = stServerIP;
-		this.stServerPort = stServerPort;
-		this.stServerPath = stServerPath;
+		this.stURL = stURL;
 	}
 	
 	/**
@@ -61,12 +57,12 @@ public class ServletExtensionHttpWrapper {
 	 * @return
 	 * @throws URISyntaxException
 	 */
-	protected Response askServer(String query) throws URISyntaxException {
-		//HttpGet http = prepareGet(query);
-		HttpPost http = preparePost(query);
+	protected Response askServer(List<NameValuePair> parameterLists) {
+		//HttpGet http = prepareGet(parameterLists);
+		HttpPost http = preparePost(parameterLists);
 		try {
-			HttpResponse response = httpclient.execute(http);
-			return handleResponse(response); 
+			HttpResponse response = HttpClientFactory.getHttpClient().execute(http);
+			return handleResponse(response, http.getURI().getQuery()); 
 		} catch (ClientProtocolException e) {
 			http.abort();
 			e.printStackTrace();
@@ -79,37 +75,44 @@ public class ServletExtensionHttpWrapper {
 		} catch (SAXException e) {
 			http.abort();
 			e.printStackTrace();
-		}	
+		} catch (ParserConfigurationException e) {
+			http.abort();
+			e.printStackTrace();
+		}
+		finally
+		{
+			http.releaseConnection();
+		}
 		return null;
 	}
 
 	/**
-	 * @param service
-	 * @param request
-	 * @param parameters
+	 * @param parameterLists
 	 * @return
+	 * @throws URISyntaxException
 	 */
-	protected Response askServer(String service, String request, String... parameters) {
-		StringBuffer query = new StringBuffer();
-		query.append("service=" + service + "&request=" + request);
-		for (int i = 0; i < parameters.length; i++)
-			query.append("&" + parameters[i]);
+	protected URI getURI(List<NameValuePair> parameterLists)
+	{
+		URI uri;
 		try {
-			return askServer(query.toString());
+			uri = new URIBuilder(stURL)
+			.setParameters(parameterLists)
+			.build();
+			logger.debug("\n"+uri);
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(e);
 		}
+		return uri;
 	}
+	
 
 	/**
 	 * @param query
 	 * @return
 	 * @throws URISyntaxException
 	 */
-	protected HttpGet prepareGet(String query) throws URISyntaxException {
-		URI uri = URIUtils.createURI(stServerScheme, stServerIP, stServerPort, stServerPath,  query, null);
-		logger.debug("\n"+uri);
-		HttpGet httpget = new HttpGet(uri);
+	protected HttpGet prepareGet(List<NameValuePair> parameterLists) {
+		HttpGet httpget = new HttpGet(getURI(parameterLists));
 		return httpget;
 	}
 	
@@ -118,34 +121,8 @@ public class ServletExtensionHttpWrapper {
 	 * @return
 	 * @throws URISyntaxException
 	 */
-	protected HttpPost preparePost(String query) throws URISyntaxException {
-		URI uri = URIUtils.createURI(stServerScheme, stServerIP, stServerPort, stServerPath, query, null);
-		logger.debug("\n"+uri);
-		HttpPost httpPost = new HttpPost(uri);
-		
-		/*
-	    try {
-	    	ArrayList<NameValuePair> postParameters;
-	    	postParameters = new ArrayList<NameValuePair>();
-	    	StringTokenizer st = new StringTokenizer(query, "&");
-	    	while(st.hasMoreElements())
-	    	{
-	    		String pairs = (String)st.nextElement();
-	    		String[] param = pairs.split("=");
-	    		if(param.length>1)
-	    		{
-	    			//System.out.println(param[0]+" = "+param[1]);
-	    			postParameters.add(new BasicNameValuePair(param[0], param[1]));
-	    		}
-	    	}
-	    	
-			httpPost.setEntity(new UrlEncodedFormEntity(postParameters));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		 */
-	
-		
+	protected HttpPost preparePost(List<NameValuePair> parameterLists) {
+		HttpPost httpPost = new HttpPost(getURI(parameterLists));
 		return httpPost;
 	}
 	
@@ -155,20 +132,41 @@ public class ServletExtensionHttpWrapper {
 	 * @throws IOException 
 	 * @throws IllegalStateException 
 	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
 	 */
-	protected Response handleResponse(HttpResponse response) throws IllegalStateException, IOException, SAXException {
-			HttpEntity entity = response.getEntity();
-			if (entity != null) {
-				InputStream instream = entity.getContent();
-				BufferedInputStream in = new BufferedInputStream(instream);
-				Document doc = XMLHelp.inputStream2XML(in);
-				return ResponseParser.getResponseFromXML(doc);
-			}
-
-		return null;
+	protected Response handleResponse(HttpResponse response, String query) throws IllegalStateException, IOException, SAXException, ParserConfigurationException {
+		InputStream in = null;
+		try
+		{
+			in = getInputStream(response);
+			Document doc = XMLUtil.inputStream2XML(in);
+			return ResponseParser.getResponseFromXML(doc);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		finally
+		{
+			 IOUtils.closeQuietly(in);
+		}
 	}
-
 	
+	protected InputStream getInputStream(HttpResponse httpResponse) {
+        try {
+        	InputStream is = null;
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            if (HttpStatus.SC_OK == statusCode) {
+                is = httpResponse.getEntity().getContent();
+            } else {
+                 EntityUtils.consume(httpResponse.getEntity());
+            }
+            return is;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 	
 	// END OF HTTP SERVER METHODS
 	

@@ -97,20 +97,43 @@ public class Footer extends VerticalPanel {
     	hp.setCellHorizontalAlignment(partners, HasHorizontalAlignment.ALIGN_LEFT);
     	hp.setCellWidth(hp.getWidget(7), "100%");
 
-    	String cr = constants.footerCopyRight() + "&nbsp;" +constants.footerOrganization() + ",&nbsp;" + DateTimeFormat.getFormat("yyyy").format(new Date());
-    	LinkLabel copyr = new LinkLabel(null, null, cr, "footer-copyright");
-    	copyr.setLabelStyle("footer-copyright");
-    	copyr.addClickHandler(new ClickHandler(){
+    	LinkLabel copy1 = new LinkLabel(null, null, constants.footerCopyRight() + "&nbsp;", "footer-copyright");
+    	copy1.setLabelStyle("footer-copyright");
+    	copy1.setClickable(false);
+
+    	LinkLabel copy2 = new LinkLabel(null, null, "&nbsp;&&nbsp;", "footer-copyright");
+    	copy2.setLabelStyle("footer-copyright");
+    	copy2.setClickable(false);
+
+    	LinkLabel copy3 = new LinkLabel(null, null, ",&nbsp;" + DateTimeFormat.getFormat("yyyy").format(new Date()), "footer-copyright");
+    	copy3.setLabelStyle("footer-copyright");
+    	copy3.setClickable(false);
+    	
+    	LinkLabel copyFAO = new LinkLabel(null, null, constants.footerOrganization(), "footer-copyright");
+    	copyFAO.setLabelStyle("footer-copyright");
+    	copyFAO.addClickHandler(new ClickHandler(){
     		public void onClick(ClickEvent arg0) {
     			HelpUtility.openURL(ConfigConstants.COPYRIGHTLINK);
     		}
 
     	});
+    	LinkLabel copyART = new LinkLabel(null, null, constants.footerART(), "footer-copyright");
+    	copyART.setLabelStyle("footer-copyright");
+    	copyART.addClickHandler(new ClickHandler(){
+    		public void onClick(ClickEvent arg0) {
+    			HelpUtility.openURL(ConfigConstants.ARTGROUPLINK);
+    		}
+
+    	});
+    	
     	HorizontalPanel rightFooterPanel = new HorizontalPanel();
-    	rightFooterPanel.setSpacing(3);
-    	rightFooterPanel.add(copyr);	
-    	rightFooterPanel.setCellVerticalAlignment(copyr, HasVerticalAlignment.ALIGN_MIDDLE);
-    	rightFooterPanel.setCellHorizontalAlignment(copyr, HasHorizontalAlignment.ALIGN_RIGHT);
+    	rightFooterPanel.add(copy1);	
+    	rightFooterPanel.add(copyFAO);	
+    	rightFooterPanel.add(copy2);	
+    	rightFooterPanel.add(copyART);	
+    	rightFooterPanel.add(copy3);	
+    	rightFooterPanel.setCellVerticalAlignment(copyFAO, HasVerticalAlignment.ALIGN_MIDDLE);
+    	rightFooterPanel.setCellHorizontalAlignment(copyFAO, HasHorizontalAlignment.ALIGN_RIGHT);
     	DOM.setStyleAttribute(rightFooterPanel.getElement(), "paddingRight", "20px");
 
     	HorizontalPanel footer = new HorizontalPanel();

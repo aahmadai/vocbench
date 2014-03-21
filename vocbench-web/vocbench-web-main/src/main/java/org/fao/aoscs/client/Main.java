@@ -251,7 +251,7 @@ public class Main implements EntryPoint {
 		for(String key : configObjectMap.keySet())
 		{
 			ConfigObject configObject = configObjectMap.get(key);
-			if((configObject.getValue()==null || configObject.getValue().equals(""))) 
+			if(configObject.isMandatory() && ((configObject.getValue()==null || configObject.getValue().equals("")))) 
 			{
 				i++;
 			}
