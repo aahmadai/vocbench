@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.fao.aoscs.client.image.AOSImageBundle;
 import org.fao.aoscs.client.locale.LocaleConstants;
@@ -828,14 +827,7 @@ public class MainApp extends Composite { // Application container
     static String getLocaleURL(String paramName, String paramValue)
     {
     	UrlBuilder urlBuilder = Window.Location.createUrlBuilder();
-		Map<String, List<String>> map = Window.Location.getParameterMap();
-		for(String name : map.keySet())
-		{
-			if(name.equals(paramName))
-			{
-				urlBuilder.setParameter(paramName, paramValue);
-			}
-		}
+		urlBuilder.setParameter(paramName, paramValue);
 		return urlBuilder.buildString();
     }
     
