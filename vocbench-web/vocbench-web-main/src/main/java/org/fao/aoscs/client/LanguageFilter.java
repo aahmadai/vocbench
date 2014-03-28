@@ -316,15 +316,15 @@ public class LanguageFilter extends DialogBoxAOS {
 					{
 						if(checkOrderValues())
 						{
+							hide();
 							updateLang(getLangCode());
 							updateUserSelectedLang();
-							hide();
 						}
 					}
 					else
 					{
-						updateUserSelectedLang();
 						hide();
+						updateUserSelectedLang();
 					}
 				}
 			}

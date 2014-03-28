@@ -215,7 +215,6 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 									userLoginObj.setGroupid(""+((UsersGroups) lstgroups.getObject(lstgroups.getSelectedIndex())).getUsersGroupsId());
 									userLoginObj.setGroupname(""+((UsersGroups) lstgroups.getObject(lstgroups.getSelectedIndex())).getUsersGroupsName());
 								}
-								//Window.open(GWT.getHostPageBaseURL()+"index.html?locale="+userLoginObj.getLanguage().toLowerCase(), "_self","schollbars=0,toolbar=0,resizable=1,status=no");
 					    		AsyncCallback<UserLogin> cbkauthorize = new AsyncCallback<UserLogin>() {
 					    			public void onSuccess(UserLogin result) {	   				
 					    				if(result==null){
@@ -235,7 +234,7 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 								    						userLocale = userLoginObj.getUsersPreference().getLanguageCodeInterface().toLowerCase();
 								    					if(!userLocale.equals("") && !currentLocale.equalsIgnoreCase(userLocale))
 								    					{
-								    						Window.open(GWT.getHostPageBaseURL()+"index.html?locale="+userLocale, "_self", null);
+								    						Window.Location.replace(MainApp.getLocaleURL("locale", userLocale));
 								    					}
 								    					else
 								    					{

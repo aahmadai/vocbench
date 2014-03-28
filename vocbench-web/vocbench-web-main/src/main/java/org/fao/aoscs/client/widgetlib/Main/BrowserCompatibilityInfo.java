@@ -27,6 +27,7 @@ public class BrowserCompatibilityInfo  extends HorizontalPanel{
 	private LinkLabel labelSafari;
 	private LinkLabel labelChrome;
 	private LinkLabel labelFirefox;
+	private LinkLabel labelIE;
 	
 	public BrowserCompatibilityInfo() {
 		super();
@@ -35,6 +36,7 @@ public class BrowserCompatibilityInfo  extends HorizontalPanel{
 		labelSafari = new LinkLabel("images/browser-safari.png", "Safari", "Safari");
 		labelChrome= new LinkLabel("images/browser-chrome.png", "Google Chrome", "Google Chrome");
 		labelFirefox = new LinkLabel("images/browser-firefox.png", "Mozilla Firefox", "Mozilla Firefox");
+		labelIE = new LinkLabel("images/browser-ie.png", "Internet Explorer", "Internet Explorer");
 		
 		labelSafari.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent arg0) {
@@ -53,9 +55,15 @@ public class BrowserCompatibilityInfo  extends HorizontalPanel{
 				Main.openURL("http://www.mozilla.com/en-US/firefox/" , "_blank");
 			}
 		});
+		
+		labelIE.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent arg0) {
+				Main.openURL("http://windows.microsoft.com/en-us/internet-explorer/browser-ie" , "_blank");
+			}
+		});
 	
 		warnIcon = new Image("images/warning-small.png");
-		warnText = new HTML(constants.mainBrowserWarn(), false);
+		warnText = new HTML(constants.mainPageTitle()+" "+constants.mainBrowserWarn(), false);
 		HorizontalPanel browsers = addBrowsers();
 		
 		Spacer s = new Spacer("100%", "100%");
@@ -84,7 +92,9 @@ public class BrowserCompatibilityInfo  extends HorizontalPanel{
 		bs.add(new HTML("&nbsp;&nbsp;"));
 		bs.add(labelChrome);
 		bs.add(new HTML("&nbsp;&nbsp;"));
-		bs.add(labelFirefox);		
+		bs.add(labelFirefox);
+		bs.add(new HTML("&nbsp;&nbsp;"));
+		bs.add(labelIE);
 		return bs;
 	}
 

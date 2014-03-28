@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.fao.aoscs.client.image.AOSImageBundle;
 import org.fao.aoscs.client.locale.LocaleConstants;
@@ -51,6 +52,7 @@ import org.fao.aoscs.client.widgetlib.shared.panel.Spacer;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.InitializeSystemData;
 import org.fao.aoscs.domain.LanguageCode;
+import org.fao.aoscs.domain.LanguageInterface;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.PermissionObject;
 import org.fao.aoscs.domain.SearchParameterObject;
@@ -60,10 +62,13 @@ import org.fao.aoscs.domain.ValidationFilter;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
@@ -76,6 +81,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
@@ -776,6 +782,8 @@ public class MainApp extends Composite { // Application container
 				new LogManager().endLog();
 			}
 		});
+		HorizontalPanel languageBar = getInterfaceLanguage();
+		
 		HorizontalPanel admin = getAdminsiterMenu();
 		AboutVocBenchMenu about = new AboutVocBenchMenu();
         HTML delimiter = new HTML("|");
@@ -788,6 +796,8 @@ public class MainApp extends Composite { // Application container
         hp.add(about);
         hp.add(new HTML("&nbsp;"));
         hp.add(delimiter);
+        hp.add(new HTML("&nbsp;"));
+        hp.add(languageBar);
         hp.add(rss);
         hp.add(new HTML("&nbsp;"));
         hp.add(preferences);
@@ -798,19 +808,87 @@ public class MainApp extends Composite { // Application container
         hp.add(new HTML("&nbsp;"));
         hp.add(signOut);
         hp.setSpacing(3);
-        hp.setCellVerticalAlignment(rss, HasVerticalAlignment.ALIGN_MIDDLE);
-        hp.setCellVerticalAlignment(about, HasVerticalAlignment.ALIGN_MIDDLE);
         //hp.setCellVerticalAlignment(comment, HasVerticalAlignment.ALIGN_MIDDLE);
         //hp.setCellVerticalAlignment(glossary, HasVerticalAlignment.ALIGN_MIDDLE);
         //hp.setCellVerticalAlignment(help, HasVerticalAlignment.ALIGN_MIDDLE);
-        hp.setCellVerticalAlignment(signOut, HasVerticalAlignment.ALIGN_MIDDLE);
         hp.setCellVerticalAlignment(admin, HasVerticalAlignment.ALIGN_MIDDLE);
-        hp.setCellVerticalAlignment(preferences, HasVerticalAlignment.ALIGN_MIDDLE);
         hp.setCellVerticalAlignment(delimiter, HasVerticalAlignment.ALIGN_MIDDLE);
+        hp.setCellVerticalAlignment(about, HasVerticalAlignment.ALIGN_MIDDLE);
         hp.setCellVerticalAlignment(delimiter2, HasVerticalAlignment.ALIGN_MIDDLE);
+        hp.setCellVerticalAlignment(languageBar, HasVerticalAlignment.ALIGN_MIDDLE);
+        hp.setCellVerticalAlignment(rss, HasVerticalAlignment.ALIGN_MIDDLE);
+        hp.setCellVerticalAlignment(preferences, HasVerticalAlignment.ALIGN_MIDDLE);
+        hp.setCellVerticalAlignment(help, HasVerticalAlignment.ALIGN_MIDDLE);
+        hp.setCellVerticalAlignment(signOut, HasVerticalAlignment.ALIGN_MIDDLE);
         statusBar.add(hp);
         statusBar.setCellHorizontalAlignment(hp, HasHorizontalAlignment.ALIGN_RIGHT);
         return statusBar;
+    }
+    
+    static String getLocaleURL(String paramName, String paramValue)
+    {
+    	UrlBuilder urlBuilder = Window.Location.createUrlBuilder();
+		Map<String, List<String>> map = Window.Location.getParameterMap();
+		for(String name : map.keySet())
+		{
+			if(name.equals(paramName))
+			{
+				urlBuilder.setParameter(paramName, paramValue);
+			}
+		}
+		return urlBuilder.buildString();
+    }
+    
+    private HorizontalPanel getInterfaceLanguage()
+	{
+    	final ListBox langMenuBar = new ListBox();
+    	loadInterfaceLanguage(langMenuBar);
+		langMenuBar.addChangeHandler(new ChangeHandler(){
+			public void onChange(ChangeEvent event) {
+				try
+				{
+					Window.Location.replace(MainApp.getLocaleURL("locale", langMenuBar.getValue(langMenuBar.getSelectedIndex())));
+				}
+				catch (Throwable e)
+				{
+					e.printStackTrace();
+				}
+			}
+		});
+		Image map = new Image("images/map-grey.gif");
+
+		HorizontalPanel langPanel = new HorizontalPanel();
+		langPanel.setSpacing(5);
+		langPanel.add(map);
+		langPanel.add(langMenuBar);
+		langPanel.setCellVerticalAlignment(langMenuBar, HasVerticalAlignment.ALIGN_MIDDLE);
+		langPanel.setCellHorizontalAlignment(langMenuBar, HasHorizontalAlignment.ALIGN_LEFT);
+		langPanel.setCellVerticalAlignment(map, HasVerticalAlignment.ALIGN_MIDDLE);
+
+		return langPanel;
+		
+    	
+	}
+    
+    private void loadInterfaceLanguage(final ListBox langMenuBar)
+    {
+    	AsyncCallback<ArrayList<LanguageInterface>> callback = new AsyncCallback<ArrayList<LanguageInterface>>()
+		{
+			public void onSuccess(ArrayList<LanguageInterface> langList) {
+				for(int i=0 ; i<langList.size() ; i++)
+				{
+					LanguageInterface langInterface = (LanguageInterface) langList.get(i);
+					langMenuBar.addItem(langInterface.getLanguageNote(), langInterface.getLanguageCode().toLowerCase());
+					if(langList.get(i).getLanguageCode().toLowerCase().equals(constants.mainLocale().toLowerCase()))
+						langMenuBar.setSelectedIndex(i);
+				}
+			}
+		    public void onFailure(Throwable caught) {
+		    	ExceptionManager.showException(caught, constants.mainDBError());
+		    }
+		};
+		
+		Service.systemService.getInterfaceLang(callback);
     }
 
     private HorizontalPanel getAppTitle()

@@ -23,7 +23,7 @@ public class AdministrationResponseManager extends ResponseManager {
 	{
 		// TODO replace hardcoded request "getOntologyMirror" with proper constants from ST
 		Response resp = getSTModel(ontoInfo).administrationService.makeRequest("getOntologyMirror");
-		logger.info(resp.getResponseContent());
+		logger.debug(resp.getResponseContent());
 		return getXMLResponseREPLY(resp);
 	}
 }

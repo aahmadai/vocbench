@@ -388,14 +388,7 @@ public class Register extends Composite implements ClickHandler {
 					else
 					{
 						mailAlert(txtfname.getText(), txtlname.getText(), txtemail.getText());
-						try {
-							Window.alert(constants.registerUserSuccess());
-							Window.open(GWT.getHostPageBaseURL()+"index.html", "_self","schollbars=0,toolbar=0,resizable=1,status=no");
-						} 
-						catch (Throwable e) 
-						{
-							e.printStackTrace();
-						}
+						Main.gotoLoginScreen();
 					}
 				}
 				public void onFailure(Throwable caught){

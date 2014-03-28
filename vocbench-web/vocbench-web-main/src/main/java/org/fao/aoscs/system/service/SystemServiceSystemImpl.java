@@ -1606,21 +1606,18 @@ public class SystemServiceSystemImpl {
 		try
 		{
 			int size = QueryFactory.getHibernateSQLQuery("SELECT 1").size();
-			//System.out.println("test: "+size);
 			if(size>0)
 			{
-				//System.out.println("true");
 				return true;
 			}
 			else
 			{
-				//System.out.println("false");
 				return false;
 			}
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 			return false;
 		}
 	}

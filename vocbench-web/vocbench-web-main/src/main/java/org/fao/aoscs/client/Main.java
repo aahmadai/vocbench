@@ -444,7 +444,7 @@ public class Main implements EntryPoint {
 			public void onChange(ChangeEvent event) {
 				try
 				{
-					Window.open(GWT.getHostPageBaseURL()+"index.html?locale="+langMenuBar.getValue(langMenuBar.getSelectedIndex()), "_self", null);
+					Window.Location.replace(MainApp.getLocaleURL("locale", langMenuBar.getValue(langMenuBar.getSelectedIndex())));
 				}
 				catch (Throwable e)
 				{
