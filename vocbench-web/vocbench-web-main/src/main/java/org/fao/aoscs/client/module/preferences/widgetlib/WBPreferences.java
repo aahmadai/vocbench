@@ -9,6 +9,7 @@ import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
+import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.preferences.service.UsersPreferenceService.UserPreferenceServiceUtil;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
@@ -1054,49 +1055,22 @@ public class WBPreferences extends Composite implements ClickHandler{
 	public void mailAlert(String list, String type) {
 		
 		String to = user.getEmail();
-		String subject = messages.mailPreferencesSubject(constants.mainPageTitle());
+		String subject = messages.mailPreferencesSubject(constants.mainPageTitle()+" "+ (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
 		String body = messages.mailPreferencesBody(user.getFirstName(), user.getLastName(), constants.mainPageTitle(), GWT.getHostPageBaseURL(), Main.DISPLAYVERSION, type, list);
-		
-		/*String subject = "Welcome to " + constants.mainPageTitle();
-		String body = "";
-		body += "Dear "+user.getFirstName()+" "+user.getLastName()+",";
-		body += "\n\nThank you for your interest to access the following "+type+". \n\n"
-			    + "Requested "+type+" : " + list + "\n\n";
-		body += constants.mainPageTitle() + " URL : " + GWT.getHostPageBaseURL() + "\n\n";
-		body += "Version : "+ConfigConstants.DISPLAYVERSION+" \n\n";
-		body += "Your request has been received. Please wait for the administrator to approve it. " 
-				+ "You will be informed by email once the privilege to access the requested "+type+" is approved.\n" ;
-		body += "\n\nRegards,";
-		body += "\n\nThe " + constants.mainPageTitle() + " team.";*/
 
 		AsyncCallback<Void> cbkmail = new AsyncCallback<Void>() {
 			public void onSuccess(Void result) {
 				GWT.log("Mail Send Successfully", null);
 			}
 			public void onFailure(Throwable caught) {
-				//ExceptionManager.showException(caught, "Mail Send Failed");
 				GWT.log("Mail Send Failed", null);
 			}
 		};
 		Service.systemService.SendMail(to, subject, body, cbkmail);
 
 		to = "ADMIN";
-		subject = messages.mailAdminPreferencesSubject(constants.mainPageTitle(), type);
+		subject = messages.mailAdminPreferencesSubject(constants.mainPageTitle()+" "+ (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")), type);
 		body = messages.mailAdminPreferencesBody(type, constants.mainPageTitle(), GWT.getHostPageBaseURL(), Main.DISPLAYVERSION, user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), list);
-		
-		/*subject = constants.mainPageTitle() + ":"+type+" Request";
-		body = "Dear Admin, \n\n";
-		body = "A new "+type+" access request for " + constants.mainPageTitle() + ".\n\n";
-		body += constants.mainPageTitle() + " URL : " + GWT.getHostPageBaseURL() + "\n\n";
-		body += "Version : "+ConfigConstants.DISPLAYVERSION+" \n\n";
-		body += "Username : " + user.getUsername() + "\n\n";
-		body += "First name : " + user.getFirstName() + "\n\n";
-		body += "Last name : " + user.getLastName() + "\n\n";
-		body += "Email : " + user.getEmail() + "\n\n";
-		body += "Requested "+type+" : " + list + "\n\n";
-		body += "Please assign privilege for the above requested "+type+" to this user.\n";
-		body += "\n\n Regards,";
-		body += "\n\nThe " + constants.mainPageTitle() + " Team.";*/
 		
 		AsyncCallback<Void> cbkmail1 = new AsyncCallback<Void>() {
 			public void onSuccess(Void result) {
@@ -1104,7 +1078,6 @@ public class WBPreferences extends Composite implements ClickHandler{
 			}
 
 			public void onFailure(Throwable caught) {
-				//ExceptionManager.showException(caught, "Mail Send Failed"); 
 				GWT.log("Mail Send Failed", null);
 			}
 		};

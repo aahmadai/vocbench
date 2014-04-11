@@ -918,17 +918,20 @@ public class RelationshipServiceSTImpl {
 		
 		success = DeleteManager.deleteProperty(ontoInfo, rObj.getUri());
 		
-		ArrayList<LightEntity> obj = new ArrayList<LightEntity>();
-		obj.add(rObj);
-		
-		RecentChangeData rcData = new RecentChangeData();
-		rcData.setObject(obj);			
-		rcData.setOldObject(obj);						
-		rcData.setActionId(actionId);
-		rcData.setModifierId(userId);
-		rcData.setOwnerId(userId);
-		
-		DatabaseUtil.addRecentChange(rcData, ontoInfo.getOntologyId());
+		if(success)
+		{
+			ArrayList<LightEntity> obj = new ArrayList<LightEntity>();
+			obj.add(rObj);
+			
+			RecentChangeData rcData = new RecentChangeData();
+			rcData.setObject(obj);			
+			rcData.setOldObject(obj);						
+			rcData.setActionId(actionId);
+			rcData.setModifierId(userId);
+			rcData.setOwnerId(userId);
+			
+			DatabaseUtil.addRecentChange(rcData, ontoInfo.getOntologyId());
+		}
 		
 		return success;
 	}

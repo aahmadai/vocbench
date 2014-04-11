@@ -1333,29 +1333,8 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 		}
 		
 		String to = pemail;
-		String subject = messages.mailUserActivationSubject(constants.mainPageTitle());
+		String subject = messages.mailUserActivationSubject(constants.mainPageTitle()+" "+ (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
 		String body = messages.mailUserActivationBody(fname, lname, constants.mainPageTitle(), Main.DISPLAYVERSION, txtusername.getText(), groupnamelist, Langnamelist, ontologynamelist, ConfigConstants.EMAIL_FROM);
-		
-		/*String subject = "Activation of your account on the "+constants.mainPageTitle()+"";
-		String body = "";
-		
-		body += 	"Dear "+fname+" "+lname+",";
-		body += 	"\n\nYour account has been activated on the " +
-		constants.mainPageTitle() + 
-		"for the release \""+constants.mainPageTitle()+ " " + ConfigConstants.DISPLAYVERSION+"\" \n\n" +
-		"Username: '"+txtusername.getText()+"'\n\n" +
-		"You have been assigned the following user group permissions and languages:\n\n" +
-		"User Groups: " +groupnamelist+
-		"\n\nLanguages: " + Langnamelist+
-		"\n\nOntology: " + ontologynamelist;
-		body += 	"\n\nIf you have any problem on login in let us know.";
-		body += 	"\n\nIf you have any suggestion, requirement, or you want to contribute on " +
-		"revising it I will make you member of the project at " +
-		"http://code.google.com/p/agrovoc-cs-workbench/ so that you can directly " +
-		"post issues at http://code.google.com/p/agrovoc-cs-workbench/issues/list";
-		body += 	"\n\nLet me know if you wish that. Emails are also fine.";
-		body += 	"\n\nRegards,";
-		body += "\n\nThe " + constants.mainPageTitle() + " Team.";*/
 
 		AsyncCallback<Void> cbkmail = new AsyncCallback<Void>(){
 			public void onSuccess(Void result) {
@@ -1369,24 +1348,9 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 		Service.systemService.SendMail(to, subject, body, cbkmail);
 
 		to = "ADMIN";
-		subject = messages.mailAdminUserActivationSubject(constants.mainPageTitle());
+		subject = messages.mailAdminUserActivationSubject(constants.mainPageTitle()+" "+ (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
 		body = messages.mailAdminUserActivationBody(constants.mainPageTitle(), GWT.getHostPageBaseURL(), Main.DISPLAYVERSION, userName, fname, lname, pemail, groupnamelist, Langnamelist, ontologynamelist);
 		
-		/*subject = constants.mainPageTitle() + ": User Activation";
-		body = "The following user has been successfully activated for the "+constants.mainPageTitle()+".\n\n";
-		body += constants.mainPageTitle() + " URL : " + GWT.getHostPageBaseURL() + "\n\n";
-		body += "WB Version : "+ConfigConstants.DISPLAYVERSION+" \n\n";
-		body += "Username : "+userName+" \n\n";
-		body += "First Name : "+fname+" \n\n";
-		body += "Last Name : "+lname+" \n\n";
-		body += "Email : "+pemail+ "\n\n";
-		body += "User Groups: " +groupnamelist+ "\n\n";
-		body += "Languages: " + Langnamelist+ "\n\n";
-		body += "Ontology: " + ontologynamelist+ "\n\n";
-		body += 	"\n\n Regards,";
-		body += "\n\nThe " + constants.mainPageTitle() + " Team.";*/
-
-
 		AsyncCallback<Void> cbkmail1 = new AsyncCallback<Void>(){
 			public void onSuccess(Void result) {
 				GWT.log("Mail Send Successfully", null);
@@ -1487,20 +1451,9 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 
 	public void mailAlert(String list, String type){
 		String to = txtemail.getText();
-		String subject = messages.mailUserApprovalSubject(constants.mainPageTitle(), type);
+		String subject = messages.mailUserApprovalSubject(constants.mainPageTitle()+" "+ (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")), type);
 		String body = messages.mailUserApprovalBody(txtfname.getText(), txtlname.getText(), type, list, constants.mainPageTitle(), GWT.getHostPageBaseURL(), Main.DISPLAYVERSION);
 		
-		/*String subject = "Approval of your access to the requested "+type+" on the "+constants.mainPageTitle()+"";
-		String body = "";
-		body += 	"Dear "+txtfname.getText()+" "+txtlname.getText()+",";
-		body += 	"\n\nYour request to access following "+type+" has been approved. " +
-		"\n\n"+type+": " +list;
-		body +=   "\n\n"+constants.mainPageTitle() + " URL : " + GWT.getHostPageBaseURL() ;
-		body +=   "\n\nVersion : "+ConfigConstants.DISPLAYVERSION;
-		body += 	"\n\nIf you have any problem to access the "+type+" please let us know.";
-		body += 	"\n\nRegards,";
-		body += "\n\nThe " + constants.mainPageTitle() + " Team.";*/
-
 		AsyncCallback<Void> cbkmail = new AsyncCallback<Void>(){
 			public void onSuccess(Void result) {
 				GWT.log("Mail Send Successfully", null);
@@ -1513,23 +1466,9 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 		Service.systemService.SendMail(to, subject, body, cbkmail);
 
 		to = "ADMIN";
-		subject = messages.mailAdminUserApprovalSubject(constants.mainPageTitle(), type);
+		subject = messages.mailAdminUserApprovalSubject(constants.mainPageTitle()+" "+ (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")), type);
 		body = messages.mailAdminUserApprovalBody(type,  constants.mainPageTitle(), GWT.getHostPageBaseURL(), Main.DISPLAYVERSION, txtusername.getText(), txtfname.getText(), txtlname.getText(), txtemail.getText(), list);
 		
-		/*subject = constants.mainPageTitle() + ": "+type+" approval";
-		body = "Dear Admin, \n\n";
-		body += "The following "+type+" has been successfully approved for the user in the "+constants.mainPageTitle()+".\n\n";
-		body += constants.mainPageTitle() + " URL : " + GWT.getHostPageBaseURL() + "\n\n";
-		body += "WB Version : "+ConfigConstants.DISPLAYVERSION+" \n\n";
-		body += "Username : "+txtusername.getText()+" \n\n";
-		body += "First Name : "+txtfname.getText()+" \n\n";
-		body += "Last Name : "+ txtlname.getText()+" \n\n";
-		body += "Email : "+ txtemail.getText() + "\n\n";
-		body += ""+type+": " +list+ "\n";
-		body += 	"\n\n Regards,";
-		body += "\n\nThe " + constants.mainPageTitle() + " Team.";*/
-
-
 		AsyncCallback<Void> cbkmail1 = new AsyncCallback<Void>(){
 			public void onSuccess(Void result) {
 				GWT.log("Mail Send Successfully", null);

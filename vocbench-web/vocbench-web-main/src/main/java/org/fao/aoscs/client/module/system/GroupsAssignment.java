@@ -2,6 +2,7 @@ package org.fao.aoscs.client.module.system;
 
 import java.util.ArrayList;
 
+import org.fao.aoscs.client.Main;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
@@ -980,22 +981,15 @@ userpanel.setCellHorizontalAlignment(hp,HasHorizontalAlignment.ALIGN_CENTER);*/
 	}
 		
 	public void mailAlert(String pname,String pemail){
-		String subject = messages.mailGroupAddSubject(constants.mainPageTitle());
+		String subject = messages.mailGroupAddSubject(constants.mainPageTitle()+" "+ (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
 		String body = messages.mailGroupAddBody(constants.mainPageTitle(), pname, lstgroups.getItemText(lstgroups.getSelectedIndex()), ConfigConstants.EMAIL_FROM);
 		
-		/*String subject = "VocBench Group ";
-		String body = "";
-		body += "Dear "+ pname +",";
-		body += "VocBench team add you to group " + lstgroups.getItemText(lstgroups.getSelectedIndex());
-		body += "\n\n Do you accept this group? so, please confirm to accept or reject this group.";
-		body += "\n\nThanks a lot for your interest.";
-		body += "\n\nRegards,";
-		body += "\nThe VocBench team.";*/
 		AsyncCallback<Void> cbkmail = new AsyncCallback<Void>(){
 			public void onSuccess(Void result) {
 			}
 			public void onFailure(Throwable caught) {
-				ExceptionManager.showException(caught, constants.groupSendMailFail());
+				//ExceptionManager.showException(caught, constants.groupSendMailFail());
+				GWT.log(constants.groupSendMailFail(), null);
 			}
 		};
 		Service.systemService.SendMail(pemail, subject, body, cbkmail);

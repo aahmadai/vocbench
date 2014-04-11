@@ -734,7 +734,7 @@ public class RelationshipTree extends Composite{
             getURIPanel.setVisible(showURI.getValue());
             
             //head.getDelete().setEnable(rObj.getUri().startsWith(ModelConstants.COMMONBASENAMESPACE));
-            head.getDelete().setEnable(rObj.getUri().startsWith(MainApp.defaultNamespace));
+            head.getDelete().setEnable(permissionTable.contains(OWLActionConstants.RELATIONSHIPDELETE, -1) && rObj.getUri().startsWith(MainApp.defaultNamespace));
             
             AsyncCallback<RelationshipObject> callback = new AsyncCallback<RelationshipObject>()
     		{
@@ -978,7 +978,7 @@ public class RelationshipTree extends Composite{
 				}
 			};
 			int actionId = OWLActionConstants.RELATIONSHIPDELETE; // relationship-delete
-			Service.relationshipService.deleteRelationship(relationshipObject, MainApp.userId, actionId, MainApp.userOntology, callback);
+			Service.relationshipService.deleteRelationship(relationshipObject, actionId, MainApp.userId, MainApp.userOntology, callback);
 	    }
 		
 	}

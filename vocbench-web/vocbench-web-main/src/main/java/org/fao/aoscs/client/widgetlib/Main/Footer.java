@@ -5,7 +5,7 @@ import java.util.Date;
 import org.fao.aoscs.client.Main;
 import org.fao.aoscs.client.PartnersDialogBox;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.constant.ConfigConstants;
+import org.fao.aoscs.client.module.constant.VBConstants;
 import org.fao.aoscs.client.utility.HelpUtility;
 import org.fao.aoscs.client.widgetlib.shared.label.LinkLabel;
 import org.fao.aoscs.client.widgetlib.shared.panel.Spacer;
@@ -43,7 +43,7 @@ public class Footer extends VerticalPanel {
     	DOM.setStyleAttribute(webservices.getElement(), "color", "#FFF");
     	webservices.addClickHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
-    			Main.openURL(ConfigConstants.WEBSERVICESINFO , "_blank");
+    			Main.openURL(VBConstants.WEBSERVICESINFO , "_blank");
     		}
     	});
 
@@ -113,7 +113,7 @@ public class Footer extends VerticalPanel {
     	copyFAO.setLabelStyle("footer-copyright");
     	copyFAO.addClickHandler(new ClickHandler(){
     		public void onClick(ClickEvent arg0) {
-    			HelpUtility.openURL(ConfigConstants.COPYRIGHTLINK);
+    			HelpUtility.openURL(VBConstants.COPYRIGHTLINK);
     		}
 
     	});
@@ -121,7 +121,7 @@ public class Footer extends VerticalPanel {
     	copyART.setLabelStyle("footer-copyright");
     	copyART.addClickHandler(new ClickHandler(){
     		public void onClick(ClickEvent arg0) {
-    			HelpUtility.openURL(ConfigConstants.ARTGROUPLINK);
+    			HelpUtility.openURL(VBConstants.ARTGROUPLINK);
     		}
 
     	});

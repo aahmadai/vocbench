@@ -57,27 +57,6 @@ public class ConfigConstants {
 	@VBConfigInfo(key="PERMISSION.LANGUAGECHECK", description="Set true/false to allow/restrict actions based on user permission langauge (Default: true)", defaultValue="true", mandatory=true)
 	public static Boolean PERMISSIONLANGUAGECHECK;
 	
-	@VBConfigInfo(key="PAGE.SANDBOXLINK", description="Link to Sandbox version of VocBench", defaultValue="http://202.73.13.50:55481/vocbench/", mandatory=true)
-	public static String SANDBOXLINK;
-	
-	@VBConfigInfo(key="PAGE.WEBSERVICESINFO", description="Link to web services page", defaultValue="http://aims.fao.org/tools/vocbench/access", mandatory=true)
-	public static String WEBSERVICESINFO;
-	
-	@VBConfigInfo(key="PAGE.VOCBENCHINFO", description="Link to VocBench page", defaultValue="http://aims.fao.org/tools/vocbench-2", mandatory=true)
-	public static String VOCBENCHINFO;
-	
-	@VBConfigInfo(key="PAGE.CONTACTUS", description="Link to contact page", defaultValue="http://aims.fao.org/contact", mandatory=true)
-	public static String CONTACTUS;
-	
-	@VBConfigInfo(key="PAGE.COPYRIGHTLINK", description="Link for FAO copyright page", defaultValue="http://www.fao.org/corp/copyright/en/", mandatory=true)
-	public static String COPYRIGHTLINK;
-	
-	@VBConfigInfo(key="PAGE.ARTGROUPLINK", description="Link for ART Research Group page", defaultValue="http://art.uniroma2.it/", mandatory=true)
-	public static String ARTGROUPLINK;
-	
-	@VBConfigInfo(key="PAGE.FLINTEDITORLINK", description="Link for Flint SPARQL Editor", defaultValue="https://github.com/TSO-Openup/FlintSparqlEditor", mandatory=true)
-	public static String FLINTEDITORLINK;
-	
 	@VBConfigInfo(key="VB.ONTOLOGY.VERSION", description="Specify VocBench version", defaultValue="2.0", mandatory=true)
 	public static String VERSION;
 
@@ -130,14 +109,6 @@ public class ConfigConstants {
 			EMAIL_FROM 						= getStringValue(cMap.get("EMAIL.FROM"));
 			
 			MODELCLASS 						= getStringValue(cMap.get("MODEL.CLASS"));
-			
-			SANDBOXLINK						= getStringValue(cMap.get("PAGE.SANDBOXLINK"));
-			WEBSERVICESINFO					= getStringValue(cMap.get("PAGE.WEBSERVICESINFO"));
-			VOCBENCHINFO					= getStringValue(cMap.get("PAGE.VOCBENCHINFO"));
-			CONTACTUS						= getStringValue(cMap.get("PAGE.CONTACTUS"));
-			COPYRIGHTLINK					= getStringValue(cMap.get("PAGE.COPYRIGHTLINK"));
-			ARTGROUPLINK					= getStringValue(cMap.get("PAGE.ARTGROUPLINK"));
-			FLINTEDITORLINK					= getStringValue(cMap.get("PAGE.FLINTEDITORLINK"));
 			
 			PERMISSIONCHECK  				= getStringValue(cMap.get("PERMISSION.CHECK")).equalsIgnoreCase("true")? true : false;
 			PERMISSIONHIDE  				= getStringValue(cMap.get("PERMISSION.HIDE")).equalsIgnoreCase("true")? true : false;

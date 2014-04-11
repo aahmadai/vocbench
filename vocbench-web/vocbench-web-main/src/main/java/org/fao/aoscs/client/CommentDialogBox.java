@@ -3,6 +3,7 @@ package org.fao.aoscs.client;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.comment.CommentDialog;
+import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.DialogBoxAOS;
 import org.fao.aoscs.domain.UserComments;
@@ -78,8 +79,8 @@ public class CommentDialogBox extends DialogBoxAOS implements ClickHandler{
 				    		 if(!uc.getEmail().equals(""))
 								{
 									String to = uc.getEmail();
-									String subject = messages.mailCommentSendSubject(constants.mainPageTitle(), Main.DISPLAYVERSION);
-									String body = messages.mailCommentSendBody(constants.mainPageTitle(), Main.DISPLAYVERSION);
+									String subject = messages.mailCommentSendSubject(constants.mainPageTitle(), (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
+									String body = messages.mailCommentSendBody(constants.mainPageTitle(), (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
 									AsyncCallback<Void> cbkmail = new AsyncCallback<Void>() {
 										public void onSuccess(Void result) {
 											GWT.log("Mail Send Successfully", null);

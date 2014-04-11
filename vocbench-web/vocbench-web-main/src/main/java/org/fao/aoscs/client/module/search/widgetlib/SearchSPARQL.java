@@ -6,8 +6,8 @@ import java.util.HashMap;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.constant.Style;
+import org.fao.aoscs.client.module.constant.VBConstants;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
 import org.fao.aoscs.client.utility.HelpUtility;
@@ -146,7 +146,7 @@ public class SearchSPARQL extends Composite{
 	    artGroupLabel.setWidth("100%");
 	    artGroupLabel.addClickHandler(new ClickHandler(){
     		public void onClick(ClickEvent arg0) {
-    			HelpUtility.openURL(ConfigConstants.FLINTEDITORLINK);
+    			HelpUtility.openURL(VBConstants.FLINTEDITORLINK);
     		}
 
     	});

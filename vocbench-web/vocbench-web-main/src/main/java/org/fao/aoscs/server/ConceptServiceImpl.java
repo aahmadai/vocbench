@@ -238,12 +238,12 @@ public class ConceptServiceImpl extends PersistentRemoteService implements Conce
 		return conceptService.deleteMappedConcept(ontoInfo, actionId, status, userId, destConceptObj, conceptObject);
 	}
 	
-	public void moveConcept(OntologyInfo ontoInfo, String schemeURI, String conceptURI, String oldParentConceptURI, String newParentConceptURI, OwlStatus status, int actionId, int userId) throws Exception{
-		conceptService.moveConcept(ontoInfo, schemeURI, conceptURI, oldParentConceptURI, newParentConceptURI, status, actionId, userId);
+	public void moveConcept(OntologyInfo ontoInfo, String oldSchemeUri, String newSchemeUri, String conceptURI, String oldParentConceptURI, String newParentConceptURI, OwlStatus status, int actionId, int userId) throws Exception{
+		conceptService.moveConcept(ontoInfo, oldSchemeUri, newSchemeUri, conceptURI, oldParentConceptURI, newParentConceptURI, status, actionId, userId);
 	}
 	
-	public void copyConcept(OntologyInfo ontoInfo, String conceptUri, String schemeUri, String parentconceptUri, OwlStatus status, int actionId, int userId) throws Exception{
-		conceptService.copyConcept(ontoInfo, conceptUri, schemeUri, parentconceptUri, status, actionId, userId);
+	public void copyConcept(OntologyInfo ontoInfo, String conceptUri, String oldSchemeUri, String newSchemeUri, String parentconceptUri, OwlStatus status, int actionId, int userId) throws Exception{
+		conceptService.copyConcept(ontoInfo, conceptUri, oldSchemeUri, newSchemeUri, parentconceptUri, status, actionId, userId);
 	}
 	
 	public Integer removeConcept(OntologyInfo ontoInfo, String schemeURI, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId) throws Exception{
@@ -446,6 +446,22 @@ public class ConceptServiceImpl extends PersistentRemoteService implements Conce
 			ConceptObject conceptObject, boolean isExplicit) throws Exception{
 		return conceptService.deleteConceptNotationValue(ontoInfo, actionId, status, userId, oldValue, propertyURI, conceptObject, isExplicit);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#checkConceptAddToScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String)
+	 */
+	public boolean checkConceptAddToScheme(OntologyInfo ontoInfo,
+			String conceptURI, String schemeURI) throws Exception {
+		return conceptService.checkConceptAddToScheme(ontoInfo, conceptURI, schemeURI);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#checkRemoveConceptFromScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String)
+	 */
+	public boolean checkRemoveConceptFromScheme(OntologyInfo ontoInfo,
+			String conceptURI, String schemeURI) throws Exception {
+		return conceptService.checkRemoveConceptFromScheme(ontoInfo, conceptURI, schemeURI);
+	}
 
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#addConceptToScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String)
@@ -470,5 +486,11 @@ public class ConceptServiceImpl extends PersistentRemoteService implements Conce
 			boolean isExplicit, OntologyInfo ontoInfo) throws Exception{
 		return conceptService.getConceptSchemeValue(conceptURI, isExplicit, ontoInfo);
 	}
+
+	public HashMap<String, String> getExcludedConceptSchemes(String conceptURI,
+			boolean isExplicit, OntologyInfo ontoInfo) throws Exception {
+		return conceptService.getExcludedConceptSchemes(conceptURI, isExplicit, ontoInfo);
+	}
+
 
 }

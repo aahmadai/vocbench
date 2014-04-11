@@ -18,6 +18,7 @@ import org.fao.aoscs.domain.PermissionFunctionalityMap;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
+import org.fao.aoscs.domain.VBInitConstants;
 import org.fao.aoscs.domain.ValidationFilter;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -67,7 +68,7 @@ public interface SystemServiceAsync<T> {
 	void getUnassignedActionStatus(String groupId, String actionId, AsyncCallback<ArrayList<OwlStatus>> callback);
 	void saveFilterPreferences(ValidationFilter vFilter, AsyncCallback<Void> callback);
 	void getHelpURL(AsyncCallback<HashMap<String, String>> callback);
-	void loadBuildConstants(AsyncCallback<String> callback);
+	void loadVBInitConstants(AsyncCallback<VBInitConstants> callback);
 	void loadConfigConstants(
 			AsyncCallback<HashMap<String, ConfigObject>> callback);
 	void updateConfigConstants(HashMap<String, ConfigObject> configObjectMap,

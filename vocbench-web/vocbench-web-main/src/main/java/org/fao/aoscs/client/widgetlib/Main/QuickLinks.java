@@ -4,7 +4,7 @@ import org.fao.aoscs.client.AboutVocBenchMenu;
 import org.fao.aoscs.client.Main;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
-import org.fao.aoscs.client.module.constant.ConfigConstants;
+import org.fao.aoscs.client.module.constant.VBConstants;
 import org.fao.aoscs.client.widgetlib.shared.label.LinkLabel;
 import org.fao.aoscs.client.widgetlib.shared.panel.Spacer;
 
@@ -91,7 +91,7 @@ public class QuickLinks extends HorizontalPanel {
 			homelabel.addClickHandler( new ClickHandler()
 			{
 				public void onClick(ClickEvent event) {
-					Main.openURL(ConfigConstants.VOCBENCHINFO , "_blank");			
+					Main.openURL(VBConstants.VOCBENCHINFO , "_blank");			
 				}					
 			});
 		}

@@ -489,12 +489,28 @@ public class ConceptTree extends Composite{
 				}
 				else
 				{
-					if(removeConceptToScheme == null || !removeConceptToScheme.isLoaded)
-					{
-						removeConceptToScheme = new RemoveConceptToScheme();
-					}
-					removeConceptToScheme.setConcept(selectedConceptObject.getUri());
-					removeConceptToScheme.show();
+					AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>() {
+						public void onSuccess(HashMap<String, String> list) {
+							
+							if(list.size()<2)
+							{
+								Window.alert(constants.conceptSchemeRemoveInvalid());
+							}
+							else
+							{
+								if(removeConceptToScheme == null || !removeConceptToScheme.isLoaded)
+								{
+									removeConceptToScheme = new RemoveConceptToScheme();
+								}
+								removeConceptToScheme.setConcept(selectedConceptObject.getUri(), list);
+								removeConceptToScheme.show();
+							}
+						}
+						public void onFailure(Throwable caught) {
+							ExceptionManager.showException(caught, constants.conceptSchemeGetSchemeFail());
+						}
+					};
+					Service.conceptService.getConceptSchemeValue(selectedConceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
 				}
 			}
 		});
@@ -982,7 +998,7 @@ public class ConceptTree extends Composite{
 				
 				int actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditRelationshipCreate));	
 				
-				Service.conceptService.moveConcept(MainApp.userOntology, MainApp.schemeUri, conceptObject.getUri(), conceptObject.getParentURI(), parentConceptURI, status, actionId, MainApp.userId, callback);
+				Service.conceptService.moveConcept(MainApp.userOntology, MainApp.schemeUri, MainApp.schemeUri, conceptObject.getUri(), conceptObject.getParentURI(), parentConceptURI, status, actionId, MainApp.userId, callback);
 			}
 		}
 	}
@@ -1104,7 +1120,7 @@ public class ConceptTree extends Composite{
 				OwlStatus status = (OwlStatus)initData.getActionStatus().get(ConceptActionKey.conceptEditRelationshipCreate);
 				int actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditRelationshipCreate));	
 				
-				Service.conceptService.copyConcept(MainApp.userOntology, MainApp.schemeUri, childConcept.getUri(), conceptObject.getUri(), status, actionId, MainApp.userId, callback);
+				Service.conceptService.copyConcept(MainApp.userOntology, MainApp.schemeUri, MainApp.schemeUri, childConcept.getUri(), conceptObject.getUri(), status, actionId, MainApp.userId, callback);
 			}
 		}
 	}

@@ -40,6 +40,7 @@ public class ConceptBrowser extends FormDialogBox {
 	private LoadingDialog ld = new LoadingDialog();
 	private ConceptCellTreeAOS conceptTree = null;	
 	private ArrayList<TreeObject> ctObj;
+	private String schemeURI = MainApp.schemeUri;
 	
 	private SuggestBoxAOSWB searchText = new SuggestBoxAOSWB(new MultiWordSuggestOracle());
 	private ListBox filterBox;
@@ -180,10 +181,15 @@ public class ConceptBrowser extends FormDialogBox {
 				ExceptionManager.showException(caught, constants.conceptLoadFail());
 			}
 		};
-		Service.treeService.getTreeObject(null, MainApp.schemeUri, MainApp.userOntology, !MainApp.userPreference.isHideNonpreferred(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage,callback);
+		Service.treeService.getTreeObject(null, schemeURI, MainApp.userOntology, !MainApp.userPreference.isHideNonpreferred(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage,callback);
+	}
+	
+	public void showBrowser() 
+	{		
+		showBrowser(MainApp.schemeUri);
 	}
 
-	public void showBrowser() 
+	public void showBrowser(String schemeURI) 
 	{		
 		sc.clear();
 		sc.setSize("700px", "400px");
@@ -191,13 +197,23 @@ public class ConceptBrowser extends FormDialogBox {
 		show();
 		if(conceptTree == null)
 		{			
+			this.schemeURI = schemeURI;
 			reload();			
 		}
-		else{
-			sc.clear();
-			sc.setSize("700px", "400px");
-			sc.add(conceptTree);	
-			resetBrowser();
+		else
+		{
+			if(!this.schemeURI.equals(schemeURI))
+			{
+				this.schemeURI = schemeURI;
+				reload();
+			}
+			else
+			{
+				sc.clear();
+				sc.setSize("700px", "400px");
+				sc.add(conceptTree);	
+				resetBrowser();
+			}
 		}
 			
 	}
@@ -297,6 +313,7 @@ public class ConceptBrowser extends FormDialogBox {
     private void doSearch()
     {
         searchObj.setRegex(filterBox.getValue(filterBox.getSelectedIndex()));
+        searchObj.setScheme(schemeURI);
         searchObj.clearSelectedLanguage();
         for(String lang : MainApp.userSelectedLanguage)
         {

@@ -43,6 +43,7 @@ public interface LocaleMessages extends Messages {
 	//Concept Schemes
 	String conceptSchemeSelected(String label, String uri);
 	String conceptSchemeBelongDifferentScheme(String scheme);
+	String conceptSchemeNotAvailableWarning(String scheme);
 	
 	// Comment
 	String commentPost(String label);

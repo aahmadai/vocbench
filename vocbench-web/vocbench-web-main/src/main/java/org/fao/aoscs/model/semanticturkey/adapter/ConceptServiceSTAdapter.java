@@ -328,15 +328,15 @@ public class ConceptServiceSTAdapter implements ConceptService {
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#moveConcept(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, java.lang.String, org.fao.aoscs.domain.OwlStatus, int, int)
 	 */
-	public void moveConcept(OntologyInfo ontoInfo, String schemeUri, String conceptURI, String oldParentConceptURI, String newParentConceptURI, OwlStatus status, int actionId, int userId){
-		conceptService.moveConcept(ontoInfo, schemeUri, conceptURI, oldParentConceptURI, newParentConceptURI, status, actionId, userId);
+	public void moveConcept(OntologyInfo ontoInfo, String oldSchemeUri, String newSchemeUri, String conceptURI, String oldParentConceptURI, String newParentConceptURI, OwlStatus status, int actionId, int userId){
+		conceptService.moveConcept(ontoInfo, oldSchemeUri, newSchemeUri, conceptURI, oldParentConceptURI, newParentConceptURI, status, actionId, userId);
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#copyConcept(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, java.lang.String, org.fao.aoscs.domain.OwlStatus, int, int)
 	 */
-	public void copyConcept(OntologyInfo ontoInfo, String conceptUri, String schemeUri, String parentconceptUri, OwlStatus status, int actionId, int userId){
-		conceptService.copyConcept(ontoInfo, conceptUri, schemeUri, parentconceptUri, status, actionId, userId);
+	public void copyConcept(OntologyInfo ontoInfo, String conceptUri, String oldSchemeUri, String newSchemeUri, String parentconceptUri, OwlStatus status, int actionId, int userId){
+		conceptService.copyConcept(ontoInfo, conceptUri, oldSchemeUri, newSchemeUri, parentconceptUri, status, actionId, userId);
 	}
 	
 	/* (non-Javadoc)
@@ -539,7 +539,23 @@ public class ConceptServiceSTAdapter implements ConceptService {
 			ConceptObject conceptObject, boolean isExplicit) {
 		return conceptService.deleteConceptNotationValue(ontoInfo, actionId, status, userId, oldValue, propertyURI, conceptObject, isExplicit);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#checkConceptAddToScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String)
+	 */
+	public boolean checkConceptAddToScheme(OntologyInfo ontoInfo,
+			String conceptURI, String schemeURI) throws Exception {
+		return conceptService.checkConceptAddToScheme(ontoInfo, conceptURI, schemeURI);
+	}
 
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#checkRemoveConceptFromScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String)
+	 */
+	public boolean checkRemoveConceptFromScheme(OntologyInfo ontoInfo,
+			String conceptURI, String schemeURI) throws Exception {
+		return conceptService.checkRemoveConceptFromScheme(ontoInfo, conceptURI, schemeURI);
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#addConceptToScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String)
 	 */
@@ -564,4 +580,8 @@ public class ConceptServiceSTAdapter implements ConceptService {
 		return conceptService.getConceptSchemeValue(conceptURI, isExplicit, ontoInfo);
 	}
 
+	public HashMap<String, String> getExcludedConceptSchemes(String conceptURI,
+			boolean isExplicit, OntologyInfo ontoInfo) throws Exception {
+		return conceptService.getExcludedConceptSchemes(ontoInfo, conceptURI, isExplicit);
+	}
 }

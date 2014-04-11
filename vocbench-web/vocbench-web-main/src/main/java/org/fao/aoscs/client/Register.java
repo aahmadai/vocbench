@@ -685,23 +685,7 @@ public class Register extends Composite implements ClickHandler {
 
 	public void mailAlert(String fname, String lname, String pemail) {
 		String to = pemail;
-		/*String subject = "Welcome to " + constants.mainPageTitle();
-		String body = "";
-		body += "Dear " + fname + " "+lname+",";
-		body += "\n\nThank you for registering as a user of the " + constants.mainPageTitle() + "." 
-				+ "Your request has been received. Please wait for the administrator to approve it. " 
-				+ "You will be informed when you can start to login in the system. " 
-				+ "After approval, you can log in to the " + constants.mainPageTitle() + " now with the username '"
-				+ txtloginname.getText() + "' and your chosen password."
-				+ "\n\nThanks for your interest."
-				+ "\n\nIf you want to unregister, please send an email with your username and the "
-				+ "subject: " + constants.mainPageTitle() + " - Unregister to "
-				+ ConfigConstants.EMAIL_FROM+". \n\n" 
-				+ constants.mainPageTitle() + " URL : " + GWT.getHostPageBaseURL() + "\n\n";;
-		body += "\n\nRegards,";
-		body += "\n\nThe " + constants.mainPageTitle() + " team.";*/
-		
-		String subject = messages.mailUserRegisterSubject(constants.mainPageTitle());
+		String subject = messages.mailUserRegisterSubject(constants.mainPageTitle()+" "+ (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
 		String body = messages.mailUserRegisterBody(fname, lname, constants.mainPageTitle(), txtloginname.getText(), ConfigConstants.EMAIL_FROM, GWT.getHostPageBaseURL());
 
 		AsyncCallback<Void> cbkmail = new AsyncCallback<Void>() {
@@ -716,20 +700,7 @@ public class Register extends Composite implements ClickHandler {
 		Service.systemService.SendMail(to, subject, body, cbkmail);
 
 		to = "ADMIN";
-		
-		/*subject = constants.mainPageTitle() + ":User Request";
-		body = "A new user registration request for " + constants.mainPageTitle() + ".\n\n";
-		body += constants.mainPageTitle() + " URL : " + GWT.getHostPageBaseURL() + "\n\n";
-		body += "Version : "+ConfigConstants.DISPLAYVERSION+" \n\n";
-		body += "Username : " + txtloginname.getText() + "\n\n";
-		body += "First Name : " + txtfname.getText() + "\n\n";
-		body += "Last Name : " + txtlname.getText() + "\n\n";
-		body += "Email : " + txtemail.getText() + "\n\n";
-		body += "Please assign languages, ontology, user groups and activate the account.\n";
-		body += "\n\n Regards,";
-		body += "\n\nThe " + constants.mainPageTitle() + " Team.";*/
-		
-		subject = messages.mailAdminUserRegisterSubject(constants.mainPageTitle());
+		subject = messages.mailAdminUserRegisterSubject(constants.mainPageTitle()+" "+ (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
 		body = messages.mailAdminUserRegisterBody(constants.mainPageTitle(), GWT.getHostPageBaseURL(), Main.DISPLAYVERSION, txtloginname.getText(), txtfname.getText(), txtlname.getText(), txtemail.getText());
 
 		AsyncCallback<Void> cbkmail1 = new AsyncCallback<Void>() {

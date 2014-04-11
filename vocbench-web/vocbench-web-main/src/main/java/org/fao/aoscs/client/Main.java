@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
+import org.fao.aoscs.client.module.constant.VBConstants;
 import org.fao.aoscs.client.module.logging.LogManager;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.HTTPRequestUtility;
@@ -22,6 +23,7 @@ import org.fao.aoscs.client.widgetlib.shared.panel.Spacer;
 import org.fao.aoscs.domain.ConfigObject;
 import org.fao.aoscs.domain.LanguageInterface;
 import org.fao.aoscs.domain.UserLogin;
+import org.fao.aoscs.domain.VBInitConstants;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -57,17 +59,18 @@ public class Main implements EntryPoint {
 
 	public void onModuleLoad() {
 		
-		AsyncCallback<String> callback = new AsyncCallback<String>()
+		AsyncCallback<VBInitConstants> callback = new AsyncCallback<VBInitConstants>()
 		{
-			public void onSuccess(String buildVersion) {
-				Main.DISPLAYVERSION = buildVersion;
+			public void onSuccess(VBInitConstants vbInitConstants) {
+				Main.DISPLAYVERSION = vbInitConstants.getBuildVersion();
+				VBConstants.loadConstants(vbInitConstants.getVBConstants());
 				initLayout();
 			}
 		    public void onFailure(Throwable caught) {
 		    	ExceptionManager.showException(caught, constants.configConfigurationLoadFail());
 		    }
 		};
-		Service.systemService.loadBuildConstants(callback);
+		Service.systemService.loadVBInitConstants(callback);
 		
 		Window.addWindowClosingHandler(new ClosingHandler() {
 			public void onWindowClosing(ClosingEvent event) {
@@ -114,7 +117,7 @@ public class Main implements EntryPoint {
 					briefLeft.add(getVisitorInfo());
 				if(ConfigConstants.MODE.equals(MainApp.PRO))
 				{
-					if(!ConfigConstants.SANDBOXLINK.equals(""))
+					if(!VBConstants.SANDBOXLINK.equals(""))
 						briefLeft.add(getSandboxInfo());
 				}
 				if(ConfigConstants.MODE.equals(MainApp.SANDBOX))
@@ -126,7 +129,7 @@ public class Main implements EntryPoint {
 				briefMiddle.add(new Spacer("20px", "100%"));
 
 				WhatIsNew whatIsNew = new WhatIsNew();
-				whatIsNew.addNewItem(new HTML(constants.mainPageTitle() +" Web services has been released for developers to incorporate the " + constants.mainPageTitle() + " into their applications via <a href='"+ConfigConstants.WEBSERVICESINFO+"' target='_blank'>web services</a>."));
+				whatIsNew.addNewItem(new HTML(constants.mainPageTitle() +" Web services has been released for developers to incorporate the " + constants.mainPageTitle() + " into their applications via <a href='"+VBConstants.WEBSERVICESINFO+"' target='_blank'>web services</a>."));
 
 				VerticalPanel content = new VerticalPanel();
 				content.setStyleName("front-content");
@@ -404,7 +407,7 @@ public class Main implements EntryPoint {
 
 	 public static void mailAlert(String fname, String lname, String pemail,String userName,String password){
 		  String to = pemail;
-		  String subject = messages.mailChangePasswordSubject(constants.mainPageTitle());
+		  String subject = messages.mailChangePasswordSubject(constants.mainPageTitle()+" "+ (Main.DISPLAYVERSION!=null?Main.DISPLAYVERSION:"")+ " " + ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.DEV))? "(DEVELOPMENT)" : ((ConfigConstants.MODE !=null && ConfigConstants.MODE.equals(MainApp.SANDBOX))? "(SANDBOX)" : "")));
 		  String body = messages.mailChangePasswordBody(fname, lname, constants.mainPageTitle(), userName, password, ConfigConstants.EMAIL_FROM);
 
 		  AsyncCallback<Void> cbkmail = new AsyncCallback<Void>(){
@@ -473,7 +476,7 @@ public class Main implements EntryPoint {
 		learnMore.setLabelStyle("toolbar-link");
 		learnMore.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent arg0) {
-				Window.open(ConfigConstants.VOCBENCHINFO, null, null);
+				Window.open(VBConstants.VOCBENCHINFO, null, null);
 			}
 		});
 		VerticalPanel vp = new VerticalPanel();
@@ -519,7 +522,7 @@ public class Main implements EntryPoint {
 		sandboxLink.setLabelStyle("toolbar-link");
 		sandboxLink.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
-				Window.open(ConfigConstants.SANDBOXLINK, null, null);
+				Window.open(VBConstants.SANDBOXLINK, null, null);
 			}
 		});
 

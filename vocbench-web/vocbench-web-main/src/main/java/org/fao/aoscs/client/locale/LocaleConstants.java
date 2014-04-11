@@ -1053,6 +1053,8 @@ public interface LocaleConstants extends Constants{
 	// Concept>messages
 	public String conceptSchemeAdded();
 	public String conceptSchemeRemoved();
+	public String conceptSchemeRemoveInvalid();
+	public String conceptSchemeRemoveFail();
 	public String conceptCheckAvailabilityFail();
 	public String conceptConceptExist();
 	public String conceptConceptNotExist();

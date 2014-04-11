@@ -3,7 +3,7 @@ package org.fao.aoscs.client;
 import java.util.LinkedHashMap;
 
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.constant.ConfigConstants;
+import org.fao.aoscs.client.module.constant.VBConstants;
 import org.fao.aoscs.client.widgetlib.shared.label.MenuBarAOS;
 
 import com.google.gwt.core.client.GWT;
@@ -49,7 +49,7 @@ public class AboutVocBenchMenu extends HorizontalPanel{
         aboutTab.addMenuItem(constants.footerContactUs(), false, true, new Command() {
             public void execute()
             {
-            	Main.openURL(ConfigConstants.CONTACTUS, "_help");
+            	Main.openURL(VBConstants.CONTACTUS, "_help");
             }
         });
         

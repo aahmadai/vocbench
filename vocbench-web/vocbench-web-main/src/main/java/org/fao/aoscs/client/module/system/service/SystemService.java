@@ -18,6 +18,7 @@ import org.fao.aoscs.domain.PermissionFunctionalityMap;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
+import org.fao.aoscs.domain.VBInitConstants;
 import org.fao.aoscs.domain.ValidationFilter;
 
 import com.google.gwt.core.client.GWT;
@@ -70,7 +71,7 @@ public interface SystemService extends RemoteService {
 	public ArrayList<OwlStatus> getUnassignedActionStatus(String groupId, String actionId) throws Exception;
 	public void saveFilterPreferences(ValidationFilter vFilter) throws Exception;
 	public HashMap<String, String> getHelpURL() throws Exception;
-	public String loadBuildConstants() throws Exception;
+	public VBInitConstants loadVBInitConstants() throws Exception;
 	public HashMap<String, ConfigObject> loadConfigConstants() throws Exception;
 	public void updateConfigConstants(HashMap<String, ConfigObject> configObjectMap) throws Exception;
 	public HashMap<String, ConfigObject> getConfigConstants(String filename) throws Exception;

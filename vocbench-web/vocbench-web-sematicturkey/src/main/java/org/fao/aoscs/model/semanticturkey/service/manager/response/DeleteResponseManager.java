@@ -21,9 +21,17 @@ public class DeleteResponseManager extends ResponseManager {
 	 * @param propertyUri
 	 * @return
 	 */
-	public static XMLResponseREPLY removePropertyRequest(OntologyInfo ontoInfo, String propertyUri)
+	public static XMLResponseREPLY removePropertyRequest(OntologyInfo ontoInfo, String uri)
 	{
-		Response resp = getSTModel(ontoInfo).deleteService.makeRequest(Delete.removePropertyRequest, STModel.par("name", propertyUri));
+		//TODO on ST UPDATE : Replacing property uri with local name. After ST update replace back with uri.
+		String name = uri;
+		if (uri.contains("#"))			
+			name = uri.split("#")[1];
+		else {
+			String[] contents = uri.split("/");
+			name = contents[contents.length-1];
+		}
+		Response resp = getSTModel(ontoInfo).deleteService.makeRequest(Delete.removePropertyRequest, STModel.par("name", name));
 		return getXMLResponseREPLY(resp);
 	}
 }

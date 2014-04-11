@@ -41,6 +41,7 @@ public interface ConceptService extends RemoteService{
 	public Boolean addConceptToScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI) throws Exception;
 	public Boolean removeConceptFromScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI) throws Exception;
 	public HashMap<String, String> getConceptSchemeValue(String conceptURI, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
+	public HashMap<String, String> getExcludedConceptSchemes(String conceptURI, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
 	
 	public ConceptDetailObject getConceptDetail(OntologyInfo ontoInfo, ArrayList<String> langList, String conceptURI, boolean isExplicit) throws Exception;
 	public ConceptDetailObject getCategoryDetail(OntologyInfo ontoInfo, ArrayList<String> langList, String conceptURI, String parentConceptURI) throws Exception;
@@ -120,11 +121,11 @@ public interface ConceptService extends RemoteService{
 			boolean isExplicit) throws Exception;
 	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptNotationValue(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId, NonFuncObject oldValue, String propertyURI,ConceptObject conceptObject, boolean isExplicit) throws Exception;
 
-	public RelationObject addNewRelationship(OntologyInfo ontoInfo, String rObj, String conceptName,String destConceptName,OwlStatus status,int actionId,int userId, boolean isExplicit) throws Exception;
+	public RelationObject addNewRelationship(OntologyInfo ontoInfo, String rObj, String conceptURI,String destConceptURI,OwlStatus status,int actionId,int userId, boolean isExplicit) throws Exception;
 	RelationObject editRelationship(OntologyInfo ontoInfo,
 			String rObj, String newRObj,
-			String conceptName, String destConceptName,
-			String newDestConceptName, OwlStatus status, int actionId,
+			String conceptURI, String destConceptURI,
+			String newDestConceptURI, OwlStatus status, int actionId,
 			int userId, boolean isExplicit) throws Exception;
 	public RelationObject deleteRelationship(OntologyInfo ontoInfo ,String rObj,ConceptObject conceptObject,ConceptObject destConceptObj,OwlStatus status,int actionId,int userId, boolean isExplicit) throws Exception;
 	
@@ -134,15 +135,17 @@ public interface ConceptService extends RemoteService{
 	public TermMoveObject loadMoveTerm(OntologyInfo ontoInfo, String termURI, String conceptURI) throws Exception;
 	public TermMoveObject moveTerm(OntologyInfo ontoInfo ,int actionId, OwlStatus status,int userId, TermObject termObject, TermMoveObject termMoveObject) throws Exception;
 	
-	public ConceptMappedObject addMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,String destConceptName,String conceptName) throws Exception;
+	public ConceptMappedObject addMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,String destConceptURI,String conceptURI) throws Exception;
 	public ConceptMappedObject deleteMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,ConceptObject destConceptObj,ConceptObject conceptObject) throws Exception;
 	
-	public void moveConcept(OntologyInfo ontoInfo, String schemeUri, String conceptName, String oldParentConceptName, String newParentConceptName, OwlStatus status, int actionId, int userId) throws Exception;
-	public void copyConcept(OntologyInfo ontoInfo, String schemeUri, String conceptName, String parentConceptName, OwlStatus status, int actionId, int userId) throws Exception;
-	public Integer removeConcept(OntologyInfo ontoInfo, String schemeUri, String conceptName, String parentConceptName, OwlStatus status, int actionId, int userId) throws Exception;
+	public void moveConcept(OntologyInfo ontoInfo, String oldSchemeUri, String newSchemeUri, String conceptURI, String oldParentConceptURI, String newParentConceptURI, OwlStatus status, int actionId, int userId) throws Exception;
+	public void copyConcept(OntologyInfo ontoInfo, String oldSchemeUri, String newSchemeUri, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId) throws Exception;
+	public Integer removeConcept(OntologyInfo ontoInfo, String schemeUri, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId) throws Exception;
 	
 	
 	public HashMap<String, String> getSchemes(OntologyInfo ontoInfo) throws Exception;
+	public boolean checkConceptAddToScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI) throws Exception;
+	public boolean checkRemoveConceptFromScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI) throws Exception;
 	public boolean addScheme(OntologyInfo ontoInfo, String scheme, String label, String lang) throws Exception;
 	public boolean deleteScheme(OntologyInfo ontoInfo, String scheme) throws Exception;
 	public boolean setScheme(OntologyInfo ontoInfo, String scheme) throws Exception;

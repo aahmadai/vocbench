@@ -4,11 +4,10 @@ import java.util.ArrayList;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
 
-import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.module.constant.RecentChangesConstants;
+import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.widgetlib.shared.panel.HorizontalFlowPanel;
 import org.fao.aoscs.domain.ExportParameterObject;
-import org.fao.aoscs.domain.LabelObject;
 import org.fao.aoscs.domain.PermissionGroupMapId;
 import org.fao.aoscs.domain.RecentChangeData;
 import org.fao.aoscs.domain.RelationshipObject;
@@ -58,29 +57,33 @@ public class LabelFactory {
 			case 46: //relationship-create				
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMOLD)
 					return new HTML("&nbsp;");										
 				
 				
 			case 47: //relationship-delete
-				if(returnType == ITEMLABEL)
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);								
+				if(returnType == ITEMLABEL){
+					r = (RelationshipObject)(rc.getObject().get(0));
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);	
+				}
 				else if(returnType == ITEMCHANGE)
 					return new HTML("&nbsp;");										
-				else if(returnType == ITEMOLD)
-					return new HTML("&nbsp;");										
+				else if(returnType == ITEMOLD){
+					r = (RelationshipObject)(rc.getOldObject().get(0));
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);	
+				}
 				
 			
 			case 48: //relationship-edit-label-create				
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					TranslationObject to = new TranslationObject();
@@ -101,7 +104,7 @@ public class LabelFactory {
 			case 49: //relationship-edit-label-edit				
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					TranslationObject to = (TranslationObject)(rc.getNewObject().get(0));
@@ -114,7 +117,7 @@ public class LabelFactory {
 			case 50: //relationship-edit-label-delete				
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					return new HTML("&nbsp;");
@@ -126,7 +129,7 @@ public class LabelFactory {
 			case 51: //relationship-edit-definition-create				
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					TranslationObject to = (TranslationObject)(rc.getNewObject().get(0));
@@ -138,7 +141,7 @@ public class LabelFactory {
 			case 52: //relationship-edit-definition-edit				
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					TranslationObject to = (TranslationObject)(rc.getNewObject().get(0));
@@ -151,7 +154,7 @@ public class LabelFactory {
 			case 53: //relationship-edit-definition-delete				
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					return new HTML("&nbsp;");
@@ -163,7 +166,7 @@ public class LabelFactory {
 			case 54: //relationship-edit-property-create
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					TranslationObject to = (TranslationObject)(rc.getNewObject().get(0));
@@ -175,7 +178,7 @@ public class LabelFactory {
 			case 55: //relationship-edit-property-delete
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					return new HTML("&nbsp;");
@@ -187,7 +190,7 @@ public class LabelFactory {
 			case 56: //relationship-edit-inverse-property-create
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					TranslationObject to = (TranslationObject)(rc.getNewObject().get(0));
@@ -199,7 +202,7 @@ public class LabelFactory {
 			case 57: //relationship-edit-inverse-property-edit
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					TranslationObject to = (TranslationObject)(rc.getNewObject().get(0));
@@ -211,7 +214,7 @@ public class LabelFactory {
 			case 58: //relationship-edit-inverse-property-delete
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					return new HTML("&nbsp;");										
@@ -222,7 +225,7 @@ public class LabelFactory {
 			case 59: //relationship-edit-domain-create
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					TranslationObject to = (TranslationObject)(rc.getNewObject().get(0));
@@ -234,7 +237,7 @@ public class LabelFactory {
 			case 60: //relationship-edit-domain-delete
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					return new HTML("&nbsp;");					
@@ -246,7 +249,7 @@ public class LabelFactory {
 			case 61: //relationship-edit-range-create
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					TranslationObject to = (TranslationObject)(rc.getNewObject().get(0));
@@ -258,7 +261,7 @@ public class LabelFactory {
 			case 62: //relationship-edit-range-edit
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					TranslationObject to = (TranslationObject)(rc.getNewObject().get(0));
@@ -271,7 +274,7 @@ public class LabelFactory {
 			case 63: //relationship-edit-range-delete
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					return new HTML("&nbsp;");
@@ -283,7 +286,7 @@ public class LabelFactory {
 			case 64: //relationship-edit-range-value-add
 				if(returnType == ITEMLABEL){
 					r = (RelationshipObject)(rc.getObject().get(0));
-					return makeLabel(makeRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
+					return makeLabel(Convert.getRelationshipLabel(r) , RecentChangesConstants.RELATIONSHIP_TYPE);
 				}
 				else if(returnType == ITEMCHANGE){
 					TranslationObject to = (TranslationObject)(rc.getNewObject().get(0));
@@ -418,25 +421,5 @@ public class LabelFactory {
 		panel.add(new HTML("&nbsp;&nbsp;"));
 		panel.add(txt);
 		return panel;			
-	}
-	
-	private static String makeRelationshipLabel(RelationshipObject rObj)
-	{
-		ArrayList<LabelObject> labelList = rObj.getLabelList();
-		String labelStr = "";
-		for(int i=0;i<labelList.size();i++)
-		{
-			LabelObject labelObj = (LabelObject) labelList.get(i);
-			String lang = (String) labelObj.getLanguage();
-			if(MainApp.userSelectedLanguage.contains(lang))
-			{
-				String label = (String) labelObj.getLabel();
-				if(labelStr.equals(""))
-					labelStr += " "+label+" ("+lang+")";
-				else
-					labelStr += ", "+label+" ("+lang+")";
-			}
-		}
-		return labelStr;
 	}
 }

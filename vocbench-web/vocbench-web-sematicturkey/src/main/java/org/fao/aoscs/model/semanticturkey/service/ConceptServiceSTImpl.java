@@ -615,19 +615,23 @@ public class ConceptServiceSTImpl {
 	}*/
 	
 	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#copyConcept(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, org.fao.aoscs.domain.OwlStatus, int, int)
+	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#copyConcept(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, java.lang.String, org.fao.aoscs.domain.OwlStatus, int, int)
 	 */
-	public void copyConcept(OntologyInfo ontoInfo, String schemeURI, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId){
+	public void copyConcept(OntologyInfo ontoInfo, String oldSchemeURI, String newSchemeURI, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId){
 		
 		if(parentConceptURI==null)
 		{
-			SKOSManager.addTopConcept(ontoInfo, conceptURI, schemeURI);
+			SKOSManager.addTopConcept(ontoInfo, conceptURI, newSchemeURI);
 		}
 		else if(!conceptURI.equals(parentConceptURI))
 		{
+			boolean isTopconcept = SKOSManager.isTopConcept(ontoInfo, conceptURI, oldSchemeURI);
 			SKOSManager.addBroaderConcept(ontoInfo, conceptURI, parentConceptURI);
+			
+			// TODO on ST UPDATE : Fixes for when adding concept which is a top concept to different broader concept, it removes itself as top concept.
+			if(isTopconcept)
+				SKOSManager.addTopConcept(ontoInfo, conceptURI, oldSchemeURI);
 		}
-		
 	}
 	
 	/* (non-Javadoc)
@@ -1913,13 +1917,13 @@ public class ConceptServiceSTImpl {
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#moveConcept(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, java.lang.String, org.fao.aoscs.domain.OwlStatus, int, int)
 	 */
-	public void moveConcept(OntologyInfo ontoInfo, String schemeUri, String conceptURI, String oldParentConceptURI, String newParentConceptURI, OwlStatus status, int actionId, int userId){
+	public void moveConcept(OntologyInfo ontoInfo, String oldSchemeUri, String newSchemeUri, String conceptURI, String oldParentConceptURI, String newParentConceptURI, OwlStatus status, int actionId, int userId){
 		
 		logger.debug("moveConcept(" + conceptURI + ", " + oldParentConceptURI + ", " + newParentConceptURI+ ", " + status + ", " + actionId + ", " + userId + ")");
 		if(!conceptURI.equals(newParentConceptURI))
 		{
-			copyConcept(ontoInfo, schemeUri, conceptURI, newParentConceptURI, status, actionId, userId);
-			removeConcept(ontoInfo, schemeUri, conceptURI, oldParentConceptURI, status, actionId, userId);
+			copyConcept(ontoInfo, oldSchemeUri, newSchemeUri, conceptURI, newParentConceptURI, status, actionId, userId);
+			removeConcept(ontoInfo, newSchemeUri, conceptURI, oldParentConceptURI, status, actionId, userId);
 		}
 	}
 	
@@ -1942,7 +1946,7 @@ public class ConceptServiceSTImpl {
 			cnt += broaderList.size();
 		if(cnt>1)
 		{
-			if(parentConceptURI==null)
+			if(parentConceptURI==null || parentConceptURI.equals(""))
 			{
 				SKOSManager.removeTopConcept(ontoInfo, conceptURI, schemeUri);
 			}
@@ -2034,6 +2038,22 @@ public class ConceptServiceSTImpl {
 		}
 		return map;
 	}
+	
+	
+	/**
+	 * @param ontoInfo
+	 * @return
+	 */
+	public HashMap<String, String> getExcludedConceptSchemes(OntologyInfo ontoInfo, String resourceURI, boolean isExplicit) {
+		HashMap<String, String> existingMap = getConceptSchemeValue(resourceURI, isExplicit, ontoInfo);
+		HashMap<String, String> map = new HashMap<String, String>();
+		for(String[] scheme : SKOSManager.getAllSchemesList(ontoInfo))
+		{
+			if(!existingMap.containsValue(scheme[1]))
+				map.put(scheme[0], scheme[1]);
+		}
+		return map;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#addScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
@@ -2057,6 +2077,41 @@ public class ConceptServiceSTImpl {
 	public boolean setScheme(OntologyInfo ontoInfo, String scheme) {
 		
 		return ProjectManager.setProjectProperty(ontoInfo, STXMLUtility.SKOS_SELECTED_SCHEME, scheme);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param schemeURI
+	 * @return
+	 */
+	public boolean checkConceptAddToScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI){
+		ArrayList<String> broaderList = SKOSManager.getBroaderConceptsURI(ontoInfo, conceptURI, schemeURI);
+		if(broaderList!=null && broaderList.size()>0)
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param schemeURI
+	 * @return
+	 */
+	public boolean checkRemoveConceptFromScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI){
+		ArrayList<String> list = SKOSManager.getNarrowerConceptsURI(ontoInfo, conceptURI, schemeURI);
+		if(list!=null)
+		{
+			for(String narrowerConceptURI: list)
+			{
+				if(!SKOSManager.isTopConcept(ontoInfo, narrowerConceptURI, schemeURI))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**

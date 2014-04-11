@@ -41,7 +41,7 @@ public class ModuleManager {
 				gotoItemFinal(treeItem, schemeURI, isAddAction, infoTab, belongsToModule, type);
 			}*/
 		}
-		else if(MainApp.schemeUri==null || !MainApp.schemeUri.equals(schemeURI))
+		else if(type!=MODULE_CONCEPT_BROWSER && (MainApp.schemeUri==null || !MainApp.schemeUri.equals(schemeURI)))
 		{
 			if(Window.confirm(messages.conceptSchemeBelongDifferentScheme(schemeURI)))
 			{

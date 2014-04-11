@@ -24,6 +24,7 @@ import org.fao.aoscs.domain.PermissionFunctionalityMap;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
+import org.fao.aoscs.domain.VBInitConstants;
 import org.fao.aoscs.domain.ValidationFilter;
 import org.fao.aoscs.hibernate.HibernateUtilities;
 import org.fao.aoscs.system.service.SystemServiceSystemImpl;
@@ -432,8 +433,8 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 		return systemServiceSystemImpl.manageOntologyIndexing(isIndexing, ontoInfo);	
 	}
 
-	public String loadBuildConstants() throws Exception {
-		return systemServiceSystemImpl.loadBuildConstants();
+	public VBInitConstants loadVBInitConstants() throws Exception {
+		return systemServiceSystemImpl.loadVBInitConstants();
 	}
 
 }

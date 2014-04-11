@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -40,6 +41,7 @@ import org.fao.aoscs.domain.RecentChangeData;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
+import org.fao.aoscs.domain.VBInitConstants;
 import org.fao.aoscs.domain.ValidationFilter;
 import org.fao.aoscs.hibernate.DatabaseUtil;
 import org.fao.aoscs.hibernate.EncriptFunction;
@@ -210,7 +212,7 @@ public class SystemServiceSystemImpl {
 		ArrayList<String[]> tmpVal = QueryFactory.getHibernateSQLQuery(owlStatusConstantsQuery);
 		HashMap<String, String> owlStatusConstants = new HashMap<String, String>();
 		for(int i=0;i<tmpVal.size();i++){
-			String[] item = (String[]) tmpVal.get(i);
+			String[] item = tmpVal.get(i);
 			owlStatusConstants.put(item[0], item[1]);
 		}
 		OWLStatusConstants.loadOwlStatusConstants(owlStatusConstants);
@@ -261,7 +263,7 @@ public class SystemServiceSystemImpl {
 		ArrayList<String[]> tmpVal = QueryFactory.getHibernateSQLQuery(owlStatusConstantsQuery);
 		HashMap<String, Integer> owlActionConstants = new HashMap<String, Integer>();
 		for(int i=0;i<tmpVal.size();i++){
-			String[] item = (String[]) tmpVal.get(i);
+			String[] item = tmpVal.get(i);
 			int id = Integer.parseInt(item[0]);
 			
 			String action = item[1].toUpperCase();
@@ -289,7 +291,7 @@ public class SystemServiceSystemImpl {
 		ArrayList<String[]> tmpVal = QueryFactory.getHibernateSQLQuery(query);
 	
 		for(int i=0;i<tmpVal.size();i++){
-			String[] item = (String[]) tmpVal.get(i);
+			String[] item = tmpVal.get(i);
 			userLoginObj = new UserLogin();	
 			userLoginObj.setUserid(item[0]);
 			userLoginObj.setLoginname(item[1]);
@@ -312,7 +314,7 @@ public class SystemServiceSystemImpl {
 		
 		for(int i=0;i<tmpVal.size();i++)
 		{
-			String[] item = (String[]) tmpVal.get(i);
+			String[] item = tmpVal.get(i);
 			String pm = item[0];
 		    permissionlist.add(pm);
 		}
@@ -384,7 +386,7 @@ public class SystemServiceSystemImpl {
 			ArrayList<String[]> list = QueryFactory.getHibernateSQLQuery(query);
 			ArrayList<UsersGroups> userGroupsList = new ArrayList<UsersGroups>();
 			for(int i=0;i<list.size();i++){
-	    		String[] item = (String[]) list.get(i);
+	    		String[] item = list.get(i);
 	    		UsersGroups userGroups = new UsersGroups();
 	    		userGroups.setUsersGroupsId(Integer.parseInt(item[0]));
 	    		userGroups.setUsersGroupsName(item[1]);
@@ -578,7 +580,7 @@ public class SystemServiceSystemImpl {
 		ArrayList<String[]> resultlist = QueryFactory.getHibernateSQLQuery(sql);
 		for(int z=0;z<resultlist.size();z++)
 		{
-			String str = ((String[])resultlist.get(z))[0].toLowerCase();		
+			String str = resultlist.get(z)[0].toLowerCase();		
 			if(!userSelectedLanguage.contains(str))
 				userSelectedLanguage.add(str);
 		}
@@ -593,7 +595,7 @@ public class SystemServiceSystemImpl {
 		ArrayList<String[]> resultlist = QueryFactory.getHibernateSQLQuery(sql);
 		for(int z=0;z<resultlist.size();z++)
 		{
-			String[] val = ((String[])resultlist.get(z));
+			String[] val = resultlist.get(z);
 			countryList.add(val);
 		}
 		return countryList;
@@ -676,7 +678,7 @@ public class SystemServiceSystemImpl {
 				user.setPassword(Encrypt.MD5(user.getPassword()));
 				DatabaseUtil.createObject(user);
 				list = QueryFactory.getHibernateSQLQuery("SELECT user_id from users where username = '" + QueryFactory.escapeSingleQuote(user.getUsername()) + "'");
-				id = Integer.parseInt(((String[]) list.get(0))[0]);
+				id = Integer.parseInt(list.get(0)[0]);
 				
 			}catch(Exception e){	
 				e.printStackTrace();				
@@ -967,7 +969,7 @@ public class SystemServiceSystemImpl {
 			ArrayList<String[]> ret = QueryFactory.getHibernateSQLQuery(sql);
 			
 			if(ret.size() > 0){
-				String[] countArray = (String[])(ret.get(0));
+				String[] countArray = (ret.get(0));
 				if(countArray.length > 0){
 					try{
 						int count = Integer.parseInt(countArray[0]);
@@ -994,7 +996,7 @@ public class SystemServiceSystemImpl {
 			ArrayList<String[]> ret = QueryFactory.getHibernateSQLQuery(sql);
 			
 			if(ret.size() > 0){
-				String[] countArray = (String[])(ret.get(0));
+				String[] countArray = (ret.get(0));
 				if(countArray.length > 0){
 					try{
 						int count = Integer.parseInt(countArray[0]);
@@ -1196,9 +1198,9 @@ public class SystemServiceSystemImpl {
 			ArrayList<String[]> resultlist = QueryFactory.getHibernateSQLQuery(query);
 			for(int z=0;z<resultlist.size();z++)
 			{
-				int fId = Integer.parseInt(((String[])resultlist.get(z))[0]);
-				int gId = Integer.parseInt(((String[])resultlist.get(z))[1]);
-				int sId = Integer.parseInt(((String[])resultlist.get(z))[2]);
+				int fId = Integer.parseInt(resultlist.get(z)[0]);
+				int gId = Integer.parseInt(resultlist.get(z)[1]);
+				int sId = Integer.parseInt(resultlist.get(z)[2]);
 				PermissionFunctionalityMap map = new PermissionFunctionalityMap();
 				map.setFunctionId(fId);
 				map.setGroupId(gId);
@@ -1270,7 +1272,7 @@ public class SystemServiceSystemImpl {
 			resultlist = QueryFactory.getHibernateSQLQuery(query);
 			for(int z=0;z<resultlist.size();z++)
 			{
-				String[] item = (String[]) resultlist.get(z);
+				String[] item = resultlist.get(z);
 				OwlAction oa = new OwlAction();
 				oa.setId(Integer.parseInt(item[0]));
 				oa.setAction(item[1].toUpperCase());
@@ -1292,7 +1294,7 @@ public class SystemServiceSystemImpl {
 			resultlist = QueryFactory.getHibernateSQLQuery(query);
 			for(int z=0;z<resultlist.size();z++)
 			{
-				String[] item = (String[]) resultlist.get(z);
+				String[] item = resultlist.get(z);
 				OwlAction oa = new OwlAction();
 				oa.setId(Integer.parseInt(item[0]));
 				oa.setAction(item[1].toUpperCase());
@@ -1333,7 +1335,7 @@ public class SystemServiceSystemImpl {
 			ArrayList<String[]> resultlist = QueryFactory.getHibernateSQLQuery(query);
 			for(int z=0;z<resultlist.size();z++){
 				OwlStatus os = new OwlStatus();
-				String[] item = (String[]) resultlist.get(z);
+				String[] item = resultlist.get(z);
 				os.setId(Integer.parseInt(item[0]));
 				os.setStatus(item[1]);
 				statusList.add(os);
@@ -1476,7 +1478,7 @@ public class SystemServiceSystemImpl {
 		
 		for(int i=0;i<tmpVal.size();i++)
 		{
-			String[] item = (String[]) tmpVal.get(i);
+			String[] item = tmpVal.get(i);
 			try
 			{
 				if(filterId==FilterPreferences.USERFILTER)
@@ -1540,18 +1542,25 @@ public class SystemServiceSystemImpl {
 		return list;
 	} */
 	
-	public String loadBuildConstants()
+	public VBInitConstants loadVBInitConstants()
 	{
-		String buildVersion = "";
-		PropertiesConfiguration pc;
+		VBInitConstants vbInitConstants = new VBInitConstants();
+		vbInitConstants.setBuildVersion(loadBuildConstants());
+		vbInitConstants.setVBConstants(loadVBConfigConstants());
+		return vbInitConstants;
+	}
+	
+	private PropertiesConfiguration getPropertiesConfiguration(String filename)
+	{
+		PropertiesConfiguration pc = new PropertiesConfiguration();
 		try {
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-			URL url = classloader.getResource("./build.properties");
+			URL url = classloader.getResource("./"+filename);
 			File f;
 			if(url==null)
 			{
 				
-				f = new File(classloader.getResource(".").getPath(), "build.properties");
+				f = new File(classloader.getResource(".").getPath(), filename);
 				if(!f.exists())
 				{
 					try {
@@ -1566,16 +1575,31 @@ public class SystemServiceSystemImpl {
 			{
 				pc = new PropertiesConfiguration(url);
 			}
-			
-			buildVersion = pc.getString("BUILD.VERSION");
-			
 		} catch (ConfigurationException e) {
 			e.printStackTrace();
 		}
-		
-		
+		return pc;
+	}
+	
+	private String loadBuildConstants()
+	{
+		PropertiesConfiguration pc = getPropertiesConfiguration("build.properties");
+		String buildVersion = pc.getString("BUILD.VERSION");
 		return buildVersion;
 	}
+	
+	private LinkedHashMap<String, String> loadVBConfigConstants()
+	{
+		PropertiesConfiguration pc = getPropertiesConfiguration("VBConstants.properties");
+		LinkedHashMap<String, String> mcMap = new LinkedHashMap<String, String>();
+		for (Iterator<?> keys = pc.getKeys(); keys.hasNext();)
+		{
+			String key = (String) keys.next();
+			mcMap.put(key , pc.getString(key));
+		}
+		return mcMap;
+	}
+	
 	
 	public HashMap<String, ConfigObject> loadConfigConstants()
 	{

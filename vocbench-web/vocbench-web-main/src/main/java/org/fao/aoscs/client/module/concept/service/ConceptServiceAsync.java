@@ -84,12 +84,12 @@ public interface ConceptServiceAsync<T> {
 		
 
 	void addNewRelationship(OntologyInfo ontoInfo, String rObj,
-			String conceptName, String destConceptName, OwlStatus status,
+			String conceptURI, String destConceptURI, OwlStatus status,
 			int actionId, int userId, boolean isExplicit,
 			AsyncCallback<RelationObject> callback);
 	void editRelationship(OntologyInfo ontoInfo, String rObj, String newRObj,
-			String conceptName, String destConceptName,
-			String newDestConceptName, OwlStatus status, int actionId,
+			String conceptURI, String destConceptURI,
+			String newDestConceptURI, OwlStatus status, int actionId,
 			int userId, boolean isExplicit,
 			AsyncCallback<RelationObject> callback);
 	void deleteRelationship(OntologyInfo ontoInfo, String rObj,
@@ -106,14 +106,14 @@ public interface ConceptServiceAsync<T> {
 	void moveTerm(OntologyInfo ontoInfo ,int actionId, OwlStatus status,int userId,TermObject termObject,TermMoveObject termMoveObject, AsyncCallback<TermMoveObject> callback);
 	
 	
-	void addMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,String destConceptName,String conceptName,AsyncCallback<ConceptMappedObject> callback);
+	void addMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,String destConceptURI,String conceptURI,AsyncCallback<ConceptMappedObject> callback);
 	void deleteMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,ConceptObject destConceptObj,ConceptObject conceptObject,AsyncCallback<ConceptMappedObject> callback);
 
-	void moveConcept(OntologyInfo ontoInfo, String schemeUri, String conceptName, String oldParentConceptName, String newParentConceptName, OwlStatus status, int actionId, int userId, AsyncCallback<Void> callback);
-	void copyConcept(OntologyInfo ontoInfo, String schemeUri,
-			String conceptName, String parentConceptName, OwlStatus status,
+	void moveConcept(OntologyInfo ontoInfo, String oldSchemeUri, String newSchemeUri, String conceptURI, String oldParentConceptURI, String newParentConceptURI, OwlStatus status, int actionId, int userId, AsyncCallback<Void> callback);
+	void copyConcept(OntologyInfo ontoInfo, String oldSchemeUri, String newSchemeUri,
+			String conceptURI, String parentConceptURI, OwlStatus status,
 			int actionId, int userId, AsyncCallback<Void> callback);
-	void removeConcept(OntologyInfo ontoInfo, String schemeUri, String conceptName, String parentConceptName, OwlStatus status, int actionId, int userId, AsyncCallback<Integer> callback);
+	void removeConcept(OntologyInfo ontoInfo, String schemeUri, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId, AsyncCallback<Integer> callback);
 	
 	void getSchemes(OntologyInfo ontoInfo, AsyncCallback<HashMap<String, String>> callback);
 	void addScheme(OntologyInfo ontoInfo, String scheme, String label,
@@ -242,6 +242,10 @@ public interface ConceptServiceAsync<T> {
 			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
 	void addConceptToScheme(OntologyInfo ontoInfo, String conceptURI,
 			String schemeURI, AsyncCallback<Boolean> callback);
+	void checkConceptAddToScheme(OntologyInfo ontoInfo, String conceptURI,
+			String schemeURI, AsyncCallback<Boolean> callback);
+	void checkRemoveConceptFromScheme(OntologyInfo ontoInfo,
+			String conceptURI, String schemeURI, AsyncCallback<Boolean> callback);
 	void removeConceptFromScheme(OntologyInfo ontoInfo, String conceptURI,
 			String schemeURI, AsyncCallback<Boolean> callback);
 	void getConceptSchemeValue(String conceptURI, boolean isExplicit,
@@ -249,4 +253,8 @@ public interface ConceptServiceAsync<T> {
 			AsyncCallback<HashMap<String, String>> callback);
 	void getConceptHistoryDataSize(int ontologyId, String uri, int type,
 			AsyncCallback<Integer> callback);
+	void getExcludedConceptSchemes(String conceptURI, boolean isExplicit,
+			OntologyInfo ontoInfo,
+			AsyncCallback<HashMap<String, String>> callback);
+	
 }

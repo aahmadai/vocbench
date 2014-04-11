@@ -483,6 +483,15 @@ public class MainApp extends Composite { // Application container
             ((Concept) modulePanel.getWidget(modulePanel.getWidgetIndex(concept))).reload();
         }
     }
+    
+    public Concept getConcept()
+    {
+        if (modulePanel.getWidgetIndex(concept) != -1)
+        {
+            return ((Concept) modulePanel.getWidget(modulePanel.getWidgetIndex(concept)));
+        }
+        return null;
+    }
 
     public void reloadClassificationTree()
     {
