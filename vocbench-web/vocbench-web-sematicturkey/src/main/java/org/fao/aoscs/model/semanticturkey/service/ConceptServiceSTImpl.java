@@ -1528,6 +1528,7 @@ public class ConceptServiceSTImpl {
 		cDetailObj.setAttributeObject(null);
 		cDetailObj.setNotationObject(null);
 		cDetailObj.setHierarchyObject(null);
+		cDetailObj.setSchemeObject(null);
 		
 		XMLResponseREPLY resp = VocbenchResponseManager.getConceptTabsCountsRequest(ontoInfo, conceptURI);
 		if(resp!=null)
@@ -1544,16 +1545,9 @@ public class ConceptServiceSTImpl {
 				cDetailObj.setImageCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "images", isExplicit?"numberExplicit":"number"));
 			}
 		}
-		/*int si = -1;
-		try
-		{
-			si = getConceptHistoryDataSize(ontoInfo.getOntologyId(), cObj.getUri() , InformationObject.CONCEPT_TYPE);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		cDetailObj.setHistoryCount(si);*/
+		// //TODO on ST UPDATE : Add scheme count in the ST service getConceptTabsCountsRequest
+		cDetailObj.setSchemeObject(getConceptSchemeValue(cObj.getUri(), isExplicit, ontoInfo));
+		cDetailObj.setSchemeCount(cDetailObj.getSchemeObject().size());
 		
 		return cDetailObj;
 	}

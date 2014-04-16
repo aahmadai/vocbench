@@ -19,6 +19,7 @@ public class ConceptDetailObject extends LightEntity{
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> attributeObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> noteObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> notationObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
+	private HashMap<String, String> schemeObject = null;
 	
 	private int termCount = 0;
 	private int definitionCount = 0;
@@ -28,6 +29,7 @@ public class ConceptDetailObject extends LightEntity{
 	private int relationCount = 0;
 	private int historyCount = 0;
 	private int imageCount = 0;
+	private int schemeCount = 0;
 	private int conceptMappedCount = 0;
 
 	/**
@@ -204,6 +206,18 @@ public class ConceptDetailObject extends LightEntity{
 	}
 	public void setNotationObject(HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> notationObject) {
 		this.notationObject = notationObject;
+	}
+	public HashMap<String, String> getSchemeObject() {
+		return schemeObject;
+	}
+	public void setSchemeObject(HashMap<String, String> schemeObject) {
+		this.schemeObject = schemeObject;
+	}
+	public int getSchemeCount() {
+		return schemeCount;
+	}
+	public void setSchemeCount(int schemeCount) {
+		this.schemeCount = schemeCount;
 	}
 }
 

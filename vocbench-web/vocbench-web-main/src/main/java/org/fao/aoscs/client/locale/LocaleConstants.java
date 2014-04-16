@@ -945,6 +945,8 @@ public interface LocaleConstants extends Constants{
 	public String conceptImage();
 	public String conceptImages();
 	public String conceptHistory();
+	public String conceptScheme();
+	public String conceptSchemes();
 	public String conceptHierarchy();
 	public String conceptAddNewTerm();
 	public String conceptPreferredTerm();
@@ -1049,6 +1051,7 @@ public interface LocaleConstants extends Constants{
 	public String conceptShowAdvOptions();
 	public String conceptShowAdvOptionsHelp();
 	public String conceptFoundExistingConcepts();
+	public String conceptNoSchemes();
 
 	// Concept>messages
 	public String conceptSchemeAdded();
