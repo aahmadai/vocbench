@@ -42,8 +42,22 @@ public class CopyConceptToScheme extends FormDialogBox{
 		this.initLayout();
 	}
 	
-	private HorizontalPanel getConceptBrowse(){
-		destConcept = new LabelAOS("--None--",null);
+	public void onButtonClicked(Widget sender) {
+		if(sender.equals(browse)){
+			
+			final ConceptBrowser cb = new ConceptBrowser();
+			cb.showBrowser(schemeURI);
+			cb.addSubmitClickHandler(new ClickHandler()
+			{
+				public void onClick(ClickEvent event) {
+					destConcept.setValue(cb.getSelectedItem(),cb.getTreeObject().getUri());
+				}					
+			});		
+		}
+	}
+	public void initLayout() {
+		
+		destConcept = new LabelAOS("--None--", null);
 
 		browse = new Image("images/browseButton3-grey.gif");
 		browse.addClickHandler(this);
@@ -56,32 +70,16 @@ public class CopyConceptToScheme extends FormDialogBox{
 		hp.setCellHorizontalAlignment(destConcept, HasHorizontalAlignment.ALIGN_LEFT);
 		hp.setCellHorizontalAlignment(browse, HasHorizontalAlignment.ALIGN_RIGHT);
 		
-		return hp;
-	}
-	
-	public void onButtonClicked(Widget sender) {
-		if(sender.equals(browse)){
-			
-			final ConceptBrowser cb = new ConceptBrowser();
-			cb.showBrowser(schemeURI);
-			cb.addSubmitClickHandler(new ClickHandler()
-			{
-				public void onClick(ClickEvent event) {
-					destConcept.setText(cb.getSelectedItem(),cb.getTreeObject().getUri());
-				}					
-			});		
-		}
-	}
-	public void initLayout() {
 		rootConceptChb = new CheckBox(constants.conceptSetRoot());
 		rootConceptChb.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				destConcept.setText("--None--",null);
+				destConcept.setValue("--None--",null);
 			}
 		});
+		
 		Grid table = new Grid(2,2);
 		table.setWidget(0, 0,new HTML(constants.conceptNewParent()));
-		table.setWidget(0, 1, getConceptBrowse());
+		table.setWidget(0, 1, hp);
 		table.setWidget(1, 1,rootConceptChb);
 		table.setWidth("100%");
 		table.getColumnFormatter().setWidth(1,"80%");

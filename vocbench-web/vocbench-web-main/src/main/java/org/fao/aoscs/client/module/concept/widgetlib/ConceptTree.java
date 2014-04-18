@@ -255,18 +255,22 @@ public class ConceptTree extends Composite{
 	
 	public void reload()
 	{
-		 String currentURI = null;
+		String currentURI = null;
 		 if(this.getSelectedConceptObject() != null){
 			currentURI = this.getSelectedConceptObject().getUri(); 
 		}
-		
+		 reload(currentURI);
+	}
+	
+	public void reload(String currentURI)
+	{
 		treePanel.showLoading(true);
 	    hSplit.setSplitPosition("100%");
 	    functionPanel.setVisible(false);
 	    detailPanel.setVisible(false);
 	    getURIPanel.setVisible(false);
 		
-		if(currentURI != null)
+		if(currentURI != null && !currentURI.equals(""))
 		{
 			reloadItem(currentURI, 0);
 		}
@@ -411,7 +415,7 @@ public class ConceptTree extends Composite{
 			}
 		);
 		
-		moveconcept = new ImageAOS(constants.conceptMove(), "images/moveconcept-grey.gif", "images/moveconcept-grey-disabled.gif", MainApp.permissionTable.contains(OWLActionConstants.CONCEPTEDIT_MOVECONCEPT, -1), new ClickHandler() {
+		moveconcept = new ImageAOS(constants.conceptMove(), "images/moveconcept-grey.gif", "images/moveconcept-grey-disabled.gif", permissionTable.contains(OWLActionConstants.CONCEPTEDIT_MOVECONCEPT, -1), new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if(selectedConceptObject==null)
 					Window.alert(constants.conceptSelectConcept());
@@ -463,7 +467,10 @@ public class ConceptTree extends Composite{
 			}
 		});
 		
-		addConceptToSchemeButton = new ImageAOS(constants.conceptSchemeAdd(), "images/concept-scheme-add-grey.png", "images/concept-scheme-add-grey-disabled.png", true, new ClickHandler() {
+		// TODO change this value by adding action and setting group permission
+	    boolean schemePermission = MainApp.groupId<3;
+		
+		addConceptToSchemeButton = new ImageAOS(constants.conceptSchemeAdd(), "images/concept-scheme-add-grey.png", "images/concept-scheme-add-grey-disabled.png", schemePermission, new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if(selectedConceptObject==null)
 				{
@@ -481,7 +488,7 @@ public class ConceptTree extends Composite{
 			}
 		});
 		
-		removeConceptToSchemeButton = new ImageAOS(constants.conceptSchemeDelete(), "images/concept-scheme-delete-grey.png", "images/concept-scheme-delete-grey-disabled.png", true, new ClickHandler() {
+		removeConceptToSchemeButton = new ImageAOS(constants.conceptSchemeDelete(), "images/concept-scheme-delete-grey.png", "images/concept-scheme-delete-grey-disabled.png", schemePermission, new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if(selectedConceptObject==null)
 				{
@@ -908,7 +915,7 @@ public class ConceptTree extends Composite{
 				cb.addSubmitClickHandler(new ClickHandler()
 				{
 					public void onClick(ClickEvent event) {
-						destConcept.setText(cb.getSelectedItem(),cb.getTreeObject().getUri());
+						destConcept.setValue(cb.getSelectedItem(),cb.getTreeObject().getUri());
 					}					
 				});		
 			}
@@ -917,7 +924,7 @@ public class ConceptTree extends Composite{
 			rootConceptChb = new CheckBox(constants.conceptSetRoot());
 			rootConceptChb.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
-					destConcept.setText("--None--",null);
+					destConcept.setValue("--None--",null);
 				}
 			});
 			Grid table = new Grid(2,2);
@@ -1045,7 +1052,7 @@ public class ConceptTree extends Composite{
 				cb.addSubmitClickHandler(new ClickHandler()
 				{
 					public void onClick(ClickEvent event) {
-						destConcept.setText(cb.getSelectedItem(), cb.getTreeObject());
+						destConcept.setValue(cb.getSelectedItem(), cb.getTreeObject());
 					}					
 				});		
 			}
@@ -1302,4 +1309,5 @@ public class ConceptTree extends Composite{
 	{
 		return selectedConceptObject;
 	}
+	
 }

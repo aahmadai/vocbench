@@ -223,7 +223,7 @@ public class TermRelationship extends TermTemplate {
 				rb.showBrowser(RelationshipBrowser.REL_TERM);
 				rb.addSubmitClickHandler(new ClickHandler(){
 					public void onClick(ClickEvent event) {
-						selectedRel.setText(rb.getSelectedItem(),rb.getRelationshipObject().getUri());
+						selectedRel.setValue(rb.getSelectedItem(),rb.getRelationshipObject().getUri());
 					}
 				});
 			}
@@ -250,10 +250,10 @@ public class TermRelationship extends TermTemplate {
 
 			selectedRel = new LabelAOS("--None--", new RelationshipObject());
 			//selectedRel.setText(Convert.getRelationshipLabel(rObj), rObj);
-			selectedRel.setText(relClsObj.getLabel(), relClsObj.getUri());
+			selectedRel.setValue(relClsObj.getLabel(), relClsObj.getUri());
 
 			selectedTerm = new LabelAOS("--None--", new TermObject());
-			selectedTerm.setText(destObj.getLabel(), destObj);
+			selectedTerm.setValue(destObj.getLabel(), destObj);
 
 			HorizontalPanel hpRel = new HorizontalPanel();
 			hpRel.add(selectedRel);
@@ -465,7 +465,7 @@ public class TermRelationship extends TermTemplate {
 				rb.showBrowser(RelationshipBrowser.REL_TERM);
 				rb.addSubmitClickHandler(new ClickHandler(){
 					public void onClick(ClickEvent event) {
-						selectedRel.setText(rb.getSelectedItem(),rb.getRelationshipObject());
+						selectedRel.setValue(rb.getSelectedItem(),rb.getRelationshipObject());
 					}
 				});
 			}

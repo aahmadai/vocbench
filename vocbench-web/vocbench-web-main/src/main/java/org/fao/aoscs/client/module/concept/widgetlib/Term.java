@@ -629,7 +629,7 @@ public class Term extends ConceptTemplate{
 					cb.addSubmitClickHandler(new ClickHandler()
 					{
 						public void onClick(ClickEvent event) {
-							destConcept.setText(cb.getSelectedItem(),cb.getTreeObject().getUri());
+							destConcept.setValue(cb.getSelectedItem(),cb.getTreeObject().getUri());
 						}
 					});
 

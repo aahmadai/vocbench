@@ -177,7 +177,7 @@ public class ConceptMap extends ConceptTemplate{
 					cb.addSubmitClickHandler(new ClickHandler()
 					{
 						public void onClick(ClickEvent event) {
-							selectedConcept.setText(cb.getSelectedItem(),cb.getTreeObject().getUri());
+							selectedConcept.setValue(cb.getSelectedItem(),cb.getTreeObject().getUri());
 						}					
 					});						
 				}

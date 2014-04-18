@@ -316,7 +316,7 @@ class ConceptRelationship extends ConceptTemplate{
 				{
 					public void onClick(ClickEvent event) {
 						if(rb.getSelectedItem()!=null)
-							relationship.setText(rb.getSelectedItem(),rb.getRelationshipObject());
+							relationship.setValue(rb.getSelectedItem(),rb.getRelationshipObject());
 					}					
 				});										
 			}else if(sender.equals(browse)){
@@ -327,7 +327,7 @@ class ConceptRelationship extends ConceptTemplate{
 				{
 					public void onClick(ClickEvent event) {
 						if(cb.getSelectedItem()!=null)
-							destConcept.setText(cb.getSelectedItem(),cb.getTreeObject().getUri());
+							destConcept.setValue(cb.getSelectedItem(),cb.getTreeObject().getUri());
 					}					
 				});								
 			}
@@ -441,7 +441,7 @@ class ConceptRelationship extends ConceptTemplate{
 		
 		private HorizontalPanel getRelationshipBrowserButton(){
 			relationship = new LabelAOS();
-			relationship.setText(oldRelationObj.getLabel(), oldRelationObj.getUri());
+			relationship.setValue(oldRelationObj.getLabel(), oldRelationObj.getUri());
 			
 			relationshipBrowse = new Image(imgPath);
 			relationshipBrowse.addClickHandler(this);
@@ -474,7 +474,7 @@ class ConceptRelationship extends ConceptTemplate{
 		
 		private HorizontalPanel getConceptBrowseButton(){
 			destConcept = new LabelAOS();
-			destConcept.setText(getConceptLabel(oldConceptObj),oldConceptObj.getUri());
+			destConcept.setValue(getConceptLabel(oldConceptObj),oldConceptObj.getUri());
 			
 			browse = new Image(imgPath);
 			browse.addClickHandler(this);
@@ -499,7 +499,7 @@ class ConceptRelationship extends ConceptTemplate{
 				{
 					public void onClick(ClickEvent event) {
 						if(rb.getSelectedItem()!=null)
-							relationship.setText(rb.getSelectedItem(),rb.getRelationshipObject().getUri());
+							relationship.setValue(rb.getSelectedItem(),rb.getRelationshipObject().getUri());
 					}					
 				});			
 			}else if(sender.equals(browse)){
@@ -509,7 +509,7 @@ class ConceptRelationship extends ConceptTemplate{
 				{
 					public void onClick(ClickEvent event) {
 						if(cb.getSelectedItem()!=null)
-							destConcept.setText(cb.getSelectedItem(), cb.getTreeObject().getUri());
+							destConcept.setValue(cb.getSelectedItem(), cb.getTreeObject().getUri());
 					}					
 				});					
 			}

@@ -8,14 +8,14 @@ import java.util.HashMap;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.concept.Concept;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTree;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
 import org.fao.aoscs.client.utility.ModuleManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
 import org.fao.aoscs.client.widgetlib.shared.misc.OlistBox;
+import org.fao.aoscs.domain.OntologyInfo;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
@@ -38,6 +38,23 @@ public class RemoveConceptToScheme extends FormDialogBox {
 	private VerticalPanel panel = new VerticalPanel();
 	
 	public RemoveConceptToScheme(){
+		super(constants.buttonDelete(), constants.buttonCancel());
+		this.setText(constants.conceptSchemeDelete());
+		setWidth("400px");
+		
+		panel.setSize("100%", "100%");
+		LoadingDialog load = new LoadingDialog();
+		panel.add(load);
+		panel.setCellHorizontalAlignment(load,HasHorizontalAlignment.ALIGN_CENTER);
+		panel.setCellVerticalAlignment(load, HasVerticalAlignment.ALIGN_MIDDLE);
+		addWidget(panel);	
+		
+		schemeList = new OlistBox();
+		schemeList.addItem("--Select--", "");
+		schemeList.setWidth("100%");
+	}
+	
+	public RemoveConceptToScheme(String scheme){
 		super(constants.buttonDelete(), constants.buttonCancel());
 		this.setText(constants.conceptSchemeDelete());
 		setWidth("400px");
@@ -88,8 +105,12 @@ public class RemoveConceptToScheme extends FormDialogBox {
 	}
 
 	public void onSubmit() {
-		final String scheme = schemeList.getValue((schemeList.getSelectedIndex()));
-		
+		removeScheme(schemeList.getValue((schemeList.getSelectedIndex())), conceptURI, MainApp.userOntology);
+	}
+	
+	
+	public static void removeScheme(final String scheme, final String conceptURI, final OntologyInfo ontoInfo)
+	{
 		AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
 			public void onSuccess(Boolean result) {
 				if(result)
@@ -102,9 +123,17 @@ public class RemoveConceptToScheme extends FormDialogBox {
 						public void onSuccess(Boolean result) {
 							if(result)
 							{
+								ConceptTree conceptTree = ModuleManager.getMainApp().getConcept().conceptTree;
 								Window.alert(constants.conceptSchemeRemoved()+": "+scheme);
-								Concept c = ModuleManager.getMainApp().getConcept();
-								c.conceptTree.reloadItem(c.conceptTree.getSelectedConceptObject().getParentURI(), InfoTab.term);
+								if(scheme.equals(MainApp.schemeUri))
+								{
+									conceptTree.reload(conceptTree.getSelectedConceptObject().getParentURI());
+								}
+								else
+								{
+									conceptTree.reload(conceptURI);
+								}
+									
 							}
 						}
 						public void onFailure(Throwable caught) {
@@ -119,7 +148,5 @@ public class RemoveConceptToScheme extends FormDialogBox {
 			}
 		};
 		Service.conceptService.checkRemoveConceptFromScheme(MainApp.userOntology, conceptURI, scheme, callback);
-		
-		
 	}
 }

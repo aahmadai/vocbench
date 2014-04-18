@@ -188,7 +188,7 @@ public class RelationshipInverseProperty extends RelationshipTemplate {
 					rb.addSubmitClickHandler(new ClickHandler()
 					{
 						public void onClick(ClickEvent event) {
-							relationship.setText(rb.getSelectedItem(),rb.getRelationshipObject());
+							relationship.setValue(rb.getSelectedItem(),rb.getRelationshipObject());
 						}					
 					});						
 				}
@@ -259,7 +259,7 @@ public class RelationshipInverseProperty extends RelationshipTemplate {
 		if(str.length()>1){
 			str = str.substring(0, str.length()-1);
 		}
-		lab.setText(str,insRObj);
+		lab.setValue(str,insRObj);
 		hp.add(new HTML("&nbsp"));
 		hp.add(lab);
 		return hp;
@@ -292,7 +292,7 @@ public class RelationshipInverseProperty extends RelationshipTemplate {
 					rb.addSubmitClickHandler(new ClickHandler()
 					{
 						public void onClick(ClickEvent event) {
-							relationship.setText(rb.getSelectedItem(),rb.getRelationshipObject());
+							relationship.setValue(rb.getSelectedItem(),rb.getRelationshipObject());
 						}					
 					});		
 				}

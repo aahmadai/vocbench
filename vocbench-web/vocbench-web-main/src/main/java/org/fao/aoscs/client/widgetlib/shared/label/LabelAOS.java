@@ -25,7 +25,11 @@ public class LabelAOS extends Label{
 		this.value = value;
 		this.map = map;
 	}
-	public void setText(String text,Object value){
+	/*public void setText(String text, Object value){
+		this.setText(text);
+		this.value = value;
+	}*/
+	public void setValue(String text, Object value){
 		this.setText(text);
 		this.value = value;
 	}

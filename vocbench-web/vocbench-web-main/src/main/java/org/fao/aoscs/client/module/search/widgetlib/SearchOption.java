@@ -142,12 +142,12 @@ public class SearchOption extends Composite{
 			public void onClick(ClickEvent event) {
 				if(rb.getRelType()==RelationshipBrowser.REL_CONCEPT)
 				{
-					conceptRelationshipLabel.setText(rb.getSelectedItem(),rb.getRelationshipObject());
+					conceptRelationshipLabel.setValue(rb.getSelectedItem(),rb.getRelationshipObject());
 					searchObj.setConceptRelationship(rb.getRelationshipObject().getUri());
 				}
 				else if(rb.getRelType()==RelationshipBrowser.REL_TERM)
 				{
-					termRelationshipLabel.setText(rb.getSelectedItem(),rb.getRelationshipObject());
+					termRelationshipLabel.setValue(rb.getSelectedItem(),rb.getRelationshipObject());
 					searchObj.setTermRelationship(rb.getRelationshipObject().getUri());
 				}
 			}					
@@ -441,8 +441,8 @@ public class SearchOption extends Composite{
 				opt1.setValue(false);
 				opt2.setValue(false);
 				opt3.setValue(false);
-				conceptRelationshipLabel.setText("", "");
-				termRelationshipLabel.setText("", "");
+				conceptRelationshipLabel.setValue("", "");
+				termRelationshipLabel.setValue("", "");
 				if(termCodeRepository.getItemCount()>0)	termCodeRepository.setSelectedIndex(0);
 				termCode.setText("");
 				if(status.getItemCount()>0)	status.setSelectedIndex(0);
@@ -823,7 +823,7 @@ public class SearchOption extends Composite{
 		{
 			public void onClick(ClickEvent event) 
 			{
-				conceptRelationshipLabel.setText("", "");
+				conceptRelationshipLabel.setValue("", "");
 				searchObj.setConceptRelationship(null);
 			}
 		});
@@ -865,7 +865,7 @@ public class SearchOption extends Composite{
 		{
 			public void onClick(ClickEvent event) 
 			{
-				termRelationshipLabel.setText("", "");
+				termRelationshipLabel.setValue("", "");
 				searchObj.setTermRelationship(null);
 			}
 		});

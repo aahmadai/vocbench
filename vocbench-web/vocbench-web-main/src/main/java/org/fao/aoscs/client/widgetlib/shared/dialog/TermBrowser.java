@@ -162,6 +162,6 @@ public class TermBrowser extends FormDialogBox implements ClickHandler {
 
 	public void onSubmit() {
 		TermObject tObj = getSelectedItem();
-		selectedTerm.setText(tObj.getLabel(), tObj);
+		selectedTerm.setValue(tObj.getLabel(), tObj);
 	}
 }

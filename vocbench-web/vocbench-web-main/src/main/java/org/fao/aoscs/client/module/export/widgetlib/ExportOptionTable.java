@@ -344,7 +344,7 @@ public class ExportOptionTable extends Composite{
 				{
 					public void onClick(ClickEvent event) 
 					{
-						conceptLabel.setText(cb.getSelectedItem(),cb.getTreeObject());
+						conceptLabel.setValue(cb.getSelectedItem(),cb.getTreeObject());
 						exp.setConceptURI(cb.getTreeObject().getUri());
 					}					
 				});						
