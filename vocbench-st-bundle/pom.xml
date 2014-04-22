@@ -4,7 +4,7 @@
 	<groupId>org.fao.aims.aos.vocbench</groupId>
 	<artifactId>vocbench-st-osgibundle</artifactId>
 	<packaging>bundle</packaging>
-	<version>0.0.5</version>
+	<version>2.1</version>
 	<name>VOCBENCH</name>
 	<description>VOCBENCH OSGi Bundle for Semantic Turkey</description>
 
@@ -27,7 +27,6 @@
 			<version>0.9.1</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>it.uniroma2.art.semanticturkey</groupId>
 			<artifactId>st-codegen-annotations</artifactId>
