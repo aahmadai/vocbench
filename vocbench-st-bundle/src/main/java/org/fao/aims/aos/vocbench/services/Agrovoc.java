@@ -15,7 +15,6 @@ import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.ServiceVocabulary.RepliesStatus;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 import it.uniroma2.art.semanticturkey.servlet.main.SKOS;
-import it.uniroma2.art.semanticturkey.servlet.main.SKOSXL;
 import it.uniroma2.art.semanticturkey.utilities.XMLHelp;
 
 import static org.fao.aims.aos.vocbench.services.VocBenchResourcesURI.*;
@@ -81,7 +80,7 @@ public class Agrovoc extends ServiceAdapter {
 	}
 
 	public Response getStatsAgrovoc(String schemeUri) {
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		try {
 			XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 			Element dataElement = response.getDataElement();
@@ -177,6 +176,11 @@ public class Agrovoc extends ServiceAdapter {
 		} catch (MalformedQueryException e) {
 			return logAndSendException(e);
 		}
+	}
+
+	//TODO understand how to remove this duplication
+	public SKOSXLModel getSKOSXLModel() {
+		return (SKOSXLModel)getOntModel();
 	}
 
 }

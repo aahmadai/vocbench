@@ -1623,7 +1623,7 @@ public class VOCBENCH extends SKOSXL {
 	}*/
 	
 	public Response getTopConcepts(String schemeUri, String defaultLanguage) {
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		ARTURIResourceIterator it;
 		//long start = System.currentTimeMillis();
 		try {
@@ -1692,7 +1692,7 @@ public class VOCBENCH extends SKOSXL {
 	 */
 	public Response getNarrowerConcepts(String conceptName, String schemeName, boolean TreeView,
 			String defaultLanguage) {
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		//long start = System.currentTimeMillis();
@@ -1756,7 +1756,7 @@ public class VOCBENCH extends SKOSXL {
 	}
 
 	public Response getBroaderConcepts(String conceptName, String schemeName, String defaultLanguage) {
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		try {
 			ARTResource[] graphs = getUserNamedGraphs();
@@ -1812,7 +1812,7 @@ public class VOCBENCH extends SKOSXL {
 	public Response getConceptDescription(String conceptName, String method) {
 		// logger.debug("getConceptDescription; name: " + conceptName);
 		// return getResourceDescription(conceptName, RDFResourceRolesEnum.concept, method);
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
 		try {
@@ -1909,7 +1909,7 @@ public class VOCBENCH extends SKOSXL {
 	}
 
 	public Response getConceptTabsCounts(String conceptName){
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
 		try {
@@ -2183,7 +2183,7 @@ public class VOCBENCH extends SKOSXL {
 	
 	
 	public Response getTermTabsCounts(String xlabelName){
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
 		try {
@@ -2314,7 +2314,7 @@ public class VOCBENCH extends SKOSXL {
 	}
 	
 	public Response getResourcePropertyCount(String resourceName, String properties){
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
 		try {
@@ -2377,7 +2377,7 @@ public class VOCBENCH extends SKOSXL {
 	}
 	
 	public Response getLabelDescription(String labelUri) {
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		try {
 			ARTResource[] graphs = getUserNamedGraphs();
@@ -2455,7 +2455,7 @@ public class VOCBENCH extends SKOSXL {
 	}
 
 	public Response getSubProperties(String propURI, boolean getSubPropRec, boolean excludeSuperProp) {
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 
 		try {
@@ -2500,7 +2500,7 @@ public class VOCBENCH extends SKOSXL {
 		//	- Source link
 		//	- Source
 		
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
 		
@@ -2689,7 +2689,7 @@ public class VOCBENCH extends SKOSXL {
 		//	- Source link
 		//	- Source
 		
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
 		
@@ -2796,7 +2796,7 @@ public class VOCBENCH extends SKOSXL {
 	}*/
 	
 	public Response getStatsA(String schemeUri) {
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		ARTURIResourceIterator it;
 
 		try {
@@ -2902,7 +2902,7 @@ public class VOCBENCH extends SKOSXL {
 	}
 
 	public Response getStatsB(String schemeUri, boolean depth) {
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 		//ARTURIResourceIterator it;
 
 		try {
@@ -3099,7 +3099,7 @@ public class VOCBENCH extends SKOSXL {
 			String queryString = "SELECT distinct ?concept " + "\nWHERE { " + 
 					"\n ?concept <"+ BROADER+"> <"+ concept.getURI() +"> ."+
 					"\n }";
-			TupleQuery query = (TupleQuery) SKOSXL.getSKOSXLModel().createQuery(QueryLanguage.SPARQL, 
+			TupleQuery query = (TupleQuery) getSKOSXLModel().createQuery(QueryLanguage.SPARQL, 
 					queryString);
 			TupleBindingsIterator results = query.evaluate(true);
 			while(results.hasNext()){
@@ -3110,7 +3110,7 @@ public class VOCBENCH extends SKOSXL {
 	}
 	
 	public Response getStatsC(String schemeUri) {
-		SKOSXLModel skosxlModel = SKOSXL.getSKOSXLModel();
+		SKOSXLModel skosxlModel = getSKOSXLModel();
 
 		try {
 			// ARTResource[] graphs = getUserNamedGraphs();
