@@ -275,37 +275,6 @@ public class ConceptServiceImpl extends PersistentRemoteService implements Conce
 	  }
 
 	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#getSchemes(org.fao.aoscs.domain.OntologyInfo)
-	 */
-	public HashMap<String, String> getSchemes(OntologyInfo ontoInfo) throws Exception{
-		return conceptService.getSchemes(ontoInfo);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#addScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public boolean addScheme(OntologyInfo ontoInfo, String scheme, String label, String lang) throws Exception{
-		return conceptService.addScheme(ontoInfo, scheme, label, lang);
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#deleteScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String)
-	 */
-	public boolean deleteScheme(OntologyInfo ontoInfo, String scheme) throws Exception{
-		return conceptService.deleteScheme(ontoInfo, scheme);
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#setScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String)
-	 */
-	public boolean setScheme(OntologyInfo ontoInfo, String scheme) throws Exception{
-		return conceptService.setScheme(ontoInfo, scheme);
-		
-	}
-	
-	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#getConceptNotes(java.lang.String, boolean, org.fao.aoscs.domain.OntologyInfo)
 	 */
 	public HashMap<String, String> getConceptNotes(String resourceURI,
@@ -487,10 +456,8 @@ public class ConceptServiceImpl extends PersistentRemoteService implements Conce
 		return conceptService.getConceptSchemeValue(conceptURI, isExplicit, ontoInfo);
 	}
 
-	public HashMap<String, String> getExcludedConceptSchemes(String conceptURI,
+	public HashMap<String, String> getExcludedConceptSchemes(String conceptURI, String schemeLang,
 			boolean isExplicit, OntologyInfo ontoInfo) throws Exception {
-		return conceptService.getExcludedConceptSchemes(conceptURI, isExplicit, ontoInfo);
+		return conceptService.getExcludedConceptSchemes(conceptURI, schemeLang, isExplicit, ontoInfo);
 	}
-
-
 }

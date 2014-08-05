@@ -13,4 +13,5 @@ public interface ServiceWrapper extends ServletExtensionWrapper {
 	 */
 	public abstract Response makeRequest(String request, ParameterPair...pars);
 
+	public abstract Response makeNewRequest(String request, ParameterPair...pars);
 }

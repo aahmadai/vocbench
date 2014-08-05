@@ -20,10 +20,13 @@ public class SearchServiceSTAdapter implements SearchService {
 		return searchService.initData(ontoInfo);
 	}
 	
-
-
-	public ArrayList<String[]> getSchemes(OntologyInfo ontoInfo) {
-		return searchService.getSchemes(ontoInfo);
+	/**
+	 * @param ontoInfo
+	 * @param schemeLang
+	 * @return
+	 */
+	public ArrayList<String[]> getSchemes(OntologyInfo ontoInfo, String schemeLang) {
+		return searchService.getSchemes(ontoInfo, schemeLang);
 	}
 	
 	public String getSearchResultsSize(SearchParameterObject searchObj, OntologyInfo ontoInfo)

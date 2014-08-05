@@ -11,6 +11,7 @@ import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.module.scheme.ManageScheme.SchemeDialogBoxOpener;
+import org.fao.aoscs.client.module.scheme.SchemeLabel.SchemeLabelDialogOpener;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
 import org.fao.aoscs.client.utility.ModuleManager;
@@ -41,7 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author rajbhandari
  *
  */
-public class Scheme extends Composite implements SchemeDialogBoxOpener {
+public class Scheme extends Composite implements SchemeDialogBoxOpener, SchemeLabelDialogOpener {
 	
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	private LocaleMessages messages = (LocaleMessages) GWT.create(LocaleMessages.class);
@@ -55,6 +56,7 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener {
 	private int tableWidth = MainApp.getBodyPanelWidth()-45;
 	private int tableHeight = MainApp.getBodyPanelHeight()-100;
 	private ManageScheme addManageScheme;
+	private SchemeLabel editSchemeLabel;
 	private ManageScheme deleteManageScheme;
 	
 	//TODO replace MainApp.groupId with group management privilege
@@ -128,7 +130,7 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener {
 		ImageAOS addButton = new ImageAOS(constants.conceptSchemeAddScheme(), "images/add-grey.gif", "images/add-grey-disabled.gif", permission, new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if(addManageScheme == null || !addManageScheme.isLoaded )
-					addManageScheme = new ManageScheme(ManageScheme.ADD, null);
+					addManageScheme = new ManageScheme(ManageScheme.SCHEME_ADD, null);
 				addManageScheme.show(Scheme.this);
 			}
 		});
@@ -188,7 +190,7 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener {
 				ExceptionManager.showException(caught, constants.conceptSchemeSetSchemeFail());
 			}
 		};
-		Service.conceptService.setScheme(MainApp.userOntology, scheme, callback);
+		Service.schemeService.setScheme(MainApp.userOntology, scheme, callback);
 	}
 	
 	/**
@@ -224,16 +226,30 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener {
         					schemeDataTable.getCellFormatter().setWidth(i, 1, "55%");
         					schemeDataTable.getCellFormatter().setHorizontalAlignment(i , 1 , HasHorizontalAlignment.ALIGN_LEFT);
 
+        					ImageAOS edit = new ImageAOS(constants.conceptSchemeEditScheme(), "images/edit-grey.gif", "images/edit-grey-disabled.gif", permission, new ClickHandler() {
+        						public void onClick(ClickEvent event) 
+        						{
+        							if(editSchemeLabel == null || !editSchemeLabel.isLoaded)
+										editSchemeLabel = new SchemeLabel(scheme);
+									editSchemeLabel.show(Scheme.this);	
+        						}
+        					});
+        					
         					ImageAOS delete = new ImageAOS(constants.conceptSchemeDeleteScheme(), "images/delete-grey.gif", "images/delete-grey-disabled.gif", permission, new ClickHandler() {
         						public void onClick(ClickEvent event) 
         						{
         							if(deleteManageScheme == null || !deleteManageScheme.isLoaded)
-        								deleteManageScheme = new ManageScheme(ManageScheme.DELETE, scheme);
+        								deleteManageScheme = new ManageScheme(ManageScheme.SCHEME_DELETE, scheme);
         							deleteManageScheme.show(Scheme.this);					
         						}
         					});
         					
-        					schemeDataTable.setWidget(i, 2 , delete);
+        					HorizontalPanel functionalPanel = new HorizontalPanel();
+        					functionalPanel.setSpacing(3);
+        					functionalPanel.add(edit);
+        					functionalPanel.add(delete);
+        					
+        					schemeDataTable.setWidget(i, 2 , functionalPanel);
         					schemeDataTable.getCellFormatter().setWidth(i, 2, "5%");
         					schemeDataTable.getCellFormatter().setHorizontalAlignment(i , 2 , HasHorizontalAlignment.ALIGN_CENTER);
         					i++;
@@ -251,7 +267,7 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener {
         				ExceptionManager.showException(caught, constants.conceptSchemeGetSchemeFail());
         			}
         		};
-        		Service.conceptService.getSchemes(MainApp.userOntology, callback);
+        		Service.schemeService.getSchemes(MainApp.userOntology, MainApp.userLanguage, callback);
 		
 		
 	}
@@ -260,6 +276,13 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener {
 	 * @see org.fao.aoscs.client.module.scheme.ManageScheme.SchemeDialogBoxOpener#schemeDialogBoxSubmit()
 	 */
 	public void schemeDialogBoxSubmit() {
+		loadSchemes();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.scheme.SchemeLabel.SchemeLabelDialogOpener#schemeLabelDialogBoxSubmit()
+	 */
+	public void schemeLabelDialogBoxSubmit() {
 		loadSchemes();
 	}
 	

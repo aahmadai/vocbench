@@ -41,7 +41,6 @@ import org.fao.aoscs.hibernate.QueryFactory;
 import org.fao.aoscs.model.semanticturkey.STModelConstants;
 import org.fao.aoscs.model.semanticturkey.service.manager.MetadataManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.ObjectManager;
-import org.fao.aoscs.model.semanticturkey.service.manager.ProjectManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.PropertyManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.ResourceManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.SKOSManager;
@@ -2021,57 +2020,21 @@ public class ConceptServiceSTImpl {
 			}
 	  }
 	
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#getSchemes(org.fao.aoscs.domain.OntologyInfo)
-	 */
-	public HashMap<String, String> getSchemes(OntologyInfo ontoInfo) {
-		HashMap<String, String> map = new HashMap<String, String>();
-		for(String[] scheme : SKOSManager.getAllSchemesList(ontoInfo))
-		{
-			map.put(scheme[0], scheme[1]);
-		}
-		return map;
-	}
-	
-	
 	/**
 	 * @param ontoInfo
 	 * @return
 	 */
-	public HashMap<String, String> getExcludedConceptSchemes(OntologyInfo ontoInfo, String resourceURI, boolean isExplicit) {
+	public HashMap<String, String> getExcludedConceptSchemes(OntologyInfo ontoInfo, String resourceURI, String defaultLang, boolean isExplicit) {
 		HashMap<String, String> existingMap = getConceptSchemeValue(resourceURI, isExplicit, ontoInfo);
 		HashMap<String, String> map = new HashMap<String, String>();
-		for(String[] scheme : SKOSManager.getAllSchemesList(ontoInfo))
+		for(String[] scheme : SKOSXLManager.getAllSchemesList(ontoInfo, defaultLang))
 		{
 			if(!existingMap.containsValue(scheme[1]))
 				map.put(scheme[0], scheme[1]);
 		}
 		return map;
 	}
-
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#addScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public boolean addScheme(OntologyInfo ontoInfo, String scheme, String label, String lang) {
-		return SKOSManager.createScheme(ontoInfo, scheme, label, lang, STXMLUtility.SKOS_LANG_SCHEME);
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#deleteScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String)
-	 */
-	public boolean deleteScheme(OntologyInfo ontoInfo, String scheme) {
-		return SKOSManager.deleteScheme(ontoInfo, scheme, STXMLUtility.SKOS_SETFORCEDELETEDANGLINGCONCEPTS_SCHEME, STXMLUtility.SKOS_FORCEDELETEDANGLINGCONCEPTS_SCHEME);
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#setScheme(org.fao.aoscs.domain.OntologyInfo, java.lang.String)
-	 */
-	public boolean setScheme(OntologyInfo ontoInfo, String scheme) {
-		
-		return ProjectManager.setProjectProperty(ontoInfo, STXMLUtility.SKOS_SELECTED_SCHEME, scheme);
-	}
+	
 	
 	/**
 	 * @param ontoInfo

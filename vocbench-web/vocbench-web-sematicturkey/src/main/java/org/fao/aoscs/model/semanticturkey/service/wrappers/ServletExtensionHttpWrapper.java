@@ -23,6 +23,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.util.EntityUtils;
 import org.fao.aoscs.model.semanticturkey.util.HttpClientFactory;
+import org.fao.aoscs.model.semanticturkey.util.STInfo;
 import org.fao.aoscs.model.semanticturkey.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -62,7 +63,42 @@ public class ServletExtensionHttpWrapper {
 		HttpPost http = preparePost(parameterLists);
 		try {
 			HttpResponse response = HttpClientFactory.getHttpClient().execute(http);
-			return handleResponse(response, http.getURI().getQuery()); 
+			return handleResponse(response, http.getURI().toString()); 
+		} catch (ClientProtocolException e) {
+			http.abort();
+			e.printStackTrace();
+		} catch (IOException e) {
+			http.abort();
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			http.abort();
+			e.printStackTrace();
+		} catch (SAXException e) {
+			http.abort();
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			http.abort();
+			e.printStackTrace();
+		}
+		finally
+		{
+			http.releaseConnection();
+		}
+		return null;
+	}
+	
+	/**
+	 * @param query
+	 * @return
+	 * @throws URISyntaxException
+	 */
+	protected Response askNewServer(String service, String request, List<NameValuePair> parameterLists) {
+		//HttpGet http = prepareGet(parameterLists);
+		//HttpPost http = preparePost(parameterLists);
+		HttpGet http = prepareNewGet(service, request, parameterLists);
+		try {
+			HttpResponse response = HttpClientFactory.getHttpClient().execute(http);
+			return handleResponse(response, http.getURI().toString()); 
 		} catch (ClientProtocolException e) {
 			http.abort();
 			e.printStackTrace();
@@ -98,7 +134,29 @@ public class ServletExtensionHttpWrapper {
 			uri = new URIBuilder(stURL)
 			.setParameters(parameterLists)
 			.build();
-			logger.debug("\n"+uri);
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException(e);
+		}
+		return uri;
+	}
+	
+	/**
+	 * @param parameterLists
+	 * @return
+	 * @throws URISyntaxException
+	 */
+	protected URI getNewURI(String service, String request, List<NameValuePair> parameterLists)
+	{
+		URI uri;
+		try {
+			URI stURI = new URI(stURL);
+			uri = new URIBuilder()
+			.setScheme(stURI.getScheme())
+			.setHost(stURI.getHost())
+			.setPort(stURI.getPort())
+			.setPath("/"+STInfo.getSTName()+"/"+STInfo.getGroupId()+"/"+STInfo.getArtifactId()+"/"+service+"/"+request)
+			.setParameters(parameterLists)
+			.build();
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -127,6 +185,16 @@ public class ServletExtensionHttpWrapper {
 	}
 	
 	/**
+	 * @param query
+	 * @return
+	 * @throws URISyntaxException
+	 */
+	protected HttpGet prepareNewGet(String service, String request, List<NameValuePair> parameterLists) {
+		HttpGet httpGet = new HttpGet(getNewURI(service, request, parameterLists));
+		return httpGet;
+	}
+	
+	/**
 	 * @param response
 	 * @return
 	 * @throws IOException 
@@ -135,6 +203,8 @@ public class ServletExtensionHttpWrapper {
 	 * @throws ParserConfigurationException 
 	 */
 	protected Response handleResponse(HttpResponse response, String query) throws IllegalStateException, IOException, SAXException, ParserConfigurationException {
+		//System.out.println("\n"+query);
+		logger.debug("\n"+query);
 		InputStream in = null;
 		try
 		{

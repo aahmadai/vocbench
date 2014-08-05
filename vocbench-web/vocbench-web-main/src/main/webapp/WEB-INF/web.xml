@@ -4,7 +4,7 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
     
 <web-app>
-	<display-name>VocBench 2.0</display-name>
+	<display-name>VocBench 2.2</display-name>
 	
 	<context-param>
 	    <param-name>maxSize</param-name>
@@ -28,6 +28,10 @@
 	<servlet>
 		<servlet-name>org.fao.aoscs.server.ConceptServiceImpl</servlet-name>
 		<servlet-class>org.fao.aoscs.server.ConceptServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>org.fao.aoscs.server.SchemeServiceImpl</servlet-name>
+		<servlet-class>org.fao.aoscs.server.SchemeServiceImpl</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>org.fao.aoscs.server.TreeServiceImpl</servlet-name>
@@ -118,6 +122,10 @@
     	<servlet-name>org.fao.aoscs.server.GraphServlet</servlet-name>
     	<servlet-class>org.fao.aoscs.server.GraphServlet</servlet-class>
   	</servlet>
+  	<servlet>
+    	<servlet-name>org.fao.aoscs.server.SparqlResultServlet</servlet-name>
+    	<servlet-class>org.fao.aoscs.server.SparqlResultServlet</servlet-class>
+  	</servlet>
   	
 	<servlet-mapping>
 		<servlet-name>org.fao.aoscs.server.SystemServiceImpl</servlet-name>
@@ -128,6 +136,11 @@
 	<servlet-mapping>
 		<servlet-name>org.fao.aoscs.server.ConceptServiceImpl</servlet-name>
 		<url-pattern>/vocbench/concept</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>org.fao.aoscs.server.SchemeServiceImpl</servlet-name>
+		<url-pattern>/vocbench/scheme</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
@@ -251,6 +264,11 @@
  	 <servlet-mapping>
 		<servlet-name>org.fao.aoscs.server.GraphServlet</servlet-name>
 		<url-pattern>/graph</url-pattern>
+	</servlet-mapping>
+	
+ 	 <servlet-mapping>
+		<servlet-name>org.fao.aoscs.server.SparqlResultServlet</servlet-name>
+		<url-pattern>/sparqlresult</url-pattern>
 	</servlet-mapping>
  	 
 	<session-config>

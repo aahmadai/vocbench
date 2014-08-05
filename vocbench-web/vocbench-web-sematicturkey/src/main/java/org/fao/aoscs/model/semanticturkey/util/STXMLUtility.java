@@ -30,12 +30,12 @@ public class STXMLUtility {
 	protected static Logger logger = LoggerFactory.getLogger(STXMLUtility.class);
 	public static String ALL_LANGAUGE = "*";
 	public static String ST_SEPARATOR = "|_|";
-	public static String ST_KEYPAIRSEPARATOR = ":::";
+	//public static String ST_KEYPAIRSEPARATOR = ":::";
 	public static String ST_BLANKNODEPREFIX = "_:";
 	public static String ST_LANG_SEPARATOR = ";";
 	public static String ST_PROP_SEPARATOR = ";";
 	public static String SKOS_SELECTED_SCHEME  = "skos.selected_scheme";
-	public static String SKOS_LANG_SCHEME  = "en";
+	//public static String SKOS_LANG_SCHEME  = "en";
 	public static boolean SKOS_SETFORCEDELETEDANGLINGCONCEPTS_SCHEME = false;
 	public static boolean SKOS_FORCEDELETEDANGLINGCONCEPTS_SCHEME = false;
 	

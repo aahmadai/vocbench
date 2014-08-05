@@ -43,4 +43,22 @@ public class ServiceHttpWrapper extends ServletExtensionHttpWrapper implements S
 		}
 		return askServer(parameterLists);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.model.semanticturkey.service.wrappers.ServiceWrapper#makeRequest(java.lang.String, org.fao.aoscs.model.semanticturkey.util.ParameterPair[])
+	 */
+	public Response makeNewRequest(String request, ParameterPair... pars) {
+		List<NameValuePair> parameterLists = new ArrayList<NameValuePair>();
+		if (pars!=null && (pars.length>0))
+		{
+			for (ParameterPair pair : pars) {	
+				String value = pair.getParValue();
+				if(value!=null && !value.equals(""))
+				{
+					parameterLists.add(new BasicNameValuePair(pair.getParName(), value));
+				}
+			}
+		}
+		return askNewServer(getId(), request, parameterLists);
+	}
 }

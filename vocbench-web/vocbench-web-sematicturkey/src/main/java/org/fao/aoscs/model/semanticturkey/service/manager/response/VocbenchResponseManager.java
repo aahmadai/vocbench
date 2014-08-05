@@ -27,7 +27,9 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getTopConceptsRequest(OntologyInfo ontoInfo, String schemeURI, String defaultLanguage)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOS.Req.getTopConceptsRequest, STModel.par(Par.scheme, schemeURI)/*, STModel.par(Par.lang, defaultLanguage)*/);
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOS.Req.getTopConceptsRequest, 
+				STModel.par(Par.scheme, schemeURI), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())/*, STModel.par(Par.lang, defaultLanguage)*/);
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -39,7 +41,10 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getNarrowerConceptsRequest(OntologyInfo ontoInfo, String conceptURI, String schemeURI, Boolean treeView)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOS.Req.getNarrowerConceptsRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(Par.scheme, schemeURI), STModel.par(SKOS.Par.treeView, treeView.toString()));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOS.Req.getNarrowerConceptsRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), STModel.par(Par.scheme, schemeURI), 
+				STModel.par(SKOS.Par.treeView, treeView.toString()), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -51,7 +56,10 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getBroaderConceptsRequest(OntologyInfo ontoInfo, String conceptURI, String schemeURI, Boolean treeView)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOS.Req.getBroaderConceptsRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(Par.scheme, schemeURI), STModel.par(SKOS.Par.treeView, treeView.toString()));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOS.Req.getBroaderConceptsRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), STModel.par(Par.scheme, schemeURI), 
+				STModel.par(SKOS.Par.treeView, treeView.toString()), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -62,7 +70,9 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getConceptTabsCountsRequest(OntologyInfo ontoInfo, String conceptURI)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getConceptTabsCountsRequest, STModel.par(SKOS.Par.concept, conceptURI));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getConceptTabsCountsRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -73,7 +83,9 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getTermTabsCountsRequest(OntologyInfo ontoInfo, String xlabelURI)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getTermTabsCountsRequest, STModel.par(VOCBENCH.ParVocBench.xlabelURI, xlabelURI));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getTermTabsCountsRequest, 
+				STModel.par(VOCBENCH.ParVocBench.xlabelURI, xlabelURI), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -83,7 +95,10 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getConceptDescriptionRequest(OntologyInfo ontoInfo, String conceptURI)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.conceptDescriptionRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par("method", SKOS.templateandvalued));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.conceptDescriptionRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par("method", SKOS.templateandvalued), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -93,7 +108,9 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getLabelDescriptionRequest(OntologyInfo ontoInfo, String termURI)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getLabelDescriptionRequest, STModel.par(SKOS.Par.concept, termURI));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getLabelDescriptionRequest, 
+				STModel.par(SKOS.Par.concept, termURI), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -105,7 +122,11 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY changeLabelInfoRequest(OntologyInfo ontoInfo, String termURI, String label, String lang)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeLabelInfoRequest, STModel.par(VOCBENCH.ParVocBench.xlabelURI, termURI), STModel.par(SKOS.Par.label, label), STModel.par(VOCBENCH.langTag, lang));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeLabelInfoRequest, 
+				STModel.par(VOCBENCH.ParVocBench.xlabelURI, termURI), 
+				STModel.par(SKOS.Par.label, label), 
+				STModel.par(VOCBENCH.langTag, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -116,7 +137,10 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY prefToAltLabelRequest(OntologyInfo ontoInfo, String conceptURI, String termURI)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.prefToAltLabelRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(VOCBENCH.ParVocBench.xlabelURI, termURI));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.prefToAltLabelRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(VOCBENCH.ParVocBench.xlabelURI, termURI), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -127,7 +151,10 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY altToPrefLabelRequest(OntologyInfo ontoInfo, String conceptURI, String termURI)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.altToPrefLabelRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(VOCBENCH.ParVocBench.xlabelURI, termURI));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.altToPrefLabelRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(VOCBENCH.ParVocBench.xlabelURI, termURI), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -139,7 +166,11 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getSubProperties(OntologyInfo ontoInfo, String propURI, Boolean subProp, Boolean excludeSuperProp)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getSubPropertiesRequest, STModel.par(VOCBENCH.ParVocBench.propURI, propURI), STModel.par(VOCBENCH.ParVocBench.subProp, subProp.toString()), STModel.par(VOCBENCH.ParVocBench.excludeSuperProp, excludeSuperProp.toString()));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getSubPropertiesRequest, 
+				STModel.par(VOCBENCH.ParVocBench.propURI, propURI), 
+				STModel.par(VOCBENCH.ParVocBench.subProp, subProp.toString()), 
+				STModel.par(VOCBENCH.ParVocBench.excludeSuperProp, excludeSuperProp.toString()), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -154,7 +185,13 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY setDefinitionRequest(OntologyInfo ontoInfo, String concept, String translation, String lang, String fromSource, String sourceLink)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.setDefinitionRequest, STModel.par(SKOS.Par.concept, concept), STModel.par(VOCBENCH.ParVocBench.translation, translation), STModel.par(SKOS.langTag, lang), STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.setDefinitionRequest, 
+				STModel.par(SKOS.Par.concept, concept), 
+				STModel.par(VOCBENCH.ParVocBench.translation, translation), 
+				STModel.par(SKOS.langTag, lang), 
+				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
+				STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -165,7 +202,9 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getConceptDefinitionRequest(OntologyInfo ontoInfo, String concept)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getConceptDefinitionRequest, STModel.par(SKOS.Par.concept, concept));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getConceptDefinitionRequest, 
+				STModel.par(SKOS.Par.concept, concept), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -178,7 +217,11 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY addTranslationForDefinitionRequest(OntologyInfo ontoInfo, String definition, String translation, String lang)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addTranslationForDefinitionRequest, STModel.par(VOCBENCH.ParVocBench.definition, definition), STModel.par(VOCBENCH.ParVocBench.translation, translation), STModel.par(SKOS.langTag, lang));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addTranslationForDefinitionRequest, 
+				STModel.par(VOCBENCH.ParVocBench.definition, definition), 
+				STModel.par(VOCBENCH.ParVocBench.translation, translation), 
+				STModel.par(SKOS.langTag, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 
@@ -191,7 +234,11 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY changeTranslationForDefinitionRequest(OntologyInfo ontoInfo, String definition, String translation, String lang)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeTranslationForDefinitionRequest, STModel.par(VOCBENCH.ParVocBench.definition, definition), STModel.par(VOCBENCH.ParVocBench.translation, translation), STModel.par(SKOS.langTag, lang));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeTranslationForDefinitionRequest, 
+				STModel.par(VOCBENCH.ParVocBench.definition, definition), 
+				STModel.par(VOCBENCH.ParVocBench.translation, translation), 
+				STModel.par(SKOS.langTag, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 
@@ -203,7 +250,10 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY deleteTranslationForDefinitionRequest(OntologyInfo ontoInfo, String definition, String lang)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.deleteTranslationForDefinitionRequest, STModel.par(VOCBENCH.ParVocBench.definition, definition), STModel.par(SKOS.langTag, lang));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.deleteTranslationForDefinitionRequest, 
+				STModel.par(VOCBENCH.ParVocBench.definition, definition), 
+				STModel.par(SKOS.langTag, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -216,7 +266,11 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY addLinkForDefinitionRequest(OntologyInfo ontoInfo, String definition, String fromSource, String sourceLink)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addLinkForDefinitionRequest, STModel.par(VOCBENCH.ParVocBench.definition, definition), STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addLinkForDefinitionRequest, 
+				STModel.par(VOCBENCH.ParVocBench.definition, definition), 
+				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
+				STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -229,7 +283,11 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY changeLinkForDefinitionRequest(OntologyInfo ontoInfo, String definition, String fromSource, String sourceLink)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeLinkForDefinitionRequest, STModel.par(VOCBENCH.ParVocBench.definition, definition), STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeLinkForDefinitionRequest, 
+				STModel.par(VOCBENCH.ParVocBench.definition, definition), 
+				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
+				STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 
@@ -240,7 +298,9 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY deleteLinkForDefinitionRequest(OntologyInfo ontoInfo, String definition)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.deleteLinkForDefinitionRequest, STModel.par(VOCBENCH.ParVocBench.definition, definition));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.deleteLinkForDefinitionRequest, 
+				STModel.par(VOCBENCH.ParVocBench.definition, definition), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -256,7 +316,14 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY setImageRequest(OntologyInfo ontoInfo, String concept, String translation, String lang, String fromSource, String sourceLink, String comment)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.setImageRequest, STModel.par(SKOS.Par.concept, concept), STModel.par(VOCBENCH.ParVocBench.translation, translation), STModel.par(SKOS.langTag, lang), STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), STModel.par(VOCBENCH.ParVocBench.comment, comment));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.setImageRequest, 
+				STModel.par(SKOS.Par.concept, concept), 
+				STModel.par(VOCBENCH.ParVocBench.translation, translation), 
+				STModel.par(SKOS.langTag, lang), 
+				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
+				STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), 
+				STModel.par(VOCBENCH.ParVocBench.comment, comment), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -267,7 +334,9 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getConceptImageRequest(OntologyInfo ontoInfo, String concept)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getConceptImageRequest, STModel.par(SKOS.Par.concept, concept));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getConceptImageRequest, 
+				STModel.par(SKOS.Par.concept, concept), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -281,7 +350,12 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY addTranslationForImageRequest(OntologyInfo ontoInfo, String image, String translation, String lang, String comment)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addTranslationForImageRequest, STModel.par(VOCBENCH.ParVocBench.image, image), STModel.par(VOCBENCH.ParVocBench.translation, translation), STModel.par(SKOS.langTag, lang), STModel.par(VOCBENCH.ParVocBench.comment, comment));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addTranslationForImageRequest, 
+				STModel.par(VOCBENCH.ParVocBench.image, image), 
+				STModel.par(VOCBENCH.ParVocBench.translation, translation), 
+				STModel.par(SKOS.langTag, lang), 
+				STModel.par(VOCBENCH.ParVocBench.comment, comment), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 		
@@ -295,7 +369,7 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY changeTranslationForImageRequest(OntologyInfo ontoInfo, String image, String translation, String lang, String comment)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeTranslationForImageRequest, STModel.par(VOCBENCH.ParVocBench.image, image), STModel.par(VOCBENCH.ParVocBench.translation, translation), STModel.par(SKOS.langTag, lang), STModel.par(VOCBENCH.ParVocBench.comment, comment));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeTranslationForImageRequest, STModel.par(VOCBENCH.ParVocBench.image, image), STModel.par(VOCBENCH.ParVocBench.translation, translation), STModel.par(SKOS.langTag, lang), STModel.par(VOCBENCH.ParVocBench.comment, comment), STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 
@@ -307,7 +381,10 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY deleteTranslationForImageRequest(OntologyInfo ontoInfo, String image, String lang)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.deleteTranslationForImageRequest, STModel.par(VOCBENCH.ParVocBench.image, image), STModel.par(SKOS.langTag, lang));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.deleteTranslationForImageRequest, 
+				STModel.par(VOCBENCH.ParVocBench.image, image), 
+				STModel.par(SKOS.langTag, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -320,7 +397,11 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY addLinkForImageRequest(OntologyInfo ontoInfo, String image, String fromSource, String sourceLink)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addLinkForImageRequest, STModel.par(VOCBENCH.ParVocBench.image, image), STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addLinkForImageRequest, 
+				STModel.par(VOCBENCH.ParVocBench.image, image), 
+				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
+				STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -333,7 +414,11 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY changeLinkForImageRequest(OntologyInfo ontoInfo, String image, String fromSource, String sourceLink)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeLinkForImageRequest, STModel.par(VOCBENCH.ParVocBench.image, image), STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeLinkForImageRequest, 
+				STModel.par(VOCBENCH.ParVocBench.image, image), 
+				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
+				STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 
@@ -344,7 +429,9 @@ public class VocbenchResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY deleteLinkForImageRequest(OntologyInfo ontoInfo, String image)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.deleteLinkForImageRequest, STModel.par(VOCBENCH.ParVocBench.image, image));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.deleteLinkForImageRequest, 
+				STModel.par(VOCBENCH.ParVocBench.image, image), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -393,7 +480,8 @@ public class VocbenchResponseManager extends ResponseManager {
 				STModel.par(VOCBENCH.ParVocBench.termProp, termProp),
 				STModel.par(VOCBENCH.ParVocBench.termPropValue, termPropValue),
 				STModel.par(VOCBENCH.ParVocBench.status, status),
-				STModel.par(SKOS.Par.scheme, scheme));
+				STModel.par(SKOS.Par.scheme, scheme), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -412,7 +500,8 @@ public class VocbenchResponseManager extends ResponseManager {
 				STModel.par(VOCBENCH.ParVocBench.searchString, searchString), 
 				STModel.par(SKOS.Par.lang, languages), 
 				STModel.par(VOCBENCH.ParVocBench.caseInsensitive, caseInsensitive.toString()),
-				STModel.par(VOCBENCH.ParVocBench.useIndexes, useIndexes.toString()));
+				STModel.par(VOCBENCH.ParVocBench.useIndexes, useIndexes.toString()), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -421,7 +510,8 @@ public class VocbenchResponseManager extends ResponseManager {
 	 * @return
 	 */
 	public static XMLResponseREPLY createIndexesRequest(OntologyInfo ontoInfo) {
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.createIndexesRequest);
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.createIndexesRequest, 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -430,7 +520,8 @@ public class VocbenchResponseManager extends ResponseManager {
 	 * @return
 	 */
 	public static XMLResponseREPLY updateIndexesRequest(OntologyInfo ontoInfo) {
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.updateIndexes);
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.updateIndexes, 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -449,7 +540,8 @@ public class VocbenchResponseManager extends ResponseManager {
 				STModel.par(VOCBENCH.ParVocBench.getChild, getChild.toString()),
 				STModel.par(SKOS.Par.scheme, scheme), 
 				STModel.par(VOCBENCH.ParVocBench.termcode, termcode),
-				STModel.par(VOCBENCH.ParVocBench.getLabelForRelatedConcepts, getLabelForRelatedConcepts.toString())
+				STModel.par(VOCBENCH.ParVocBench.getLabelForRelatedConcepts, getLabelForRelatedConcepts.toString()), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -465,7 +557,8 @@ public class VocbenchResponseManager extends ResponseManager {
 		
 		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.updateResourceModifiedDateRequest,
 				STModel.par(SKOS.Par.resourceName, resource), 
-				STModel.par(SKOS.Par.lang, lang)
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}

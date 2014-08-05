@@ -21,7 +21,7 @@ import org.fao.aoscs.domain.SearchResultObjectList;
 import org.fao.aoscs.hibernate.QueryFactory;
 import org.fao.aoscs.model.semanticturkey.service.manager.ObjectManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.PropertyManager;
-import org.fao.aoscs.model.semanticturkey.service.manager.SKOSManager;
+import org.fao.aoscs.model.semanticturkey.service.manager.SKOSXLManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.SparqlManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.VocbenchManager;
 import org.fao.aoscs.model.semanticturkey.util.STUtility;
@@ -47,7 +47,7 @@ public class SearchServiceSTImpl {
 		logger.debug("search data initialized");
 		data.setStatus(QueryFactory.getHibernateSQLQuery( "SELECT status, id FROM owl_status ORDER BY id"));
 		data.setDataTypes(PropertyManager.getAllRangeDatatype());
-		data.setScheme(getSchemes(ontoInfo));
+		data.setScheme(getSchemes(ontoInfo, null));
 
 		data.setTermCodeProperties(PropertyManager.getTermCodePropertiesName(ontoInfo));
         data.setConceptAttributes(PropertyManager.getConceptAttributes(ontoInfo));
@@ -61,9 +61,9 @@ public class SearchServiceSTImpl {
 	 * @param ontoInfo
 	 * @return
 	 */
-	public ArrayList<String[]> getSchemes(OntologyInfo ontoInfo) {
+	public ArrayList<String[]> getSchemes(OntologyInfo ontoInfo, String defaultLang) {
 		logger.debug("getting schemes: ");
-		return SKOSManager.getAllSchemesList(ontoInfo);
+		return SKOSXLManager.getAllSchemesList(ontoInfo, defaultLang);
 	}
 	
 	/**

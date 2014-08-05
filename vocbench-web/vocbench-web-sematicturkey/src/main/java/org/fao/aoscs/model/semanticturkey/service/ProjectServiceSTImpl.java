@@ -33,8 +33,16 @@ public class ProjectServiceSTImpl {
 	 * @see org.fao.aoscs.client.module.ontology.service.OntologyService#initializeProject(org.fao.aoscs.domain.OntologyInfo)
 	 */
 	public String[] initializeProject(OntologyInfo ontoInfo) {
+		
+		if(ProjectManager.accessProject(ontoInfo))
+			logger.debug(ontoInfo.getOntologyName()+" successfully opened!!!");
+		else
+		{
+			logger.debug(ontoInfo.getOntologyName()+" cannot be opened!!!");
+			return null;
+		}
+		/*boolean open = false;
 		String projectName = ontoInfo.getOntologyName();
-		boolean open = false;
 		if(ProjectManager.isCurrentProjectActiveRequest(ontoInfo))
 		{
 			String currentProjectName = ProjectManager.getCurrentProject(ontoInfo);
@@ -59,7 +67,7 @@ public class ProjectServiceSTImpl {
 				return null;
 			}
 		}
-		
+		*/
 		String[] values = new String[2];
 		values[0] = MetadataManager.getDefaultNamespace(ontoInfo);
 		values[1] = ProjectManager.getProjectProperty(ontoInfo, STXMLUtility.SKOS_SELECTED_SCHEME, ontoInfo.getOntologyName());
@@ -111,7 +119,7 @@ public class ProjectServiceSTImpl {
 	public Boolean createNewProject(OntologyInfo ontoInfo, String projectName,
 			String baseuri, String ontomanager, String ontMgrConfiguration,
 			String ontologyType, HashMap<String, String> cfgPars) {
-		return ProjectManager.createNewProject(ontoInfo, projectName, baseuri, ontomanager, ontMgrConfiguration, ontologyType, cfgPars);
+		return ProjectManager.createProject(ontoInfo, projectName, baseuri, ontomanager, ontMgrConfiguration, ontologyType, cfgPars);
 	}
 
 	/* (non-Javadoc)
@@ -119,14 +127,15 @@ public class ProjectServiceSTImpl {
 	 */
 	public Boolean deleteProject(OntologyInfo ontoInfo, String projectName) {
 		
-		if(ProjectManager.isCurrentProjectActiveRequest(ontoInfo))
+		/*if(ProjectManager.isCurrentProjectActiveRequest(ontoInfo))
 		{
 			String currentProjectName = ProjectManager.getCurrentProject(ontoInfo);
 			if(projectName.equals(currentProjectName))
 			{
 				ProjectManager.closeProject(ontoInfo);
 			}
-		}
+		}*/
+		ProjectManager.disconnectFromProject(ontoInfo);
 		return ProjectManager.deleteProject(ontoInfo, projectName);
 	}
 	

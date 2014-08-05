@@ -22,7 +22,9 @@ public class OntManagerResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getOntManagerParametersRequest(OntologyInfo ontoInfo, String ontMgrID)
 	{
-		Response resp = getSTModel(ontoInfo).ontManagerService.makeRequest(OntManager.getOntManagerParametersRequest, STModel.par(OntManager.ontMgrIDField, ontMgrID));
+		Response resp = getSTModel(ontoInfo).ontManagerService.makeRequest(OntManager.getOntManagerParametersRequest, 
+				STModel.par(OntManager.ontMgrIDField, ontMgrID), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	

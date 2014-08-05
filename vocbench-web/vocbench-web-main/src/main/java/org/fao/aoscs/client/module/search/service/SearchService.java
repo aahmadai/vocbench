@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface SearchService extends RemoteService{
  
 	public InitializeSearchData initData(OntologyInfo ontoInfo) throws Exception;
-	public ArrayList<String[]> getSchemes(OntologyInfo ontoInfo) throws Exception;
+	public ArrayList<String[]> getSchemes(OntologyInfo ontoInfo, String schemeLang) throws Exception;
 	public String getSearchResultsSize (SearchParameterObject searchObj, OntologyInfo ontoInfo) throws Exception;
 	public SearchResultObjectList requestSearchResultsRows (Request request, SearchParameterObject searchObj, OntologyInfo ontoInfo) throws Exception; 
 	public SearchResponse getSuggestions(SearchRequest req, boolean includeNotes, ArrayList<String> languages, OntologyInfo ontoInfo) throws Exception;

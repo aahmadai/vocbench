@@ -26,7 +26,9 @@ public class StatsResponseManager extends ResponseManager {
 	 * @return
 	 */
 	public static XMLResponseREPLY getStatsARequest(OntologyInfo ontoInfo, String schemeUri) {
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getStatsARequest, STModel.par(Par.scheme, schemeUri));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getStatsARequest, 
+				STModel.par(Par.scheme, schemeUri), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -37,7 +39,10 @@ public class StatsResponseManager extends ResponseManager {
 	 * @return
 	 */
 	public static XMLResponseREPLY getStatsBRequest(OntologyInfo ontoInfo, String schemeUri, Boolean depth) {
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getStatsBRequest, STModel.par(Par.scheme, schemeUri), STModel.par(ParVocBench.depth, depth.toString()));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getStatsBRequest, 
+				STModel.par(Par.scheme, schemeUri), 
+				STModel.par(ParVocBench.depth, depth.toString()), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -47,7 +52,9 @@ public class StatsResponseManager extends ResponseManager {
 	 * @return
 	 */
 	public static XMLResponseREPLY getStatsCRequest(OntologyInfo ontoInfo, String schemeUri) {
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getStatsCRequest, STModel.par(Par.scheme, schemeUri));
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getStatsCRequest, 
+				STModel.par(Par.scheme, schemeUri), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -57,7 +64,9 @@ public class StatsResponseManager extends ResponseManager {
 	 * @return
 	 */
 	public static XMLResponseREPLY getStatsAgrovocRequest(OntologyInfo ontoInfo, String schemeUri) {
-		Response resp = getSTModel(ontoInfo).agrovocService.makeRequest(Agrovoc.Req.getStatsAgrovocRequest, STModel.par(Par.scheme, schemeUri));
+		Response resp = getSTModel(ontoInfo).agrovocService.makeRequest(Agrovoc.Req.getStatsAgrovocRequest,
+				STModel.par(Par.scheme, schemeUri), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	

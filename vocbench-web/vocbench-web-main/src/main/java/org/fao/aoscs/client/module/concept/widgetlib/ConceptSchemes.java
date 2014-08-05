@@ -115,7 +115,6 @@ public class ConceptSchemes extends ConceptTemplate{
 					ExceptionManager.showException(caught, constants.conceptSchemeGetSchemeFail());
 				}
 			};
-			Window.alert(conceptObject.getUri());
 			Service.conceptService.getConceptSchemeValue(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
 		}
 	}
@@ -140,9 +139,9 @@ public class ConceptSchemes extends ConceptTemplate{
 	private FlexTable getTable(HashMap<String, String> sObj)
 	{
 		FlexTable table = new FlexTable();
-		table.setWidget(0, 0, new HTML(constants.conceptSchemeLabel()));
-		table.setWidget(0, 1, new HTML(constants.conceptSchemeUri()));
-		table.getColumnFormatter().setWidth(1, "80%");
+		table.setWidget(0, 0, new HTML(constants.conceptSchemeUri()));
+		table.setWidget(0, 1, new HTML(constants.conceptSchemeLabel()));
+		table.getColumnFormatter().setWidth(0, "50%");
 		int i=1;
 		for(String label: sObj.keySet()){
 			String uri = sObj.get(label);

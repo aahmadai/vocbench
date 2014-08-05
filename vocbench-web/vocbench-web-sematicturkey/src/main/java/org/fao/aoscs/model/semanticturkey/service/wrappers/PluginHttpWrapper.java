@@ -1,10 +1,10 @@
 package org.fao.aoscs.model.semanticturkey.service.wrappers;
 
+import it.uniroma2.art.semanticturkey.servlet.Response;
+import it.uniroma2.art.semanticturkey.servlet.main.controllers.LegacyServiceController;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import it.uniroma2.art.semanticturkey.servlet.Response;
-import it.uniroma2.art.semanticturkey.servlet.STServer;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -23,14 +23,14 @@ public class PluginHttpWrapper extends ServletExtensionHttpWrapper implements Pl
 	 * @see org.fao.aoscs.model.semanticturkey.service.wrappers.PluginWrapper#init()
 	 */
 	public Response init() {
-		return makeRequest(STServer.pluginActivateRequest);
+		return makeRequest(LegacyServiceController.pluginActivateRequest);
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.model.semanticturkey.service.wrappers.PluginWrapper#dispose()
 	 */
 	public Response dispose() {
-		return makeRequest(STServer.pluginDeactivateRequest);
+		return makeRequest(LegacyServiceController.pluginDeactivateRequest);
 	}
 	
 	/**

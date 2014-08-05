@@ -32,6 +32,7 @@ public class STModel {
 	public ServiceWrapper searchOntologyService;
 	public ServiceWrapper synonymsService;
 	public ServiceWrapper systemStartService;
+	public ServiceWrapper projectsOldService;
 	public ServiceWrapper projectsService;
 	public ServiceWrapper pluginsService;
 	public ServiceWrapper resourceService;
@@ -107,7 +108,8 @@ public class STModel {
 		pageService = new ServiceHttpWrapper("page", stURL);
 		pluginsService = new ServiceHttpWrapper("plugins", stURL);
 		propertyService = new ServiceHttpWrapper("property", stURL);
-		projectsService = new ServiceHttpWrapper("projects", stURL);
+		projectsOldService = new ServiceHttpWrapper("projects", stURL);
+		projectsService = new ServiceHttpWrapper("Projects", stURL);
 		resourceService = new ServiceHttpWrapper("resource", stURL);
 		searchOntologyService = new ServiceHttpWrapper("ontologySearch", stURL);
 		synonymsService = new ServiceHttpWrapper("synonyms", stURL);

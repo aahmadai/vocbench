@@ -23,7 +23,8 @@ public class MetadataResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getBaseuriRequest(OntologyInfo ontoInfo)
 	{
-		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getBaseuriRequest);
+		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getBaseuriRequest, 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -33,7 +34,8 @@ public class MetadataResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getDefaultNamespaceRequest(OntologyInfo ontoInfo)
 	{
-		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getDefaultNamespaceRequest);
+		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getDefaultNamespaceRequest, 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -43,7 +45,8 @@ public class MetadataResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getNSPrefixMappingsRequest(OntologyInfo ontoInfo)
 	{
-		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getNSPrefixMappingsRequest);
+		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getNSPrefixMappingsRequest, 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -55,7 +58,10 @@ public class MetadataResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY setNSPrefixMappingRequest(OntologyInfo ontoInfo, String prefix, String namespace)
 	{
-		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.setNSPrefixMappingRequest, STModel.par(Metadata.prefixPar, prefix), STModel.par(Metadata.namespacePar, namespace));
+		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.setNSPrefixMappingRequest, 
+				STModel.par(Metadata.prefixPar, prefix), 
+				STModel.par(Metadata.namespacePar, namespace), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -67,7 +73,10 @@ public class MetadataResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY changeNSPrefixMappingRequest(OntologyInfo ontoInfo, String prefix, String namespace)
 	{
-		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.changeNSPrefixMappingRequest, STModel.par(Metadata.prefixPar, prefix), STModel.par(Metadata.namespacePar, namespace));
+		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.changeNSPrefixMappingRequest, 
+				STModel.par(Metadata.prefixPar, prefix), 
+				STModel.par(Metadata.namespacePar, namespace), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -78,7 +87,9 @@ public class MetadataResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY removeNSPrefixMappingRequest(OntologyInfo ontoInfo, String namespace)
 	{
-		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.removeNSPrefixMappingRequest, STModel.par(Metadata.namespacePar, namespace));
+		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.removeNSPrefixMappingRequest, 
+				STModel.par(Metadata.namespacePar, namespace), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -88,7 +99,8 @@ public class MetadataResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getNamedGraphsRequest(OntologyInfo ontoInfo)
 	{
-		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getNamedGraphsRequest);
+		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getNamedGraphsRequest, 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -98,7 +110,8 @@ public class MetadataResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getImportsRequest(OntologyInfo ontoInfo)
 	{
-		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getImportsRequest);
+		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.getImportsRequest, 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -113,13 +126,15 @@ public class MetadataResponseManager extends ResponseManager {
 		if(isNULL(altURL))
 		{
 			resp= getSTModel(ontoInfo).metadataService.makeRequest(Metadata.addFromWebRequest,
-				STModel.par(Metadata.baseuriPar, baseuri));
+				STModel.par(Metadata.baseuriPar, baseuri), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		}
 		else
 		{
 			resp= getSTModel(ontoInfo).metadataService.makeRequest(Metadata.addFromWebRequest,
 					STModel.par(Metadata.baseuriPar, baseuri),
-					STModel.par(Metadata.alturlPar, altURL));
+					STModel.par(Metadata.alturlPar, altURL), 
+					STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		}
 		return getXMLResponseREPLY(resp);
 	}
@@ -138,14 +153,16 @@ public class MetadataResponseManager extends ResponseManager {
 		{
 			resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.addFromWebToMirrorRequest,
 				STModel.par(Metadata.baseuriPar, baseuri),
-				STModel.par(Metadata.mirrorFilePar, mirrorFile));
+				STModel.par(Metadata.mirrorFilePar, mirrorFile), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		}
 		else
 		{
 			resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.addFromWebToMirrorRequest,
 				STModel.par(Metadata.baseuriPar, baseuri),
 				STModel.par(Metadata.alturlPar, altURL),
-				STModel.par(Metadata.mirrorFilePar, mirrorFile));
+				STModel.par(Metadata.mirrorFilePar, mirrorFile), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		}
 		return getXMLResponseREPLY(resp);
 	}
@@ -162,7 +179,8 @@ public class MetadataResponseManager extends ResponseManager {
 		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.addFromLocalFileRequest,
 				STModel.par(Metadata.baseuriPar, baseuri),
 				STModel.par(Metadata.localFilePathPar, localFilePath),
-				STModel.par(Metadata.mirrorFilePar, mirrorFile));
+				STModel.par(Metadata.mirrorFilePar, mirrorFile), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -176,7 +194,8 @@ public class MetadataResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.addFromOntologyMirrorRequest,
 				STModel.par(Metadata.baseuriPar, baseuri),
-				STModel.par(Metadata.mirrorFilePar, mirrorFile));
+				STModel.par(Metadata.mirrorFilePar, mirrorFile), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -188,7 +207,8 @@ public class MetadataResponseManager extends ResponseManager {
 	public static XMLResponseREPLY removeImportRequest(OntologyInfo ontoInfo, String baseuri)
 	{
 		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.removeImportRequest,
-				STModel.par(Metadata.baseuriPar, baseuri));
+				STModel.par(Metadata.baseuriPar, baseuri), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 
@@ -202,7 +222,8 @@ public class MetadataResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.mirrorOntologyRequest,
 				STModel.par(Metadata.baseuriPar, baseuri),
-				STModel.par(Metadata.mirrorFilePar, ontFileName));
+				STModel.par(Metadata.mirrorFilePar, ontFileName), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 }

@@ -57,6 +57,16 @@ public class Convert {
 		}
 		return language;
 	}
+	public static HashMap<String, String> getLanguageDict(ArrayList<String[]> language){
+		HashMap<String, String> langList = new HashMap<String, String>();
+		for(int i=0;i<language.size();i++){
+			String [] item = (String[]) language.get(i);
+			String code = item[1].toLowerCase(); 
+			String label = item[0]; 
+			langList.put(code, label);
+ 		}
+		return langList;
+	}
 	public static ListBox makeConceptRelationshipListBox(ArrayList<String[]> conceptRelProp){
 		ListBox prop = new ListBox();
 		prop.addItem("--None--", "");

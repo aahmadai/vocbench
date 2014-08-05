@@ -168,6 +168,14 @@ http://127.0.0.1:1979/semantic_turkey/resources/stserver/STServer
 &label=produce
 &lang=en
 
+http://127.0.0.1:1979/semanticturkey/resources/stserver/STServer
+?service=
+&request=setPrefLabel
+&concept=http%3A%2F%2Fniteroi.cti.gov.br
+&label=test
+&lang=en
+&ctx_project=ITMPvoc
+
 
 http://127.0.0.1:1979/semantic_turkey/resources/stserver/STServer
 ?service=skosxl

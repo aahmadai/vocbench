@@ -792,7 +792,7 @@ public class ConceptTree extends Composite{
 				selectedConceptObject = cDetailObj.getConceptObject();
 				
 				String status = selectedConceptObject.getStatus();
-				addConceptButton.setEnable(true);
+				addConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTCREATE, OWLStatusConstants.getOWLStatusID(status)));
 				deleteConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTDELETE, OWLStatusConstants.getOWLStatusID(status)));
 				moveconcept.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTEDIT_MOVECONCEPT, OWLStatusConstants.getOWLStatusID(status)));
 				copyconcept.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTEDIT_LINKCONCEPT, OWLStatusConstants.getOWLStatusID(status)));

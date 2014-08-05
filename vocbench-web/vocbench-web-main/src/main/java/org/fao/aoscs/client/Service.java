@@ -22,6 +22,8 @@ import org.fao.aoscs.client.module.project.service.ProjectService.ProjectService
 import org.fao.aoscs.client.module.project.service.ProjectServiceAsync;
 import org.fao.aoscs.client.module.relationship.service.RelationshipService.RelationshipServiceUtil;
 import org.fao.aoscs.client.module.relationship.service.RelationshipServiceAsync;
+import org.fao.aoscs.client.module.scheme.service.SchemeService.SchemeServiceUtil;
+import org.fao.aoscs.client.module.scheme.service.SchemeServiceAsync;
 import org.fao.aoscs.client.module.search.service.SearchService.SearchServiceUtil;
 import org.fao.aoscs.client.module.search.service.SearchServiceAsync;
 import org.fao.aoscs.client.module.system.service.SystemService.SystemServiceUtil;
@@ -38,6 +40,7 @@ import org.fao.aoscs.client.widgetlib.shared.tree.service.TreeServiceAsync;
 public class Service {
 	public static SystemServiceAsync<?> systemService = SystemServiceUtil.getInstance();
 	public static ConceptServiceAsync<?> conceptService = ConceptServiceUtil.getInstance();
+	public static SchemeServiceAsync<?> schemeService = SchemeServiceUtil.getInstance();
 	public static RelationshipServiceAsync<?> relationshipService = RelationshipServiceUtil.getInstance();
 	public static TermServiceAsync<?> termService = TermServiceUtil.getInstance();
 	public static TreeServiceAsync<?> treeService = TreeServiceUtil.getInstance();

@@ -117,7 +117,7 @@ public class ManageProject extends FormDialogBox implements ClickHandler{
 		
 		projectType = new ListBox();
 		projectType.setWidth(widthWidget+"px");
-		projectType.addItem("SKOS-XL", "SKOS-XL");
+		projectType.addItem("SKOS-XL", "it.uniroma2.art.owlart.models.SKOSXLModel");
 
 		stURL = new TextBox();
 		stURL.setWidth("100%");

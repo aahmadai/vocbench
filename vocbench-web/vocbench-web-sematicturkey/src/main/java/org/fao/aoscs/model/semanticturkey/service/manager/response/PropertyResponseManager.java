@@ -4,7 +4,7 @@ import it.uniroma2.art.owlart.vocabulary.RDFTypesEnum;
 import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 import it.uniroma2.art.semanticturkey.servlet.main.Property;
-import it.uniroma2.art.semanticturkey.servlet.main.Resource;
+import it.uniroma2.art.semanticturkey.servlet.main.ResourceOld;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,9 @@ public class PropertyResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getPropertiesTreeRequest(OntologyInfo ontoInfo, String propertyRequest)
 	{
-		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(propertyRequest, STModel.par(Property.Par.inferencePar, "true"));
+		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(propertyRequest, 
+				STModel.par(Property.Par.inferencePar, "true"), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -41,7 +43,8 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.propertyDescriptionRequest, 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyURI/*)*/)
+				STModel.par(Property.Par.propertyQNamePar, propertyURI), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -59,12 +62,13 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.createAndAddPropValueRequest, 
-				STModel.par(Property.Par.instanceQNamePar, /*STUtility.getName(ontoInfo, */resourceURI/*)*/), 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyURI/*)*/),
+				STModel.par(Property.Par.instanceQNamePar, resourceURI), 
+				STModel.par(Property.Par.propertyQNamePar, propertyURI),
 				STModel.par(Property.Par.valueField, value),
 				STModel.par(Property.Par.langField, lang),
 				STModel.par(Property.Par.rangeQNamePar, range),
-				STModel.par(Property.Par.type, type)
+				STModel.par(Property.Par.type, type), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -82,11 +86,12 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.createAndAddPropValueRequest, 
-				STModel.par(Property.Par.instanceQNamePar, /*STUtility.getName(ontoInfo, */resourceURI/*)*/), 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyURI/*)*/),
+				STModel.par(Property.Par.instanceQNamePar, resourceURI), 
+				STModel.par(Property.Par.propertyQNamePar, propertyURI),
 				STModel.par(Property.Par.valueField, value),
 				STModel.par(Property.Par.rangeQNamePar, range),
-				STModel.par(Property.Par.type, type)
+				STModel.par(Property.Par.type, type), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -104,10 +109,11 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.addExistingPropValueRequest, 
-				STModel.par(Property.Par.instanceQNamePar, /*STUtility.getName(ontoInfo, */resourceURI/*)*/), 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyURI/*)*/),
+				STModel.par(Property.Par.instanceQNamePar, resourceURI), 
+				STModel.par(Property.Par.propertyQNamePar, propertyURI),
 				STModel.par(Property.Par.valueField, uri),
-				STModel.par(Property.Par.type, RDFTypesEnum.uri.toString())
+				STModel.par(Property.Par.type, RDFTypesEnum.uri.toString()), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -139,7 +145,8 @@ public class PropertyResponseManager extends ResponseManager {
 				STModel.par(Property.Par.langField, lang),
 				STModel.par(Property.Par.oldLangField, oldLang),
 				STModel.par(Property.Par.type, type),
-				STModel.par(Property.Par.oldType, oldType)
+				STModel.par(Property.Par.oldType, oldType), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -158,12 +165,13 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.removePropValueRequest, 
-				STModel.par(Property.Par.instanceQNamePar, /*STUtility.getName(ontoInfo, */resourceURI/*)*/), 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyURI/*)*/),
+				STModel.par(Property.Par.instanceQNamePar, resourceURI), 
+				STModel.par(Property.Par.propertyQNamePar, propertyURI),
 				STModel.par(Property.Par.valueField, value),
 				STModel.par(Property.Par.langField, lang),
 				STModel.par(Property.Par.rangeQNamePar, range),
-				STModel.par(Property.Par.type, type)
+				STModel.par(Property.Par.type, type), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -178,9 +186,10 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.addPropertyRequest, 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyUri/*)*/), 
+				STModel.par(Property.Par.propertyQNamePar, propertyUri), 
 				STModel.par("propertyType", propertyType), 
-				STModel.par("superPropertyQName", /*STUtility.getName(ontoInfo, */superPropertyUri/*)*/)
+				STModel.par("superPropertyQName", superPropertyUri), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -194,8 +203,9 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.addPropertyRequest, 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyUri/*)*/), 
-				STModel.par("propertyType", propertyType)
+				STModel.par(Property.Par.propertyQNamePar, propertyUri), 
+				STModel.par("propertyType", propertyType), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -209,8 +219,9 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.addPropertyDomainRequest, 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyUri/*)*/), 
-				STModel.par(Property.Par.domainPropertyQNamePar, /*STUtility.getName(ontoInfo, */domainUri/*)*/)
+				STModel.par(Property.Par.propertyQNamePar, propertyUri), 
+				STModel.par(Property.Par.domainPropertyQNamePar, domainUri), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -224,8 +235,9 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.removePropertyDomainRequest, 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyUri/*)*/), 
-				STModel.par(Property.Par.domainPropertyQNamePar, /*STUtility.getName(ontoInfo, */domainUri/*)*/)
+				STModel.par(Property.Par.propertyQNamePar, propertyUri), 
+				STModel.par(Property.Par.domainPropertyQNamePar, domainUri), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -239,8 +251,9 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.addPropertyRangeRequest, 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyUri/*)*/), 
-				STModel.par("rangePropertyQName", /*STUtility.getName(ontoInfo, */rangeUri/*)*/)
+				STModel.par(Property.Par.propertyQNamePar, propertyUri), 
+				STModel.par("rangePropertyQName", rangeUri), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -254,8 +267,9 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.removePropertyRangeRequest, 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyUri/*)*/), 
-				STModel.par("rangePropertyQName", /*STUtility.getName(ontoInfo, */rangeUri/*)*/)
+				STModel.par(Property.Par.propertyQNamePar, propertyUri), 
+				STModel.par("rangePropertyQName", rangeUri), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -270,8 +284,9 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.setDataRangeRequest, 
-				STModel.par(Property.Par.propertyQNamePar, /*STUtility.getName(ontoInfo, */propertyUri/*)*/), 
-				STModel.par(Property.Par.valuesField, values)
+				STModel.par(Property.Par.propertyQNamePar, propertyUri), 
+				STModel.par(Property.Par.valuesField, values), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -287,7 +302,8 @@ public class PropertyResponseManager extends ResponseManager {
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.addValueToDatarangeRequest, 
 				STModel.par(Property.Par.dataRangePar, dataRange), 
-				STModel.par(Property.Par.valueField, value)
+				STModel.par(Property.Par.valueField, value), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -303,7 +319,8 @@ public class PropertyResponseManager extends ResponseManager {
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.addValuesToDatarangeRequest, 
 				STModel.par(Property.Par.dataRangePar, dataRange), 
-				STModel.par(Property.Par.valuesField, values)
+				STModel.par(Property.Par.valuesField, values), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -319,7 +336,8 @@ public class PropertyResponseManager extends ResponseManager {
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.removeValueFromDatarangeRequest, 
 				STModel.par(Property.Par.dataRangePar, dataRange), 
-				STModel.par(Property.Par.valueField, value)
+				STModel.par(Property.Par.valueField, value), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -335,7 +353,8 @@ public class PropertyResponseManager extends ResponseManager {
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.parseDataRangeRequest, 
 				STModel.par(Property.Par.dataRangePar, dataRange), 
-				STModel.par(Property.Par.nodeTypePar, nodeType)
+				STModel.par(Property.Par.nodeTypePar, nodeType), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -351,7 +370,8 @@ public class PropertyResponseManager extends ResponseManager {
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
 				Property.Req.getRangeRequest, 
 				STModel.par(Property.Par.propertyQNamePar, propertyUri), 
-				STModel.par(Property.Par.visualize, visualize?"true":"false")
+				STModel.par(Property.Par.visualize, visualize?"true":"false"), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		return getXMLResponseREPLY(resp);
 	}
@@ -369,7 +389,12 @@ public class PropertyResponseManager extends ResponseManager {
 		String classesStr = STUtility.convertArrayToString(classes, STXMLUtility.ST_SEPARATOR);
 		String subPropOfStr = STUtility.convertArrayToString(subPropOf, STXMLUtility.ST_SEPARATOR);
 		String notSubPropOfStr = STUtility.convertArrayToString(notSubPropOf, STXMLUtility.ST_SEPARATOR);
-		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(Property.Req.getPropertiesForDomainsRequest, STModel.par(Property.Par.classes, classesStr), STModel.par(Resource.Par.role, role), STModel.par(Resource.Par.subPropOf, subPropOfStr), STModel.par(Resource.Par.notSubPropOf, notSubPropOfStr));			
+		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(Property.Req.getPropertiesForDomainsRequest, 
+				STModel.par(Property.Par.classes, classesStr), 
+				STModel.par(ResourceOld.Par.role, role), 
+				STModel.par(ResourceOld.Par.subPropOf, subPropOfStr), 
+				STModel.par(ResourceOld.Par.notSubPropOf, notSubPropOfStr), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));			
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -384,7 +409,11 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		String subPropOfStr = STUtility.convertArrayToString(subPropOf, STXMLUtility.ST_SEPARATOR);
 		String notSubPropOfStr = STUtility.convertArrayToString(notSubPropOf, STXMLUtility.ST_SEPARATOR);
-		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(Property.Req.getPropertyListRequest, STModel.par(Resource.Par.role, role), STModel.par(Resource.Par.subPropOf, subPropOfStr), STModel.par(Resource.Par.notSubPropOf, notSubPropOfStr));			
+		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(Property.Req.getPropertyListRequest, 
+				STModel.par(ResourceOld.Par.role, role), 
+				STModel.par(ResourceOld.Par.subPropOf, subPropOfStr), 
+				STModel.par(ResourceOld.Par.notSubPropOf, notSubPropOfStr), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));			
 		return getXMLResponseREPLY(resp);
 	}
 	

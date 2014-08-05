@@ -1,5 +1,6 @@
 package org.fao.aoscs.model.semanticturkey.service.manager;
 
+import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 
 import java.util.ArrayList;
@@ -304,5 +305,116 @@ public class SKOSXLManager extends ResponseManager{
 	public static void removeAltLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
 	{
 		SKOSXLResponseManager.removeAltLabelRequest(ontoInfo, conceptURI, label, lang);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param schemeURI
+	 * @param schemeLang
+	 * @return
+	 */
+	public static ArrayList<LabelObject> getSchemeLabel(OntologyInfo ontoInfo, String schemeURI)
+	{
+		ArrayList<LabelObject> prefLabels = new ArrayList<LabelObject>();
+		XMLResponseREPLY reply = SKOSXLResponseManager.getPrefLabelRequest(ontoInfo, schemeURI, STXMLUtility.ALL_LANGAUGE);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(Element elem : STXMLUtility.getChildElementByTagName(dataElement, "collection"))
+			{
+				for(STResource stResource : STXMLUtility.getURIResource(elem))
+				{
+					prefLabels.add(STUtility.createLabelObject(stResource.getRendering(), stResource.getInfo("lang")));
+				}
+			}
+		}
+		return prefLabels;
+	}
+	
+	/**
+	 * @param schemeURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public static boolean setSchemeLabel(OntologyInfo ontoInfo, String schemeURI, String label, String lang)
+	{
+		XMLResponseREPLY reply = SKOSXLResponseManager.setPrefLabelRequest(ontoInfo, schemeURI, label, lang);
+		if(reply!=null)
+		{
+			return reply.isAffirmative();
+		}
+		return false;
+	}
+	
+	/**
+	 * @param schemeURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public static boolean deleteSchemeLabel(OntologyInfo ontoInfo, String schemeURI, String label, String lang)
+	{
+		XMLResponseREPLY reply = SKOSXLResponseManager.removePrefLabelRequest(ontoInfo, schemeURI, label, lang);
+		if(reply!=null)
+		{
+			return reply.isAffirmative();
+		}
+		return false;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param defaultLanguage
+	 * @return
+	 */
+	public static ArrayList<String[]> getAllSchemesList(OntologyInfo ontoInfo, String schemeLang)
+	{
+		ArrayList<String[]> schemesList = new ArrayList<String[]>();
+
+		XMLResponseREPLY resp = SKOSXLResponseManager.getAllSchemesListRequest(ontoInfo, schemeLang);
+		Element dataElement = resp.getDataElement();
+		for(Element colElem : STXMLUtility.getChildElementByTagName(dataElement, "collection"))
+		{
+			for(Element uriElem : STXMLUtility.getChildElementByTagName(colElem, "uri"))
+			{
+				String[] tmp = new String[2];
+				tmp[0] = uriElem.getAttribute("show");
+				tmp[1] = uriElem.getTextContent();
+				schemesList.add(tmp);
+				
+			}
+		}
+		return schemesList;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param scheme
+	 * @param preferredLabel
+	 * @param preferredLabelLanguage
+	 * @param language
+	 * @return
+	 */
+	public static boolean createScheme(OntologyInfo ontoInfo, String scheme, String preferredLabel, String preferredLabelLanguage, String language)
+	{
+		Response resp = SKOSXLResponseManager.createSchemeRequest(ontoInfo, scheme, preferredLabel, preferredLabelLanguage, language);
+		return resp.isAffirmative();
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param scheme
+	 * @param setForceDeleteDanglingConcepts
+	 * @param forceDeleteDanglingConcepts
+	 * @return
+	 */
+	public static String deleteScheme(OntologyInfo ontoInfo, String scheme, Boolean setForceDeleteDanglingConcepts, Boolean forceDeleteDanglingConcepts)
+	{
+		Response resp = SKOSXLResponseManager.deleteSchemeRequest(ontoInfo, scheme, setForceDeleteDanglingConcepts, forceDeleteDanglingConcepts);
+		if(resp.isAffirmative())
+			return "";
+		else
+			return ((XMLResponseREPLY) resp).getReplyMessage();
 	}
 }

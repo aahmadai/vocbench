@@ -51,10 +51,8 @@ public class SearchServiceImpl extends PersistentRemoteService  implements Searc
 		return searchService.initData(ontoInfo);
 	}
 	
-
-
-	public ArrayList<String[]> getSchemes(OntologyInfo ontoInfo) throws Exception{
-		return searchService.getSchemes(ontoInfo);
+	public ArrayList<String[]> getSchemes(OntologyInfo ontoInfo, String schemeLang) throws Exception{
+		return searchService.getSchemes(ontoInfo, schemeLang);
 	}
 	
 	public String getSearchResultsSize(SearchParameterObject searchObj, OntologyInfo ontoInfo) throws Exception

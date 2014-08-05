@@ -115,11 +115,6 @@ public interface ConceptServiceAsync<T> {
 			int actionId, int userId, AsyncCallback<Void> callback);
 	void removeConcept(OntologyInfo ontoInfo, String schemeUri, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId, AsyncCallback<Integer> callback);
 	
-	void getSchemes(OntologyInfo ontoInfo, AsyncCallback<HashMap<String, String>> callback);
-	void addScheme(OntologyInfo ontoInfo, String scheme, String label,
-			String lang, AsyncCallback<Boolean> callback);
-	void deleteScheme(OntologyInfo ontoInfo, String scheme, AsyncCallback<Boolean> callback);
-	void setScheme(OntologyInfo ontoInfo, String scheme, AsyncCallback<Boolean> callback);
 	void getConceptAttributeValue(
 			String cls,
 			boolean isExplicit,
@@ -253,8 +248,8 @@ public interface ConceptServiceAsync<T> {
 			AsyncCallback<HashMap<String, String>> callback);
 	void getConceptHistoryDataSize(int ontologyId, String uri, int type,
 			AsyncCallback<Integer> callback);
-	void getExcludedConceptSchemes(String conceptURI, boolean isExplicit,
-			OntologyInfo ontoInfo,
+	void getExcludedConceptSchemes(String conceptURI, String schemeLang,
+			boolean isExplicit, OntologyInfo ontoInfo,
 			AsyncCallback<HashMap<String, String>> callback);
 	
 }

@@ -1323,13 +1323,20 @@ public interface LocaleConstants extends Constants{
 	public String conceptSchemeLang();		
 	public String conceptSchemeUri();	
 	public String conceptSchemeAddScheme();
+	public String conceptSchemeEditScheme();
 	public String conceptSchemeDeleteScheme();
 	public String conceptSchemeReloadScheme();
+	public String conceptSchemeLabelTitle();
+	public String conceptSchemeAddSchemeLabel();
+	public String conceptSchemeEditSchemeLabel();
+	public String conceptSchemeDeleteSchemeLabel();
 	
 	//Concept Scheme/messages
 	public String conceptSchemeGetSchemeFail();
 	public String conceptSchemeSetSchemeFail();
 	public String conceptSchemeManageSchemeFail();
+	public String conceptSchemeManageSchemeFailReply();
+	public String conceptSchemeManageSchemeFailReplyConfirm();
 	public String conceptSchemeNotSelected();
 	public String conceptSchemeNotBelong();
 	
@@ -1377,6 +1384,7 @@ public interface LocaleConstants extends Constants{
 	public String buttonViewConceptTree();
 	public String buttonViewSearchResult();
 	public String buttonSaveAndDownload();
+	public String buttonDownload();
 	
 	//Projects
 	public String projectProjectName();

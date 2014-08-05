@@ -41,7 +41,7 @@ public interface ConceptService extends RemoteService{
 	public Boolean addConceptToScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI) throws Exception;
 	public Boolean removeConceptFromScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI) throws Exception;
 	public HashMap<String, String> getConceptSchemeValue(String conceptURI, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
-	public HashMap<String, String> getExcludedConceptSchemes(String conceptURI, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
+	public HashMap<String, String> getExcludedConceptSchemes(String conceptURI, String schemeLang, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
 	
 	public ConceptDetailObject getConceptDetail(OntologyInfo ontoInfo, ArrayList<String> langList, String conceptURI, boolean isExplicit) throws Exception;
 	public ConceptDetailObject getCategoryDetail(OntologyInfo ontoInfo, ArrayList<String> langList, String conceptURI, String parentConceptURI) throws Exception;
@@ -142,13 +142,8 @@ public interface ConceptService extends RemoteService{
 	public void copyConcept(OntologyInfo ontoInfo, String oldSchemeUri, String newSchemeUri, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId) throws Exception;
 	public Integer removeConcept(OntologyInfo ontoInfo, String schemeUri, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId) throws Exception;
 	
-	
-	public HashMap<String, String> getSchemes(OntologyInfo ontoInfo) throws Exception;
 	public boolean checkConceptAddToScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI) throws Exception;
 	public boolean checkRemoveConceptFromScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI) throws Exception;
-	public boolean addScheme(OntologyInfo ontoInfo, String scheme, String label, String lang) throws Exception;
-	public boolean deleteScheme(OntologyInfo ontoInfo, String scheme) throws Exception;
-	public boolean setScheme(OntologyInfo ontoInfo, String scheme) throws Exception;
 	
 	
 	public static class ConceptServiceUtil{

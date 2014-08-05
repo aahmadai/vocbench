@@ -8,6 +8,7 @@ import org.fao.aoscs.client.module.importdata.service.ImportService;
 import org.fao.aoscs.client.module.ontology.service.OntologyService;
 import org.fao.aoscs.client.module.project.service.ProjectService;
 import org.fao.aoscs.client.module.relationship.service.RelationshipService;
+import org.fao.aoscs.client.module.scheme.service.SchemeService;
 import org.fao.aoscs.client.module.search.service.SearchService;
 import org.fao.aoscs.client.module.statistic.service.StatisticsService;
 import org.fao.aoscs.client.module.term.service.TermService;
@@ -22,6 +23,7 @@ import org.fao.aoscs.model.semanticturkey.adapter.ImportServiceSTAdapter;
 import org.fao.aoscs.model.semanticturkey.adapter.OntologyServiceSTAdapter;
 import org.fao.aoscs.model.semanticturkey.adapter.ProjectServiceSTAdapter;
 import org.fao.aoscs.model.semanticturkey.adapter.RelationshipServiceSTAdapter;
+import org.fao.aoscs.model.semanticturkey.adapter.SchemeServiceSTAdapter;
 import org.fao.aoscs.model.semanticturkey.adapter.SearchServiceSTAdapter;
 import org.fao.aoscs.model.semanticturkey.adapter.StatisticsServiceSTAdapter;
 import org.fao.aoscs.model.semanticturkey.adapter.TermServiceSTAdapter;
@@ -139,6 +141,14 @@ public class STManager implements BasicModelManager {
 	 */
 	public ProjectService getProjectService() {
 		return new ProjectServiceSTAdapter();
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.model.BasicModelManager#getSchemeService()
+	 */
+	public SchemeService getSchemeService() {
+		return new SchemeServiceSTAdapter();
 	}
 
 }

@@ -59,7 +59,7 @@ public class ModuleManager {
 						ExceptionManager.showException(caught, constants.conceptSchemeSetSchemeFail());
 					}
 				};
-				Service.conceptService.setScheme(MainApp.userOntology, schemeURI, callback);
+				Service.schemeService.setScheme(MainApp.userOntology, schemeURI, callback);
 			}
 			else
 				gotoItemFinal(treeItem, schemeURI, isAddAction, infoTab, belongsToModule, type);

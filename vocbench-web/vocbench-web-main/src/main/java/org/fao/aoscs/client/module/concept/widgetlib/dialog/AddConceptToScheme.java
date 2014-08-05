@@ -85,7 +85,7 @@ public class AddConceptToScheme extends FormDialogBox {
 				ExceptionManager.showException(caught, constants.conceptSchemeGetSchemeFail());
 			}
 		};
-		Service.conceptService.getExcludedConceptSchemes(conceptURI, MainApp.isExplicit, MainApp.userOntology, callback);
+		Service.conceptService.getExcludedConceptSchemes(conceptURI, MainApp.userLanguage, MainApp.isExplicit, MainApp.userOntology, callback);
 		
 		
 	};

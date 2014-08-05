@@ -159,58 +159,6 @@ public class SKOSManager extends ResponseManager {
 	
 	/**
 	 * @param ontoInfo
-	 * @param defaultLanguage
-	 * @return
-	 */
-	public static ArrayList<String[]> getAllSchemesList(OntologyInfo ontoInfo)
-	{
-		ArrayList<String[]> schemesList = new ArrayList<String[]>();
-
-		XMLResponseREPLY resp = SKOSResponseManager.getAllSchemesListRequest(ontoInfo, STXMLUtility.SKOS_LANG_SCHEME);
-		Element dataElement = resp.getDataElement();
-		for(Element colElem : STXMLUtility.getChildElementByTagName(dataElement, "collection"))
-		{
-			for(Element uriElem : STXMLUtility.getChildElementByTagName(colElem, "uri"))
-			{
-				String[] tmp = new String[2];
-				tmp[0] = uriElem.getAttribute("show");
-				tmp[1] = uriElem.getTextContent();
-				schemesList.add(tmp);
-				
-			}
-		}
-		return schemesList;
-	}
-	
-	/**
-	 * @param ontoInfo
-	 * @param scheme
-	 * @param preferredLabel
-	 * @param preferredLabelLanguage
-	 * @param language
-	 * @return
-	 */
-	public static boolean createScheme(OntologyInfo ontoInfo, String scheme, String preferredLabel, String preferredLabelLanguage, String language)
-	{
-		Response resp = SKOSResponseManager.createSchemeRequest(ontoInfo, scheme, preferredLabel, preferredLabelLanguage, language);
-		return resp.isAffirmative();
-	}
-	
-	/**
-	 * @param ontoInfo
-	 * @param scheme
-	 * @param setForceDeleteDanglingConcepts
-	 * @param forceDeleteDanglingConcepts
-	 * @return
-	 */
-	public static boolean deleteScheme(OntologyInfo ontoInfo, String scheme, Boolean setForceDeleteDanglingConcepts, Boolean forceDeleteDanglingConcepts)
-	{
-		Response resp = SKOSResponseManager.deleteSchemeRequest(ontoInfo, scheme, setForceDeleteDanglingConcepts, forceDeleteDanglingConcepts);
-		return resp.isAffirmative();
-	}
-	
-	/**
-	 * @param ontoInfo
 	 * @param conceptURI
 	 * @param schemeURI
 	 * @return

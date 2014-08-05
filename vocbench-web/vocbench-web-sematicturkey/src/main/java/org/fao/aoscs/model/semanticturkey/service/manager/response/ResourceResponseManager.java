@@ -2,7 +2,7 @@ package org.fao.aoscs.model.semanticturkey.service.manager.response;
 
 import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
-import it.uniroma2.art.semanticturkey.servlet.main.Resource;
+import it.uniroma2.art.semanticturkey.servlet.main.ResourceOld;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,10 @@ public class ResourceResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getPropertyValuesCountRequest(OntologyInfo ontoInfo, String resourceURI, String propertyURI)
 	{
-		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(Resource.Req.getPropertyValuesCountRequest, STModel.par(Resource.Par.resource, resourceURI), STModel.par(Resource.Par.property, propertyURI));
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getPropertyValuesCountRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.property, propertyURI), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -39,7 +42,10 @@ public class ResourceResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getPropertyValuesRequest(OntologyInfo ontoInfo, String resourceURI, String propertyURI)
 	{
-		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(Resource.Req.getPropertyValuesRequest, STModel.par(Resource.Par.resource, resourceURI), STModel.par(Resource.Par.property, propertyURI));
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getPropertyValuesRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.property, propertyURI), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -54,7 +60,13 @@ public class ResourceResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getValuesOfPropertiesCountRequest(OntologyInfo ontoInfo, String resourceURI, String propertyURI, boolean subProperties, boolean excludePropItSelf, String excludedProps)
 	{
-		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(Resource.Req.getValuesOfPropertiesCountRequest, STModel.par(Resource.Par.resource, resourceURI), STModel.par(Resource.Par.properties, propertyURI), STModel.par(Resource.Par.subProp, subProperties?"true":"false"), STModel.par(Resource.Par.excludePropItSelf, excludePropItSelf?"true":"false"), STModel.par(Resource.Par.excludedProps, excludedProps));
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getValuesOfPropertiesCountRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.properties, propertyURI), 
+				STModel.par(ResourceOld.Par.subProp, subProperties?"true":"false"), 
+				STModel.par(ResourceOld.Par.excludePropItSelf, excludePropItSelf?"true":"false"), 
+				STModel.par(ResourceOld.Par.excludedProps, excludedProps), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -70,7 +82,13 @@ public class ResourceResponseManager extends ResponseManager {
 	public static XMLResponseREPLY getValuesOfPropertiesCountRequest(OntologyInfo ontoInfo, String resourceURI, ArrayList<String> propertyURIs, boolean subProperties, boolean excludePropItSelf, String excludedProps)
 	{
 		String propURIs = STUtility.convertArrayToString(propertyURIs, STXMLUtility.ST_SEPARATOR);
-		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(Resource.Req.getValuesOfPropertiesCountRequest, STModel.par(Resource.Par.resource, resourceURI), STModel.par(Resource.Par.properties, propURIs), STModel.par(Resource.Par.subProp, subProperties?"true":"false"), STModel.par(Resource.Par.excludePropItSelf, excludePropItSelf?"true":"false"), STModel.par(Resource.Par.excludedProps, excludedProps));
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getValuesOfPropertiesCountRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.properties, propURIs), 
+				STModel.par(ResourceOld.Par.subProp, subProperties?"true":"false"), 
+				STModel.par(ResourceOld.Par.excludePropItSelf, excludePropItSelf?"true":"false"), 
+				STModel.par(ResourceOld.Par.excludedProps, excludedProps), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -83,7 +101,10 @@ public class ResourceResponseManager extends ResponseManager {
 	public static XMLResponseREPLY getValuesOfPropertiesCountRequest(OntologyInfo ontoInfo, String resourceURI, ArrayList<String> propertyURIs)
 	{
 		String propURIs = STUtility.convertArrayToString(propertyURIs, STXMLUtility.ST_SEPARATOR);
-		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(Resource.Req.getValuesOfPropertiesCountRequest, STModel.par(Resource.Par.resource, resourceURI), STModel.par(Resource.Par.properties, propURIs));
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getValuesOfPropertiesCountRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.properties, propURIs), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -99,7 +120,13 @@ public class ResourceResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getValuesOfPropertiesRequest(OntologyInfo ontoInfo, String resourceURI, String propertyURIs, boolean subProperties, boolean excludePropItSelf, String excludedProps)
 	{
-		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(Resource.Req.getValuesOfPropertiesRequest, STModel.par(Resource.Par.resource, resourceURI), STModel.par(Resource.Par.properties, propertyURIs), STModel.par(Resource.Par.subProp, subProperties?"true":"false"), STModel.par(Resource.Par.excludePropItSelf, excludePropItSelf?"true":"false"), STModel.par(Resource.Par.excludedProps, excludedProps));
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getValuesOfPropertiesRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.properties, propertyURIs), 
+				STModel.par(ResourceOld.Par.subProp, subProperties?"true":"false"), 
+				STModel.par(ResourceOld.Par.excludePropItSelf, excludePropItSelf?"true":"false"), 
+				STModel.par(ResourceOld.Par.excludedProps, excludedProps), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -116,7 +143,13 @@ public class ResourceResponseManager extends ResponseManager {
 	public static XMLResponseREPLY getValuesOfPropertiesRequest(OntologyInfo ontoInfo, String resourceURI, ArrayList<String> propertyURIs, boolean subProperties, boolean excludePropItSelf, String excludedProps)
 	{
 		String propURIs = STUtility.convertArrayToString(propertyURIs, STXMLUtility.ST_SEPARATOR);
-		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(Resource.Req.getValuesOfPropertiesRequest, STModel.par(Resource.Par.resource, resourceURI), STModel.par(Resource.Par.properties, propURIs), STModel.par(Resource.Par.subProp, subProperties?"true":"false"), STModel.par(Resource.Par.excludePropItSelf, excludePropItSelf?"true":"false"), STModel.par(Resource.Par.excludedProps, excludedProps));
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getValuesOfPropertiesRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.properties, propURIs), 
+				STModel.par(ResourceOld.Par.subProp, subProperties?"true":"false"), 
+				STModel.par(ResourceOld.Par.excludePropItSelf, excludePropItSelf?"true":"false"), 
+				STModel.par(ResourceOld.Par.excludedProps, excludedProps), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -128,7 +161,10 @@ public class ResourceResponseManager extends ResponseManager {
 	public static XMLResponseREPLY getValuesOfPropertiesRequest(OntologyInfo ontoInfo, String resourceURI, ArrayList<String> propertyURIs)
 	{
 		String propURIs = STUtility.convertArrayToString(propertyURIs, STXMLUtility.ST_SEPARATOR);
-		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(Resource.Req.getValuesOfPropertiesRequest, STModel.par(Resource.Par.resource, resourceURI), STModel.par(Resource.Par.properties, propURIs));
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getValuesOfPropertiesRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.properties, propURIs), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -140,7 +176,12 @@ public class ResourceResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getTemplatePropertiesRequest(OntologyInfo ontoInfo, String resourceURI, String role, String subPropOf, String notSubPropOf)
 	{
-		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(Resource.Req.getTemplatePropertiesRequest, STModel.par(Resource.Par.resource, resourceURI), STModel.par(Resource.Par.role, role), STModel.par(Resource.Par.subPropOf, subPropOf), STModel.par(Resource.Par.notSubPropOf, notSubPropOf));			
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getTemplatePropertiesRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.role, role), 
+				STModel.par(ResourceOld.Par.subPropOf, subPropOf), 
+				STModel.par(ResourceOld.Par.notSubPropOf, notSubPropOf), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));			
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -153,11 +194,10 @@ public class ResourceResponseManager extends ResponseManager {
 	public static XMLResponseREPLY getValuesOfDatatypePropertiesRequest(OntologyInfo ontoInfo, String resourceURI, ArrayList<String> excludedProps)
 	{
 		String propURIs = STUtility.convertArrayToString(excludedProps, STXMLUtility.ST_SEPARATOR);
-		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(Resource.Req.getValuesOfDatatypePropertiesRequest, STModel.par(Resource.Par.resource, resourceURI), STModel.par(Resource.Par.excludedProps, propURIs));
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getValuesOfDatatypePropertiesRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.excludedProps, propURIs), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
-	
-	
-	
-	
 }

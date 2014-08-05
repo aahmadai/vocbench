@@ -24,7 +24,10 @@ public class SearchOntologyResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY searchOntologyRequest(OntologyInfo ontoInfo, String inputString, String types)
 	{
-		Response resp = getSTModel(ontoInfo).searchOntologyService.makeRequest(OntoSearch.searchOntologyRequest, STModel.par("inputString", inputString), STModel.par("types", types));
+		Response resp = getSTModel(ontoInfo).searchOntologyService.makeRequest(OntoSearch.searchOntologyRequest, 
+				STModel.par("inputString", inputString), 
+				STModel.par("types", types), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	

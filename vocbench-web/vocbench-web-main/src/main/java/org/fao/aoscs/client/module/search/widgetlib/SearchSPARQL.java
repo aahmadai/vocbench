@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -55,15 +56,23 @@ public class SearchSPARQL extends Composite{
 	private FlexTable table = new FlexTable();
 	private CheckBox chkBox = new CheckBox(constants.searchSparqlIncludeInferredStatements());
 	private Button clear = new Button(constants.buttonClear());
+	private Button download = new Button(constants.buttonDownload());
 	private Button submit = new Button(constants.buttonSubmit());
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlintEditorWrapper wrapper;
+	private FormPanel form = new FormPanel("_sparqlresult");
+	private TextBox queryTXT = new TextBox();
+    private TextBox languageTXT = new TextBox();
+    private TextBox ontologyTXT = new TextBox();
+    private TextBox inferTXT = new TextBox();
+    
 	
 	private JSONObject nsPrefixMappings = new JSONObject();
     private JSONArray namedGraphs = new JSONArray();
 	
 	public SearchSPARQL()
 	{
+		download.setEnabled(false);
 		displayPanel.clear();
 		displayPanel.setSize("100%", "100%");
 		LoadingDialog load = new LoadingDialog();
@@ -127,6 +136,8 @@ public class SearchSPARQL extends Composite{
 	
 	public void init() 
 	{
+		loadForm();
+		
 		langList.addItem("SPARQL 1.0","sparql10");
 		langList.addItem("SPARQL 1.1 Query", "sparql11query");
 		langList.addItem("SPARQL 1.1 Update", "sparql11update");
@@ -182,6 +193,7 @@ public class SearchSPARQL extends Composite{
 		HorizontalPanel buttonPanel = new HorizontalPanel();
 		buttonPanel.setSpacing(5);
 		buttonPanel.add(clear);
+		buttonPanel.add(download);
 		buttonPanel.add(submit);
 		
 		HorizontalPanel bottomPanel = new HorizontalPanel();
@@ -196,14 +208,69 @@ public class SearchSPARQL extends Composite{
 			
 			public void onClick(ClickEvent event) {
 				//resultPanel.setText("");
-				wrapper.setValue("");
+				//wrapper.setValue("");
 				table.removeAllRows();
+				download.setEnabled(false);
+			}
+		});
+		
+		download.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				
+				/*StringBuffer strBuffer = new StringBuffer();
+				for(int row=0;row<table.getRowCount();row++)
+				{
+					String line = "";
+					for(int col=0;col<table.getCellCount(row);i++)
+					{
+						if(line.length()>0)
+							line += ", ";
+						line += table.getText(row, col);
+					}
+					strBuffer.append(line+"\n");
+				
+				AsyncCallback<ArrayList<ArrayList<String>>> callback = new AsyncCallback<ArrayList<ArrayList<String>>>()
+				{
+					public void onSuccess(ArrayList<ArrayList<String>> result)
+					{
+						download.setEnabled(true);
+						outputPanel.clear();
+						outputPanel.add(table);
+						table.removeAllRows();
+						for(int row=0;row<result.size();row++)
+						{
+							if(row==0)	table.getRowFormatter().addStyleName(0, "titlebartext");
+							ArrayList<String> colList = result.get(row);
+							for(int col=0;col< colList.size();col++)
+							{
+								HTML html = new HTML();
+								html.setText(colList.get(col));
+								table.setWidget(row, col, html);
+								DOM.setStyleAttribute(table.getCellFormatter().getElement(row, col),"backgroundColor", "F4F4F4");
+								DOM.setStyleAttribute(table.getCellFormatter().getElement(row, col),"border", "1px solid #E8E8E8");
+							}
+						}
+					}
+					public void onFailure(Throwable caught){
+						ExceptionManager.showException(caught, constants.searchSparqlResultFail());
+					}
+				};
+				Service.searchSerice.getSparqlSearchResults(MainApp.userOntology, wrapper.getValue(), "SPARQL", chkBox.getValue(), callback);}*/
+				
+				queryTXT.setValue(wrapper.getValue());
+				languageTXT.setValue("SPARQL");
+				ontologyTXT.setValue(""+MainApp.userOntology.getOntologyId());
+				inferTXT.setValue(chkBox.getValue().toString());
+				
+				form.submit();
 			}
 		});
 		
 		submit.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
+				download.setEnabled(false);
 				if(wrapper.getValue().equals(""))
 					Window.alert(constants.searchSparqlEmptyQuery());
 				else
@@ -219,6 +286,7 @@ public class SearchSPARQL extends Composite{
 					{
 						public void onSuccess(ArrayList<ArrayList<String>> result)
 						{
+							download.setEnabled(true);
 							outputPanel.clear();
 							outputPanel.add(table);
 							table.removeAllRows();
@@ -305,4 +373,31 @@ public class SearchSPARQL extends Composite{
     	ButtonElement submit = submitButton.getElement().cast();
     	return FlintEditorWrapper.createFlintEditorFromTextArea(text, status, submit, config); 
     }
+	
+	private void loadForm()
+	{
+			
+		VerticalPanel holder = new VerticalPanel();
+			
+		queryTXT.setVisible(false);
+		queryTXT.setName("query");
+		holder.add(queryTXT);
+		
+		languageTXT.setVisible(false);
+		languageTXT.setName("language");
+		holder.add(languageTXT);
+		
+		ontologyTXT.setVisible(false);
+		ontologyTXT.setName("ontology");
+		holder.add(ontologyTXT);
+		
+		inferTXT.setVisible(false);
+		inferTXT.setName("infer");
+		holder.add(inferTXT);
+		
+		form.add(holder);
+		form.setAction(GWT.getHostPageBaseURL()+"sparqlresult");
+		form.setMethod(FormPanel.METHOD_POST);
+		form.setVisible(false);
+	}
 }

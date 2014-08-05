@@ -26,7 +26,10 @@ public class SKOSXLResponseManager extends ResponseManager {
 	public static XMLResponseREPLY getLabelsRequest(OntologyInfo ontoInfo, String conceptURI, String lang)
 	{
 		
-		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.getLabelsRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(SKOS.Par.lang, lang));
+		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.getLabelsRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -38,7 +41,10 @@ public class SKOSXLResponseManager extends ResponseManager {
 	public static XMLResponseREPLY getPrefLabelRequest(OntologyInfo ontoInfo, String conceptURI, String lang)
 	{
 		
-		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.getPrefLabelRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(SKOS.Par.lang, lang));
+		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.getPrefLabelRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -49,7 +55,10 @@ public class SKOSXLResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getAltLabelsRequest(OntologyInfo ontoInfo, String conceptURI, String lang)
 	{
-		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.getAltLabelsRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(SKOS.Par.lang, lang));
+		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.getAltLabelsRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -60,7 +69,10 @@ public class SKOSXLResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY getHiddenLabelsRequest(OntologyInfo ontoInfo, String conceptURI, String lang)
 	{
-		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.getHiddenLabelsRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(SKOS.Par.lang, lang));
+		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.getHiddenLabelsRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -82,7 +94,8 @@ public class SKOSXLResponseManager extends ResponseManager {
 					STModel.par(SKOS.Par.broaderConcept, broaderConceptURI), 
 					STModel.par(SKOS.Par.scheme, schemeURI),
 					STModel.par(SKOS.Par.prefLabel, prefLabel), 
-					STModel.par(SKOS.Par.prefLabelLang, prefLabelLang));
+					STModel.par(SKOS.Par.prefLabelLang, prefLabelLang), 
+					STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		}
 		else
 		{
@@ -90,7 +103,8 @@ public class SKOSXLResponseManager extends ResponseManager {
 					STModel.par(SKOS.Par.concept, conceptURI), 
 					STModel.par(SKOS.Par.scheme, schemeURI),
 					STModel.par(SKOS.Par.prefLabel, prefLabel), 
-					STModel.par(SKOS.Par.prefLabelLang, prefLabelLang));
+					STModel.par(SKOS.Par.prefLabelLang, prefLabelLang), 
+					STModel.par("ctx_project", ontoInfo.getDbTableName()));
 			
 		}
 		return getXMLResponseREPLY(resp);
@@ -102,7 +116,9 @@ public class SKOSXLResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY deleteConceptRequest(OntologyInfo ontoInfo, String conceptURI)
 	{
-		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOS.Req.deleteConceptRequest, STModel.par(SKOS.Par.concept, conceptURI));
+		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOS.Req.deleteConceptRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -114,7 +130,12 @@ public class SKOSXLResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY setPrefLabelRequest(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
 	{
-		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.setPrefLabelRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(SKOS.Par.label, label), STModel.par(SKOS.Par.lang, lang), STModel.par(SKOSXL.Par.mode, "uri"));
+		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.setPrefLabelRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(SKOS.Par.label, label), 
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par(SKOSXL.Par.mode, "uri"), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -126,7 +147,11 @@ public class SKOSXLResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY removePrefLabelRequest(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
 	{
-		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.removePrefLabelRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(SKOS.Par.label, label), STModel.par(SKOS.Par.lang, lang));
+		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.removePrefLabelRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(SKOS.Par.label, label), 
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -138,7 +163,12 @@ public class SKOSXLResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY addAltLabelRequest(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
 	{
-		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.addAltLabelRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(SKOS.Par.label, label), STModel.par(SKOS.Par.lang, lang), STModel.par(SKOSXL.Par.mode, "uri"));
+		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.addAltLabelRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(SKOS.Par.label, label), 
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par(SKOSXL.Par.mode, "uri"), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	
@@ -150,7 +180,58 @@ public class SKOSXLResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY removeAltLabelRequest(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
 	{
-		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.removeAltLabelRequest, STModel.par(SKOS.Par.concept, conceptURI), STModel.par(SKOS.Par.label, label), STModel.par(SKOS.Par.lang, lang));
+		Response resp = getSTModel(ontoInfo).skosXLService.makeRequest(SKOSXL.Req.removeAltLabelRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(SKOS.Par.label, label), 
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param defaultLanguage
+	 * @return
+	 */
+	public static XMLResponseREPLY getAllSchemesListRequest(OntologyInfo ontoInfo, String schemeLang)
+	{
+		Response resp= getSTModel(ontoInfo).skosXLService.makeRequest(SKOS.Req.getAllSchemesListRequest,  STModel.par(SKOS.Par.lang, schemeLang), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param scheme
+	 * @param preferredLabel
+	 * @param preferredLabelLanguage
+	 * @param language
+	 * @return
+	 */
+	public static XMLResponseREPLY createSchemeRequest(OntologyInfo ontoInfo, String scheme, String preferredLabel, String preferredLabelLanguage, String language)
+	{
+		Response resp= getSTModel(ontoInfo).skosXLService.makeRequest(SKOS.Req.createSchemeRequest,  
+				STModel.par(SKOS.Par.scheme, scheme),  
+				STModel.par(SKOS.Par.prefLabel, preferredLabel),  
+				STModel.par(SKOS.Par.prefLabelLang, preferredLabelLanguage),  
+				STModel.par(SKOS.Par.lang, language), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param scheme
+	 * @param setForceDeleteDanglingConcepts
+	 * @param forceDeleteDanglingConcepts
+	 * @return
+	 */
+	public static XMLResponseREPLY deleteSchemeRequest(OntologyInfo ontoInfo, String scheme, Boolean setForceDeleteDanglingConcepts, Boolean forceDeleteDanglingConcepts)
+	{
+		Response resp= getSTModel(ontoInfo).skosXLService.makeRequest(SKOS.Req.deleteSchemeRequest,  
+				STModel.par(SKOS.Par.scheme, scheme),  
+				STModel.par(SKOS.Par.setForceDeleteDanglingConcepts, setForceDeleteDanglingConcepts.toString()),  
+				STModel.par(SKOS.Par.forceDeleteDanglingConcepts, forceDeleteDanglingConcepts.toString()), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 	

@@ -31,7 +31,9 @@ public class DeleteResponseManager extends ResponseManager {
 			String[] contents = uri.split("/");
 			name = contents[contents.length-1];
 		}
-		Response resp = getSTModel(ontoInfo).deleteService.makeRequest(Delete.removePropertyRequest, STModel.par("name", name));
+		Response resp = getSTModel(ontoInfo).deleteService.makeRequest(Delete.removePropertyRequest, 
+				STModel.par("name", name), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
 }
