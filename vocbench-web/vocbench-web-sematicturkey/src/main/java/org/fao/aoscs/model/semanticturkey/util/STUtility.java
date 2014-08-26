@@ -14,6 +14,8 @@ import java.util.HashMap;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.fao.aoscs.client.module.constant.OWLStatusConstants;
+import org.fao.aoscs.domain.ARTBNodeObject;
+import org.fao.aoscs.domain.ARTURIResourceObject;
 import org.fao.aoscs.domain.ClassObject;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.DomainRangeObject;
@@ -21,6 +23,7 @@ import org.fao.aoscs.domain.IDObject;
 import org.fao.aoscs.domain.LabelObject;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.RelationshipObject;
+import org.fao.aoscs.domain.ARTLiteralObject;
 import org.fao.aoscs.domain.TermObject;
 import org.fao.aoscs.domain.TranslationObject;
 import org.fao.aoscs.domain.TreeObject;
@@ -248,6 +251,61 @@ public class STUtility {
 		trObj.setDescription(description);
 		trObj.setType(type);
 		return trObj;
+	}
+	
+	/**
+	 * @param resource
+	 * @return
+	 */
+	public static ARTURIResourceObject createARTURIResourceObject(STResource resource)
+	{
+		ARTURIResourceObject stObj = new ARTURIResourceObject();
+		stObj.setExplicit(resource.isExplicit());
+		stObj.setRole(resource.getRole().name());
+		stObj.setShow(resource.getRendering());
+		stObj.setUri(resource.getARTNode().asURIResource().getURI());
+		//System.out.println("ARTURIResourceObject: "+stObj.getShow()+" : "+stObj.getNominalValue());
+		return stObj;
+	}
+	
+	/**
+	 * @param resource
+	 * @return
+	 */
+	public static ARTLiteralObject createARTLiteralObject(STLiteral resource, boolean isTypedLiteral)
+	{
+		ARTLiteralObject stObj = new ARTLiteralObject();
+		stObj.setLabel(resource.getARTNode().asLiteral().getLabel());
+		if(isTypedLiteral)
+		{
+			stObj.setLang("");
+			stObj.setDatatype(resource.getARTNode().asLiteral().getDatatype().getURI());
+		}
+		else
+		{
+			stObj.setLang(resource.getARTNode().asLiteral().getLanguage());
+			stObj.setDatatype("");
+		}
+		stObj.setTypedLiteral(isTypedLiteral);
+		stObj.setShow(resource.getRendering());
+		stObj.setExplicit(resource.isExplicit());
+		//System.out.println("ARTLiteralObject: "+stObj.getNominalValue());
+		return stObj;
+	}
+	
+	
+	/**
+	 * @param resource
+	 * @return
+	 */
+	public static ARTBNodeObject createARTBNodeObject(STResource resource)
+	{
+		ARTBNodeObject stObj = new ARTBNodeObject();
+		stObj.setId(resource.getARTNode().asBNode().getID());
+		stObj.setExplicit(resource.isExplicit());
+		stObj.setShow(resource.getRendering());
+		//System.out.println("ARTBNodeObject: "+stObj.getNominalValue());
+		return stObj;
 	}
 	
 	/**

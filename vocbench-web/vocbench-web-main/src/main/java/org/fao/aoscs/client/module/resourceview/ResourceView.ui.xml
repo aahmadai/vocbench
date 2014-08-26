@@ -1,0 +1,17 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with field='constants' type='org.fao.aoscs.client.locale.LocaleConstants'/>
+	
+	<g:HTMLPanel>
+	    <g:FlowPanel addStyleNames="myTableRow">
+	        <g:Label><ui:text from='{constants.conceptResource}'/></g:Label>
+	        <g:FlowPanel width="100%" addStyleNames="myTableCell">
+	            <g:TextBox ui:field="txtResourceURL" width="100%"/>
+	        </g:FlowPanel>
+	        <g:Button ui:field="btnRenameResourceURL" text="{constants.buttonEdit}"/>
+	    </g:FlowPanel>
+	    <g:FlowPanel ui:field="pnlResourceView">
+	    </g:FlowPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

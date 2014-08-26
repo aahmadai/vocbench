@@ -10,6 +10,7 @@ import org.fao.aoscs.client.utility.GridStyle;
 import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
@@ -37,6 +38,16 @@ public class ImportConfig extends FormDialogBox{
 	{
 		super.show();
 		this.submit.setEnabled(false);
+	}
+	
+	public void onClick(ClickEvent event) 
+	{
+		if(uploader!=null)
+		{
+			getUploader().cancel();
+			clearMessage();
+		}
+		super.onCancel();
 	}
 	
 	public void initLayout(){

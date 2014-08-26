@@ -22,6 +22,8 @@ import org.fao.aoscs.client.module.project.service.ProjectService.ProjectService
 import org.fao.aoscs.client.module.project.service.ProjectServiceAsync;
 import org.fao.aoscs.client.module.relationship.service.RelationshipService.RelationshipServiceUtil;
 import org.fao.aoscs.client.module.relationship.service.RelationshipServiceAsync;
+import org.fao.aoscs.client.module.resourceview.service.ResourceService.ResourceServiceUtil;
+import org.fao.aoscs.client.module.resourceview.service.ResourceServiceAsync;
 import org.fao.aoscs.client.module.scheme.service.SchemeService.SchemeServiceUtil;
 import org.fao.aoscs.client.module.scheme.service.SchemeServiceAsync;
 import org.fao.aoscs.client.module.search.service.SearchService.SearchServiceUtil;
@@ -56,4 +58,5 @@ public class Service {
 	public static OntologyServiceAsync<?> ontologyService = OntologyServiceUtil.getInstance();
 	public static ImportServiceAsync<?> importService = ImportServiceUtil.getInstance();
 	public static ProjectServiceAsync<?> projectService = ProjectServiceUtil.getInstance();
+	public static ResourceServiceAsync<?> resourceService = ResourceServiceUtil.getInstance();
 }

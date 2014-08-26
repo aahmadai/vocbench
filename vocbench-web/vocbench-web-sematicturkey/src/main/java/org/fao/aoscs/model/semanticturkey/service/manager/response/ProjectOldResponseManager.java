@@ -38,7 +38,7 @@ public class ProjectOldResponseManager extends ResponseManager {
 	public static XMLResponseREPLY openProjectRequest(OntologyInfo ontoInfo)
 	{
 		Response resp = getSTModel(ontoInfo).projectsOldService.makeRequest(ProjectsOld.Req.openProjectRequest, 
-				STModel.par(ProjectsOld.projectNamePar, ontoInfo.getOntologyName()), 
+				STModel.par(ProjectsOld.projectNamePar, ontoInfo.getDbTableName()), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}

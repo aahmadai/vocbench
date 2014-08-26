@@ -31,6 +31,8 @@ public class UserLogin extends LightEntity {
 
 	private UsersPreference usersPreference = new UsersPreference();
 	
+	private boolean isAdministrator;
+	
 	/**
 	 * @return the userid
 	 */
@@ -184,6 +186,20 @@ public class UserLogin extends LightEntity {
 	 */
 	public String getGroupname() {
 		return groupname;
+	}
+
+	/**
+	 * @return the isAdministrator
+	 */
+	public boolean isAdministrator() {
+		return isAdministrator;
+	}
+
+	/**
+	 * @param isAdministrator the isAdministrator to set
+	 */
+	public void setAdministrator(boolean isAdministrator) {
+		this.isAdministrator = isAdministrator;
 	}
 
 	

@@ -298,10 +298,11 @@ public class SystemServiceSystemImpl {
 			userLoginObj.setPassword(item[2]);
 			userLoginObj.setNoOfGroup(getNoOfGroups(Integer.parseInt(userLoginObj.getUserid())));
 			userLoginObj.setUserSelectedLanguage(getUserSelectedLanguageCode(Integer.parseInt(userLoginObj.getUserid())));
+			userLoginObj.setAdministrator(isAdministrator(Integer.parseInt(userLoginObj.getUserid())));
 		}
 		return userLoginObj;
 	} 
-
+	
 	public static UserLogin getUserLoginPermission(UserLogin userLoginObj) throws SQLException {
 
 		ArrayList<String> permissionlist = new ArrayList<String>();
@@ -460,12 +461,12 @@ public class SystemServiceSystemImpl {
 		try {
 			String query = "";
 			// if VISITOR then load read only ontology
-			if(ConfigConstants.ISVISITOR){
-				query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
-			}
-			else{
+			//if(ConfigConstants.ISVISITOR){
+			//	query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
+			//}
+			//else{
 				query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1'";
-			}
+			//}
 			
 			query += "AND ontology_id IN ( SELECT ontology_id FROM users_ontology WHERE user_id =  '"+userid +"' and status = 1)"; 
 			
@@ -566,6 +567,24 @@ public class SystemServiceSystemImpl {
 		return ontoInfo;
 	}
 	
+	private boolean isAdministrator(int user_id)
+	{
+		String sql = "select count(users_group_id) FROM users_groups_map WHERE users_id='"+ user_id +"' and users_group_id='1'" ;
+		ArrayList<String[]> ret = QueryFactory.getHibernateSQLQuery(sql);
+		
+		if(ret.size() > 0){
+			String[] countArray = (ret.get(0));
+			if(countArray.length > 0){
+				try{
+					int count = Integer.parseInt(countArray[0]);
+					return count > 0;
+				}
+				catch(Exception e)
+				{}
+			}
+		}
+		return false;	
+	}
 	
 	public int getNoOfGroups(int user_id){ 
 		String query = "select users_group_id FROM users_groups_map WHERE users_id='"+ user_id +"'" ;

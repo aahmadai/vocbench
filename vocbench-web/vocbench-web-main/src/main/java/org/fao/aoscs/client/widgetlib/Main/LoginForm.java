@@ -27,7 +27,13 @@ public class LoginForm extends VerticalPanel{
  	public LoginForm() 
 	{		
 		super();
-		VerticalPanel loginTitle = new VerticalPanel();
+		init(false);
+	}
+ 	
+ 	private void init(boolean showLogin)
+ 	{
+ 		this.clear();
+ 		VerticalPanel loginTitle = new VerticalPanel();
 		loginTitle.setStyleName("loginTitle");
 		loginTitle.add(new HTML(constants.loginTitle()));
 		if(!ConfigConstants.ISVISITOR){
@@ -46,15 +52,36 @@ public class LoginForm extends VerticalPanel{
 					signIn();
 				}
 			});
+			
 			this.add(loginTitle);
-			this.add(new Spacer("100%", "50px"));
-			this.add(signin);
+			if(showLogin)
+			{
+				Login login = new Login();
+				login.setStyleName("login");
+				this.add(login);
+				this.add(signin);
+			}
+			else
+			{
+				this.add(new Spacer("100%", "20px"));
+				LinkLabel linkLabel = new LinkLabel(null, constants.loginSignInAsAdministrator(), constants.loginSignInAsAdministrator()); 
+				linkLabel.setLabelStyle("toolbar-link");
+				linkLabel.addClickHandler(new ClickHandler(){
+					public void onClick(ClickEvent arg0) {
+						init(true);
+					}
+				});
+				this.add(signin);
+				this.add(linkLabel);
+			}
+			
+			this.setSpacing(10);
 			this.setCellVerticalAlignment(signin,HasVerticalAlignment.ALIGN_MIDDLE);
 			this.setCellHorizontalAlignment(signin,HasHorizontalAlignment.ALIGN_CENTER);
 			this.setCellWidth(loginTitle, "100%");
 			this.setCellHeight(loginTitle, "100%");
 		}
-	}
+ 	}
 	
 	private void signIn()
 	{

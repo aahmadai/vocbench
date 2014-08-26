@@ -3,6 +3,7 @@ package org.fao.aoscs.client.module.importdata;
 import gwtupload.client.IUploadStatus.Status;
 import gwtupload.client.IUploader;
 import gwtupload.client.IUploader.OnFinishUploaderHandler;
+import gwtupload.client.IUploader.UploadedInfo;
 import gwtupload.client.MultiUploader;
 
 import org.fao.aoscs.client.MainApp;
@@ -37,6 +38,7 @@ public class ImportData extends Composite{
 	private MultiUploader uploader;
 	Button save = new Button(constants.importButton());
 	TextBox txtBaseURI = new TextBox();
+	private UploadedInfo uploadedInfo = null;
 
 	public ImportData(){
 		initLayout();
@@ -51,7 +53,8 @@ public class ImportData extends Composite{
 				
 		    	if (uploader.getStatus() == Status.SUCCESS) {
 			        save.setEnabled(true);
-		    	}
+			        uploadedInfo = uploader.getServerInfo();
+			     }
 		    }
 		});
 		
@@ -67,7 +70,8 @@ public class ImportData extends Composite{
 						public void onSuccess(Boolean result){		
 							if(uploader!=null)
 							{
-								uploader.reset();
+								uploader.cancel();
+								uploadedInfo = null;
 							}
 							txtBaseURI.setText("");
 							showLoading(false);
@@ -79,13 +83,14 @@ public class ImportData extends Composite{
 						public void onFailure(Throwable caught){
 							if(uploader!=null)
 							{
-								uploader.reset();
+								uploader.cancel();
+								uploadedInfo = null;
 							}
 							showLoading(false);
 							ExceptionManager.showException(caught, constants.importFail());							
 						}
 					};
-					Service.importService.loadData(MainApp.userOntology, uploader.getServerInfo().message, txtBaseURI.getText(), null, callback);
+					Service.importService.loadData(MainApp.userOntology, uploadedInfo.message, txtBaseURI.getText(), null, callback);
 		    	}
 		    	else
 		    		Window.alert(constants.conceptCompleteInfo()); 
@@ -155,8 +160,7 @@ public class ImportData extends Composite{
 	}
 	
 	public boolean passCheckInput() {
-		return (txtBaseURI.getText().length()!=0 && uploader.getServerInfo().message.length()!=0);
-		
+		return (txtBaseURI.getText().length()!=0 && uploadedInfo.message.length()!=0);
 	}
 	
 	public void showLoading(boolean sayLoad){

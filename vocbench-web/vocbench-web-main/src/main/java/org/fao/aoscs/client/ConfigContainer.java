@@ -172,7 +172,7 @@ public class ConfigContainer extends Composite {
 						public void onSuccess(HashMap<String, ConfigObject> result){		
 							if(impConfig.getUploader()!=null)
 							{
-								impConfig.getUploader().reset();
+								impConfig.getUploader().cancel();
 								impConfig.clearMessage();
 							}
 							
@@ -209,7 +209,7 @@ public class ConfigContainer extends Composite {
 						public void onFailure(Throwable caught){
 							if(impConfig.getUploader()!=null)
 							{
-								impConfig.getUploader().reset();
+								impConfig.getUploader().cancel();
 								impConfig.clearMessage();
 							}
 							ExceptionManager.showException(caught, constants.importFail());							

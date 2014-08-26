@@ -181,6 +181,10 @@ public class Login extends Composite {
     					{
 			    			Window.alert(constants.loginNoAssignGroup());
 			    		}
+    					else if(ConfigConstants.ISVISITOR && !userLoginObj.isAdministrator())
+    					{
+			    			Window.alert(constants.loginOnlyAdministrator());
+			    		}
     					else if(userLoginObj.getUserSelectedLanguage().size()<1)
     					{
     						Window.alert(constants.loginNoAssignLang());

@@ -155,6 +155,7 @@ public interface LocaleConstants extends Constants{
 	public String loginRememberMe();
 	public String loginSignInAsAnonymous();
 	public String loginSignInAsVisitor();
+	public String loginSignInAsAdministrator();
 	public String loginTitle();
 
 	//Login>messages
@@ -162,6 +163,7 @@ public interface LocaleConstants extends Constants{
 	public String loginNoMatch();
 	public String loginNoAssignGroup();
 	public String loginNoAssignLang();
+	public String loginOnlyAdministrator();
 	public String loginFail();
 
 	//SelectPreferences
@@ -906,6 +908,8 @@ public interface LocaleConstants extends Constants{
 	public String conceptCopy();
 	public String conceptRemove();
 	public String conceptVisualize();
+	public String conceptResource();
+	public String conceptResourceView();
 	public String conceptSchemeAdd();
 	public String conceptSchemeDelete();
 	public String conceptAddNew();
@@ -1072,6 +1076,7 @@ public interface LocaleConstants extends Constants{
 	public String conceptRemoveFailOnlyOne();
 	public String conceptReloadFail();
 	public String conceptLoadFail();
+	public String conceptResourceViewFail();
 	public String conceptDefinitionDeleteWarning();
 	public String conceptDefinitionSourceDeleteWarning();
 	public String conceptValueDeleteWarning();

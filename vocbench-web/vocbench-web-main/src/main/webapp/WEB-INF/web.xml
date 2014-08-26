@@ -4,7 +4,7 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
     
 <web-app>
-	<display-name>VocBench 2.2</display-name>
+	<display-name>VocBench ${pom.version}</display-name>
 	
 	<context-param>
 	    <param-name>maxSize</param-name>
@@ -105,6 +105,10 @@
 	<servlet>
 		<servlet-name>org.fao.aoscs.server.ProjectServiceImpl</servlet-name>
 		<servlet-class>org.fao.aoscs.server.ProjectServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>org.fao.aoscs.server.ResourceServiceImpl</servlet-name>
+		<servlet-class>org.fao.aoscs.server.ResourceServiceImpl</servlet-class>
 	</servlet>
 	 <servlet>
     	<servlet-name>org.fao.aoscs.server.FileUpload</servlet-name>
@@ -244,6 +248,11 @@
 	<servlet-mapping>
 		<servlet-name>org.fao.aoscs.server.ProjectServiceImpl</servlet-name>
 		<url-pattern>/vocbench/project</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>org.fao.aoscs.server.ResourceServiceImpl</servlet-name>
+		<url-pattern>/vocbench/resource</url-pattern>
 	</servlet-mapping>
 	
 	<servlet-mapping>

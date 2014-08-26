@@ -3,20 +3,16 @@
  */
 package org.fao.aoscs.model.semanticturkey.service;
 
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
 import org.fao.aoscs.domain.OntologyConfigurationManager;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.service.manager.MetadataManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.OntManagerManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.ProjectManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.SystemStartManager;
+import org.fao.aoscs.model.semanticturkey.util.STModelFactory;
 import org.fao.aoscs.model.semanticturkey.util.STXMLUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,76 +37,18 @@ public class ProjectServiceSTImpl {
 			logger.debug(ontoInfo.getOntologyName()+" cannot be opened!!!");
 			return null;
 		}
-		/*boolean open = false;
-		String projectName = ontoInfo.getOntologyName();
-		if(ProjectManager.isCurrentProjectActiveRequest(ontoInfo))
-		{
-			String currentProjectName = ProjectManager.getCurrentProject(ontoInfo);
-			if(!projectName.equals(currentProjectName))
-			{
-				ProjectManager.closeProject(ontoInfo);
-				open = true;
-			}
-			else
-				logger.debug(projectName+" already opened!!!");
-		}
-		else
-			open = true;
-		
-		if(open)
-		{
-			if(ProjectManager.openProject(ontoInfo))
-				logger.debug(projectName+" successfully opened!!!");
-			else
-			{
-				logger.debug(projectName+" cannot be opened!!!");
-				return null;
-			}
-		}
-		*/
 		String[] values = new String[2];
 		values[0] = MetadataManager.getDefaultNamespace(ontoInfo);
-		values[1] = ProjectManager.getProjectProperty(ontoInfo, STXMLUtility.SKOS_SELECTED_SCHEME, ontoInfo.getOntologyName());
+		values[1] = ProjectManager.getProjectProperty(ontoInfo, STXMLUtility.SKOS_SELECTED_SCHEME, ontoInfo.getDbTableName());
 		return values;
 	}
 	
-	/*public Boolean isSTServerStarted(OntologyInfo ontoInfo)  {
-		String URLName = ontoInfo.getDbDriver();
-		try
-		{
-	      HttpURLConnection.setFollowRedirects(false);
-	      HttpURLConnection con = (HttpURLConnection) new URL(URLName).openConnection();
-	      con.setRequestMethod("HEAD");
-	      con.setConnectTimeout(15000); //set timeout to 15 seconds
-	      con.setReadTimeout(15000);
-	      //logger.debug("Connection response code: "+con.getResponseCode()+"  :: "+ HttpURLConnection.HTTP_OK);
-	      System.out.println("Connection URL: "+URLName);
-	      System.out.println("Connection response code: "+con.getResponseCode()+"  :: "+ HttpURLConnection.HTTP_OK);
-	      return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
-	    }
-	    catch (Exception e) {
-	    	//logger.debug("Connection error:"+e.getLocalizedMessage());
-	    	e.printStackTrace();
-	       return false;
-	    }
-	}*/
-	
+	/**
+	 * @param ontoInfo
+	 * @return
+	 */
 	public Boolean isSTServerStarted(OntologyInfo ontoInfo)  {
-		String URLName = ontoInfo.getDbDriver();
-		HttpClient httpclient;
-		try
-		{
-			HttpGet httpRequest = new HttpGet(URLName);
-			httpclient = HttpClients.createDefault(); 
-			HttpResponse response = httpclient.execute(httpRequest);
-			int statusCode = response.getStatusLine().getStatusCode();
-	        logger.debug("Connection response code: "+statusCode+"  :: "+ HttpURLConnection.HTTP_OK+" : "+URLName);
-			return (statusCode == HttpURLConnection.HTTP_OK);
-		}
-		catch (Exception e) {
-			logger.debug("Connection error:"+e.getLocalizedMessage());
-			return false;
-		}
+		return STModelFactory.isSTServerStarted(ontoInfo);
 	}
 	
 	/* (non-Javadoc)

@@ -11,6 +11,7 @@ import org.fao.aoscs.client.module.importdata.service.ImportService;
 import org.fao.aoscs.client.module.ontology.service.OntologyService;
 import org.fao.aoscs.client.module.project.service.ProjectService;
 import org.fao.aoscs.client.module.relationship.service.RelationshipService;
+import org.fao.aoscs.client.module.resourceview.service.ResourceService;
 import org.fao.aoscs.client.module.scheme.service.SchemeService;
 import org.fao.aoscs.client.module.search.service.SearchService;
 import org.fao.aoscs.client.module.statistic.service.StatisticsService;
@@ -262,6 +263,23 @@ public class ModelManager implements BasicModelManager {
 			logger.error(e.getLocalizedMessage());
 		}
 		return importService;
+	}
+	
+	public ResourceService getResourceService() {
+		
+		ResourceService resourceService = null;
+		try
+		{
+			Class<?> cls = Class.forName(getModelType());
+			Method m = cls.getMethod("getResourceService");
+			resourceService = (ResourceService) m.invoke(cls.newInstance());
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
+		}
+		return resourceService;
 	}
 
 }

@@ -16,6 +16,7 @@ import org.fao.aoscs.client.module.constant.ConceptActionKey;
 import org.fao.aoscs.client.module.constant.OWLActionConstants;
 import org.fao.aoscs.client.module.constant.OWLStatusConstants;
 import org.fao.aoscs.client.module.constant.Style;
+import org.fao.aoscs.client.module.resourceview.ResourceViewer;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
@@ -107,6 +108,9 @@ public class ConceptTree extends Composite{
     private RemoveConcept removeConcept;
     private AddConceptToScheme addConceptToScheme;
     private RemoveConceptToScheme removeConceptToScheme;
+    
+    private ImageAOS resourceView;
+    private ResourceViewer resourceViewer;
     
     //private String VgraphURL = "";
     private FormPanel form = new FormPanel("_wbgraph");
@@ -535,6 +539,22 @@ public class ConceptTree extends Composite{
 		});
 		DOM.setStyleAttribute(visualize.getElement(), "cursor", "pointer");
 		
+		resourceView =  new ImageAOS(constants.conceptResourceView(), "images/res-grey.png", "images/res-grey-disabled.png", schemePermission, new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(selectedConceptObject==null)
+					Window.alert(constants.conceptSelectConcept());
+				else
+				{
+					if(resourceViewer == null || !resourceViewer.isLoaded)
+					{
+						resourceViewer = new ResourceViewer();
+					}
+					resourceViewer.show(selectedConceptObject.getUri());
+				}
+			}
+		});
+		DOM.setStyleAttribute(resourceView.getElement(), "cursor", "pointer");
+		
 		
 		/*Image selectrootconcept = new Image("images/root-grey.gif");
 		selectrootconcept.setTitle(constants.conceptSelectRootConcept());
@@ -601,6 +621,10 @@ public class ConceptTree extends Composite{
 		hp.add(visualize);
 		hp.setCellHorizontalAlignment(visualize, HasHorizontalAlignment.ALIGN_LEFT);		
 		hp.setCellVerticalAlignment(visualize, HasVerticalAlignment.ALIGN_MIDDLE);
+		
+		hp.add(resourceView);
+		hp.setCellHorizontalAlignment(resourceView, HasHorizontalAlignment.ALIGN_LEFT);		
+		hp.setCellVerticalAlignment(resourceView, HasVerticalAlignment.ALIGN_MIDDLE);
 
 		hp.add(checkPanel);
 		hp.setSpacing(1);
@@ -779,6 +803,7 @@ public class ConceptTree extends Composite{
 		addConceptToSchemeButton.setEnable(false);
 		removeConceptToSchemeButton.setEnable(false);
 		visualize.setEnable(false);
+		resourceView.setEnable(false);
 
 		URI.setText(conceptURI);
 		detailPanel.resetTab();
@@ -800,6 +825,7 @@ public class ConceptTree extends Composite{
 				addConceptToSchemeButton.setEnable(true);
 				removeConceptToSchemeButton.setEnable(true);
 				visualize.setEnable(true);
+				resourceView.setEnable(true);
 				
 				//VgraphURL = GWT.getHostPageBaseURL()+"graph.jsp?concept="+selectedConceptObject.getUri()+"&language="+convertArrayList2String(MainApp.userSelectedLanguage,"_")+"&ontology="+MainApp.userOntology.getDbTableName()+"&wsurl="+MainApp.userOntology.getDbDriver();
 				formLoad(selectedConceptObject.getUri());

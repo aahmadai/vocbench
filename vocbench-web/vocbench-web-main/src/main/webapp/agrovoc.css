@@ -1509,6 +1509,13 @@ div:focus{
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='rgb(225,240,254)', endColorstr='rgb(200,220,244)');
 }
 
+.myTableRow {
+    display: table-row;
+}
+
+.myTableCell {
+    display: table-cell;
+}
 
 
 

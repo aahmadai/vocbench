@@ -35,6 +35,7 @@ public class STModel {
 	public ServiceWrapper projectsOldService;
 	public ServiceWrapper projectsService;
 	public ServiceWrapper pluginsService;
+	public ServiceWrapper resourceViewService;
 	public ServiceWrapper resourceService;
 	public ServiceWrapper sparqlService;
 	public ServiceWrapper statementService;
@@ -111,6 +112,7 @@ public class STModel {
 		projectsOldService = new ServiceHttpWrapper("projects", stURL);
 		projectsService = new ServiceHttpWrapper("Projects", stURL);
 		resourceService = new ServiceHttpWrapper("resource", stURL);
+		resourceViewService = new ServiceHttpWrapper("ResourceView", stURL);
 		searchOntologyService = new ServiceHttpWrapper("ontologySearch", stURL);
 		synonymsService = new ServiceHttpWrapper("synonyms", stURL);
 		systemStartService = new ServiceHttpWrapper("systemStart", stURL);

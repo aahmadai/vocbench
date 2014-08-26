@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.fao.aoscs.client.locale.LocaleConstants;
+import org.fao.aoscs.client.module.project.service.ProjectService.ProjectServiceUtil;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
@@ -134,6 +135,15 @@ public class ManageProject extends FormDialogBox implements ClickHandler{
 			
 			public void onClick(ClickEvent event) {
 				
+				tripleStore.clear();
+				mode.clear();
+				bottomTable.removeAllRows();
+				
+				bottomPanel.setVisible(false);
+				triplePanel.setVisible(false);
+				middlePanel.setVisible(false);
+				bottomPanel.setVisible(false);
+				
 				if(!projectName.getText().equals("") && !projectDesc.getText().equals("") && projectType.getValue(projectType.getSelectedIndex()).length()!=0 && !stURL.getText().equals("") && Convert.isValidURL(baseURI.getText()) && Convert.isValidURL(stURL.getText()))
 				{
 					ontoInfo = new OntologyInfo();
@@ -144,8 +154,19 @@ public class ManageProject extends FormDialogBox implements ClickHandler{
 					ontoInfo.setDbUrl("");
 					ontoInfo.setDbUsername("");
 					ontoInfo.setDbPassword("");
-					listTripleStores();
 					
+					AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+						public void onSuccess(Boolean val) {
+							if(val)
+								listTripleStores();
+							else
+								Window.alert(constants.projectSTServiceFail());
+						}
+						public void onFailure(Throwable caught) {
+							ExceptionManager.showException(caught, constants.projectSTServiceFail());
+						}
+					};
+					ProjectServiceUtil.getInstance().isSTServerStarted(ontoInfo, callback);
 				}
 				else
 					Window.alert(constants.conceptCompleteInfo());

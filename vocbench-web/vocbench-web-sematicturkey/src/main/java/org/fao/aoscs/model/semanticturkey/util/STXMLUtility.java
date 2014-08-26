@@ -184,7 +184,7 @@ public class STXMLUtility {
 				String role = typedLiteralElem.getAttribute("role");
 				String show = typedLiteralElem.getAttribute("show");
 				ARTNodeFactoryImpl artNFI = new ARTNodeFactoryImpl();
-				uriResources.add(new STURIImpl(artNFI.createURIResource(label),  getRDFResourceRolesEnum(role), explicit, show));
+				uriResources.add(new STBNodeImpl(artNFI.createBNode(label),  getRDFResourceRolesEnum(role), explicit, show));
 			}
 		}
 		return uriResources;
