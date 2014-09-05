@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 27, 2014 5:57:12 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.fao.aoscs.domain.StInstances" table="st_instances">
+        <composite-id name="id" class="org.fao.aoscs.domain.StInstancesId">
+            <key-property name="stName" type="string">
+                <column name="st_name" />
+            </key-property>
+            <key-property name="stDomain" type="string">
+                <column name="st_domain" />
+            </key-property>
+            <key-property name="stPort" type="string">
+                <column name="st_port" length="7" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>
