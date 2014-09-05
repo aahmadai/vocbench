@@ -15,6 +15,7 @@ import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.fao.aoscs.client.module.constant.OWLStatusConstants;
 import org.fao.aoscs.domain.ARTBNodeObject;
+import org.fao.aoscs.domain.ARTLiteralObject;
 import org.fao.aoscs.domain.ARTURIResourceObject;
 import org.fao.aoscs.domain.ClassObject;
 import org.fao.aoscs.domain.ConceptObject;
@@ -23,12 +24,12 @@ import org.fao.aoscs.domain.IDObject;
 import org.fao.aoscs.domain.LabelObject;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.RelationshipObject;
-import org.fao.aoscs.domain.ARTLiteralObject;
 import org.fao.aoscs.domain.TermObject;
 import org.fao.aoscs.domain.TranslationObject;
 import org.fao.aoscs.domain.TreeObject;
 import org.fao.aoscs.model.semanticturkey.STModelConstants;
 import org.fao.aoscs.model.semanticturkey.service.manager.PropertyManager;
+import org.fao.aoscs.model.semanticturkey.service.manager.SKOSManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.VocbenchManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.SKOSXLResponseManager;
 import org.fao.aoscs.server.utility.DateUtility;
@@ -107,10 +108,7 @@ public class STUtility {
 	{
 		TreeObject treeObj = new TreeObject();
 		treeObj.setUri(uri);
-		//treeObj.setInstance(uri);
-		//treeObj.setName(name);
 		treeObj.setStatus(status);
-		//treeObj.setNameSpace(uri);
 		treeObj.setLabel(label);
 		treeObj.setHasChild(hasChild);
 		
@@ -671,6 +669,69 @@ public class STUtility {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param oldSchemeURI
+	 * @param newSchemeURI
+	 * @param conceptURI
+	 * @param parentConceptURI
+	 * @param status
+	 * @param actionId
+	 * @param userId
+	 */
+	public static void linkConcept(OntologyInfo ontoInfo, String oldSchemeURI, String newSchemeURI, String conceptURI, String parentConceptURI){
+		
+		if(parentConceptURI==null || parentConceptURI.equals(""))
+		{
+			SKOSManager.addTopConcept(ontoInfo, conceptURI, newSchemeURI);
+		}
+		else if(!conceptURI.equals(parentConceptURI))
+		{
+			boolean isTopconcept = SKOSManager.isTopConcept(ontoInfo, conceptURI, oldSchemeURI);
+			SKOSManager.addBroaderConcept(ontoInfo, conceptURI, parentConceptURI);
+			
+			// TODO on ST UPDATE : Fixes for when adding concept which is a top concept to different broader concept, it removes itself as top concept.
+			try
+			{
+				if(isTopconcept)
+					SKOSManager.addTopConcept(ontoInfo, conceptURI, oldSchemeURI);
+			}
+			catch(Exception e)
+			{
+				logger.debug(e.getLocalizedMessage());
+			}
+		}
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param schemeUri
+	 * @param conceptURI
+	 * @param parentConceptURI
+	 * @param status
+	 * @param actionId
+	 * @param userId
+	 * @return
+	 */
+	public static Integer unlinkConcept(OntologyInfo ontoInfo, String schemeUri, String conceptURI, String parentConceptURI){
+		int cnt = 0;
+		if(SKOSManager.isTopConcept(ontoInfo, conceptURI, schemeUri))
+			cnt = 1;
+		ArrayList<String> broaderList = SKOSManager.getBroaderConceptsURI(ontoInfo, conceptURI, schemeUri);
+		if(broaderList!=null)
+			cnt += broaderList.size();
+		if(cnt>1)
+		{
+			if(parentConceptURI==null || parentConceptURI.equals(""))
+			{
+				SKOSManager.removeTopConcept(ontoInfo, conceptURI, schemeUri);
+			}
+			else 
+				SKOSManager.removeBroaderConcept(ontoInfo, conceptURI, parentConceptURI);
+		}
+		return cnt;
 	}
 	
 	public static String convertArrayToString(ArrayList<?> list, String separator)

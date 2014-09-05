@@ -1390,6 +1390,7 @@ public interface LocaleConstants extends Constants{
 	public String buttonViewSearchResult();
 	public String buttonSaveAndDownload();
 	public String buttonDownload();
+	public String buttonManage();
 	
 	//Projects
 	public String projectProjectName();
@@ -1397,6 +1398,7 @@ public interface LocaleConstants extends Constants{
 	public String projectProjectType();
 	public String projectBaseURI();
 	public String projectSTServerURL();
+	public String projectSTServerInstance();
 	public String projectTripleStore();
 	public String projectTripleMode();
 	public String projectConfigurationValue();
@@ -1412,6 +1414,12 @@ public interface LocaleConstants extends Constants{
 	public String projectRepositoryURL();
 	public String projectRepositoryUsername();
 	public String projectRepositoryPassword();
+	
+	public String projectSTServerName();
+	public String projectSTServerDomain();
+	public String projectSTServerPort();
+	public String projectSTServerManageFail();
+	public String projectSTServerLoadFail();
 	
 	//Exception
 	public String exceptionExceptionDetails();

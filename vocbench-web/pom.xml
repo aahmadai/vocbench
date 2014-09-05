@@ -22,6 +22,15 @@
 		<name>Food and Agriculture Organization (FAO) of the United Nations</name>
 		<url>http://www.fao.org</url>
 	</organization>
+	<scm>
+		<url>https://bitbucket.org/art-uniroma2/vocbench.git</url>
+		<connection>scm:git:https://bitbucket.org/art-uniroma2/vocbench.git</connection>
+		<developerConnection>scm:git:https://bitbucket.org/art-uniroma2/vocbench.git</developerConnection>
+	</scm>
+	<issueManagement>
+		<url>https://aims-fao.atlassian.net/browse/VOCBENCH</url>
+		<system>Jira</system>
+	</issueManagement>
 	
 	<distributionManagement>
 		<repository>
@@ -73,11 +82,10 @@
 		</dependencies>
 	</dependencyManagement>
 
-
-
 	<modules>
 		<module>vocbench-web-shared</module>
 		<module>vocbench-web-main</module>
 		<module>vocbench-web-sematicturkey</module>
 	</modules>
+	
 </project>

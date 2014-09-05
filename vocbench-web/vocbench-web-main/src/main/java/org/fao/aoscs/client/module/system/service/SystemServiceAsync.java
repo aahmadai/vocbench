@@ -15,6 +15,7 @@ import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlAction;
 import org.fao.aoscs.domain.OwlStatus;
 import org.fao.aoscs.domain.PermissionFunctionalityMap;
+import org.fao.aoscs.domain.StInstances;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
@@ -85,5 +86,14 @@ public interface SystemServiceAsync<T> {
 	void checkDBConnection(AsyncCallback<Boolean> callback);
 	void getDBMigrationList(AsyncCallback<ArrayList<DBMigrationObject>> callback);
 	void runDBMigration(String initVersion, AsyncCallback<ArrayList<DBMigrationObject>> callback);
+	
+	void listSTServer(OntologyInfo ontoInfo,
+			AsyncCallback<ArrayList<StInstances>> callback);
+
+	void addSTServer(OntologyInfo ontoInfo, StInstances stInstances,
+			AsyncCallback<Boolean> callback);
+
+	void deleteSTServer(OntologyInfo ontoInfo, StInstances stInstances,
+			AsyncCallback<Boolean> callback);
 	
 }

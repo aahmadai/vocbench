@@ -6,6 +6,7 @@ package org.fao.aoscs.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.fao.aoscs.client.STServerInstances.SelectSTServerDialogBoxOpener;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.module.project.service.ProjectService.ProjectServiceUtil;
 import org.fao.aoscs.client.utility.Convert;
@@ -17,6 +18,7 @@ import org.fao.aoscs.client.widgetlib.shared.misc.OlistBox;
 import org.fao.aoscs.domain.OntologyConfigurationManager;
 import org.fao.aoscs.domain.OntologyConfigurationParameters;
 import org.fao.aoscs.domain.OntologyInfo;
+import org.fao.aoscs.domain.StInstances;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -39,12 +41,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * @author rajbhandari
  *
  */
-public class ManageProject extends FormDialogBox implements ClickHandler{
+public class ManageProject extends FormDialogBox implements ClickHandler, SelectSTServerDialogBoxOpener{
 	
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	
-	private TextBox stURL;
-	private Button stConnect;
+	private ListBox stURL;
+	private Button stManage;
 	private TextBox projectName;
 	private TextArea projectDesc;
 	private ListBox projectType;
@@ -70,13 +72,15 @@ public class ManageProject extends FormDialogBox implements ClickHandler{
 	
 	private int action = -1;
 	
-	private int widthTable = 400;  
-	private int widthCol1 = 200;  
-	private int widthCol2 = 225;
+	private int widthTable = 500;  
+	private int widthCol1 = 250;  
+	private int widthCol2 = 275;
 	private int widthCol3 = 25;
-	private int widthWidget = 225;
+	private int widthWidget = 275;
 	
 	private ProjectDialogBoxOpener opener;
+	
+	private STServerInstances selectSTServer;
 
 	private String userId;
 	
@@ -120,8 +124,15 @@ public class ManageProject extends FormDialogBox implements ClickHandler{
 		projectType.setWidth(widthWidget+"px");
 		projectType.addItem("SKOS-XL", "it.uniroma2.art.owlart.models.SKOSXLModel");
 
-		stURL = new TextBox();
+		stURL = new ListBox();
 		stURL.setWidth("100%");
+		stURL.addChangeHandler(new ChangeHandler() {
+			public void onChange(ChangeEvent event) {
+				if(!stURL.getValue(stURL.getSelectedIndex()).equals(""))
+					connect();
+			}
+		});
+		listSTServerInstances();
 		
 		baseURI = new TextBox();
 		baseURI.setWidth(widthWidget+"px");
@@ -130,53 +141,21 @@ public class ManageProject extends FormDialogBox implements ClickHandler{
 		tripleStore.setWidth(widthWidget+"px");
 		triplePanel.add(tripleStore);
 		
-		stConnect = new Button(constants.buttonConnect());
-		stConnect.addClickHandler(new ClickHandler() {
+		stManage = new Button(constants.buttonManage());
+		stManage.addClickHandler(new ClickHandler() {
 			
+			@Override
 			public void onClick(ClickEvent event) {
-				
-				tripleStore.clear();
-				mode.clear();
-				bottomTable.removeAllRows();
-				
-				bottomPanel.setVisible(false);
-				triplePanel.setVisible(false);
-				middlePanel.setVisible(false);
-				bottomPanel.setVisible(false);
-				
-				if(!projectName.getText().equals("") && !projectDesc.getText().equals("") && projectType.getValue(projectType.getSelectedIndex()).length()!=0 && !stURL.getText().equals("") && Convert.isValidURL(baseURI.getText()) && Convert.isValidURL(stURL.getText()))
-				{
-					ontoInfo = new OntologyInfo();
-					ontoInfo.setOntologyName(projectName.getText());
-					ontoInfo.setDbTableName(projectName.getText());
-					ontoInfo.setOntologyDescription(projectDesc.getText());
-					ontoInfo.setDbDriver(stURL.getText());
-					ontoInfo.setDbUrl("");
-					ontoInfo.setDbUsername("");
-					ontoInfo.setDbPassword("");
-					
-					AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
-						public void onSuccess(Boolean val) {
-							if(val)
-								listTripleStores();
-							else
-								Window.alert(constants.projectSTServiceFail());
-						}
-						public void onFailure(Throwable caught) {
-							ExceptionManager.showException(caught, constants.projectSTServiceFail());
-						}
-					};
-					ProjectServiceUtil.getInstance().isSTServerStarted(ontoInfo, callback);
-				}
-				else
-					Window.alert(constants.conceptCompleteInfo());
+				if(selectSTServer == null || !selectSTServer.isLoaded )
+					selectSTServer = new STServerInstances();
+				selectSTServer.show(ManageProject.this); 
 			}
 		});
-		
+			
 		HorizontalPanel stPanel = new HorizontalPanel();
 		stPanel.setSize(widthWidget+"px", "100%");
 		stPanel.add(stURL);
-		stPanel.add(stConnect);
+		stPanel.add(stManage);
 		stPanel.setCellWidth(stURL, "100%");
 		
 		mode = new OlistBox();
@@ -278,7 +257,7 @@ public class ManageProject extends FormDialogBox implements ClickHandler{
 				topTable.setWidget(2, 1, projectType);
 				topTable.setWidget(3, 0, new HTML(constants.projectBaseURI()));			
 				topTable.setWidget(3, 1, baseURI);
-				topTable.setWidget(4, 0, new HTML(constants.projectSTServerURL()));			
+				topTable.setWidget(4, 0, new HTML(constants.projectSTServerInstance()));			
 				topTable.setWidget(4, 1, stPanel);
 				break;
 			case 1:
@@ -301,6 +280,66 @@ public class ManageProject extends FormDialogBox implements ClickHandler{
 		
 		this.setText(title);
 		this.submit.setText(buttonText);
+	}
+	
+	private void connect()
+	{
+		tripleStore.clear();
+		mode.clear();
+		bottomTable.removeAllRows();
+		
+		bottomPanel.setVisible(false);
+		triplePanel.setVisible(false);
+		middlePanel.setVisible(false);
+		bottomPanel.setVisible(false);
+		
+		if(!projectName.getText().equals("") && !projectDesc.getText().equals("") && projectType.getValue(projectType.getSelectedIndex()).length()!=0 && !stURL.getValue(stURL.getSelectedIndex()).equals("") && Convert.isValidURL(baseURI.getText()) && Convert.isValidURL(stURL.getValue(stURL.getSelectedIndex())))
+		{
+			ontoInfo = new OntologyInfo();
+			ontoInfo.setOntologyName(projectName.getText());
+			ontoInfo.setDbTableName(projectName.getText());
+			ontoInfo.setOntologyDescription(projectDesc.getText());
+			ontoInfo.setDbDriver(stURL.getValue(stURL.getSelectedIndex()));
+			ontoInfo.setDbUrl("");
+			ontoInfo.setDbUsername("");
+			ontoInfo.setDbPassword("");
+			
+			AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+				public void onSuccess(Boolean val) {
+					if(val)
+						listTripleStores();
+					else
+						Window.alert(constants.projectSTServiceFail());
+				}
+				public void onFailure(Throwable caught) {
+					ExceptionManager.showException(caught, constants.projectSTServiceFail());
+				}
+			};
+			ProjectServiceUtil.getInstance().isSTServerStarted(ontoInfo, callback);
+		}
+		else
+		{
+			Window.alert(constants.conceptCompleteInfo());
+			stURL.setSelectedIndex(0);
+		}
+	}
+	
+	public void listSTServerInstances()
+	{
+		stURL.clear();
+		stURL.addItem(constants.buttonSelect(), "");
+		AsyncCallback<ArrayList<StInstances>> callback = new AsyncCallback<ArrayList<StInstances>>() {
+			public void onSuccess(ArrayList<StInstances> result) {
+				for(StInstances stIns : result)
+				{
+					stURL.addItem(stIns.getId().getStName(), "http://"+stIns.getId().getStDomain()+":"+stIns.getId().getStPort());
+				}
+			}
+			public void onFailure(Throwable caught){
+				ExceptionManager.showException(caught, constants.projectSTServerLoadFail());
+			}
+		};
+		Service.systemService.listSTServer(ontoInfo, callback);
 	}
 	
 	public void listTripleStores()
@@ -363,8 +402,8 @@ public class ManageProject extends FormDialogBox implements ClickHandler{
 				pass = (!projectName.getText().equals("") && 
 						!projectDesc.getText().equals("") && 
 						projectType.getValue(projectType.getSelectedIndex()).length()!=0 &&
-						!stURL.getText().equals("") && 
-						Convert.isValidURL(baseURI.getText()) && Convert.isValidURL(stURL.getText()));
+						!stURL.getValue(stURL.getSelectedIndex()).equals("") && 
+						Convert.isValidURL(baseURI.getText()) && Convert.isValidURL(stURL.getValue(stURL.getSelectedIndex())));
 				if(triplePanel.isVisible())
 					pass = pass &&	tripleStore.getValue(tripleStore.getSelectedIndex()).length()!=0;
 				else
@@ -497,5 +536,8 @@ public class ManageProject extends FormDialogBox implements ClickHandler{
 		}
 	}
 	
-	
+	public void selectSTServerDialogBoxSubmit() {
+		listSTServerInstances();
+	}
+
 }

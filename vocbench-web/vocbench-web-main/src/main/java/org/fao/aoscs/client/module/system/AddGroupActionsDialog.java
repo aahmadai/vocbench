@@ -12,7 +12,8 @@ import org.fao.aoscs.domain.OwlStatus;
 import org.fao.aoscs.domain.PermissionFunctionalityMap;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -32,8 +33,6 @@ public class AddGroupActionsDialog extends FlexDialogBox implements ClickHandler
 	private ListBox statusList = new ListBox();
 	private VerticalPanel permission_statusList = new VerticalPanel();
 	private String groupId;
-	public String actionId;
-	private int selectedStatusId = -1;
 	
 	public AddGroupActionsDialog(String gid, final String aid) {
 		super(constants.buttonAdd(), constants.buttonCancel(), constants.buttonAddAgain());
@@ -41,19 +40,21 @@ public class AddGroupActionsDialog extends FlexDialogBox implements ClickHandler
 		setText(constants.groupAddAction());
 		center();
 		
-		initActionList(gid, aid);
-		
-		AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {	
-			public void onSuccess(Integer tmp) {
-				selectedStatusId = tmp;
-				initStatusList(aid, groupId);
-				initPermissionStatusList(aid, groupId);
+		AsyncCallback<ArrayList<OwlStatus>> callback = new AsyncCallback<ArrayList<OwlStatus>>() {	
+			public void onSuccess(ArrayList<OwlStatus> tmp) {
+				statusList.clear();
+				statusList.addItem("--"+constants.buttonSelect()+"--", "-1");
+				for(int i=0;i<tmp.size();i++){
+					OwlStatus os = (OwlStatus)tmp.get(i);
+					statusList.addItem(os.getStatus(), ""+os.getId());
+				}
+				initActionList(groupId, aid);
 			}
 			public void onFailure(Throwable caught) {
-				ExceptionManager.showException(caught, constants.groupSelectAction());
+				ExceptionManager.showException(caught, constants.groupUserListFail());
 			}
 		};
-		Service.systemService.getSelectedGroupActionStatusID(gid, aid, callback);
+		Service.validationService.getStatus(callback);
 		
 		// create UI for action-status input
 		container.add(createStatusInput(constants.groupActions()+":&nbsp;", actionList));
@@ -66,13 +67,13 @@ public class AddGroupActionsDialog extends FlexDialogBox implements ClickHandler
 		addWidget(container);
 		
 		// action list select handler
-		actionList.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
+		actionList.addChangeHandler(new ChangeHandler(){
+			public void onChange(ChangeEvent event) {
 				ListBox b = (ListBox)event.getSource();
 				final String action = b.getValue(b.getSelectedIndex());
 				if(action.equals("-1"))
 				{
-					statusList.clear();
+					statusList.setSelectedIndex(0);
 					permission_statusList.clear();
 				}
 				else
@@ -111,7 +112,10 @@ public class AddGroupActionsDialog extends FlexDialogBox implements ClickHandler
 				}
 				actionList.setSelectedIndex(selectedIndex);
 				if(selectedIndex > 0)
+				{
 					initStatusList(aid, groupId);
+					initPermissionStatusList(aid, groupId);
+				}
 			}
 
 			public void onFailure(Throwable caught) {
@@ -122,23 +126,23 @@ public class AddGroupActionsDialog extends FlexDialogBox implements ClickHandler
 		Service.systemService.getUnassignedActions(groupId, callback);
 	}
 	
-	private void initStatusList(final String action, String groupId){
-		AsyncCallback<ArrayList<OwlStatus>> callback = new AsyncCallback<ArrayList<OwlStatus>>() {	
-			public void onSuccess(ArrayList<OwlStatus> tmp) {
-				statusList.clear();
-				statusList.addItem("--"+constants.buttonSelect()+"--", "-1");
-				for(int i=0;i<tmp.size();i++){
-					OwlStatus os = (OwlStatus)tmp.get(i);
-					statusList.addItem(os.getStatus(), ""+os.getId());
-					if(os.getId() == selectedStatusId)
-						statusList.setSelectedIndex(i+1);
+	private void initStatusList(final String aid, final String groupId){
+		
+		AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {	
+			public void onSuccess(Integer selectedStatusId) {
+				for(int i=0;i<statusList.getItemCount();i++){
+					if(statusList.getValue(i).equals(""+selectedStatusId))
+					{
+						statusList.setSelectedIndex(i);
+					}
 				}
 			}
 			public void onFailure(Throwable caught) {
-				ExceptionManager.showException(caught, constants.groupUserListFail());
+				ExceptionManager.showException(caught, constants.groupSelectAction());
 			}
 		};
-		Service.validationService.getStatus(callback);
+		Service.systemService.getSelectedGroupActionStatusID(groupId, aid, callback);
+		
 	}
 	
 	private void initPermissionStatusList(final String action, String groupId){
@@ -156,7 +160,7 @@ public class AddGroupActionsDialog extends FlexDialogBox implements ClickHandler
 				}
 			}
 			public void onFailure(Throwable caught) {
-				ExceptionManager.showException(caught, constants.groupUserListFail());
+				ExceptionManager.showException(caught, constants.groupPermissionListFail());
 			}
 		};
 		Service.systemService.getUnassignedActionStatus(groupId, action, callback);
@@ -185,7 +189,7 @@ public class AddGroupActionsDialog extends FlexDialogBox implements ClickHandler
 	public void onSubmit(){
 		int wCount = permission_statusList.getWidgetCount();
 		ArrayList<PermissionFunctionalityMap> map = new ArrayList<PermissionFunctionalityMap>();
-		actionId = actionList.getValue(actionList.getSelectedIndex());
+		String actionId = actionList.getValue(actionList.getSelectedIndex());
 		for(int i=0; i<wCount; i++){
 			Widget w = permission_statusList.getWidget(i);
 			if(w instanceof CheckBox)

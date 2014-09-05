@@ -131,7 +131,12 @@ public class ServletExtensionHttpWrapper {
 	{
 		URI uri;
 		try {
-			uri = new URIBuilder(stURL)
+			URI stURI = new URI(stURL);
+			uri = new URIBuilder()
+			.setScheme(stURI.getScheme())
+			.setHost(stURI.getHost())
+			.setPort(stURI.getPort())
+			.setPath("/semanticturkey/resources/stserver/STServer")
 			.setParameters(parameterLists)
 			.build();
 		} catch (URISyntaxException e) {

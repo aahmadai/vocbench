@@ -21,6 +21,7 @@ import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlAction;
 import org.fao.aoscs.domain.OwlStatus;
 import org.fao.aoscs.domain.PermissionFunctionalityMap;
+import org.fao.aoscs.domain.StInstances;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
@@ -435,6 +436,21 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 
 	public VBInitConstants loadVBInitConstants() throws Exception {
 		return systemServiceSystemImpl.loadVBInitConstants();
+	}
+	
+	@Override
+	public ArrayList<StInstances> listSTServer(OntologyInfo ontoInfo) {
+		return systemServiceSystemImpl.listSTServer(ontoInfo);
+	}
+
+	@Override
+	public Boolean addSTServer(OntologyInfo ontoInfo, StInstances stInstances) {
+		return systemServiceSystemImpl.addSTServer(ontoInfo, stInstances);
+	}
+
+	@Override
+	public Boolean deleteSTServer(OntologyInfo ontoInfo, StInstances stInstances) {
+		return systemServiceSystemImpl.deleteSTServer(ontoInfo, stInstances);
 	}
 
 }

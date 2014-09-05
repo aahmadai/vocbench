@@ -15,6 +15,7 @@ import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.DomainRangeObject;
 import org.fao.aoscs.domain.IDObject;
 import org.fao.aoscs.domain.LabelObject;
+import org.fao.aoscs.domain.LinkingConceptObject;
 import org.fao.aoscs.domain.NonFuncObject;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlAction;
@@ -1131,6 +1132,36 @@ public class ValidationServiceSTImpl {
 		 case 42:     //     "mapping-delete"
 			 if(!val.getIsAccept())
 				 addSchemeMapping(val);
+			 break;
+			 
+		 case 76:     //     "move-concept"
+			 if(!val.getIsAccept())
+			 {
+				LinkingConceptObject oldLinkingConceptObject= (LinkingConceptObject) val.getOldObject().get(0);
+				LinkingConceptObject newLinkingConceptObject= (LinkingConceptObject) val.getNewObject().get(0);
+				if(!oldLinkingConceptObject.getUri().equals(oldLinkingConceptObject.getParentURI()))
+				{
+					STUtility.linkConcept(ontoInfo, newLinkingConceptObject.getScheme(), oldLinkingConceptObject.getScheme(), oldLinkingConceptObject.getUri(), oldLinkingConceptObject.getParentURI());
+					STUtility.unlinkConcept(ontoInfo, oldLinkingConceptObject.getScheme(), oldLinkingConceptObject.getUri(), newLinkingConceptObject.getParentURI());
+				}
+			 }
+			 break;
+			 
+		 case 77:     //     "link-concept"
+			 if(!val.getIsAccept())
+			 {
+				 LinkingConceptObject linkingConceptObject= (LinkingConceptObject) val.getNewObject().get(0);
+				 STUtility.unlinkConcept(ontoInfo, linkingConceptObject.getScheme(), linkingConceptObject.getUri(), linkingConceptObject.getParentURI());
+			 }
+			 break;
+			 
+		 case 78:     //     "unlink-concept"
+			 if(!val.getIsAccept())
+			 {
+				 LinkingConceptObject oldLinkingConceptObject= (LinkingConceptObject) val.getOldObject().get(0);
+				 //LinkingConceptObject newLinkingConceptObject= (LinkingConceptObject) val.getNewObject().get(0);
+				 STUtility.linkConcept(ontoInfo, oldLinkingConceptObject.getScheme(), oldLinkingConceptObject.getScheme(), oldLinkingConceptObject.getUri(), oldLinkingConceptObject.getParentURI());
+			 }
 			 break;
 			 
 		 default: 

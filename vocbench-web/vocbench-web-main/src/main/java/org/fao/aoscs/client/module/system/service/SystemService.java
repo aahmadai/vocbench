@@ -15,6 +15,7 @@ import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlAction;
 import org.fao.aoscs.domain.OwlStatus;
 import org.fao.aoscs.domain.PermissionFunctionalityMap;
+import org.fao.aoscs.domain.StInstances;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
@@ -83,6 +84,10 @@ public interface SystemService extends RemoteService {
 	public Boolean checkDBConnection() throws Exception;
 	public ArrayList<DBMigrationObject> getDBMigrationList() throws Exception;
 	public ArrayList<DBMigrationObject> runDBMigration(String initVersion) throws Exception;
+	
+	public ArrayList<StInstances> listSTServer(OntologyInfo ontoInfo);
+	public Boolean addSTServer(OntologyInfo ontoInfo, StInstances stInstances);
+	public Boolean deleteSTServer(OntologyInfo ontoInfo, StInstances stInstances);
 	
 	public static class SystemServiceUtil{
 		private static SystemServiceAsync<?> instance;

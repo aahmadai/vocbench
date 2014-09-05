@@ -18,6 +18,7 @@ import org.fao.aoscs.domain.AttributesObject;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.IDObject;
 import org.fao.aoscs.domain.LabelObject;
+import org.fao.aoscs.domain.LinkingConceptObject;
 import org.fao.aoscs.domain.NonFuncObject;
 import org.fao.aoscs.domain.RelationshipObject;
 import org.fao.aoscs.domain.SchemeObject;
@@ -156,7 +157,7 @@ public class Validator extends ValidationTemplate {
 	}
 	public static Widget getLabelPanel(final int type, String text, String title, final String link, final String schemeURI, String style, final boolean isAddAction, final int tab, final int belongsToModule)
 	{
-		if(!text.equals(""))
+		if(text != null && !text.equals(""))
 		{
 			HTML label = new HTML(" "+text, true);
 			if(link!=null)
@@ -419,6 +420,14 @@ public class Validator extends ValidationTemplate {
 					hp.add(makeLabelOnly(trObj.getLabel()+checkNullValueInParenthesis(trObj.getLang()), trObj.getUri(), v.getConceptObject().getUri(), v.getConceptObject().getScheme(), style, isAddAction, tab, objectType, isSource,  belongsToModule));
 				}
 			}
+			else if(obj instanceof LinkingConceptObject)
+			{
+				LinkingConceptObject cObj = (LinkingConceptObject) obj;
+				String text = cObj.getParentURI();
+				if(text==null || text.equals(""))
+					text = "Root concept";
+				hp.add(makeLabelOnly(text, cObj.getUri(), v.getConceptObject().getUri(), v.getConceptObject().getScheme(), style, isAddAction, tab, objectType, isSource,  belongsToModule));	
+			}
 		}
 		if(hp.getWidgetCount()<1)
 			hp.add(new HTML("&nbsp;"));
@@ -673,6 +682,23 @@ public class Validator extends ValidationTemplate {
 			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
 			 break;
 		 case 42:     //     "mapping-delete"
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 break;
+		 case 76:     //     "move-concept"
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 break;
+			 
+		 case 77:     //     "link-concept"
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 break;
+			 
+		 case 78:     //     "unlink-concept"
 			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
 			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
 			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);

@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 		public Boolean createNewProject(OntologyInfo ontoInfo, String projectName, String baseuri, String ontomanager, String ontMgrConfiguration, String ontologyType, HashMap<String, String> cfgPars) throws Exception;
 		public Boolean deleteProject(OntologyInfo ontoInfo, String projectName) throws Exception;
 		public Boolean isSTServerStarted(OntologyInfo ontoInfo) throws Exception;
-
+		
 		public ArrayList<String> listTripleStores(OntologyInfo ontoInfo) throws Exception;
 		public ArrayList<OntologyConfigurationManager> getOntManagerParameters(OntologyInfo ontoInfo, String ontMgrID) throws Exception;
 		

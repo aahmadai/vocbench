@@ -38,6 +38,7 @@ import org.fao.aoscs.domain.PermissionGroupMap;
 import org.fao.aoscs.domain.PermissionGroupMapId;
 import org.fao.aoscs.domain.PermissionObject;
 import org.fao.aoscs.domain.RecentChangeData;
+import org.fao.aoscs.domain.StInstances;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersGroups;
@@ -521,7 +522,7 @@ public class SystemServiceSystemImpl {
 		ontoInfo.setVersion(ConfigConstants.VERSION);
 		try
 		{
-			ontoInfo = (OntologyInfo) DatabaseUtil.createObject(ontoInfo);
+			DatabaseUtil.createObject(ontoInfo);
 			ArrayList<String> list = new ArrayList<String>();
 			list.add(""+ontoInfo.getOntologyId());
 			addOntologiesToUser(userId, list);
@@ -1321,6 +1322,29 @@ public class SystemServiceSystemImpl {
 				if(!owlActions.contains(oa))
 					owlActions.add(oa);
 			}
+			
+			// get actions without any status			
+			query = "SELECT tb2.id, tb2.action, tb2.action_child, tb2.status_id FROM "
+					+ "("
+						+ "	SELECT * FROM owl_action LEFT JOIN "
+						+ "( " +
+				      			"SELECT status_id, action_id FROM status_action_map where group_id = 1 GROUP By status_id " +
+				      		") tb1 " +
+				      	"ON tb1.action_id = owl_action.id " +
+				     ")tb2 WHERE tb2.status_id IS NULL ";
+			
+			resultlist = QueryFactory.getHibernateSQLQuery(query);
+			for(int z=0;z<resultlist.size();z++)
+			{
+				String[] item = resultlist.get(z);
+				OwlAction oa = new OwlAction();
+				oa.setId(Integer.parseInt(item[0]));
+				oa.setAction(item[1].toUpperCase());
+				oa.setActionChild(item[2].toUpperCase());
+				if(!owlActions.contains(oa))
+					owlActions.add(oa);
+			}
+			
 			return owlActions;
 		}
 		catch(Exception e){
@@ -1677,6 +1701,48 @@ public class SystemServiceSystemImpl {
 	public ArrayList<DBMigrationObject> runDBMigration(String initVersion) throws Exception {
 		DBMigrationUtility dbmUtility = new DBMigrationUtility(ConfigConstants.DB_CONNECTIONURL, ConfigConstants.DB_USERNAME, ConfigConstants.DB_PASSWORD);
 		return dbmUtility.runDBMigrate(initVersion);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public ArrayList<StInstances> listSTServer(OntologyInfo ontoInfo) {
+		String sqlStr = "SELECT * FROM st_instances";
+		try
+		{
+			return (ArrayList<StInstances>)	HibernateUtilities.currentSession().createSQLQuery(sqlStr).addEntity(StInstances.class).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return new ArrayList<StInstances>();
+		}
+		finally
+		{
+			HibernateUtilities.closeSession();
+		}
+	}
+
+	/**
+	 * @param ontoInfo
+	 * @param stInstances
+	 * @return
+	 */
+	public Boolean addSTServer(OntologyInfo ontoInfo, StInstances stInstances) {
+		DatabaseUtil.createObject(stInstances);
+		return true;
+	}
+
+	/**
+	 * @param ontoInfo
+	 * @param stInstances
+	 * @return
+	 */
+	public Boolean deleteSTServer(OntologyInfo ontoInfo, StInstances stInstances) {
+		DatabaseUtil.delete(stInstances);
+		return true;
 	}
 	 
 }

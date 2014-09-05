@@ -22,6 +22,7 @@ import org.fao.aoscs.domain.IDObject;
 import org.fao.aoscs.domain.ImageObject;
 import org.fao.aoscs.domain.InformationObject;
 import org.fao.aoscs.domain.InitializeConceptData;
+import org.fao.aoscs.domain.LinkingConceptObject;
 import org.fao.aoscs.domain.NonFuncObject;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlStatus;
@@ -612,26 +613,6 @@ public class ConceptServiceSTImpl {
 		
 		return false;
 	}*/
-	
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#copyConcept(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, java.lang.String, org.fao.aoscs.domain.OwlStatus, int, int)
-	 */
-	public void copyConcept(OntologyInfo ontoInfo, String oldSchemeURI, String newSchemeURI, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId){
-		
-		if(parentConceptURI==null)
-		{
-			SKOSManager.addTopConcept(ontoInfo, conceptURI, newSchemeURI);
-		}
-		else if(!conceptURI.equals(parentConceptURI))
-		{
-			boolean isTopconcept = SKOSManager.isTopConcept(ontoInfo, conceptURI, oldSchemeURI);
-			SKOSManager.addBroaderConcept(ontoInfo, conceptURI, parentConceptURI);
-			
-			// TODO on ST UPDATE : Fixes for when adding concept which is a top concept to different broader concept, it removes itself as top concept.
-			if(isTopconcept)
-				SKOSManager.addTopConcept(ontoInfo, conceptURI, oldSchemeURI);
-		}
-	}
 	
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#deleteConcept(org.fao.aoscs.domain.OntologyInfo, int, int, org.fao.aoscs.domain.OwlStatus, org.fao.aoscs.domain.ConceptObject)
@@ -1915,9 +1896,67 @@ public class ConceptServiceSTImpl {
 		logger.debug("moveConcept(" + conceptURI + ", " + oldParentConceptURI + ", " + newParentConceptURI+ ", " + status + ", " + actionId + ", " + userId + ")");
 		if(!conceptURI.equals(newParentConceptURI))
 		{
-			copyConcept(ontoInfo, oldSchemeUri, newSchemeUri, conceptURI, newParentConceptURI, status, actionId, userId);
-			removeConcept(ontoInfo, newSchemeUri, conceptURI, oldParentConceptURI, status, actionId, userId);
+			STUtility.linkConcept(ontoInfo, oldSchemeUri, newSchemeUri, conceptURI, newParentConceptURI);
+			STUtility.unlinkConcept(ontoInfo, newSchemeUri, conceptURI, oldParentConceptURI);
 		}
+		
+		ConceptObject conceptObject = getConceptObject(ontoInfo, conceptURI);
+		
+		LinkingConceptObject oldLinkingConceptObject = new LinkingConceptObject();
+		oldLinkingConceptObject.setUri(conceptURI);
+		oldLinkingConceptObject.setParentURI(oldParentConceptURI);
+		oldLinkingConceptObject.setScheme(oldSchemeUri);
+		
+		LinkingConceptObject newLinkingConceptObject = new LinkingConceptObject();
+		newLinkingConceptObject.setUri(conceptURI);
+		newLinkingConceptObject.setParentURI(newParentConceptURI);
+		newLinkingConceptObject.setScheme(newSchemeUri);
+		
+		Validation v = new Validation();
+		v.setConcept(DatabaseUtil.setObject(conceptObject));
+		v.setOldValue(DatabaseUtil.setObject(oldLinkingConceptObject));
+		v.setNewValue(DatabaseUtil.setObject(newLinkingConceptObject));
+		v.setOwnerId(userId);
+		v.setModifierId(userId);
+		v.setAction(actionId);
+		v.setOldStatusLabel(conceptObject.getStatus());
+		v.setOldStatus(conceptObject.getStatusID());
+		v.setStatus(status.getId());
+		v.setStatusLabel(status.getStatus());
+		v.setOntologyId(ontoInfo.getOntologyId());
+		v.setDateCreate(conceptObject.getDateCreate());
+		v.setDateModified(DateUtility.getROMEDate());
+		DatabaseUtil.createObject(v);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#copyConcept(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, java.lang.String, org.fao.aoscs.domain.OwlStatus, int, int)
+	 */
+	public void copyConcept(OntologyInfo ontoInfo, String oldSchemeURI, String newSchemeURI, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId){
+		
+		STUtility.linkConcept(ontoInfo, oldSchemeURI, newSchemeURI, conceptURI, parentConceptURI);
+		
+		ConceptObject conceptObject = getConceptObject(ontoInfo, conceptURI);
+		
+		LinkingConceptObject newLinkingConceptObject = new LinkingConceptObject();
+		newLinkingConceptObject.setUri(conceptURI);
+		newLinkingConceptObject.setParentURI(parentConceptURI);
+		newLinkingConceptObject.setScheme(newSchemeURI);
+		
+		Validation v = new Validation();
+		v.setConcept(DatabaseUtil.setObject(conceptObject));
+		v.setNewValue(DatabaseUtil.setObject(newLinkingConceptObject));
+		v.setOwnerId(userId);
+		v.setModifierId(userId);
+		v.setAction(actionId);
+		v.setOldStatusLabel(conceptObject.getStatus());
+		v.setOldStatus(conceptObject.getStatusID());
+		v.setStatus(status.getId());
+		v.setStatusLabel(status.getStatus());
+		v.setOntologyId(ontoInfo.getOntologyId());
+		v.setDateCreate(conceptObject.getDateCreate());
+		v.setDateModified(DateUtility.getROMEDate());
+		DatabaseUtil.createObject(v);
 	}
 	
 	/**
@@ -1931,21 +1970,36 @@ public class ConceptServiceSTImpl {
 	 * @return
 	 */
 	public Integer removeConcept(OntologyInfo ontoInfo, String schemeUri, String conceptURI, String parentConceptURI, OwlStatus status, int actionId, int userId){
-		int cnt = 0;
-		if(SKOSManager.isTopConcept(ontoInfo, conceptURI, schemeUri))
-			cnt = 1;
-		ArrayList<String> broaderList = SKOSManager.getBroaderConceptsURI(ontoInfo, conceptURI, schemeUri);
-		if(broaderList!=null)
-			cnt += broaderList.size();
-		if(cnt>1)
-		{
-			if(parentConceptURI==null || parentConceptURI.equals(""))
-			{
-				SKOSManager.removeTopConcept(ontoInfo, conceptURI, schemeUri);
-			}
-			else 
-				SKOSManager.removeBroaderConcept(ontoInfo, conceptURI, parentConceptURI);
-		}
+		int cnt = STUtility.unlinkConcept(ontoInfo, schemeUri, conceptURI, parentConceptURI);
+		
+		ConceptObject conceptObject = getConceptObject(ontoInfo, conceptURI);
+		
+		LinkingConceptObject oldLinkingConceptObject = new LinkingConceptObject();
+		oldLinkingConceptObject.setUri(conceptURI);
+		oldLinkingConceptObject.setParentURI(parentConceptURI);
+		oldLinkingConceptObject.setScheme(schemeUri);
+		
+		/*LinkingConceptObject newLinkingConceptObject = new LinkingConceptObject();
+		newLinkingConceptObject.setUri(conceptURI);
+		newLinkingConceptObject.setParentURI(parentConceptURI);
+		newLinkingConceptObject.setScheme(schemeUri);*/
+		
+		Validation v = new Validation();
+		v.setConcept(DatabaseUtil.setObject(conceptObject));
+		v.setOldValue(DatabaseUtil.setObject(oldLinkingConceptObject));
+		//v.setNewValue(DatabaseUtil.setObject(newLinkingConceptObject));
+		v.setOwnerId(userId);
+		v.setModifierId(userId);
+		v.setAction(actionId);
+		v.setOldStatusLabel(conceptObject.getStatus());
+		v.setOldStatus(conceptObject.getStatusID());
+		v.setStatus(status.getId());
+		v.setStatusLabel(status.getStatus());
+		v.setOntologyId(ontoInfo.getOntologyId());
+		v.setDateCreate(conceptObject.getDateCreate());
+		v.setDateModified(DateUtility.getROMEDate());
+		DatabaseUtil.createObject(v);
+		
 		return cnt;
 	}
 	

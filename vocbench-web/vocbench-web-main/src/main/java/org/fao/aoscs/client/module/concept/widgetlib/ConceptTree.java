@@ -1021,16 +1021,15 @@ public class ConceptTree extends Composite{
 				AsyncCallback<Void> callback = new AsyncCallback<Void>(){
 					public void onSuccess(Void results){
 						ConceptTree.this.reloadItem(conceptObject.getUri(), InfoTab.term);
+						treePanel.showLoading(false);
 					}
 					public void onFailure(Throwable caught){
 						ExceptionManager.showException(caught, constants.conceptMoveFail());
 					}
 				};
 				
-				OwlStatus status = (OwlStatus)initData.getActionStatus().get(ConceptActionKey.conceptEditRelationshipCreate);
-				
-				int actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditRelationshipCreate));	
-				
+				OwlStatus status = (OwlStatus)initData.getActionStatus().get(ConceptActionKey.conceptEditMoveConcept);
+				int actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditMoveConcept));	
 				Service.conceptService.moveConcept(MainApp.userOntology, MainApp.schemeUri, MainApp.schemeUri, conceptObject.getUri(), conceptObject.getParentURI(), parentConceptURI, status, actionId, MainApp.userId, callback);
 			}
 		}
@@ -1139,10 +1138,7 @@ public class ConceptTree extends Composite{
 				treePanel.showLoading(true);
 				AsyncCallback<Void> callback = new AsyncCallback<Void>(){
 					public void onSuccess(Void results){
-						//ConceptTree.this.reload(conceptObject.getUri(),InfoTab.term);
 						ConceptTree.this.reloadItem(conceptObject.getUri(), InfoTab.term);
-						///FastTreeItem item = treePanel.tree.getSelectedItem();
-						///SearchTree.addTargetItem(item, childConcept, conceptObject.getUri(), TreeAOS.SUBLEVEL, !MainApp.userPreference.isHideNonpreferred());
 						treePanel.showLoading(false);
 					}
 					public void onFailure(Throwable caught){
@@ -1150,8 +1146,8 @@ public class ConceptTree extends Composite{
 					}
 				};
 				
-				OwlStatus status = (OwlStatus)initData.getActionStatus().get(ConceptActionKey.conceptEditRelationshipCreate);
-				int actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditRelationshipCreate));	
+				OwlStatus status = (OwlStatus)initData.getActionStatus().get(ConceptActionKey.conceptEditLinkConcept);
+				int actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditLinkConcept));	
 				
 				Service.conceptService.copyConcept(MainApp.userOntology, MainApp.schemeUri, MainApp.schemeUri, childConcept.getUri(), conceptObject.getUri(), status, actionId, MainApp.userId, callback);
 			}
@@ -1202,29 +1198,29 @@ public class ConceptTree extends Composite{
 		
 		public void onSubmit() {
 			treePanel.showLoading(true);
-			
-			OwlStatus status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptDelete);
-			int actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptDelete));
 
 			AsyncCallback<Integer> callback = new AsyncCallback<Integer>(){
 				public void onSuccess(Integer result){
 					int cnt = result;
 					if(cnt>1)
 					{
-						///FastTreeItem item = treePanel.tree.getSelectedItem();
-						///SearchTree.deleteTargetItem(item);
 						ConceptTree.this.reloadItem(cObj.getParentURI(), InfoTab.term);
+						treePanel.showLoading(false);
 					}
 					else
 					{
 						Window.alert(constants.conceptRemoveFailOnlyOne());
 					}
-					treePanel.showLoading(false);
+					
 				}
 				public void onFailure(Throwable caught){
 					ExceptionManager.showException(caught, constants.conceptRemoveFail());
 				}
 			};
+			
+			OwlStatus status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditUnlinkConcept);
+			int actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditUnlinkConcept));
+			
 			Service.conceptService.removeConcept(MainApp.userOntology, MainApp.schemeUri, cObj.getUri(), cObj.getParentURI(), status, actionId, MainApp.userId, callback);
 		}
 		

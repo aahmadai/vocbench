@@ -33,5 +33,5 @@ public interface ProjectServiceAsync<T> {
 
 	void isSTServerStarted(OntologyInfo ontoInfo,
 			AsyncCallback<Boolean> callback);
-	
+
 }

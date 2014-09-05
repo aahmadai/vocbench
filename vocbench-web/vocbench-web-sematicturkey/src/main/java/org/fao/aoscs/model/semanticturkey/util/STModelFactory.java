@@ -1,6 +1,8 @@
 package org.fao.aoscs.model.semanticturkey.util;
 
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
@@ -8,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.fao.aoscs.domain.OntologyInfo;
 
@@ -73,7 +76,7 @@ public class STModelFactory {
 		HttpClient httpclient;
 		try
 		{
-			HttpGet httpRequest = new HttpGet(URLName);
+			HttpGet httpRequest = new HttpGet(getSTURL(URLName));
 			httpclient = HttpClients.createDefault(); 
 			HttpResponse response = httpclient.execute(httpRequest);
 			int statusCode = response.getStatusLine().getStatusCode();
@@ -85,5 +88,24 @@ public class STModelFactory {
 			return false;
 		}
 	}
+	
+	public static URI getSTURL(String stURL)
+	{
+		URI uri;
+		try {
+			URI stURI = new URI(stURL);
+			uri = new URIBuilder()
+			.setScheme(stURI.getScheme())
+			.setHost(stURI.getHost())
+			.setPort(stURI.getPort())
+			.setPath("/semanticturkey/resources/stserver/STServer")
+			.build();
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException(e);
+		}
+		return uri;
+	}
+	
+	
 	
 }

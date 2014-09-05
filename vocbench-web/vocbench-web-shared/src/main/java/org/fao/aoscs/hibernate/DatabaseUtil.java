@@ -17,12 +17,16 @@ import org.fao.aoscs.domain.Validation;
 import org.fao.aoscs.server.utility.DateUtility;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DatabaseUtil {
 	
+	protected static Logger logger = LoggerFactory.getLogger(DatabaseUtil.class);
+	
 	//create new object
 	 @SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Object createObject(Object obj)
+	public static void createObject(Object obj)
 	 {
 	    	
 		 	if (obj instanceof Validation) {
@@ -66,13 +70,13 @@ public class DatabaseUtil {
 	    	}
 	    	catch(Exception ex)
 	    	{
-	    		ex.printStackTrace();	    		
+	    		logger.debug(ex.getLocalizedMessage());	
+	    		throw new RuntimeException(ex.getMessage()); 
 	    	}
 	    	finally
 	    	{
 	    		HibernateUtilities.closeSession();
 	    	}
-	    	return obj;
 	 }	
 	 
 	 public static void addRecentChange(RecentChangeData rcData, int ontologyId)
@@ -127,7 +131,8 @@ public class DatabaseUtil {
     	}
     	catch(Exception ex)
     	{
-    		ex.printStackTrace();
+    		logger.debug(ex.getLocalizedMessage());	
+    		throw new RuntimeException(ex.getMessage());
     	}
     	finally 
     	{
@@ -158,7 +163,8 @@ public class DatabaseUtil {
     	}
     	catch(Exception ex)
     	{
-    		ex.printStackTrace();
+    		logger.debug(ex.getLocalizedMessage());	
+    		throw new RuntimeException(ex.getMessage());
     	}
     	finally 
     	{

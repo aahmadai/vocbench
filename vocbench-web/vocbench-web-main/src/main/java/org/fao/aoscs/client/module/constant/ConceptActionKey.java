@@ -36,6 +36,10 @@ public class ConceptActionKey {
 		public static String conceptEditRelationshipEdit = "concept-edit-relationship-edit";
 		public static String conceptEditRelationshipDelete = "concept-edit-relationship-delete";
 		
+		public static String conceptEditMoveConcept = "concept-edit-move-concept";
+		public static String conceptEditLinkConcept = "concept-edit-link-concept";
+		public static String conceptEditUnlinkConcept = "concept-edit-unlink-concept";
+		
 		public static String termCreate = "term-create";
 		public static String termEdit = "term-edit";
 		public static String termDelete = "term-delete";
