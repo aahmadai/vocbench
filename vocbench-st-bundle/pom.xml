@@ -24,23 +24,23 @@
 		<dependency>
 			<groupId>it.uniroma2.art.semanticturkey</groupId>
 			<artifactId>st-core-framework</artifactId>
-			<version>0.9.2-SNAPSHOT</version>
+			<version>0.10</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>it.uniroma2.art.semanticturkey</groupId>
 			<artifactId>st-codegen-annotations</artifactId>
-			<version>0.9.2-SNAPSHOT</version>
+			<version>0.10</version>
 		</dependency>
 		<dependency>
 			<groupId>it.uniroma2.art.semanticturkey</groupId>
 			<artifactId>st-codegen-processor</artifactId>
-			<version>0.9.2-SNAPSHOT</version>
+			<version>0.10</version>
 		</dependency>
 		<dependency>
 			<groupId>it.uniroma2.art.semanticturkey</groupId>
 			<artifactId>st-core-services</artifactId>
-			<version>0.9.2-SNAPSHOT</version>
+			<version>0.10</version>
 		</dependency>
 	</dependencies>
 
@@ -58,12 +58,12 @@
 
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
+				<version>2.5.1</version>
 				<configuration>
-					<verbose>true</verbose>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 			<plugin>

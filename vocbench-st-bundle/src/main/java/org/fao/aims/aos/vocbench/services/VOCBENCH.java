@@ -7,6 +7,7 @@ import it.uniroma2.art.owlart.exceptions.UnsupportedQueryLanguageException;
 import it.uniroma2.art.owlart.exceptions.UnsupportedRDFFormatException;
 import it.uniroma2.art.owlart.filter.ConceptsInSchemePredicate;
 import it.uniroma2.art.owlart.io.RDFFormat;
+import it.uniroma2.art.owlart.io.RDFNodeSerializer;
 import it.uniroma2.art.owlart.model.ARTLiteral;
 import it.uniroma2.art.owlart.model.ARTNode;
 import it.uniroma2.art.owlart.model.ARTResource;
@@ -30,8 +31,11 @@ import it.uniroma2.art.owlart.query.TupleQuery;
 import it.uniroma2.art.owlart.query.Update;
 import it.uniroma2.art.owlart.utilities.RDFIterators;
 import it.uniroma2.art.owlart.vocabulary.RDFResourceRolesEnum;
+import it.uniroma2.art.semanticturkey.exceptions.DuplicatedResourceException;
 import it.uniroma2.art.semanticturkey.exceptions.HTTPParameterUnspecifiedException;
+import it.uniroma2.art.semanticturkey.exceptions.InvalidProjectNameException;
 import it.uniroma2.art.semanticturkey.exceptions.NonExistingRDFResourceException;
+import it.uniroma2.art.semanticturkey.exceptions.ProjectInexistentException;
 import it.uniroma2.art.semanticturkey.ontology.utilities.RDFXMLHelp;
 import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFLiteral;
 import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFNode;
@@ -189,7 +193,41 @@ public class VOCBENCH extends SKOSXL {
 			return servletUtilities.createNoSuchHandlerExceptionResponse(request);
 
 		// CREATE/SET/DELETE REQUESTS
-		if (request.equals(Req.changeLabelInfoRequest)) {
+		if(request.equals(SKOSXL.Req.createConceptRequest)){
+			String conceptName = setHttpPar(SKOS.Par.concept);
+			String broaderConceptName = setHttpPar(SKOS.Par.broaderConcept);
+			String schemeName = setHttpPar(SKOS.Par.scheme);
+			String prefLabel = setHttpPar(SKOS.Par.prefLabel);
+			String prefLabelLanguage = setHttpPar(SKOS.Par.prefLabelLang);
+			String language = setHttpPar(SKOS.Par.lang);
+			checkRequestParametersAllNotNull(SKOS.Par.scheme);
+			response = createConcept(conceptName, broaderConceptName, schemeName, prefLabel, 
+					prefLabelLanguage, language);
+		} else if (request.equals(SKOSXL.Req.setPrefLabelRequest)) {
+			String skosConceptName = setHttpPar(SKOS.Par.concept);
+			String lang = setHttpPar(SKOS.Par.lang);
+			String label = setHttpPar(SKOS.Par.label);
+			String modeString = setHttpPar(Par.mode);
+			checkRequestParametersAllNotNull(SKOS.Par.concept, Par.mode, SKOS.Par.lang, SKOS.Par.label);
+			XLabelCreationMode xLabelCreationMode = XLabelCreationMode.valueOf(modeString);
+			response = setPrefXLabel(skosConceptName, xLabelCreationMode, label, lang);
+		} else if (request.equals(SKOSXL.Req.addAltLabelRequest)) {
+			String skosConceptName = setHttpPar(SKOS.Par.concept);
+			String lang = setHttpPar(SKOS.Par.lang);
+			String label = setHttpPar(SKOS.Par.label);
+			String modeString = setHttpPar(Par.mode);
+			checkRequestParametersAllNotNull(SKOS.Par.concept, Par.mode, SKOS.Par.lang, SKOS.Par.label);
+			XLabelCreationMode xLabelCreationMode = XLabelCreationMode.valueOf(modeString);
+			response = addAltXLabel(skosConceptName, xLabelCreationMode, label, lang);
+		} else if (request.equals(SKOSXL.Req.addHiddenLabelRequest)) {
+			String skosConceptName = setHttpPar(SKOS.Par.concept);
+			String lang = setHttpPar(SKOS.Par.lang);
+			String label = setHttpPar(SKOS.Par.label);
+			String modeString = setHttpPar(Par.mode);
+			checkRequestParametersAllNotNull(SKOS.Par.concept, Par.mode, SKOS.Par.lang, SKOS.Par.label);
+			XLabelCreationMode xLabelCreationMode = XLabelCreationMode.valueOf(modeString);
+			response = addHiddenXLabel(skosConceptName, xLabelCreationMode, label, lang);
+		} else if (request.equals(Req.changeLabelInfoRequest)) {
 			String xlabelURI = setHttpPar(ParVocBench.xlabelURI);
 			String label = setHttpPar(SKOS.Par.label);
 			String lang = setHttpPar(SKOS.Par.lang);
@@ -512,6 +550,201 @@ public class VOCBENCH extends SKOSXL {
 		return response;
 	}
 
+	public Response createConcept(String conceptName, String superConceptName, String schemeName,
+			String prefLabel, String prefLabelLang, String language) {
+		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
+		logger.debug("conceptName: " + conceptName);
+		logger.debug("schemeName: " + schemeName);
+
+		try {
+			ARTResource wrkGraph = getWorkingGraph();
+			SKOSXLModel skosxlModel = getSKOSXLModel();
+			ARTResource[] graphs = getUserNamedGraphs();
+
+			//there are two possibilities:
+			// - the uri is passed, so that URI should be used to create the concept
+			// - the uri is null, so it should be created using the specified method
+			ARTURIResource newConcept = null;
+			if(conceptName == null){
+				newConcept = generateConceptURI(skosxlModel, graphs);
+			} else{
+				newConcept = createNewResource(skosxlModel, conceptName, graphs);
+			}
+			System.out.println("new Concept = "+newConcept.getURI());
+			logger.debug("new concept: "+newConcept.getURI());
+			
+			
+			ARTURIResource superConcept;
+			if (superConceptName != null){
+				superConcept = retrieveExistingURIResource(skosxlModel, superConceptName, graphs);
+			} else{
+				superConcept = NodeFilters.NONE;
+			}
+			
+			ARTURIResource conceptScheme = retrieveExistingURIResource(skosxlModel, schemeName, graphs);
+
+			logger.debug("adding concept to graph: " + wrkGraph);
+			skosxlModel.addConceptToScheme(newConcept.getURI(), superConcept, conceptScheme, wrkGraph);
+
+			//old
+			//ARTURIResource prefXLabel = skosxlModel.addXLabel(createURIForXLabel(skosxlModel), prefLabel,
+			//		prefLabelLang, getWorkingGraph());
+			ARTURIResource prefXLabelURI = generateXLabelURI(skosxlModel, graphs);
+			ARTURIResource prefXLabel = skosxlModel.addXLabel(prefXLabelURI.getURI(), prefLabel,
+					prefLabelLang, getWorkingGraph());
+			
+			
+			skosxlModel.setPrefXLabel(newConcept, prefXLabel, getWorkingGraph());
+
+			RDFXMLHelp.addRDFNode(response, createSTConcept(skosxlModel, newConcept, true, language));
+			RDFXMLHelp.addRDFNode(response, createSTXLabel(skosxlModel, prefXLabel, true));
+
+		} catch (ModelAccessException e) {
+			return logAndSendException(e);
+		} catch (ModelUpdateException e) {
+			return logAndSendException(e);
+		} catch (NonExistingRDFResourceException e) {
+			return logAndSendException(e);
+		} catch (DuplicatedResourceException e) {
+			return logAndSendException(e);
+		}
+		return response;
+	}
+	
+	/**
+	 * this service sets the preferred label for a given language
+	 * 
+	 * 
+	 * @param skosConceptName
+	 * @param mode
+	 *            bnode or uri: if uri a URI generator is used to create the URI for the xlabel
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public Response setPrefXLabel(String skosConceptName, XLabelCreationMode mode, String label, String lang) {
+
+		SKOSXLModel skosxlmodel = getSKOSXLModel();
+
+		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
+
+		try {
+			ARTResource graph = getWorkingGraph();
+			ARTURIResource skosConcept = retrieveExistingURIResource(skosxlmodel, skosConceptName, graph);
+
+			// change the other preferred label (of the same language) to alternative label, as only one
+			// preferred label per language can exist
+			ARTResource oldPrefLabelRes = skosxlmodel.getPrefXLabel(skosConcept, lang, graph);
+			if (oldPrefLabelRes != null && oldPrefLabelRes.isURIResource()) {
+				ARTURIResource oldxlabel = oldPrefLabelRes.asURIResource();
+				skosxlmodel.deleteTriple(skosConcept,
+						skosxlmodel.createURIResource(it.uniroma2.art.owlart.vocabulary.SKOSXL.PREFLABEL),
+						oldxlabel, graph);
+				skosxlmodel.addTriple(skosConcept,
+						skosxlmodel.createURIResource(it.uniroma2.art.owlart.vocabulary.SKOSXL.ALTLABEL),
+						oldxlabel, graph);
+			}
+
+			if (mode == XLabelCreationMode.bnode)
+				skosxlmodel.setPrefXLabel(skosConcept, label, lang, getWorkingGraph());
+			else {
+				ARTURIResource prefXLabelURI = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResource prefXLabel = skosxlmodel.addXLabel(prefXLabelURI.getURI(), label, lang,
+						getWorkingGraph());
+				skosxlmodel.setPrefXLabel(skosConcept, prefXLabel, getWorkingGraph());
+				RDFXMLHelp.addRDFNode(response, createSTXLabel(skosxlmodel, prefXLabel, true));
+			}
+
+		} catch (ModelUpdateException e) {
+			return logAndSendException(e);
+		} catch (ModelAccessException e) {
+			return logAndSendException(e);
+		} catch (NonExistingRDFResourceException e) {
+			return logAndSendException(e);
+		}
+		return response;
+	}
+
+	/**
+	 * this service adds an alternative label to a concept for a given language
+	 * 
+	 * 
+	 * @param skosConceptName
+	 * @param mode
+	 *            bnode or uri: if uri a URI generator is used to create the URI for the xlabel
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public Response addAltXLabel(String skosConceptName, XLabelCreationMode mode, String label, String lang) {
+
+		SKOSXLModel skosxlmodel = getSKOSXLModel();
+
+		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
+
+		try {
+			ARTURIResource skosConcept = retrieveExistingURIResource(skosxlmodel, skosConceptName,
+					getUserNamedGraphs());
+			if (mode == XLabelCreationMode.bnode)
+				skosxlmodel.addAltXLabel(skosConcept, label, lang, getWorkingGraph());
+			else {
+				ARTURIResource altXLabelURI = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResource altXLabel = skosxlmodel.addXLabel(altXLabelURI.getURI(), label, lang,
+						getWorkingGraph());
+				skosxlmodel.addAltXLabel(skosConcept, altXLabel, getWorkingGraph());
+				RDFXMLHelp.addRDFNode(response, createSTXLabel(skosxlmodel, altXLabel, true));
+			}
+
+		} catch (ModelUpdateException e) {
+			return logAndSendException(e);
+		} catch (ModelAccessException e) {
+			return logAndSendException(e);
+		} catch (NonExistingRDFResourceException e) {
+			return logAndSendException(e);
+		}
+		return response;
+	}
+
+	/**
+	 * this service adds an hidden label to a concept for a given language
+	 * 
+	 * 
+	 * @param skosConceptName
+	 * @param mode
+	 *            bnode or uri: if uri a URI generator is used to create the URI for the xlabel
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public Response addHiddenXLabel(String skosConceptName, XLabelCreationMode mode, String label, String lang) {
+
+		SKOSXLModel skosxlmodel = getSKOSXLModel();
+
+		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
+
+		try {
+			ARTURIResource skosConcept = retrieveExistingURIResource(skosxlmodel, skosConceptName,
+					getUserNamedGraphs());
+			if (mode == XLabelCreationMode.bnode)
+				skosxlmodel.addHiddenXLabel(skosConcept, label, lang, getWorkingGraph());
+			else {
+				ARTURIResource hiddenXLabelURI = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResource hiddenXLabel = skosxlmodel.addXLabel(hiddenXLabelURI.getURI(), label, lang,
+						getWorkingGraph());
+				skosxlmodel.addHiddenXLabel(skosConcept, hiddenXLabel, getWorkingGraph());
+			}
+
+		} catch (ModelUpdateException e) {
+			return logAndSendException(e);
+		} catch (ModelAccessException e) {
+			return logAndSendException(e);
+		} catch (NonExistingRDFResourceException e) {
+			return logAndSendException(e);
+		}
+		return response;
+	}
+	
+
 	public Response changeLabelInfo(String xlabelURI, String label, String lang) {
 		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
@@ -644,10 +877,11 @@ public class VOCBENCH extends SKOSXL {
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
 		Element defElem;
-		if(isImage)
+		if(isImage) {
 			defElem= XMLHelp.newElement(dataElement, ParVocBench.image);
-		else
+		} else{
 			defElem = XMLHelp.newElement(dataElement, ParVocBench.definition);
+		}
 		
 		try{
 			ARTResource graph = getWorkingGraph();
@@ -655,27 +889,25 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource conceptURI = retrieveExistingURIResource(skosxlModel, 
 					skosxlModel.expandQName(conceptName));
 			ARTURIResource defOrImagePropURI;
-			if(isImage)
+			if(isImage) {
 				defOrImagePropURI = skosxlModel.createURIResource(DEPICTION);
-			else
+			}
+			else {
 				defOrImagePropURI = skosxlModel.createURIResource(DEFINITION);
+			}
 			
 			ARTURIResource imageClassURI = skosxlModel.createURIResource(IMAGE_CLASS);
 			ARTURIResource type = skosxlModel.createURIResource(TYPE);
 			
-			//ARTURIResource newNode = model.createURIResource("http://aims.fao.org/aos/agrontology#" + 
-			//		"i_def_"+ lang+"_"+ UUID.randomUUID().toString());
 			ARTURIResource newNode ;
 			if(isImage){
-				//newNode = skosxlModel.createURIResource(skosxlModel.getDefaultNamespace() +"i_img_"+lang+"_"+ 
+				//newNode = skosxlModel.createURIResource(skosxlModel.getDefaultNamespace() +"i_img_"+ 
 				//		UUID.randomUUID().toString());
-				newNode = skosxlModel.createURIResource(skosxlModel.getDefaultNamespace() +"i_img_"+ 
-						UUID.randomUUID().toString());
+				newNode = generateImgURI(skosxlModel, getUserNamedGraphs());
 			} else {
-				//newNode = skosxlModel.createURIResource(skosxlModel.getDefaultNamespace() +"i_def_"+lang+"_"+ 
+				//newNode = skosxlModel.createURIResource(skosxlModel.getDefaultNamespace() +"i_def_"+ 
 				//		UUID.randomUUID().toString());
-				newNode = skosxlModel.createURIResource(skosxlModel.getDefaultNamespace() +"i_def_"+ 
-						UUID.randomUUID().toString());
+				newNode = generateDefURI(skosxlModel, getUserNamedGraphs());
 			}
 			
 			ARTURIResource defValueURI = skosxlModel.createURIResource(VALUE); 
@@ -5014,5 +5246,174 @@ public class VOCBENCH extends SKOSXL {
 		mergeIter = RDFIterators.createARTStatementIterator(statList.iterator());
 		//return removeDuplicateSTatement(mergeIter);
 		return mergeIter;
+	}
+	
+	private STRDFResource createSTXLabel(SKOSXLModel skosModel, ARTResource xLabel, boolean explicit)
+			throws ModelAccessException, NonExistingRDFResourceException {
+		String show;
+		ARTLiteral lbl = skosModel.getLiteralForm(xLabel, getUserNamedGraphs());
+		if (lbl != null)
+			show = lbl.getLabel();
+		else
+			show = skosModel.getQName(RDFNodeSerializer.toNT(xLabel));
+
+		STRDFResource res = STRDFNodeFactory.createSTRDFResource(xLabel, RDFResourceRolesEnum.xLabel,
+				explicit, show);
+		if (lbl != null)
+			res.setInfo("lang", lbl.getLanguage());
+
+		return res;
+	}
+	
+	/*private String createURIForXLabel(RDFModel model) {
+		return model.getDefaultNamespace() + "xl-" + UUID.randomUUID().toString();
+	}*/
+
+	
+	public SKOSXLModel getSKOSXLModel() {
+		return (SKOSXLModel)getOntModel();
+	}
+	
+	
+	//functions to generate URI. These function will be moved inside ST in a future release
+	
+	protected ARTURIResource generateConceptURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+			throws ModelAccessException {
+		final String DEFAULT_VALUE = "c_";
+		String projectName = serviceContext.getProject().getName();
+		String entityPrefix;
+		try{
+			entityPrefix = ProjectManager.getProjectProperty(projectName, "uriConceptPreamble");
+		} catch (IOException | InvalidProjectNameException | ProjectInexistentException e1) {
+			entityPrefix = DEFAULT_VALUE;
+		}
+		if(entityPrefix == null){
+			entityPrefix = DEFAULT_VALUE;
+		}
+		ARTURIResource newConcept = null;
+		boolean newConceptGenerated = false;
+		while(!newConceptGenerated){
+			String randomValue = randomGenerator();
+			//check if the new concept already exists, in this case generate a new one until a not alredy
+			// existing URI has been generated
+			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
+			newConcept = skosxlModel.createURIResource(newConceptURI);
+			if(!skosxlModel.existsResource(newConcept, graphs)){
+				newConceptGenerated = true;
+			};
+		}
+		return newConcept;
+	}
+	
+	protected ARTURIResource generateXLabelURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+			throws ModelAccessException {
+		final String DEFAULT_VALUE = "xl_";
+		String projectName = serviceContext.getProject().getName();
+		String entityPrefix;
+		
+		try{
+			entityPrefix = ProjectManager.getProjectProperty(projectName, "uriXLabelPreamble");
+		} catch (IOException | InvalidProjectNameException | ProjectInexistentException e1) {
+			entityPrefix =DEFAULT_VALUE;
+		}
+		if(entityPrefix == null){
+			entityPrefix = DEFAULT_VALUE;
+		}
+		ARTURIResource newConcept = null;
+		boolean newConceptGenerated = false;
+		while(!newConceptGenerated){
+			String randomValue = randomGenerator();
+			//check if the new xlabel already exists, in this case generate a new one until a not alredy
+			// existing URI has been generated
+			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
+			newConcept = skosxlModel.createURIResource(newConceptURI);
+			if(!skosxlModel.existsResource(newConcept, graphs)){
+				newConceptGenerated = true;
+			};
+		}
+		return newConcept;
+	}
+	
+	protected ARTURIResource generateImgURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+			throws ModelAccessException {
+		final String DEFAULT_VALUE = "img_";
+		String projectName = serviceContext.getProject().getName();
+		String entityPrefix;
+		
+		try{
+			entityPrefix = ProjectManager.getProjectProperty(projectName, "uriImgPreamble");
+		} catch (IOException | InvalidProjectNameException | ProjectInexistentException e1) {
+			entityPrefix =DEFAULT_VALUE;
+		}
+		if(entityPrefix == null){
+			entityPrefix = DEFAULT_VALUE;
+		}
+		ARTURIResource newConcept = null;
+		boolean newConceptGenerated = false;
+		while(!newConceptGenerated){
+			String randomValue = randomGenerator();
+			//check if the new image already exists, in this case generate a new one until a not alredy
+			// existing URI has been generated
+			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
+			newConcept = skosxlModel.createURIResource(newConceptURI);
+			if(!skosxlModel.existsResource(newConcept, graphs)){
+				newConceptGenerated = true;
+			};
+		}
+		return newConcept;
+	}
+	
+	protected ARTURIResource generateDefURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+			throws ModelAccessException {
+		final String DEFAULT_VALUE = "def_";
+		String projectName = serviceContext.getProject().getName();
+		String entityPrefix;
+		
+		try{
+			entityPrefix = ProjectManager.getProjectProperty(projectName, "uriDefPreamble");
+		} catch (IOException | InvalidProjectNameException | ProjectInexistentException e1) {
+			entityPrefix =DEFAULT_VALUE;
+		}
+		if(entityPrefix == null){
+			entityPrefix = DEFAULT_VALUE;
+		}
+		ARTURIResource newConcept = null;
+		boolean newConceptGenerated = false;
+		while(!newConceptGenerated){
+			String randomValue = randomGenerator();
+			//check if the new image already exists, in this case generate a new one until a not alredy
+			// existing URI has been generated
+			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
+			newConcept = skosxlModel.createURIResource(newConceptURI);
+			if(!skosxlModel.existsResource(newConcept, graphs)){
+				newConceptGenerated = true;
+			};
+		}
+		return newConcept;
+	}
+	
+	protected String randomGenerator(){
+		final String DEFAULT_VALUE = "datetimems";
+		String projectName = serviceContext.getProject().getName();
+		String type;
+		try{
+			type = ProjectManager.getProjectProperty(projectName, "uriRndCodeGenerator");
+		} catch (IOException | InvalidProjectNameException | ProjectInexistentException e1) {
+			type = "datetimems";
+		}
+		if(type == null){
+			type = DEFAULT_VALUE;
+		}
+		String randomValue = null;
+		if(type == "datetimems"){
+			randomValue = new java.util.Date().getTime()+"";
+		} else if(type == "uuid"){
+			randomValue = UUID.randomUUID().toString();
+		} else if(type == "truncuuid8"){
+			randomValue = UUID.randomUUID().toString().substring(0, 8);
+		} else if(type == "truncuuid12"){
+			randomValue = UUID.randomUUID().toString().substring(0, 13);
+		}
+		return randomValue;
 	}
 }
