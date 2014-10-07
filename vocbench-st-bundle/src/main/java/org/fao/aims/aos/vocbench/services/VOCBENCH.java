@@ -565,8 +565,11 @@ public class VOCBENCH extends SKOSXL {
 			// - the uri is passed, so that URI should be used to create the concept
 			// - the uri is null, so it should be created using the specified method
 			ARTURIResource newConcept = null;
+			String randomConceptValue = null;
 			if(conceptName == null){
-				newConcept = generateConceptURI(skosxlModel, graphs);
+				ARTURIResAndRandomString newConceptAndRandomValue = generateConceptURI(skosxlModel, graphs);
+				newConcept = newConceptAndRandomValue.getArtURIResource();
+				randomConceptValue = newConceptAndRandomValue.getRandomValue();
 			} else{
 				newConcept = createNewResource(skosxlModel, conceptName, graphs);
 			}
@@ -589,7 +592,9 @@ public class VOCBENCH extends SKOSXL {
 			//old
 			//ARTURIResource prefXLabel = skosxlModel.addXLabel(createURIForXLabel(skosxlModel), prefLabel,
 			//		prefLabelLang, getWorkingGraph());
-			ARTURIResource prefXLabelURI = generateXLabelURI(skosxlModel, graphs);
+			ARTURIResAndRandomString prefXLabelURIAndRandomValue = generateXLabelURI(skosxlModel, graphs);
+			ARTURIResource prefXLabelURI = prefXLabelURIAndRandomValue.getArtURIResource();
+			String randomXLabelValue = prefXLabelURIAndRandomValue.getRandomValue();
 			ARTURIResource prefXLabel = skosxlModel.addXLabel(prefXLabelURI.getURI(), prefLabel,
 					prefLabelLang, getWorkingGraph());
 			
@@ -597,7 +602,11 @@ public class VOCBENCH extends SKOSXL {
 			skosxlModel.setPrefXLabel(newConcept, prefXLabel, getWorkingGraph());
 
 			RDFXMLHelp.addRDFNode(response, createSTConcept(skosxlModel, newConcept, true, language));
+			if(randomConceptValue != null){
+				XMLHelp.newElement(response.getDataElement(), "randomForConcept", randomConceptValue);
+			}
 			RDFXMLHelp.addRDFNode(response, createSTXLabel(skosxlModel, prefXLabel, true));
+			XMLHelp.newElement(response.getDataElement(), "randomForPrefXLabel", randomXLabelValue);
 
 		} catch (ModelAccessException e) {
 			return logAndSendException(e);
@@ -648,11 +657,14 @@ public class VOCBENCH extends SKOSXL {
 			if (mode == XLabelCreationMode.bnode)
 				skosxlmodel.setPrefXLabel(skosConcept, label, lang, getWorkingGraph());
 			else {
-				ARTURIResource prefXLabelURI = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResAndRandomString prefXLabelURIAndRandomValue = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResource prefXLabelURI = prefXLabelURIAndRandomValue.getArtURIResource();
+				String randomXLabelValue = prefXLabelURIAndRandomValue.getRandomValue();
 				ARTURIResource prefXLabel = skosxlmodel.addXLabel(prefXLabelURI.getURI(), label, lang,
 						getWorkingGraph());
 				skosxlmodel.setPrefXLabel(skosConcept, prefXLabel, getWorkingGraph());
 				RDFXMLHelp.addRDFNode(response, createSTXLabel(skosxlmodel, prefXLabel, true));
+				XMLHelp.newElement(response.getDataElement(), "randomForPrefXLabel", randomXLabelValue);
 			}
 
 		} catch (ModelUpdateException e) {
@@ -688,11 +700,14 @@ public class VOCBENCH extends SKOSXL {
 			if (mode == XLabelCreationMode.bnode)
 				skosxlmodel.addAltXLabel(skosConcept, label, lang, getWorkingGraph());
 			else {
-				ARTURIResource altXLabelURI = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResAndRandomString altXLabelURIAndRandomValue = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResource altXLabelURI = altXLabelURIAndRandomValue.getArtURIResource();
+				String randomXLabelValue = altXLabelURIAndRandomValue.getRandomValue();
 				ARTURIResource altXLabel = skosxlmodel.addXLabel(altXLabelURI.getURI(), label, lang,
 						getWorkingGraph());
 				skosxlmodel.addAltXLabel(skosConcept, altXLabel, getWorkingGraph());
 				RDFXMLHelp.addRDFNode(response, createSTXLabel(skosxlmodel, altXLabel, true));
+				XMLHelp.newElement(response.getDataElement(), "randomForAltXLabel", randomXLabelValue);
 			}
 
 		} catch (ModelUpdateException e) {
@@ -728,10 +743,14 @@ public class VOCBENCH extends SKOSXL {
 			if (mode == XLabelCreationMode.bnode)
 				skosxlmodel.addHiddenXLabel(skosConcept, label, lang, getWorkingGraph());
 			else {
-				ARTURIResource hiddenXLabelURI = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResAndRandomString hiddenXLabelURIRandomValue = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResource hiddenXLabelURI = hiddenXLabelURIRandomValue.getArtURIResource();
+				String randomXLabelValue = hiddenXLabelURIRandomValue.getRandomValue();
 				ARTURIResource hiddenXLabel = skosxlmodel.addXLabel(hiddenXLabelURI.getURI(), label, lang,
 						getWorkingGraph());
 				skosxlmodel.addHiddenXLabel(skosConcept, hiddenXLabel, getWorkingGraph());
+				RDFXMLHelp.addRDFNode(response, createSTXLabel(skosxlmodel, hiddenXLabelURI, true));
+				XMLHelp.newElement(response.getDataElement(), "randomForHiddenXLabel", randomXLabelValue);
 			}
 
 		} catch (ModelUpdateException e) {
@@ -900,14 +919,19 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource type = skosxlModel.createURIResource(TYPE);
 			
 			ARTURIResource newNode ;
+			String randomValue;
 			if(isImage){
 				//newNode = skosxlModel.createURIResource(skosxlModel.getDefaultNamespace() +"i_img_"+ 
 				//		UUID.randomUUID().toString());
-				newNode = generateImgURI(skosxlModel, getUserNamedGraphs());
+				ARTURIResAndRandomString newNodeAndRandomValue = generateImgURI(skosxlModel, getUserNamedGraphs());
+				newNode = newNodeAndRandomValue.getArtURIResource();
+				randomValue = newNodeAndRandomValue.getRandomValue();
 			} else {
 				//newNode = skosxlModel.createURIResource(skosxlModel.getDefaultNamespace() +"i_def_"+ 
 				//		UUID.randomUUID().toString());
-				newNode = generateDefURI(skosxlModel, getUserNamedGraphs());
+				ARTURIResAndRandomString newNodeAndRandomValue = generateDefURI(skosxlModel, getUserNamedGraphs());
+				newNode = newNodeAndRandomValue.getArtURIResource();
+				randomValue = newNodeAndRandomValue.getRandomValue();
 			}
 			
 			ARTURIResource defValueURI = skosxlModel.createURIResource(VALUE); 
@@ -952,10 +976,13 @@ public class VOCBENCH extends SKOSXL {
 				skosxlModel.addTriple(newNode, commentURI, commentlLiteral, graph);
 			
 			defElem.setAttribute("concept", conceptURI.getURI());
-			if(isImage)
+			if(isImage){
 				defElem.setAttribute("imageURI", newNode.getURI());
-			else
+				XMLHelp.newElement(response.getDataElement(), "randomForImage", randomValue);
+			} else {
 				defElem.setAttribute("definitionURI", newNode.getURI());
+				XMLHelp.newElement(response.getDataElement(), "randomForDefinition", randomValue);
+			}
 			defElem.setAttribute("label", translation);
 			defElem.setAttribute("lang", lang);
 			if(fromSourceLiteral != null)
@@ -4034,7 +4061,7 @@ public class VOCBENCH extends SKOSXL {
 		
 		try {
 			SKOSXLModel skosxlModel = getSKOSXLModel();
-			ARTResource[] graphs = getUserNamedGraphs();
+			//ARTResource[] graphs = getUserNamedGraphs();
 			//do the search using just a SPARQL query
 			
 			String query = "SELECT DISTINCT ?label ";
@@ -4164,8 +4191,6 @@ public class VOCBENCH extends SKOSXL {
 		} catch (MalformedQueryException e) {
 			return logAndSendException(e);
 		} catch (QueryEvaluationException e) {
-			return logAndSendException(e);
-		} catch (NonExistingRDFResourceException e) {
 			return logAndSendException(e);
 		}
 		
@@ -5277,7 +5302,7 @@ public class VOCBENCH extends SKOSXL {
 	
 	//functions to generate URI. These function will be moved inside ST in a future release
 	
-	protected ARTURIResource generateConceptURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+	protected ARTURIResAndRandomString generateConceptURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
 			throws ModelAccessException {
 		final String DEFAULT_VALUE = "c_";
 		String projectName = serviceContext.getProject().getName();
@@ -5292,8 +5317,9 @@ public class VOCBENCH extends SKOSXL {
 		}
 		ARTURIResource newConcept = null;
 		boolean newConceptGenerated = false;
+		String randomValue = null;
 		while(!newConceptGenerated){
-			String randomValue = randomGenerator();
+			randomValue = randomGenerator();
 			//check if the new concept already exists, in this case generate a new one until a not alredy
 			// existing URI has been generated
 			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
@@ -5302,10 +5328,10 @@ public class VOCBENCH extends SKOSXL {
 				newConceptGenerated = true;
 			};
 		}
-		return newConcept;
+		return new ARTURIResAndRandomString(randomValue, newConcept);
 	}
 	
-	protected ARTURIResource generateXLabelURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+	protected ARTURIResAndRandomString generateXLabelURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
 			throws ModelAccessException {
 		final String DEFAULT_VALUE = "xl_";
 		String projectName = serviceContext.getProject().getName();
@@ -5321,8 +5347,9 @@ public class VOCBENCH extends SKOSXL {
 		}
 		ARTURIResource newConcept = null;
 		boolean newConceptGenerated = false;
+		String randomValue = null;
 		while(!newConceptGenerated){
-			String randomValue = randomGenerator();
+			randomValue = randomGenerator();
 			//check if the new xlabel already exists, in this case generate a new one until a not alredy
 			// existing URI has been generated
 			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
@@ -5331,10 +5358,10 @@ public class VOCBENCH extends SKOSXL {
 				newConceptGenerated = true;
 			};
 		}
-		return newConcept;
+		return new ARTURIResAndRandomString(randomValue, newConcept);
 	}
 	
-	protected ARTURIResource generateImgURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+	protected ARTURIResAndRandomString generateImgURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
 			throws ModelAccessException {
 		final String DEFAULT_VALUE = "img_";
 		String projectName = serviceContext.getProject().getName();
@@ -5350,8 +5377,9 @@ public class VOCBENCH extends SKOSXL {
 		}
 		ARTURIResource newConcept = null;
 		boolean newConceptGenerated = false;
+		String randomValue = null;
 		while(!newConceptGenerated){
-			String randomValue = randomGenerator();
+			randomValue = randomGenerator();
 			//check if the new image already exists, in this case generate a new one until a not alredy
 			// existing URI has been generated
 			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
@@ -5360,10 +5388,10 @@ public class VOCBENCH extends SKOSXL {
 				newConceptGenerated = true;
 			};
 		}
-		return newConcept;
+		return new ARTURIResAndRandomString(randomValue, newConcept);
 	}
 	
-	protected ARTURIResource generateDefURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+	protected ARTURIResAndRandomString generateDefURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
 			throws ModelAccessException {
 		final String DEFAULT_VALUE = "def_";
 		String projectName = serviceContext.getProject().getName();
@@ -5379,8 +5407,9 @@ public class VOCBENCH extends SKOSXL {
 		}
 		ARTURIResource newConcept = null;
 		boolean newConceptGenerated = false;
+		String randomValue = null;
 		while(!newConceptGenerated){
-			String randomValue = randomGenerator();
+			randomValue = randomGenerator();
 			//check if the new image already exists, in this case generate a new one until a not alredy
 			// existing URI has been generated
 			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
@@ -5389,7 +5418,7 @@ public class VOCBENCH extends SKOSXL {
 				newConceptGenerated = true;
 			};
 		}
-		return newConcept;
+		return new ARTURIResAndRandomString(randomValue, newConcept);
 	}
 	
 	protected String randomGenerator(){
@@ -5415,5 +5444,26 @@ public class VOCBENCH extends SKOSXL {
 			randomValue = UUID.randomUUID().toString().substring(0, 13);
 		}
 		return randomValue;
+	}
+	
+	protected class ARTURIResAndRandomString {
+		String randomValue;
+		ARTURIResource artURIResource;
+		
+		public ARTURIResAndRandomString(String randomValue, ARTURIResource artUriResource) {
+			super();
+			this.randomValue = randomValue;
+			this.artURIResource = artUriResource;
+		}
+
+		public String getRandomValue() {
+			return randomValue;
+		}
+
+		public ARTURIResource getArtURIResource() {
+			return artURIResource;
+		}
+		
+		
 	}
 }
