@@ -592,7 +592,8 @@ public class VOCBENCH extends SKOSXL {
 			//old
 			//ARTURIResource prefXLabel = skosxlModel.addXLabel(createURIForXLabel(skosxlModel), prefLabel,
 			//		prefLabelLang, getWorkingGraph());
-			ARTURIResAndRandomString prefXLabelURIAndRandomValue = generateXLabelURI(skosxlModel, graphs);
+			ARTURIResAndRandomString prefXLabelURIAndRandomValue = generateXLabelURI(skosxlModel, 
+					prefLabelLang, graphs);
 			ARTURIResource prefXLabelURI = prefXLabelURIAndRandomValue.getArtURIResource();
 			String randomXLabelValue = prefXLabelURIAndRandomValue.getRandomValue();
 			ARTURIResource prefXLabel = skosxlModel.addXLabel(prefXLabelURI.getURI(), prefLabel,
@@ -657,7 +658,8 @@ public class VOCBENCH extends SKOSXL {
 			if (mode == XLabelCreationMode.bnode)
 				skosxlmodel.setPrefXLabel(skosConcept, label, lang, getWorkingGraph());
 			else {
-				ARTURIResAndRandomString prefXLabelURIAndRandomValue = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResAndRandomString prefXLabelURIAndRandomValue = generateXLabelURI(skosxlmodel, 
+						lang, getUserNamedGraphs());
 				ARTURIResource prefXLabelURI = prefXLabelURIAndRandomValue.getArtURIResource();
 				String randomXLabelValue = prefXLabelURIAndRandomValue.getRandomValue();
 				ARTURIResource prefXLabel = skosxlmodel.addXLabel(prefXLabelURI.getURI(), label, lang,
@@ -700,7 +702,8 @@ public class VOCBENCH extends SKOSXL {
 			if (mode == XLabelCreationMode.bnode)
 				skosxlmodel.addAltXLabel(skosConcept, label, lang, getWorkingGraph());
 			else {
-				ARTURIResAndRandomString altXLabelURIAndRandomValue = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResAndRandomString altXLabelURIAndRandomValue = generateXLabelURI(skosxlmodel, 
+						lang, getUserNamedGraphs());
 				ARTURIResource altXLabelURI = altXLabelURIAndRandomValue.getArtURIResource();
 				String randomXLabelValue = altXLabelURIAndRandomValue.getRandomValue();
 				ARTURIResource altXLabel = skosxlmodel.addXLabel(altXLabelURI.getURI(), label, lang,
@@ -743,7 +746,8 @@ public class VOCBENCH extends SKOSXL {
 			if (mode == XLabelCreationMode.bnode)
 				skosxlmodel.addHiddenXLabel(skosConcept, label, lang, getWorkingGraph());
 			else {
-				ARTURIResAndRandomString hiddenXLabelURIRandomValue = generateXLabelURI(skosxlmodel, getUserNamedGraphs());
+				ARTURIResAndRandomString hiddenXLabelURIRandomValue = generateXLabelURI(skosxlmodel, lang,
+						getUserNamedGraphs());
 				ARTURIResource hiddenXLabelURI = hiddenXLabelURIRandomValue.getArtURIResource();
 				String randomXLabelValue = hiddenXLabelURIRandomValue.getRandomValue();
 				ARTURIResource hiddenXLabel = skosxlmodel.addXLabel(hiddenXLabelURI.getURI(), label, lang,
@@ -5331,7 +5335,8 @@ public class VOCBENCH extends SKOSXL {
 		return new ARTURIResAndRandomString(randomValue, newConcept);
 	}
 	
-	protected ARTURIResAndRandomString generateXLabelURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+	protected ARTURIResAndRandomString generateXLabelURI(SKOSXLModel skosxlModel, String lang,
+			ARTResource[] graphs) 
 			throws ModelAccessException {
 		final String DEFAULT_VALUE = "xl_";
 		String projectName = serviceContext.getProject().getName();
@@ -5352,7 +5357,8 @@ public class VOCBENCH extends SKOSXL {
 			randomValue = randomGenerator();
 			//check if the new xlabel already exists, in this case generate a new one until a not alredy
 			// existing URI has been generated
-			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
+			//String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
+			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+lang+"_"+randomValue;
 			newConcept = skosxlModel.createURIResource(newConceptURI);
 			if(!skosxlModel.existsResource(newConcept, graphs)){
 				newConceptGenerated = true;
@@ -5422,13 +5428,13 @@ public class VOCBENCH extends SKOSXL {
 	}
 	
 	protected String randomGenerator(){
-		final String DEFAULT_VALUE = "datetimems";
+		final String DEFAULT_VALUE = "truncuuid8";
 		String projectName = serviceContext.getProject().getName();
 		String type;
 		try{
 			type = ProjectManager.getProjectProperty(projectName, "uriRndCodeGenerator");
 		} catch (IOException | InvalidProjectNameException | ProjectInexistentException e1) {
-			type = "datetimems";
+			type = DEFAULT_VALUE;
 		}
 		if(type == null){
 			type = DEFAULT_VALUE;
@@ -5438,10 +5444,12 @@ public class VOCBENCH extends SKOSXL {
 			randomValue = new java.util.Date().getTime()+"";
 		} else if(type == "uuid"){
 			randomValue = UUID.randomUUID().toString();
-		} else if(type == "truncuuid8"){
+		} else if(type == "truncuuid8"){ // DEFAULT_VALUE
 			randomValue = UUID.randomUUID().toString().substring(0, 8);
 		} else if(type == "truncuuid12"){
 			randomValue = UUID.randomUUID().toString().substring(0, 13);
+		} else {
+			randomValue = UUID.randomUUID().toString().substring(0, 8);
 		}
 		return randomValue;
 	}
