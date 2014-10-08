@@ -6,19 +6,11 @@ public class TreeObject extends LightEntity {
 
 	private static final long serialVersionUID = 590936046867486590L;
 	
-	/*public static final int CONCEPTMODULE = 0;
-	public static final int CLASSIFICATIONMODULE = 1;
-	public static final int RELATIONSHIPMODULE = 2;
-	private int belongsToModule;
-	*/
 	private String uri;
-	//private String instance;
-	//private String name;
 	private String status;
-	//private String nameSpace;
 	private String label;
 	private boolean hasChild;
-	
+	private String parentURI;	
 
 	/**
 	 * @return the uri
@@ -26,13 +18,6 @@ public class TreeObject extends LightEntity {
 	public String getUri() {
 		return uri;
 	}
-
-	/**
-	 * @return the name
-	 */
-	/*public String getName() {
-		return name;
-	}*/
 
 	/**
 	 * @return the status
@@ -63,13 +48,6 @@ public class TreeObject extends LightEntity {
 	}
 
 	/**
-	 * @param name the name to set
-	 */
-	/*public void setName(String name) {
-		this.name = name;
-	}*/
-
-	/**
 	 * @param status the status to set
 	 */
 	public void setStatus(String status) {
@@ -91,33 +69,16 @@ public class TreeObject extends LightEntity {
 	}
 
 	/**
-	 * @param nameSpace the nameSpace to set
+	 * @return the parentURI
 	 */
-	/*public void setNameSpace(String nameSpace) {
-		this.nameSpace = nameSpace;
-	}*/
+	public String getParentURI() {
+		return parentURI;
+	}
 
 	/**
-	 * @return the nameSpace
+	 * @param parentURI the parentURI to set
 	 */
-	/*public String getNameSpace() {
-		return nameSpace;
-	}*/
-
-	/**
-	 * @param instance the instance to set
-	 */
-	/*public void setInstance(String instance) {
-		this.instance = instance;
-	}*/
-
-	/**
-	 * @return the instance
-	 */
-	/*public String getInstance() {
-		return instance;
-	}*/
-
-	
-	
+	public void setParentURI(String parentURI) {
+		this.parentURI = parentURI;
+	}
 }

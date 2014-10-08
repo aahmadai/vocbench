@@ -815,6 +815,7 @@ public class ConceptTree extends Composite{
 			{
 				cDetailObj = (ConceptDetailObject) result;
 				selectedConceptObject = cDetailObj.getConceptObject();
+				selectedConceptObject.setParentURI(tObj.getParentURI());
 				
 				String status = selectedConceptObject.getStatus();
 				addConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTCREATE, OWLStatusConstants.getOWLStatusID(status)));
@@ -1021,9 +1022,9 @@ public class ConceptTree extends Composite{
 				AsyncCallback<Void> callback = new AsyncCallback<Void>(){
 					public void onSuccess(Void results){
 						ConceptTree.this.reloadItem(conceptObject.getUri(), InfoTab.term);
-						treePanel.showLoading(false);
 					}
 					public void onFailure(Throwable caught){
+						treePanel.showLoading(false);
 						ExceptionManager.showException(caught, constants.conceptMoveFail());
 					}
 				};
@@ -1139,9 +1140,9 @@ public class ConceptTree extends Composite{
 				AsyncCallback<Void> callback = new AsyncCallback<Void>(){
 					public void onSuccess(Void results){
 						ConceptTree.this.reloadItem(conceptObject.getUri(), InfoTab.term);
-						treePanel.showLoading(false);
 					}
 					public void onFailure(Throwable caught){
+						treePanel.showLoading(false);
 						ExceptionManager.showException(caught, constants.conceptCopyFail());
 					}
 				};
@@ -1205,15 +1206,16 @@ public class ConceptTree extends Composite{
 					if(cnt>1)
 					{
 						ConceptTree.this.reloadItem(cObj.getParentURI(), InfoTab.term);
-						treePanel.showLoading(false);
 					}
 					else
 					{
 						Window.alert(constants.conceptRemoveFailOnlyOne());
+						treePanel.showLoading(false);
 					}
 					
 				}
 				public void onFailure(Throwable caught){
+					treePanel.showLoading(false);
 					ExceptionManager.showException(caught, constants.conceptRemoveFail());
 				}
 			};

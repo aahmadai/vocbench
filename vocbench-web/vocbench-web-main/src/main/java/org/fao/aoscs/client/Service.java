@@ -10,6 +10,8 @@ import org.fao.aoscs.client.module.consistency.service.ConsistencyService.Consis
 import org.fao.aoscs.client.module.consistency.service.ConsistencyServiceAsync;
 import org.fao.aoscs.client.module.export.service.ExportService.ExportServiceUtil;
 import org.fao.aoscs.client.module.export.service.ExportServiceAsync;
+import org.fao.aoscs.client.module.icv.service.ICVService.ICVServiceUtil;
+import org.fao.aoscs.client.module.icv.service.ICVServiceAsync;
 import org.fao.aoscs.client.module.importdata.service.ImportService.ImportServiceUtil;
 import org.fao.aoscs.client.module.importdata.service.ImportServiceAsync;
 import org.fao.aoscs.client.module.logging.service.LoggingService.LoggingServiceUtil;
@@ -59,4 +61,5 @@ public class Service {
 	public static ImportServiceAsync<?> importService = ImportServiceUtil.getInstance();
 	public static ProjectServiceAsync<?> projectService = ProjectServiceUtil.getInstance();
 	public static ResourceServiceAsync<?> resourceService = ResourceServiceUtil.getInstance();
+	public static ICVServiceAsync<?> icvService = ICVServiceUtil.getInstance();
 }

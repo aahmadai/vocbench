@@ -232,6 +232,10 @@ public class ConceptBrowser extends FormDialogBox {
 		return this.submit.addClickHandler(handler);
 	}
 	
+	public HandlerRegistration addCloseClickHandler(ClickHandler handler) {
+		return this.cancel.addClickHandler(handler);
+	}
+	
 	public void resetBrowser()
 	{
 		conceptTree.setSelectedItem(null);

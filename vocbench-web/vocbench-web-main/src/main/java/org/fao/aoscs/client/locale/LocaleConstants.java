@@ -89,6 +89,10 @@ public interface LocaleConstants extends Constants{
 	public String toolbarSearchTitle();
 	public String toolbarSparql();
 	public String toolbarSparqlTitle();
+	public String toolbarICV();
+	public String toolbarICVTitle();
+	public String toolbarSheet2RDF();
+	public String toolbarSheet2RDFTitle();
 	public String toolbarConcepts();
 	public String toolbarConceptsTitle();
 	public String toolbarRelationships();
@@ -532,6 +536,23 @@ public interface LocaleConstants extends Constants{
 	//Import>messages
 	public String importSuccess();
 	public String importFail();
+	
+	//ICV
+	public String icvTitle();
+	public String icvConcept();
+	public String icvAction();
+	public String icvSchemeBroaderSelection();
+	public String icvActionDoNothing();
+	public String icvActionSetAsTopConcept();
+	public String icvActionSetAsBroaderConcept();
+	public String icvSchemeDialogTitle();
+	public String icvScheme();
+	
+	
+	//ICV>messages
+	public String icvListDanglingConceptsFail();
+	public String icvManageDanglingConceptsFail();
+
 	
 	//Statistics
 	public String statTitle();

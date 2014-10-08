@@ -4,6 +4,7 @@ import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 import it.uniroma2.art.semanticturkey.servlet.main.SKOS;
 import it.uniroma2.art.semanticturkey.servlet.main.SKOS.Par;
+import it.uniroma2.art.semanticturkey.servlet.main.SKOSXL;
 
 import org.fao.aims.aos.vocbench.services.VOCBENCH;
 import org.fao.aoscs.domain.OntologyInfo;
@@ -18,6 +19,82 @@ import org.slf4j.LoggerFactory;
 public class VocbenchResponseManager extends ResponseManager {
 	
 	protected static Logger logger = LoggerFactory.getLogger(VocbenchResponseManager.class);
+	
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param broaderConceptURI
+	 * @param schemeURI
+	 * @param prefLabel
+	 * @param prefLabelLang
+	 * @return
+	 */
+	public static XMLResponseREPLY createConceptRequest(OntologyInfo ontoInfo, String conceptURI, String broaderConceptURI, String schemeURI, String prefLabel, String prefLabelLang)
+	{
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOSXL.Req.createConceptRequest, 
+					STModel.par(SKOS.Par.concept, conceptURI),
+					STModel.par(SKOS.Par.broaderConcept, broaderConceptURI), 
+					STModel.par(SKOS.Par.scheme, schemeURI),
+					STModel.par(SKOS.Par.prefLabel, prefLabel), 
+					STModel.par(SKOS.Par.prefLabelLang, prefLabelLang), 
+					STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public static XMLResponseREPLY setPrefLabelRequest(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
+	{
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOSXL.Req.setPrefLabelRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(SKOS.Par.label, label), 
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par(SKOSXL.Par.mode, "uri"), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public static XMLResponseREPLY addAltLabelRequest(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
+	{
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOSXL.Req.addAltLabelRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(SKOS.Par.label, label), 
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par(SKOSXL.Par.mode, "uri"), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public static XMLResponseREPLY addHiddenLabelRequest(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
+	{
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOSXL.Req.addHiddenLabelRequest, 
+				STModel.par(SKOS.Par.concept, conceptURI), 
+				STModel.par(SKOS.Par.label, label), 
+				STModel.par(SKOS.Par.lang, lang), 
+				STModel.par(SKOSXL.Par.mode, "uri"), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
 	
 	/**
 	 * 

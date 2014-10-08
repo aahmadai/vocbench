@@ -21,6 +21,7 @@ import org.fao.aoscs.client.module.constant.OWLActionConstants;
 import org.fao.aoscs.client.module.constant.OWLStatusConstants;
 import org.fao.aoscs.client.module.document.About;
 import org.fao.aoscs.client.module.export.Export;
+import org.fao.aoscs.client.module.icv.IntegrityConstraintValidator;
 import org.fao.aoscs.client.module.importdata.ImportData;
 import org.fao.aoscs.client.module.logging.LogManager;
 import org.fao.aoscs.client.module.logging.LogViewer;
@@ -33,6 +34,7 @@ import org.fao.aoscs.client.module.search.Sparql;
 import org.fao.aoscs.client.module.search.widgetlib.ResultPanel;
 import org.fao.aoscs.client.module.search.widgetlib.SearchOption;
 import org.fao.aoscs.client.module.search.widgetlib.SuggestBoxAOS;
+import org.fao.aoscs.client.module.sheet2rdf.Sheet2RDF;
 import org.fao.aoscs.client.module.statistic.Statistic;
 import org.fao.aoscs.client.module.system.ConfigurationAssignment;
 import org.fao.aoscs.client.module.system.GroupsAssignment;
@@ -142,6 +144,8 @@ public class MainApp extends Composite { // Application container
     public Export exportData = null;
     public Classification classification = null;
     public Scheme scheme = null;
+    public IntegrityConstraintValidator integrityConstraintValidator = null;
+    public Sheet2RDF sheet2RDF = null;
     public Statistic statistic = null;
     public About about = null;
     public Consistency consistency = null;
@@ -557,6 +561,24 @@ public class MainApp extends Composite { // Application container
                 modulePanel.add(sparql);
             }
             modulePanel.showWidget(modulePanel.getWidgetIndex(sparql) );
+        }
+        else if (name.equals("ICV"))
+        {
+        	if(modulePanel.getWidgetIndex(integrityConstraintValidator) == -1 || integrityConstraintValidator == null)
+            {
+        		integrityConstraintValidator = new IntegrityConstraintValidator();
+                modulePanel.add(integrityConstraintValidator);
+            }
+            modulePanel.showWidget(modulePanel.getWidgetIndex(integrityConstraintValidator) );
+        }
+        else if (name.equals("Sheet2RDF"))
+        {
+        	if(modulePanel.getWidgetIndex(sheet2RDF) == -1 || sheet2RDF == null)
+            {
+        		sheet2RDF = new Sheet2RDF();
+                modulePanel.add(sheet2RDF);
+            }
+            modulePanel.showWidget(modulePanel.getWidgetIndex(sheet2RDF) );
         }
         else if (name.equals("Concepts"))
         {
@@ -1159,8 +1181,6 @@ public class MainApp extends Composite { // Application container
         {
         	iconContainer.disableMenu(constants.toolbarExport(), constants.toolbarExportTitle(), "Export");
         }
-        
-       
 
         if (menuMap.containsKey("Statistics"))
         {
@@ -1179,7 +1199,25 @@ public class MainApp extends Composite { // Application container
         {
         	iconContainer.disableMenu(constants.toolbarSparql(), constants.toolbarSparqlTitle(), "Sparql");
         }
-
+        
+        if (menuMap.containsKey("ICV"))
+        {
+            iconContainer.addMenu(constants.toolbarICV(), constants.toolbarICVTitle(), "ICV");
+        }
+        else
+        {
+        	iconContainer.disableMenu(constants.toolbarICV(), constants.toolbarICVTitle(), "ICV");
+        }
+        
+        /*if (menuMap.containsKey("Sheet2RDF"))
+        {
+            iconContainer.addMenu(constants.toolbarSheet2RDF(), constants.toolbarSheet2RDFTitle(), "Sheet2RDF");
+        }
+        else
+        {
+        	iconContainer.disableMenu(constants.toolbarSheet2RDF(), constants.toolbarSheet2RDFTitle(), "Sheet2RDF");
+        }
+*/
         for (int i = 0; i < iconContainer.getWidgetCount(); i++)
         {
             iconContainer.setCellVerticalAlignment(iconContainer.getWidget(i), HasVerticalAlignment.ALIGN_MIDDLE);

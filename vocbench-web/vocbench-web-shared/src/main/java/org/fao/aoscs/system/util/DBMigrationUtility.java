@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.fao.aoscs.domain.DBMigrationObject;
-
-import com.googlecode.flyway.core.Flyway;
-import com.googlecode.flyway.core.api.MigrationInfo;
+import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.MigrationInfo;
 
 public class DBMigrationUtility {
 	

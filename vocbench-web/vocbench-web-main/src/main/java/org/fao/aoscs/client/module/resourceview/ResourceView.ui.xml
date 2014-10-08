@@ -9,7 +9,7 @@
 	        <g:FlowPanel width="100%" addStyleNames="myTableCell">
 	            <g:TextBox ui:field="txtResourceURL" width="100%"/>
 	        </g:FlowPanel>
-	        <g:Button ui:field="btnRenameResourceURL" text="{constants.buttonEdit}"/>
+	        <g:Button ui:field="btnRenameResourceURL" text="{constants.buttonEdit}" enabled="false"/>
 	    </g:FlowPanel>
 	    <g:FlowPanel ui:field="pnlResourceView">
 	    </g:FlowPanel>

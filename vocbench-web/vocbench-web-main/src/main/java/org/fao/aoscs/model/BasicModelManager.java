@@ -4,6 +4,7 @@ import org.fao.aoscs.client.module.classification.service.ClassificationService;
 import org.fao.aoscs.client.module.concept.service.ConceptService;
 import org.fao.aoscs.client.module.consistency.service.ConsistencyService;
 import org.fao.aoscs.client.module.export.service.ExportService;
+import org.fao.aoscs.client.module.icv.service.ICVService;
 import org.fao.aoscs.client.module.importdata.service.ImportService;
 import org.fao.aoscs.client.module.ontology.service.OntologyService;
 import org.fao.aoscs.client.module.project.service.ProjectService;
@@ -33,4 +34,5 @@ public interface BasicModelManager {
 	public ImportService getImportService();
 	public ProjectService getProjectService();
 	public ResourceService getResourceService();
+	public ICVService getICVService();
 }

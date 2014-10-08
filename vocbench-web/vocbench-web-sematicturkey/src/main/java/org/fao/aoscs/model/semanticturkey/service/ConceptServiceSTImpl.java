@@ -252,18 +252,19 @@ public class ConceptServiceSTImpl {
 	 */
 	public ConceptObject addNewConcept(OntologyInfo ontoInfo, int actionId, int userId, String schemeURI, String namespace, ConceptObject conceptObject, TermObject termObject, String parentConceptURI, String typeAgrovocCode){
 		
-		long unique = new java.util.Date().getTime();
-		String termURI = "";
+		//long unique = new java.util.Date().getTime();
 
 		if(conceptObject.getUri()==null || conceptObject.getUri().equals("") || conceptObject.getUri().equals("null"))
 		{
-			conceptObject.setUri(namespace+"c_"+unique);
+			conceptObject.setUri(null);
 		}
-		//conceptObject.setName(STUtility.getName(ontoInfo, conceptURI));
 		conceptObject.setScheme(schemeURI);
 		
 		// ADD CONCEPT
-		termURI = SKOSXLManager.addConcept(ontoInfo, conceptObject.getUri(), parentConceptURI, schemeURI, termObject.getLabel(), termObject.getLang());
+		String[] uris = VocbenchManager.createConcept(ontoInfo, conceptObject.getUri(), parentConceptURI, schemeURI, termObject.getLabel(), termObject.getLang());
+		
+		conceptObject.setUri(uris[0]);
+		String termURI = uris[1];
 		
 		// SET STATUS
 		PropertyManager.addPlainLiteralPropValue(ontoInfo, conceptObject.getUri(), STModelConstants.VOCBENCHNAMESPACE+STModelConstants.HASSTATUS, conceptObject.getStatus(), null);
@@ -276,14 +277,11 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		// ADD AGROVOC CODE
-		addAGROVOCCode(ontoInfo, termURI, "", false, ""+unique, typeAgrovocCode);
+		addAGROVOCCode(ontoInfo, termURI, "", false, uris[2], typeAgrovocCode);
 		
 		termObject.setUri(termURI);
-		//termObject.setName(STUtility.getName(ontoInfo, termURI));
 		termObject.setConceptUri(conceptObject.getUri());
-		//termObject.setConceptName(conceptObject.getName());
 		
-		//conceptObject.setName(conceptObject.getName());
 		conceptObject.addTerm(termObject.getUri(), termObject);
 
 		
@@ -469,18 +467,20 @@ public class ConceptServiceSTImpl {
 			}
 		}
 		
-		String termURI = "";
+		String[] uris = new String[2];
 		if(termObject.isMainLabel())
 		{
-			termURI = SKOSXLManager.setPrefLabel(ontoInfo, conceptObject.getUri(), termObject.getLabel(), termObject.getLang());
+			uris = VocbenchManager.setPrefLabel(ontoInfo, conceptObject.getUri(), termObject.getLabel(), termObject.getLang());
 		}
 		else
 		{
-			termURI = SKOSXLManager.addAltLabel(ontoInfo, conceptObject.getUri(), termObject.getLabel(), termObject.getLang());
+			uris = VocbenchManager.addAltLabel(ontoInfo, conceptObject.getUri(), termObject.getLabel(), termObject.getLang());
 		}
+		String termURI = uris[0];
+		String agrovocCode = uris[1];
 		
 		// SET AGROVOC CODE
-		addAGROVOCCode(ontoInfo, termURI, conceptObject.getUri(), termObject.isMainLabel(), "", typeAgrovocCode);
+		addAGROVOCCode(ontoInfo, termURI, conceptObject.getUri(), termObject.isMainLabel(), agrovocCode, typeAgrovocCode);
 		
 		// SET STATUS
 		PropertyManager.addPlainLiteralPropValue(ontoInfo, termURI, STModelConstants.VOCBENCHNAMESPACE+STModelConstants.HASSTATUS, status.getStatus(), null);
@@ -532,10 +532,11 @@ public class ConceptServiceSTImpl {
 	{
 		if(typeAgrovocCode!=null && !typeAgrovocCode.equals("") && !typeAgrovocCode.equals("null"))
 		{
-			if(agrovocCode.equals(""))
+			if(isPreferred) 
 			{
-				if(isPreferred) agrovocCode = getAGROVOCCode(ontoInfo, conceptURI);
-				if(agrovocCode.equals("")) agrovocCode = ""+(new java.util.Date().getTime());
+				String existingCode = getAGROVOCCode(ontoInfo, conceptURI);
+				if(!existingCode.equals(""))
+					agrovocCode = existingCode;
 			}
 			PropertyManager.addTypedLiteralPropValue(ontoInfo, termURI, SKOS.NOTATION, agrovocCode, typeAgrovocCode);
 		}
@@ -543,7 +544,7 @@ public class ConceptServiceSTImpl {
 	
 	
 	/**
-	 * @param ontoInfo
+	 * @param ontoInfo 
 	 * @param conceptURI
 	 * @return
 	 */
@@ -1540,7 +1541,7 @@ public class ConceptServiceSTImpl {
 		HashMap<String, ArrayList<TreeObject>> broaderList = new HashMap<String, ArrayList<TreeObject>>();
 		ArrayList<TreeObject> narrowerList = new ArrayList<TreeObject>();
 		
-		TreeObject treeObj = ObjectManager.createTreeObject(ontoInfo, conceptURI, showAlsoNonpreferredTerms, isHideDeprecated, langList);
+		TreeObject treeObj = ObjectManager.createTreeObject(ontoInfo, conceptURI, showAlsoNonpreferredTerms, isHideDeprecated, langList, null);
 		getBroaderHierarchy(ontoInfo, conceptURI, schemeUri, showAlsoNonpreferredTerms, isHideDeprecated, langList, broaderList); 
 		narrowerList = VocbenchManager.getNarrowerConcepts(ontoInfo, conceptURI, schemeUri, showAlsoNonpreferredTerms, isHideDeprecated,langList); 
 

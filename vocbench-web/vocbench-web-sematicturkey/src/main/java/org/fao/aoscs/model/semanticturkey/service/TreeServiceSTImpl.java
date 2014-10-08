@@ -78,7 +78,7 @@ public class TreeServiceSTImpl {
 					NtreeItemObject nObj = (NtreeItemObject) list.get(i);
 					tpObj.addItemList(nObj);
 					if(rootList.contains(nObj.getName())){
-						tpObj.setRootItem(ObjectManager.createTreeObject(ontoInfo, nObj.getName(), showAlsoNonpreferredTerms, isHideDeprecated, langList));
+						tpObj.setRootItem(ObjectManager.createTreeObject(ontoInfo, nObj.getName(), showAlsoNonpreferredTerms, isHideDeprecated, langList, null));
 					}
 				}
 			}
@@ -102,15 +102,15 @@ public class TreeServiceSTImpl {
 		final HashMap<String, TreeObject> cList = new HashMap<String, TreeObject>();
 		final ArrayList<TreeObject> emptycList = new ArrayList<TreeObject>();
 		
-		ArrayList<TreeObject> concepts = new ArrayList<TreeObject>();
+		ArrayList<TreeObject> treeObjs = new ArrayList<TreeObject>();
 		
 		if(rootConceptURI==null)
-			concepts = VocbenchManager.getTopConcepts(ontoInfo, schemeURI, null, showAlsoNonpreferredTerms, isHideDeprecated,langList);
+			treeObjs = VocbenchManager.getTopConcepts(ontoInfo, schemeURI, null, showAlsoNonpreferredTerms, isHideDeprecated,langList);
 		else
-			concepts = VocbenchManager.getNarrowerConcepts(ontoInfo, rootConceptURI, schemeURI, showAlsoNonpreferredTerms, isHideDeprecated,langList);
+			treeObjs = VocbenchManager.getNarrowerConcepts(ontoInfo, rootConceptURI, schemeURI, showAlsoNonpreferredTerms, isHideDeprecated,langList);
 		
-		if(concepts.size()>0){
-			for(TreeObject treeObj : concepts) {
+		if(treeObjs.size()>0){
+			for(TreeObject treeObj : treeObjs) {
 				if(treeObj!=null)
 				{
 					if(treeObj.getLabel().startsWith("###EMPTY###"))

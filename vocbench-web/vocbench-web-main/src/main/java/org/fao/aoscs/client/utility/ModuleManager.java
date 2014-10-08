@@ -122,6 +122,8 @@ public class ModuleManager {
 			{
 				m.modulePanel.remove(m.concept);
 				m.concept = null;
+				if(m.conceptBrowser!=null)
+					m.conceptBrowser.resetBrowser();
 			}
 		}
 	}

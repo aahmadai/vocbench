@@ -4,6 +4,7 @@ import org.fao.aoscs.client.module.classification.service.ClassificationService;
 import org.fao.aoscs.client.module.concept.service.ConceptService;
 import org.fao.aoscs.client.module.consistency.service.ConsistencyService;
 import org.fao.aoscs.client.module.export.service.ExportService;
+import org.fao.aoscs.client.module.icv.service.ICVService;
 import org.fao.aoscs.client.module.importdata.service.ImportService;
 import org.fao.aoscs.client.module.ontology.service.OntologyService;
 import org.fao.aoscs.client.module.project.service.ProjectService;
@@ -20,6 +21,7 @@ import org.fao.aoscs.model.semanticturkey.adapter.ClassificationServiceSTAdapter
 import org.fao.aoscs.model.semanticturkey.adapter.ConceptServiceSTAdapter;
 import org.fao.aoscs.model.semanticturkey.adapter.ConsistencyServiceSTAdapter;
 import org.fao.aoscs.model.semanticturkey.adapter.ExportServiceSTAdapter;
+import org.fao.aoscs.model.semanticturkey.adapter.ICVServiceSTAdapter;
 import org.fao.aoscs.model.semanticturkey.adapter.ImportServiceSTAdapter;
 import org.fao.aoscs.model.semanticturkey.adapter.OntologyServiceSTAdapter;
 import org.fao.aoscs.model.semanticturkey.adapter.ProjectServiceSTAdapter;
@@ -159,6 +161,14 @@ public class STManager implements BasicModelManager {
 	 */
 	public ResourceService getResourceService() {
 		return new ResourceServiceSTAdapter();
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.model.BasicModelManager#getICVService()
+	 */
+	public ICVService getICVService() {
+		return new ICVServiceSTAdapter();
 	}
 
 }

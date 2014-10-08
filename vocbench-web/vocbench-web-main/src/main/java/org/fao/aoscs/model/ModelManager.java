@@ -7,6 +7,7 @@ import org.fao.aoscs.client.module.concept.service.ConceptService;
 import org.fao.aoscs.client.module.consistency.service.ConsistencyService;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.export.service.ExportService;
+import org.fao.aoscs.client.module.icv.service.ICVService;
 import org.fao.aoscs.client.module.importdata.service.ImportService;
 import org.fao.aoscs.client.module.ontology.service.OntologyService;
 import org.fao.aoscs.client.module.project.service.ProjectService;
@@ -280,6 +281,23 @@ public class ModelManager implements BasicModelManager {
 			logger.error(e.getLocalizedMessage());
 		}
 		return resourceService;
+	}
+	
+	public ICVService getICVService() {
+		
+		ICVService icvService = null;
+		try
+		{
+			Class<?> cls = Class.forName(getModelType());
+			Method m = cls.getMethod("getICVService");
+			icvService = (ICVService) m.invoke(cls.newInstance());
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
+		}
+		return icvService;
 	}
 
 }

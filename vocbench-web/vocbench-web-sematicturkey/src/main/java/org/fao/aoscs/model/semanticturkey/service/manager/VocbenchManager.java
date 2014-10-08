@@ -21,6 +21,7 @@ import org.fao.aoscs.model.semanticturkey.service.manager.response.ResponseManag
 import org.fao.aoscs.model.semanticturkey.service.manager.response.VocbenchResponseManager;
 import org.fao.aoscs.model.semanticturkey.util.STLiteral;
 import org.fao.aoscs.model.semanticturkey.util.STLiteralImpl;
+import org.fao.aoscs.model.semanticturkey.util.STResource;
 import org.fao.aoscs.model.semanticturkey.util.STUtility;
 import org.fao.aoscs.model.semanticturkey.util.STXMLUtility;
 import org.slf4j.Logger;
@@ -36,6 +37,128 @@ public class VocbenchManager extends ResponseManager {
 	protected static Logger logger = LoggerFactory.getLogger(VocbenchManager.class);
 	
 	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param broaderConceptURI
+	 * @param schemeURI
+	 * @param prefLabel
+	 * @param prefLabelLanguage
+	 * @return
+	 */
+	public static String[] createConcept(OntologyInfo ontoInfo, String conceptURI, String broaderConceptURI, String schemeURI, String prefLabel, String prefLabelLanguage)
+	{
+		String[] uris = new String[4];
+		XMLResponseREPLY reply = VocbenchResponseManager.createConceptRequest(ontoInfo, conceptURI, broaderConceptURI, schemeURI, prefLabel, prefLabelLanguage);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
+			{
+				if(stResource.getRole().toString().equals("concept"))
+					uris[0] =  stResource.getARTNode().asURIResource().getURI();
+				if(stResource.getRole().toString().equals("xLabel"))
+					uris[1] =  stResource.getARTNode().asURIResource().getURI();
+			}
+			for(Element randomForConceptElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForConcept"))
+			{
+				uris[2] = randomForConceptElement.getTextContent();
+			}
+			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForPrefXLabel"))
+			{
+				uris[3] = randomForPrefXLabelElement.getTextContent();
+			}
+		}
+		return uris;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public static String[] setPrefLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
+	{
+		String[] uris = new String[2];
+		XMLResponseREPLY reply = VocbenchResponseManager.setPrefLabelRequest(ontoInfo, conceptURI, label, lang);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
+			{
+				if(stResource.getRole().toString().equals("xLabel"))
+				{
+					uris[0] =  stResource.getARTNode().asURIResource().getURI();
+				}
+			}
+			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForPrefXLabel"))
+			{
+				uris[1] = randomForPrefXLabelElement.getTextContent();
+			}
+		}
+		return uris;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public static String[] addAltLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
+	{
+		String[] uris = new String[2];
+		XMLResponseREPLY reply = VocbenchResponseManager.addAltLabelRequest(ontoInfo, conceptURI, label, lang);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
+			{
+				if(stResource.getRole().toString().equals("xLabel"))
+				{
+					uris[0] =  stResource.getARTNode().asURIResource().getURI();
+				}
+			}
+			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForAltXLabel"))
+			{
+				uris[1] = randomForPrefXLabelElement.getTextContent();
+			}
+		}
+		return uris;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public static String[] addHiddenLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
+	{
+		String[] uris = new String[2];
+		XMLResponseREPLY reply = VocbenchResponseManager.addHiddenLabelRequest(ontoInfo, conceptURI, label, lang);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
+			{
+				if(stResource.getRole().toString().equals("xLabel"))
+				{
+					uris[0] =  stResource.getARTNode().asURIResource().getURI();
+				}
+			}
+			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForHiddenXLabel"))
+			{
+				uris[1] = randomForPrefXLabelElement.getTextContent();
+			}
+		}
+		return uris;
+	}
+	
+	/**
 	 * @param schemeURI
 	 * @param defaultLanguage
 	 * @param showAlsoNonpreferredTerms
@@ -45,7 +168,7 @@ public class VocbenchManager extends ResponseManager {
 	 */
 	public static ArrayList<TreeObject> getTopConcepts(OntologyInfo ontoInfo, String schemeURI, String defaultLanguage, boolean showAlsoNonpreferredTerms, boolean isHideDeprecated, ArrayList<String> langList)
 	{
-		return getTreeObjects(ontoInfo, VocbenchResponseManager.getTopConceptsRequest(ontoInfo, schemeURI, defaultLanguage), showAlsoNonpreferredTerms, isHideDeprecated, langList);
+		return getTreeObjects(ontoInfo, VocbenchResponseManager.getTopConceptsRequest(ontoInfo, schemeURI, defaultLanguage), showAlsoNonpreferredTerms, isHideDeprecated, langList, null);
 	}
 	
 	/**
@@ -58,12 +181,8 @@ public class VocbenchManager extends ResponseManager {
 	 */
 	public static ArrayList<TreeObject> getNarrowerConcepts(OntologyInfo ontoInfo, String conceptURI, String schemeURI, boolean showAlsoNonpreferredTerms, boolean isHideDeprecated, ArrayList<String> langList)
 	{
-		//Date d = new Date();
 		XMLResponseREPLY reply = VocbenchResponseManager.getNarrowerConceptsRequest(ontoInfo, conceptURI, schemeURI, true);
-		//Date d1 = new Date();
-		//logger.info("Time elapsed1: "+((d1.getTime()-d.getTime())/1000)+" secs");
-		ArrayList<TreeObject> list =  getTreeObjects(ontoInfo, reply, showAlsoNonpreferredTerms, isHideDeprecated, langList);
-		//logger.info("Time elapsed2: "+((new Date().getTime()-d1.getTime())/1000)+" secs");
+		ArrayList<TreeObject> list =  getTreeObjects(ontoInfo, reply, showAlsoNonpreferredTerms, isHideDeprecated, langList, conceptURI);
 		return list;
 	}
 	
@@ -77,7 +196,7 @@ public class VocbenchManager extends ResponseManager {
 	 */
 	public static ArrayList<TreeObject> getBroaderConcepts(OntologyInfo ontoInfo, String conceptURI, String schemeURI, boolean showAlsoNonpreferredTerms, boolean isHideDeprecated, ArrayList<String> langList)
 	{
-		return getTreeObjects(ontoInfo, VocbenchResponseManager.getBroaderConceptsRequest(ontoInfo, conceptURI, schemeURI, true), showAlsoNonpreferredTerms, isHideDeprecated, langList);
+		return getTreeObjects(ontoInfo, VocbenchResponseManager.getBroaderConceptsRequest(ontoInfo, conceptURI, schemeURI, true), showAlsoNonpreferredTerms, isHideDeprecated, langList, null);
 	}
 	
 	
@@ -95,7 +214,7 @@ public class VocbenchManager extends ResponseManager {
 	 * @param langList
 	 * @return
 	 */
-	private static ArrayList<TreeObject> getTreeObjects(OntologyInfo ontoInfo, XMLResponseREPLY resp, boolean showAlsoNonpreferredTerms, boolean isHideDeprecated, ArrayList<String> langList)
+	private static ArrayList<TreeObject> getTreeObjects(OntologyInfo ontoInfo, XMLResponseREPLY resp, boolean showAlsoNonpreferredTerms, boolean isHideDeprecated, ArrayList<String> langList, String parentURI)
 	{
 		ArrayList<TreeObject> treeObjList = new ArrayList<TreeObject>();
 		if(resp!=null)
@@ -139,7 +258,7 @@ public class VocbenchManager extends ResponseManager {
 							String label = ObjectManager.createTreeObjectLabel(conceptUri, prefList, altList, showAlsoNonpreferredTerms, isHideDeprecated, langList);
 							if(label.startsWith("###EMPTY###"))
 								label = conceptShow;
-							treeObjList.add(STUtility.createTreeObject(ontoInfo, conceptUri, label, status, hasChild));
+							treeObjList.add(STUtility.createTreeObject(ontoInfo, conceptUri, label, status, hasChild, parentURI));
 						}
 					}
 				}

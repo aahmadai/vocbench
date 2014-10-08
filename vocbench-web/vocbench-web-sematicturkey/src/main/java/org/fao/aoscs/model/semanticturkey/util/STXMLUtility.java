@@ -190,8 +190,6 @@ public class STXMLUtility {
 		return uriResources;
 	}
 	
-	
-	
 	/**
 	 * 
 	 * @param role

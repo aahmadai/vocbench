@@ -214,8 +214,12 @@ public class ServletExtensionHttpWrapper {
 		try
 		{
 			in = getInputStream(response);
-			Document doc = XMLUtil.inputStream2XML(in);
-			return ResponseParser.getResponseFromXML(doc);
+			if(in!=null)
+			{
+				Document doc = XMLUtil.inputStream2XML(in);
+				return ResponseParser.getResponseFromXML(doc);
+			}
+			else return null;
 		}
 		catch(Exception e)
 		{

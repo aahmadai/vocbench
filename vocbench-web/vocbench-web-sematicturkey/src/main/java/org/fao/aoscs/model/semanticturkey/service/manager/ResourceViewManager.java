@@ -52,7 +52,6 @@ public class ResourceViewManager extends ResponseManager {
 						for(STResource uriElem : STXMLUtility.getURIResource(childElem, showOnlyExplicit))
 						{
 							resourceView.setResource(STUtility.createARTURIResourceObject(uriElem));
-							System.out.println("test:"+resourceView.getResource().getUri());
 						}
 					}
 					else

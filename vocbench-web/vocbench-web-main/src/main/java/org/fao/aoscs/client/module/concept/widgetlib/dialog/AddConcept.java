@@ -1,7 +1,5 @@
 package org.fao.aoscs.client.module.concept.widgetlib.dialog;
 
-import java.util.HashMap;
-
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
@@ -144,11 +142,15 @@ public class AddConcept extends FlexDialogBox {
     	namespace = new ListBox();
     	namespace.setWidth("100%");
     	//namespace.addItem("--None--","");
+    	namespace.addItem(MainApp.defaultNamespace, MainApp.defaultNamespace);
+    	namespace.setItemSelected(namespace.getItemCount()-1, true);
+    	namespace.setEnabled(false);
     	
     	final Label uriPrefix = new Label();
     	uriPrefix.setWidth("100%");
+    	uriPrefix.setText(namespace.getValue(namespace.getSelectedIndex()));
     	
-    	AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>() {
+    	/*AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>() {
             public void onSuccess(HashMap<String, String> results)
             {
             	for(String prefix:results.keySet())
@@ -167,7 +169,7 @@ public class AddConcept extends FlexDialogBox {
             	ExceptionManager.showException(caught, constants.conceptAddNamespaceFail());
             }
         };
-        Service.conceptService.getNamespaces(MainApp.userOntology, callback);
+        Service.conceptService.getNamespaces(MainApp.userOntology, callback);*/
     
     	namespacePanel = new HorizontalPanel();
     	namespacePanel.setSize("100%", "100%");

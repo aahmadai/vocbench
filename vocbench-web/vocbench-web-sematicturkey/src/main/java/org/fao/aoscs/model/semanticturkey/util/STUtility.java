@@ -19,6 +19,7 @@ import org.fao.aoscs.domain.ARTLiteralObject;
 import org.fao.aoscs.domain.ARTURIResourceObject;
 import org.fao.aoscs.domain.ClassObject;
 import org.fao.aoscs.domain.ConceptObject;
+import org.fao.aoscs.domain.DanglingConceptObject;
 import org.fao.aoscs.domain.DomainRangeObject;
 import org.fao.aoscs.domain.IDObject;
 import org.fao.aoscs.domain.LabelObject;
@@ -104,13 +105,14 @@ public class STUtility {
 	 * @param hasChild
 	 * @return
 	 */
-	public static TreeObject createTreeObject(OntologyInfo ontoInfo, String uri, String label, String status, boolean hasChild)
+	public static TreeObject createTreeObject(OntologyInfo ontoInfo, String uri, String label, String status, boolean hasChild, String parentURI)
 	{
 		TreeObject treeObj = new TreeObject();
 		treeObj.setUri(uri);
 		treeObj.setStatus(status);
 		treeObj.setLabel(label);
 		treeObj.setHasChild(hasChild);
+		treeObj.setParentURI(parentURI);
 		
 		return treeObj;
 	}
@@ -230,6 +232,19 @@ public class STUtility {
 		idObj.setIDSourceURL(sourceURL);
 		idObj.setIDTranslationList(idtList);
 		return idObj;
+	}
+	
+	/**
+	 * @param conceptURI
+	 * @param schemeURI
+	 * @return
+	 */
+	public static DanglingConceptObject createDanglingConcept(String conceptURI, String schemeURI)
+	{
+		DanglingConceptObject dcObj = new DanglingConceptObject();
+		dcObj.setConceptURI(conceptURI);
+		dcObj.setSchemeURI(schemeURI);
+		return dcObj;
 	}
 	
 	/**

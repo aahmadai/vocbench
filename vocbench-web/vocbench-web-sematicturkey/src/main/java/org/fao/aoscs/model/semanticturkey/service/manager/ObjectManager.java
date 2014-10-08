@@ -57,7 +57,7 @@ public class ObjectManager extends ResponseManager {
 	 * @param langList
 	 * @return
 	 */
-	public static TreeObject createTreeObject(OntologyInfo ontoInfo, String conceptURI, boolean showAlsoNonpreferredTerms, boolean isHideDeprecated, ArrayList<String> langList)
+	public static TreeObject createTreeObject(OntologyInfo ontoInfo, String conceptURI, boolean showAlsoNonpreferredTerms, boolean isHideDeprecated, ArrayList<String> langList, String parentURI)
 	{
 		String status = "";
 		String conceptShow = "";
@@ -107,7 +107,7 @@ public class ObjectManager extends ResponseManager {
 		String label = createTreeObjectLabel(conceptURI, prefList, altList, showAlsoNonpreferredTerms, isHideDeprecated, langList);
 		if(label.startsWith("###EMPTY###"))
 			label = conceptShow;
-		return STUtility.createTreeObject(ontoInfo, conceptURI, label, status, hasChild);
+		return STUtility.createTreeObject(ontoInfo, conceptURI, label, status, hasChild, parentURI);
 	}
 	
 	/**
