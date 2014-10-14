@@ -55,7 +55,7 @@
 		<dependency>
 			<groupId>org.fao.aims.aos.vocbench</groupId>
 			<artifactId>vocbench-st-osgibundle</artifactId>
-			<version>2.2-SNAPSHOT</version>
+			<version>2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
