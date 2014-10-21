@@ -218,6 +218,18 @@ public class ConfigContainer extends Composite {
 					Service.systemService.getConfigConstants(impConfig.getMessage(), callback);
 			}
 		});
+		impConfig.addCancelClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				if(impConfig.getUploader()!=null)
+				{
+					impConfig.getUploader().cancel();
+					impConfig.clearMessage();
+				}
+				impConfig.onCancel();
+			}
+		});
 		
 		btnImport.setTitle(constants.configLoadBtnDesc());
 		btnImport.addClickHandler(new ClickHandler() {
