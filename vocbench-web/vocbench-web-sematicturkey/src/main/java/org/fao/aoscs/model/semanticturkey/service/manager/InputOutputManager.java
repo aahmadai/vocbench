@@ -2,12 +2,12 @@ package org.fao.aoscs.model.semanticturkey.service.manager;
 
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.InputOutputResponseManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.ResponseManager;
+import org.fao.aoscs.model.semanticturkey.util.STUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +35,8 @@ public class InputOutputManager extends ResponseManager {
 	{
 		String content = "";
 		try {
-			File tempfile = File.createTempFile("vbdownload-", ".xml");
-			InputOutputResponseManager.saveRDFRequest(ontoInfo, tempfile.getPath(), false);
-			content = tempfile.getPath();
+			content = STUtility.createTempFile().getPath();
+			InputOutputResponseManager.saveRDFRequest(ontoInfo, content, false);
 		} catch (IOException e) {
 		}
 		return content;

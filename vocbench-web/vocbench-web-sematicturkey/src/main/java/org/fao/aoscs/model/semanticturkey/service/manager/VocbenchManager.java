@@ -581,7 +581,7 @@ public class VocbenchManager extends ResponseManager {
 			Element dataElement = reply.getDataElement();
 			File tempfile;
 			try {
-				tempfile = File.createTempFile("vbdownload-", ".xml");
+				tempfile = STUtility.createTempFile();
 				FileUtils.writeStringToFile(tempfile, STXMLUtility.stripCDATA(dataElement.getTextContent()), "UTF-8");
 				filename = tempfile.getPath();
 			} catch (IOException e) {

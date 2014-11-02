@@ -5,6 +5,8 @@ import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -769,5 +771,16 @@ public class STUtility {
 	public static void printBean(Object bean) {
 	   System.out.println("bean: "+ToStringBuilder.reflectionToString(bean));
 	 }
+	
+	public static File createTempFile() throws IOException
+	{
+		File tempdir = new File(System.getProperty("java.io.tmpdir"));
+		tempdir.setReadable(true, false);
+		tempdir.setWritable(true, false);
+		File tempfile = File.createTempFile("vbdownload-", ".xml", tempdir);
+		tempfile.setReadable(true, false);
+		tempfile.setWritable(true, false);
+		return tempfile;
+	}
 	
 }
