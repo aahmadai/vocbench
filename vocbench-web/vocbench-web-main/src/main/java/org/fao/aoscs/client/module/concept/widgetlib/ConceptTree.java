@@ -472,9 +472,10 @@ public class ConceptTree extends Composite{
 		});
 		
 		// TODO change this value by adding action and setting group permission
-	    boolean schemePermission = MainApp.groupId<3;
+	    boolean admPubPermission = MainApp.groupId<3;
+	    boolean admPermission = MainApp.groupId==1;
 		
-		addConceptToSchemeButton = new ImageAOS(constants.conceptSchemeAdd(), "images/concept-scheme-add-grey.png", "images/concept-scheme-add-grey-disabled.png", schemePermission, new ClickHandler() {
+		addConceptToSchemeButton = new ImageAOS(constants.conceptSchemeAdd(), "images/concept-scheme-add-grey.png", "images/concept-scheme-add-grey-disabled.png", admPubPermission, new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if(selectedConceptObject==null)
 				{
@@ -492,7 +493,7 @@ public class ConceptTree extends Composite{
 			}
 		});
 		
-		removeConceptToSchemeButton = new ImageAOS(constants.conceptSchemeDelete(), "images/concept-scheme-delete-grey.png", "images/concept-scheme-delete-grey-disabled.png", schemePermission, new ClickHandler() {
+		removeConceptToSchemeButton = new ImageAOS(constants.conceptSchemeDelete(), "images/concept-scheme-delete-grey.png", "images/concept-scheme-delete-grey-disabled.png", admPubPermission, new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if(selectedConceptObject==null)
 				{
@@ -539,7 +540,7 @@ public class ConceptTree extends Composite{
 		});
 		DOM.setStyleAttribute(visualize.getElement(), "cursor", "pointer");
 		
-		resourceView =  new ImageAOS(constants.conceptResourceView(), "images/res-grey.png", "images/res-grey-disabled.png", schemePermission, new ClickHandler() {
+		resourceView =  new ImageAOS(constants.conceptResourceView(), "images/res-grey.png", "images/res-grey-disabled.png", admPermission, new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if(selectedConceptObject==null)
 					Window.alert(constants.conceptSelectConcept());
@@ -599,7 +600,7 @@ public class ConceptTree extends Composite{
 		hp.setCellHorizontalAlignment(deleteConceptButton, HasHorizontalAlignment.ALIGN_LEFT);				
 		hp.setCellVerticalAlignment(deleteConceptButton, HasVerticalAlignment.ALIGN_MIDDLE);
 
-		if(MainApp.groupId < 3)
+		if(admPubPermission)
 		{
 			hp.add(moveconcept);
 			hp.add(copyconcept);
@@ -618,14 +619,18 @@ public class ConceptTree extends Composite{
 			hp.setCellVerticalAlignment(removeConceptToSchemeButton, HasVerticalAlignment.ALIGN_MIDDLE);
 
 		}
+		
+		if(admPermission)
+		{
+			hp.add(resourceView);
+			hp.setCellHorizontalAlignment(resourceView, HasHorizontalAlignment.ALIGN_LEFT);		
+			hp.setCellVerticalAlignment(resourceView, HasVerticalAlignment.ALIGN_MIDDLE);
+		}
+		
 		hp.add(visualize);
 		hp.setCellHorizontalAlignment(visualize, HasHorizontalAlignment.ALIGN_LEFT);		
 		hp.setCellVerticalAlignment(visualize, HasVerticalAlignment.ALIGN_MIDDLE);
 		
-		hp.add(resourceView);
-		hp.setCellHorizontalAlignment(resourceView, HasHorizontalAlignment.ALIGN_LEFT);		
-		hp.setCellVerticalAlignment(resourceView, HasVerticalAlignment.ALIGN_MIDDLE);
-
 		hp.add(checkPanel);
 		hp.setSpacing(1);
 		
@@ -766,7 +771,7 @@ public class ConceptTree extends Composite{
 	private void formLoad(String concept)
 	{
 		String language = convertArrayList2String(MainApp.userSelectedLanguage,"_");
-		String ontology = MainApp.userOntology.getDbTableName();
+		String ontology = MainApp.userOntology.getOntologyName();
 		//String wsurl = MainApp.userOntology.getDbDriver();
 		String wsurl = GWT.getHostPageBaseURL()+"graph";
 		

@@ -32,13 +32,14 @@ public class GraphServiceSTImpl extends ResponseManager {
 		else if(service.equals("skos"))
 			serviceWrapper = getSTModel(ontoInfo).skosService;
 		
-		ParameterPair[] pair = new ParameterPair[parameters.size()];
+		ParameterPair[] pair = new ParameterPair[parameters.size()+1];
 		int i=0;
 		for(String name : parameters.keySet())
 		{
 			pair [i] = STModel.par(name, parameters.get(name));
 			i++;
 		}
+		pair[i] = STModel.par("ctx_project", ontoInfo.getDbTableName());
 		
 		if(serviceWrapper!=null)
 		{
