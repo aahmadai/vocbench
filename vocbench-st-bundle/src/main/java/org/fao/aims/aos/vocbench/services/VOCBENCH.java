@@ -82,15 +82,17 @@ public class VOCBENCH extends SKOSXL {
 
 	protected static Logger logger = LoggerFactory.getLogger(VOCBENCH.class);
 
-	
+	//this variable indicates if the desired service should use the new way (SPARQL) to obtain all the 
+	// possible information regarind the selected concept
+	private boolean newVersion = true;
 	
 	
 	// NEW REQUESTS
 	public static class Req {
 		// SET REQUESTS
-		public static final String changeLabelInfoRequest = "changeLabelInfo";
-		public static final String prefToAltLabelRequest = "prefToAltLabel";
-		public static final String altToPrefLabelRequest = "altToPrefLabel";
+		//public static final String changeLabelInfoRequest = "changeLabelInfo";
+		//public static final String prefToAltLabelRequest = "prefToAltLabel";
+		//public static final String altToPrefLabelRequest = "altToPrefLabel";
 		public static final String setDefinitionRequest = "setDefinition";
 		//public static final String changeDefinitionRequest = "changeDefinition";
 		public static final String addTranslationForDefinitionRequest = "addTranslationForDefinition";
@@ -139,7 +141,7 @@ public class VOCBENCH extends SKOSXL {
 
 	// PARS
 	public static class ParVocBench {
-		final static public String xlabelURI = "xlabelURI";
+		//final static public String xlabelURI = "xlabelURI";
 		final static public String propURI = "propURI";
 		final static public String subProp = "subProp";
 		final static public String excludeSuperProp = "excludeSuperProp";
@@ -193,7 +195,7 @@ public class VOCBENCH extends SKOSXL {
 			return servletUtilities.createNoSuchHandlerExceptionResponse(request);
 
 		// CREATE/SET/DELETE REQUESTS
-		if(request.equals(SKOSXL.Req.createConceptRequest)){
+		/*if(request.equals(SKOSXL.Req.createConceptRequest)){
 			String conceptName = setHttpPar(SKOS.Par.concept);
 			String broaderConceptName = setHttpPar(SKOS.Par.broaderConcept);
 			String schemeName = setHttpPar(SKOS.Par.scheme);
@@ -228,22 +230,23 @@ public class VOCBENCH extends SKOSXL {
 			XLabelCreationMode xLabelCreationMode = XLabelCreationMode.valueOf(modeString);
 			response = addHiddenXLabel(skosConceptName, xLabelCreationMode, label, lang);
 		} else if (request.equals(Req.changeLabelInfoRequest)) {
-			String xlabelURI = setHttpPar(ParVocBench.xlabelURI);
+			String xlabelURI = setHttpPar(SKOSXL.Par.xlabelURI);
 			String label = setHttpPar(SKOS.Par.label);
 			String lang = setHttpPar(SKOS.Par.lang);
-			checkRequestParametersAllNotNull(ParVocBench.xlabelURI, SKOS.Par.label);
+			checkRequestParametersAllNotNull(SKOSXL.Par.xlabelURI, SKOS.Par.label);
 			response = changeLabelInfo(xlabelURI, label, lang);
 		} else if (request.equals(Req.prefToAltLabelRequest)) {
 			String conceptName = setHttpPar(SKOS.Par.concept);
-			String xlabelURI = setHttpPar(ParVocBench.xlabelURI);
-			checkRequestParametersAllNotNull(SKOS.Par.concept, ParVocBench.xlabelURI);
+			String xlabelURI = setHttpPar(SKOSXL.Par.xlabelURI);
+			checkRequestParametersAllNotNull(SKOS.Par.concept, SKOSXL.Par.xlabelURI);
 			response = prefToAtlLabel(conceptName, xlabelURI);
 		} else if (request.equals(Req.altToPrefLabelRequest)) {
 			String conceptName = setHttpPar(SKOS.Par.concept);
-			String xlabelURI = setHttpPar(ParVocBench.xlabelURI);
-			checkRequestParametersAllNotNull(SKOS.Par.concept, ParVocBench.xlabelURI);
+			String xlabelURI = setHttpPar(SKOSXL.Par.xlabelURI);
+			checkRequestParametersAllNotNull(SKOS.Par.concept, SKOSXL.Par.xlabelURI);
 			response = altToPrefLabel(conceptName, xlabelURI);
-		} 
+		} */
+		
 		//DEFINITION
 		else if (request.equals(Req.setDefinitionRequest)){
 			String concept = setHttpPar(SKOS.Par.concept);
@@ -368,8 +371,8 @@ public class VOCBENCH extends SKOSXL {
 			checkRequestParametersAllNotNull(SKOS.Par.concept);
 			response = getConceptTabsCounts(conceptName);
 		} else if(request.equals(Req.getTermTabsCountsRequest)){
-			String xlabel = setHttpPar(ParVocBench.xlabelURI);
-			checkRequestParametersAllNotNull(ParVocBench.xlabelURI);
+			String xlabel = setHttpPar(SKOSXL.Par.xlabelURI);
+			checkRequestParametersAllNotNull(SKOSXL.Par.xlabelURI);
 			response = getTermTabsCounts(xlabel);
 		}else if (request.equals(Req.getLabelDescriptionRequest)) {
 			String conceptName = setHttpPar(SKOS.Par.concept);
@@ -550,7 +553,8 @@ public class VOCBENCH extends SKOSXL {
 		return response;
 	}
 
-	public Response createConcept(String conceptName, String superConceptName, String schemeName,
+	//Moved to SKOSXL service
+	/*public Response createConcept(String conceptName, String superConceptName, String schemeName,
 			String prefLabel, String prefLabelLang, String language) {
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		logger.debug("conceptName: " + conceptName);
@@ -573,7 +577,6 @@ public class VOCBENCH extends SKOSXL {
 			} else{
 				newConcept = createNewResource(skosxlModel, conceptName, graphs);
 			}
-			System.out.println("new Concept = "+newConcept.getURI());
 			logger.debug("new concept: "+newConcept.getURI());
 			
 			
@@ -619,7 +622,7 @@ public class VOCBENCH extends SKOSXL {
 			return logAndSendException(e);
 		}
 		return response;
-	}
+	}*/
 	
 	/**
 	 * this service sets the preferred label for a given language
@@ -632,7 +635,8 @@ public class VOCBENCH extends SKOSXL {
 	 * @param lang
 	 * @return
 	 */
-	public Response setPrefXLabel(String skosConceptName, XLabelCreationMode mode, String label, String lang) {
+	//Moved to SKOSXL service
+	/*public Response setPrefXLabel(String skosConceptName, XLabelCreationMode mode, String label, String lang) {
 
 		SKOSXLModel skosxlmodel = getSKOSXLModel();
 
@@ -677,7 +681,7 @@ public class VOCBENCH extends SKOSXL {
 			return logAndSendException(e);
 		}
 		return response;
-	}
+	}*/
 
 	/**
 	 * this service adds an alternative label to a concept for a given language
@@ -690,7 +694,8 @@ public class VOCBENCH extends SKOSXL {
 	 * @param lang
 	 * @return
 	 */
-	public Response addAltXLabel(String skosConceptName, XLabelCreationMode mode, String label, String lang) {
+	//Moved to SKOSXL service
+	/*public Response addAltXLabel(String skosConceptName, XLabelCreationMode mode, String label, String lang) {
 
 		SKOSXLModel skosxlmodel = getSKOSXLModel();
 
@@ -721,7 +726,7 @@ public class VOCBENCH extends SKOSXL {
 			return logAndSendException(e);
 		}
 		return response;
-	}
+	}*/
 
 	/**
 	 * this service adds an hidden label to a concept for a given language
@@ -734,7 +739,8 @@ public class VOCBENCH extends SKOSXL {
 	 * @param lang
 	 * @return
 	 */
-	public Response addHiddenXLabel(String skosConceptName, XLabelCreationMode mode, String label, String lang) {
+	//Moved to SKOSXL service
+	/*public Response addHiddenXLabel(String skosConceptName, XLabelCreationMode mode, String label, String lang) {
 
 		SKOSXLModel skosxlmodel = getSKOSXLModel();
 
@@ -765,16 +771,16 @@ public class VOCBENCH extends SKOSXL {
 			return logAndSendException(e);
 		}
 		return response;
-	}
+	}*/
 	
 
+	//Moved to SKOSXL service
+	/*
 	public Response changeLabelInfo(String xlabelURI, String label, String lang) {
 		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
-		Element xlabel = XMLHelp.newElement(dataElement, ParVocBench.xlabelURI);
-
-	
+		Element xlabel = XMLHelp.newElement(dataElement, SKOSXL.Par.xlabelURI);
 
 		try {
 			ARTLiteral xlabelLiteral = skosxlModel.createLiteral(label, lang);
@@ -799,7 +805,7 @@ public class VOCBENCH extends SKOSXL {
 							xlabelLiteral, graph);
 				}
 
-			} else {
+			} else { //there was no value associated to the xlabel (which is strange)
 				skosxlModel.addTriple(xLabel, it.uniroma2.art.owlart.vocabulary.SKOSXL.Res.LITERALFORM,
 						xlabelLiteral, graph);
 			}
@@ -815,13 +821,15 @@ public class VOCBENCH extends SKOSXL {
 			return logAndSendException(e);
 		}
 		return response;
-	}
+	}*/
 
+	//Moved to SKOSXL service
+	/*
 	public Response prefToAtlLabel(String conceptURI, String xlabelURI) {
 		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
-		Element xlabelElem = XMLHelp.newElement(dataElement, ParVocBench.xlabelURI);
+		Element xlabelElem = XMLHelp.newElement(dataElement, SKOSXL.Par.xlabelURI);
 		try {
 			ARTURIResource skosConcept = skosxlModel.createURIResource(skosxlModel.expandQName(conceptURI));
 			ARTURIResource xLabel = retrieveExistingURIResource(skosxlModel, 
@@ -846,13 +854,15 @@ public class VOCBENCH extends SKOSXL {
 			return logAndSendException(e);
 		}
 		return response;
-	}
+	}*/
 
+	//Moved to SKOSXL service
+	/*
 	public Response altToPrefLabel(String conceptURI, String xlabelURI) {
 		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
-		Element xlabelElem = XMLHelp.newElement(dataElement, ParVocBench.xlabelURI);
+		Element xlabelElem = XMLHelp.newElement(dataElement, SKOSXL.Par.xlabelURI);
 		try {
 			ARTURIResource skosConcept = skosxlModel.createURIResource(skosxlModel.expandQName(conceptURI));
 			ARTURIResource xLabel = retrieveExistingURIResource(skosxlModel, 
@@ -891,7 +901,7 @@ public class VOCBENCH extends SKOSXL {
 			return logAndSendException(e);
 		}
 		return response;
-	}
+	}*/
 
 	
 	public Response setDefinitionOrImage(String conceptName, String translation, String lang, String fromSource,
@@ -1906,7 +1916,6 @@ public class VOCBENCH extends SKOSXL {
 			Element dataElement = response.getDataElement();
 			Element extCollection = XMLHelp.newElement(dataElement, "collection");
 
-			boolean newVersion = true;
 			//extCollection.setAttribute("newVersion", newVersion+"");
 			while (it.hasNext()) {
 				ARTURIResource concept = it.next();
@@ -1983,7 +1992,6 @@ public class VOCBENCH extends SKOSXL {
 			Element dataElement = response.getDataElement();
 			Element extCollection = XMLHelp.newElement(dataElement, "collection");
 			
-			boolean newVersion = true;
 			//extCollection.setAttribute("newVersion", newVersion+"");
 			while (it.hasNext()) {
 				ARTURIResource narrowerConcept = it.next();
@@ -2041,7 +2049,6 @@ public class VOCBENCH extends SKOSXL {
 			Element dataElement = response.getDataElement();
 			Element extCollection = XMLHelp.newElement(dataElement, "collection");
 
-			boolean newVersion = true;
 			while (it.hasNext()) {
 				// concepts.add(createSTConcept(skosModel, it.next(), true, defaultLanguage));
 				ARTURIResource broaderConcept = it.next();
@@ -2084,7 +2091,6 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource concept = retrieveExistingURIResource(skosxlModel, conceptName,
 					getUserNamedGraphs());
 
-			boolean newVersion = true;
 			if(newVersion){
 				constructConceptInfo(skosxlModel, dataElement, concept);
 			} else{
@@ -5306,6 +5312,7 @@ public class VOCBENCH extends SKOSXL {
 	
 	//functions to generate URI. These function will be moved inside ST in a future release
 	
+	//moved to SKOS.java
 	protected ARTURIResAndRandomString generateConceptURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
 			throws ModelAccessException {
 		final String DEFAULT_VALUE = "c_";
@@ -5335,7 +5342,8 @@ public class VOCBENCH extends SKOSXL {
 		return new ARTURIResAndRandomString(randomValue, newConcept);
 	}
 	
-	protected ARTURIResAndRandomString generateXLabelURI(SKOSXLModel skosxlModel, String lang,
+	//moved to SKOSXL.java
+	/*protected ARTURIResAndRandomString generateXLabelURI(SKOSXLModel skosxlModel, String lang,
 			ARTResource[] graphs) 
 			throws ModelAccessException {
 		final String DEFAULT_VALUE = "xl_";
@@ -5365,7 +5373,7 @@ public class VOCBENCH extends SKOSXL {
 			};
 		}
 		return new ARTURIResAndRandomString(randomValue, newConcept);
-	}
+	}*/
 	
 	protected ARTURIResAndRandomString generateImgURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
 			throws ModelAccessException {
@@ -5427,7 +5435,8 @@ public class VOCBENCH extends SKOSXL {
 		return new ARTURIResAndRandomString(randomValue, newConcept);
 	}
 	
-	protected String randomGenerator(){
+	//moved to SKOS.java
+	/*protected String randomGenerator(){
 		final String DEFAULT_VALUE = "truncuuid8";
 		String projectName = serviceContext.getProject().getName();
 		String type;
@@ -5452,9 +5461,10 @@ public class VOCBENCH extends SKOSXL {
 			randomValue = UUID.randomUUID().toString().substring(0, 8);
 		}
 		return randomValue;
-	}
+	}*/
 	
-	protected class ARTURIResAndRandomString {
+	//moved to SKOS.java
+	/*protected class ARTURIResAndRandomString {
 		String randomValue;
 		ARTURIResource artURIResource;
 		
@@ -5471,7 +5481,5 @@ public class VOCBENCH extends SKOSXL {
 		public ARTURIResource getArtURIResource() {
 			return artURIResource;
 		}
-		
-		
-	}
+	}*/
 }
