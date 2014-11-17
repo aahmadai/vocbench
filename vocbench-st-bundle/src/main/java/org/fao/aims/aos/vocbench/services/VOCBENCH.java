@@ -2220,6 +2220,11 @@ public class VOCBENCH extends SKOSXL {
 						"\n<"+conceptUri+"> ?subPropNote ?note . }"+
 						
 						"\nUNION"+
+
+						"\n{?subPropNotation <"+SUBPROPERTY+">+ <"+NOTATION+"> . "+ //notation and its SUBPROPERTY 
+						"\n<"+conceptUri+"> ?subPropNotation ?notation . }"+
+						
+						"\nUNION"+
 						
 						"\n{?datatypeProp <"+TYPE+"> <"+DATATYPEPROPERTY+"> ." + 
 						"\n FILTER(?datatypeProp != <"+HASSTATUS+"> &&  ?datatypeProp != <"+MODIFIED+"> " +
@@ -2227,11 +2232,6 @@ public class VOCBENCH extends SKOSXL {
 						"\nFILTER NOT EXISTS{?datatypeProp <"+SUBPROPERTY+">+ <"+NOTATION+"> }"+ // not notation or one of its subproperty
 						"\n<"+conceptUri+"> ?datatypeProp ?attributes . " +
 						"\n}"+
-						
-						"\nUNION"+
-
-						"\n{?subPropNotation <"+SUBPROPERTY+">+ <"+NOTATION+"> . "+ //notation and its SUBPROPERTY 
-						"\n<"+conceptUri+"> ?subPropNotation ?notation . }"+
 						
 						"\nUNION"+
 						
@@ -2292,6 +2292,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n(COUNT (DISTINCT ?attributes) AS ?attributesCount) " +
 					"\n?subPropRel "+
 					"\n(COUNT (DISTINCT ?related) AS ?relatedCount) " +
+					"\n(COUNT (DISTINCT ?notation) AS ?notationCount) " +
 					"\n(COUNT (DISTINCT ?image) AS ?imageCount)" +
 					"\nWHERE{" +
 					
@@ -2325,7 +2326,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n{?datatypeProp <"+TYPE+"> <"+DATATYPEPROPERTY+"> ." + 
 					"\n FILTER(?datatypeProp != <"+HASSTATUS+"> &&  ?datatypeProp != <"+MODIFIED+"> " +
 							"&& ?datatypeProp != <"+CREATED+">)"+
-					"\nFILTER NOT EXISTS{?propertyForXLabel <"+SUBPROPERTY+">* <"+NOTATION+"> }"+ // not notation or one of its subproperty
+					"\nFILTER NOT EXISTS{?datatypeProp <"+SUBPROPERTY+">* <"+NOTATION+"> }"+ // not notation or one of its subproperty
 					"\n<"+conceptUri+"> ?datatypeProp ?attributes . " +
 					"\n}"+
 					
