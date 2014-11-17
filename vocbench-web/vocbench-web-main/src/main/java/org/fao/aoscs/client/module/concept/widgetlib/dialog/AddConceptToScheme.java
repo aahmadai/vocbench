@@ -16,6 +16,7 @@ import org.fao.aoscs.client.utility.ModuleManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
 import org.fao.aoscs.client.widgetlib.shared.misc.OlistBox;
+import org.fao.aoscs.domain.InitializeConceptData;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
@@ -37,10 +38,12 @@ public class AddConceptToScheme extends FormDialogBox {
 	
 	private OlistBox schemeList ;
 	private String conceptURI;
+	private InitializeConceptData initData;
 	private VerticalPanel panel = new VerticalPanel();
 	
-	public AddConceptToScheme(){
+	public AddConceptToScheme(InitializeConceptData initData){
 		super(constants.buttonAdd(), constants.buttonCancel());
+		this.initData = initData;
 		this.setText(constants.conceptSchemeAdd());
 		setWidth("400px");
 		
@@ -112,7 +115,7 @@ public class AddConceptToScheme extends FormDialogBox {
 				{
 					if(Window.confirm(messages.conceptSchemeNotAvailableWarning(scheme)))
 					{
-						CopyConceptToScheme copyConceptToScheme = new CopyConceptToScheme(conceptURI, scheme);
+						CopyConceptToScheme copyConceptToScheme = new CopyConceptToScheme(conceptURI, scheme, initData);
 						copyConceptToScheme.show();
 						copyConceptToScheme.doCopyConceptToSchemeAction(new OnCopyConceptToSchemeReady() {
 							public void doCopyConceptToSchemeAction() {

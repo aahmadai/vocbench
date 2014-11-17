@@ -3,12 +3,14 @@ package org.fao.aoscs.client.module.concept.widgetlib.dialog;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
+import org.fao.aoscs.client.module.constant.ConceptActionKey;
 import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
 import org.fao.aoscs.client.widgetlib.shared.dialog.ConceptBrowser;
 import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
 import org.fao.aoscs.client.widgetlib.shared.label.LabelAOS;
+import org.fao.aoscs.domain.InitializeConceptData;
 import org.fao.aoscs.domain.OwlStatus;
 
 import com.google.gwt.core.client.GWT;
@@ -32,11 +34,13 @@ public class CopyConceptToScheme extends FormDialogBox{
 	private CheckBox rootConceptChb;
 	private String conceptURI;
 	private String schemeURI;
+	private InitializeConceptData initData;
 	
-	public CopyConceptToScheme(String conceptURI, String schemeURI){
+	public CopyConceptToScheme(String conceptURI, String schemeURI, InitializeConceptData initData){
 		super();
 		this.conceptURI = conceptURI;
 		this.schemeURI = schemeURI;
+		this.initData = initData;
 		this.setText(constants.conceptCopy());
 		setWidth("400px");
 		this.initLayout();
@@ -154,8 +158,10 @@ public class CopyConceptToScheme extends FormDialogBox{
 				}
 			};
 			
-			OwlStatus status = null;
-			int actionId = -1;	
+			//OwlStatus status = null;
+			//int actionId = -1;	
+			OwlStatus status = (OwlStatus)initData.getActionStatus().get(ConceptActionKey.conceptEditLinkConcept);
+			int actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditLinkConcept));
 			
 			Service.conceptService.copyConcept(MainApp.userOntology, MainApp.schemeUri, schemeURI, conceptURI, parentConceptURI, status, actionId, MainApp.userId, callback);
 		}

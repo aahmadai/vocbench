@@ -485,7 +485,7 @@ public class ConceptTree extends Composite{
 				{
 					if(addConceptToScheme == null || !addConceptToScheme.isLoaded)
 					{
-						addConceptToScheme = new AddConceptToScheme();
+						addConceptToScheme = new AddConceptToScheme(initData);
 					}
 					addConceptToScheme.setConcept(selectedConceptObject.getUri());
 					addConceptToScheme.show();

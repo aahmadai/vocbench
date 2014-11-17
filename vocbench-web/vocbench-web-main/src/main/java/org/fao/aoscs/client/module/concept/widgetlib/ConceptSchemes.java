@@ -53,7 +53,7 @@ public class ConceptSchemes extends ConceptTemplate{
 				
 				if(addConceptToScheme == null || !addConceptToScheme.isLoaded)
 				{
-					addConceptToScheme = new AddConceptToScheme();
+					addConceptToScheme = new AddConceptToScheme(initData);
 				}
 				addConceptToScheme.setConcept(conceptObject.getUri());
 				addConceptToScheme.show();
