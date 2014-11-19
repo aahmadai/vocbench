@@ -2894,7 +2894,15 @@ public class VOCBENCH extends SKOSXL {
 							commentLiteralList.clear();
 						}
 					}
-					defOrImageURI = tuple.getBinding("definitionOrImageURI").getBoundValue().asURIResource();
+					if(tuple.getBinding("definitionOrImageURI").getBoundValue().isURIResource()){
+						defOrImageURI = tuple.getBinding("definitionOrImageURI").getBoundValue().asURIResource();
+					} else{
+						// the definition is a literal, not a URI, so add it in the labelLiteralList
+						labelLiteral = tuple.getBinding("definitionOrImageURI").getBoundValue().asLiteral();
+						if(!labelLiteralList.contains(labelLiteral)){
+							labelLiteralList.add(labelLiteral);
+						}
+					}
 					
 				}
 				if(tuple.hasBinding("created")){
@@ -2933,7 +2941,10 @@ public class VOCBENCH extends SKOSXL {
 				createSingleDefElement(definitionsElem, defOrImageURI, createdLiteral, modifiedLiteral, 
 					sourceLinkLiteral, sourceLiteral, labelLiteralList, commentLiteralList, isImage);
 				//}
+			} else if(labelLiteralList.size()>0){
+				createSinglePlainDefElement(definitionsElem, labelLiteralList);
 			}
+			
 		} catch (ModelAccessException e) {
 			return logAndSendException(e);
 		} catch (UnsupportedQueryLanguageException e) {
@@ -2947,6 +2958,19 @@ public class VOCBENCH extends SKOSXL {
 		}
 		
 		return response;
+	}
+	
+	private void createSinglePlainDefElement(Element definitionsElem,Collection<ARTLiteral> labelLiteralList){
+		Element defElem;
+		defElem= XMLHelp.newElement(definitionsElem, "plainDefinition");
+		
+		if(labelLiteralList.size()>0) {
+			for(ARTLiteral label : labelLiteralList){
+				RDFXMLHelp.addRDFNode(defElem, 
+						STRDFNodeFactory.createSTRDFLiteral(label, true));
+			}
+		}
+		
 	}
 	
 	private void createSingleDefElement(Element definitionsElem, ARTURIResource defURI, 
