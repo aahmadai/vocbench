@@ -46,7 +46,7 @@ public class ConfigurationAssignment extends Composite {
 	
 	public void initPanels(final HashMap<String, ConfigObject> configObjectMap){
 		
-		ConfigContainer mainPanel = new ConfigContainer(configObjectMap);
+		ConfigContainer mainPanel = new ConfigContainer(configObjectMap, true);
 		panel.clear();
 		panel.add(mainPanel);	      
 		panel.setCellHorizontalAlignment(mainPanel,  HasHorizontalAlignment.ALIGN_CENTER);

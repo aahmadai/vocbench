@@ -51,7 +51,7 @@ public class ConfigContainer extends Composite {
 	private HashMap<String, ConfigObject> configObjectMap;
 	private ImportConfig impConfig;
 
-	public ConfigContainer(HashMap<String, ConfigObject> configObjectMap1)
+	public ConfigContainer(HashMap<String, ConfigObject> configObjectMap1, final boolean logOut)
 	{
 		this.configObjectMap = configObjectMap1;
 		ArrayList<String> list = new ArrayList<String>(configObjectMap.keySet());
@@ -159,7 +159,7 @@ public class ConfigContainer extends Composite {
 						}
 					}
 				}
-				updateConfigConstants();
+				updateConfigConstants(logOut);
 			}
 		});
 		
@@ -407,7 +407,7 @@ public class ConfigContainer extends Composite {
 		return msgPanel;
 	}
 	
-	private void updateConfigConstants()
+	private void updateConfigConstants(final boolean logOut)
 	{
 		panel.clear();
 		panel.setSize("100%", "100%");
@@ -420,7 +420,10 @@ public class ConfigContainer extends Composite {
 		{
 			public void onSuccess(Void result) {
 				ConfigConstants.loadConstants(configObjectMap);
-				new LogManager().endLog();
+				if(logOut)
+					new LogManager().endLog();
+				else
+					Main.signOut();
 			}
 		    public void onFailure(Throwable caught) {
 		    	ExceptionManager.showException(caught, constants.configConfigurationFail());

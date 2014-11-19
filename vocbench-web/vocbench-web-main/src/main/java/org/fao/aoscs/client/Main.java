@@ -81,7 +81,7 @@ public class Main implements EntryPoint {
 	
 	private static void loadConfigContainer()
 	{
-		ConfigContainer configContainer = new ConfigContainer(configObjectMap);
+		ConfigContainer configContainer = new ConfigContainer(configObjectMap, false);
 		centerContainer.clear();
 		centerContainer.add(configContainer);
 	}
