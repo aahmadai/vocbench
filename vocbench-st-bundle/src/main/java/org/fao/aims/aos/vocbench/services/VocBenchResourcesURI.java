@@ -28,6 +28,7 @@ public class VocBenchResourcesURI {
 	//owl
 	final static public String OBJECTPROPERTY = "http://www.w3.org/2002/07/owl#ObjectProperty";
 	final static public String DATATYPEPROPERTY = "http://www.w3.org/2002/07/owl#DatatypeProperty";
+	final static public String SAMEAS = "http://www.w3.org/2002/07/owl#sameAs";
 	
 	
 	//skos
@@ -43,6 +44,7 @@ public class VocBenchResourcesURI {
 	final static public String CONCEPTSCHEME = "http://www.w3.org/2004/02/skos/core#ConceptScheme";
 	final static public String INSCHEME= "http://www.w3.org/2004/02/skos/core#inScheme";
 	final static public String RELATED = "http://www.w3.org/2004/02/skos/core#related";
+	final static public String MAPPINGRELATION = "http://www.w3.org/2004/02/skos/core#mappingRelation";
 	
 	//skosxl
 	final static public String LITERALFORM = "http://www.w3.org/2008/05/skos-xl#literalForm";

@@ -2197,6 +2197,8 @@ public class VOCBENCH extends SKOSXL {
 						"\n(COUNT (DISTINCT ?related) AS ?relatedCount) " +
 						"\n(COUNT (DISTINCT ?notation) AS ?notationCount) " +
 						"\n(COUNT (DISTINCT ?image) AS ?imageCount)" +
+						"\n(COUNT (DISTINCT ?sameAs) AS ?sameAsCount)" +
+						"\n(COUNT (DISTINCT ?mappingRelation) AS ?mappingRelationCount)" +
 						"\nWHERE{" +
 						
 						"\n{<"+conceptUri+"> <"+PREFLABEL+"> ?xlabel . }"+
@@ -2241,6 +2243,17 @@ public class VOCBENCH extends SKOSXL {
 						"\nUNION"+
 						
 						"\n{<"+conceptUri+"> <"+DEPICTION+"> ?image . }"+
+						
+						"\nUNION"+
+
+						"\n{?subPropSameAs <"+SUBPROPERTY+">+ <"+SAMEAS+"> . "+ //owl:sameAs and its SUBPROPERTY 
+						"\n<"+conceptUri+"> ?subPropSameAs ?sameAs . }"+
+
+						"\nUNION"+
+
+						"\n{?subPropMappingRelation <"+SUBPROPERTY+">+ <"+MAPPINGRELATION+"> . "+ //skos:mappingRelation and its SUBPROPERTY 
+						"\n<"+conceptUri+"> ?subPropMappingRelation ?mappingRelation . }"+
+						
 						"\n}" +
 						"\nGROUP BY ?subPropRel";
 			
@@ -2256,6 +2269,11 @@ public class VOCBENCH extends SKOSXL {
 			String relatedImplicitCount = "0";
 			String notationImplicitCount = "0";
 			String imageImplicitCount = "0";
+			
+			String sameAsImplicitCount = "0";
+			String mappingRelationImplicitCount = "0";
+			String sameAsAndMappingRelationImplicitCount = "0";
+			
 			boolean first = true;
 			while(it.hasNext()){
 				TupleBindings tuple = it.next();
@@ -2273,6 +2291,10 @@ public class VOCBENCH extends SKOSXL {
 						notationImplicitCount = tuple.getBinding("notationCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("imageCount"))
 						imageImplicitCount = tuple.getBinding("imageCount").getBoundValue().getNominalValue();
+					if(tuple.hasBinding("sameAsCount"))
+						sameAsImplicitCount = tuple.getBinding("sameAsCount").getBoundValue().getNominalValue();
+					if(tuple.hasBinding("mappingRelationCount"))
+						mappingRelationImplicitCount = tuple.getBinding("mappingRelationCount").getBoundValue().getNominalValue();
 				}
 				if(tuple.hasBinding("subPropRel") && tuple.hasBinding("relatedCount")){
 					String propName = tuple.getBinding("subPropRel").getBoundValue().getNominalValue();
@@ -2282,6 +2304,9 @@ public class VOCBENCH extends SKOSXL {
 				
 			}
 			it.close();
+			//now sum the sameAsImplicitCount and the mappingRelationImplicitCount
+			sameAsAndMappingRelationImplicitCount = (Integer.getInteger(sameAsImplicitCount) +
+					Integer.getInteger(mappingRelationImplicitCount)) + "";
 			
 			
 			//now execute the query for the explicit values
@@ -2294,6 +2319,8 @@ public class VOCBENCH extends SKOSXL {
 					"\n(COUNT (DISTINCT ?related) AS ?relatedCount) " +
 					"\n(COUNT (DISTINCT ?notation) AS ?notationCount) " +
 					"\n(COUNT (DISTINCT ?image) AS ?imageCount)" +
+					"\n(COUNT (DISTINCT ?sameAs) AS ?sameAsCount)" +
+					"\n(COUNT (DISTINCT ?mappingRelation) AS ?mappingRelationCount)" +
 					"\nWHERE{" +
 					
 					"\n{<"+conceptUri+"> <"+PREFLABEL+"> ?xlabel . }"+
@@ -2338,6 +2365,17 @@ public class VOCBENCH extends SKOSXL {
 					"\nUNION"+
 					
 					"\n{<"+conceptUri+"> <"+DEPICTION+"> ?image . }"+
+
+					"\nUNION"+
+
+					"\n{?subPropSameAs <"+SUBPROPERTY+">*+ <"+SAMEAS+"> . "+ //owl:sameAs and its SUBPROPERTY 
+					"\n<"+conceptUri+"> ?subPropSameAs ?sameAs . }"+
+
+					"\nUNION"+
+
+					"\n{?subPropMappingRelation <"+SUBPROPERTY+">*+ <"+MAPPINGRELATION+"> . "+ //skos:mappingRelation and its SUBPROPERTY 
+					"\n<"+conceptUri+"> ?subPropMappingRelation ?mappingRelation . }"+
+						
 					
 					"\n}" +
 					"\nGROUP BY ?subPropRel";
@@ -2353,6 +2391,11 @@ public class VOCBENCH extends SKOSXL {
 			String relatedExplicitCount = "0";
 			String notationExplicitCount = "0";
 			String imageExplicitCount = "0";
+			
+			String sameAsExplicitCount = "0";
+			String mappingRelationExplicitCount = "0";
+			String sameAsAndMappingRelationExplicitCount = "0";
+			
 			first = true;
 			while(it.hasNext()){
 				TupleBindings tuple = it.next();
@@ -2370,6 +2413,10 @@ public class VOCBENCH extends SKOSXL {
 						imageExplicitCount = tuple.getBinding("imageCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("notationCount"))
 						notationExplicitCount = tuple.getBinding("notationCount").getBoundValue().getNominalValue();
+					if(tuple.hasBinding("sameAsCount"))
+						sameAsExplicitCount = tuple.getBinding("sameAsCount").getBoundValue().getNominalValue();
+					if(tuple.hasBinding("mappingRelationCount"))
+						mappingRelationExplicitCount = tuple.getBinding("mappingRelationCount").getBoundValue().getNominalValue();
 				}
 				if(tuple.hasBinding("subPropRel") && tuple.hasBinding("relatedCount")){
 					String propName = tuple.getBinding("subPropRel").getBoundValue().getNominalValue();
@@ -2379,7 +2426,9 @@ public class VOCBENCH extends SKOSXL {
 				
 			}
 			it.close();
-			
+			//now sum the sameAsExplicitCount and the mappingRelationExplicitCount
+			sameAsAndMappingRelationExplicitCount = (Integer.getInteger(sameAsExplicitCount) +
+					Integer.getInteger(mappingRelationExplicitCount)) + "";
 			
 			Element propCollection = XMLHelp.newElement(dataElement, "collection");
 			
@@ -2434,6 +2483,10 @@ public class VOCBENCH extends SKOSXL {
 			Element imageNumElem = XMLHelp.newElement(propCollection, "images");
 			imageNumElem.setAttribute("number", imageImplicitCount);
 			imageNumElem.setAttribute("numberExplicit", imageExplicitCount);
+			
+			Element sameAsMappingRelation = XMLHelp.newElement(propCollection, "sameAsMappingRelation");
+			sameAsMappingRelation.setAttribute("number", sameAsAndMappingRelationImplicitCount);
+			sameAsMappingRelation.setAttribute("numberExplicit", sameAsAndMappingRelationExplicitCount);
 			
 			
 			
