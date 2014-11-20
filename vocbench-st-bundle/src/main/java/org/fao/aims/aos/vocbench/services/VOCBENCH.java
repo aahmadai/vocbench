@@ -547,7 +547,8 @@ public class VOCBENCH extends SKOSXL {
 		
 		
 		else
-			return servletUtilities.createNoSuchHandlerExceptionResponse(request);
+			response = super.getPreCheckedResponse(request);
+			//return servletUtilities.createNoSuchHandlerExceptionResponse(request);
 
 		this.fireServletEvent();
 		return response;
@@ -2213,7 +2214,8 @@ public class VOCBENCH extends SKOSXL {
 						
 						"\nUNION"+
 						
-						"\n{<"+conceptUri+"> <"+DEFINITION+"> ?definition . }"+
+						"\n{<"+conceptUri+"> <"+DEFINITION+"> ?definition ."+
+						"\n?definition ?genericPropForDefinition ?genericValueForDefinition. }"+
 						
 						"\nUNION"+
 						
@@ -2335,7 +2337,8 @@ public class VOCBENCH extends SKOSXL {
 					
 					"\nUNION"+
 					
-					"\n{<"+conceptUri+"> <"+DEFINITION+"> ?definition . }"+
+					"\n{<"+conceptUri+"> <"+DEFINITION+"> ?definition ." +
+					"\n?definition ?genericPropForDefinition ?genericValueForDefinition. }"+
 					
 					"\nUNION"+
 					
