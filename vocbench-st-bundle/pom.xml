@@ -24,23 +24,23 @@
 		<dependency>
 			<groupId>it.uniroma2.art.semanticturkey</groupId>
 			<artifactId>st-core-framework</artifactId>
-			<version>0.11-SNAPSHOT</version>
+			<version>0.10.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>it.uniroma2.art.semanticturkey</groupId>
 			<artifactId>st-codegen-annotations</artifactId>
-			<version>0.11-SNAPSHOT</version>
+			<version>0.10.1</version>
 		</dependency>
 		<dependency>
 			<groupId>it.uniroma2.art.semanticturkey</groupId>
 			<artifactId>st-codegen-processor</artifactId>
-			<version>0.11-SNAPSHOT</version>
+			<version>0.10.1</version>
 		</dependency>
 		<dependency>
 			<groupId>it.uniroma2.art.semanticturkey</groupId>
 			<artifactId>st-core-services</artifactId>
-			<version>0.11-SNAPSHOT</version>
+			<version>0.10.1</version>
 		</dependency>
 	</dependencies>
 
