@@ -26,6 +26,206 @@ public class SKOSXLManager extends ResponseManager{
 	protected static Logger logger = LoggerFactory.getLogger(SKOSXLManager.class);
 	
 	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param broaderConceptURI
+	 * @param schemeURI
+	 * @param prefLabel
+	 * @param prefLabelLanguage
+	 * @return
+	 */
+	public static String[] createConcept(OntologyInfo ontoInfo, String conceptURI, String broaderConceptURI, String schemeURI, String prefLabel, String prefLabelLanguage)
+	{
+		String[] uris = new String[4];
+		XMLResponseREPLY reply = SKOSXLResponseManager.createConceptRequest(ontoInfo, conceptURI, broaderConceptURI, schemeURI, prefLabel, prefLabelLanguage);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
+			{
+				if(stResource.getRole().toString().equals("concept"))
+					uris[0] =  stResource.getARTNode().asURIResource().getURI();
+				if(stResource.getRole().toString().equals("xLabel"))
+					uris[1] =  stResource.getARTNode().asURIResource().getURI();
+			}
+			for(Element randomForConceptElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForConcept"))
+			{
+				uris[2] = randomForConceptElement.getTextContent();
+			}
+			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForPrefXLabel"))
+			{
+				uris[3] = randomForPrefXLabelElement.getTextContent();
+			}
+		}
+		return uris;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public static String[] setPrefLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
+	{
+		String[] uris = new String[2];
+		XMLResponseREPLY reply = SKOSXLResponseManager.setPrefLabelRequest(ontoInfo, conceptURI, label, lang);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
+			{
+				if(stResource.getRole().toString().equals("xLabel"))
+				{
+					uris[0] =  stResource.getARTNode().asURIResource().getURI();
+				}
+			}
+			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForPrefXLabel"))
+			{
+				uris[1] = randomForPrefXLabelElement.getTextContent();
+			}
+		}
+		return uris;
+	}
+	
+	
+	/**
+	 * @param conceptURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 *//*
+	public static String setPrefLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
+	{
+		XMLResponseREPLY reply = SKOSXLResponseManager.setPrefLabelRequest(ontoInfo, conceptURI, label, lang);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
+			{
+				if(stResource.getRole().toString().equals("xLabel"))
+				{
+					return stResource.getARTNode().asURIResource().getURI();
+				}
+			}
+		}
+		return null;
+	}
+	
+	*//**
+	 * @param conceptURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 *//*
+	public static String addAltLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
+	{
+		XMLResponseREPLY reply = SKOSXLResponseManager.addAltLabelRequest(ontoInfo, conceptURI, label, lang);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
+			{
+				if(stResource.getRole().toString().equals("xLabel"))
+					return stResource.getARTNode().asURIResource().getURI();
+			}
+		}
+		return null;
+	}*/
+	
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public static String[] addAltLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
+	{
+		String[] uris = new String[2];
+		XMLResponseREPLY reply = SKOSXLResponseManager.addAltLabelRequest(ontoInfo, conceptURI, label, lang);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
+			{
+				if(stResource.getRole().toString().equals("xLabel"))
+				{
+					uris[0] =  stResource.getARTNode().asURIResource().getURI();
+				}
+			}
+			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForAltXLabel"))
+			{
+				uris[1] = randomForPrefXLabelElement.getTextContent();
+			}
+		}
+		return uris;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param termURI
+	 * @param label
+	 * @param lang
+	 */
+	public static void changeLabelInfo(OntologyInfo ontoInfo, String termURI, String label, String lang)
+	{
+		SKOSXLResponseManager.changeLabelInfoRequest(ontoInfo, termURI, label, lang);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param termURI
+	 */
+	public static void prefToAltLabel(OntologyInfo ontoInfo, String conceptURI, String termURI)
+	{
+		SKOSXLResponseManager.prefToAltLabelRequest(ontoInfo, conceptURI, termURI);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param termURI
+	 */
+	public static void altToPrefLabel(OntologyInfo ontoInfo, String conceptURI, String termURI)
+	{
+		SKOSXLResponseManager.altToPrefLabelRequest(ontoInfo, conceptURI, termURI);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param label
+	 * @param lang
+	 * @return
+	 */
+	public static String[] addHiddenLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
+	{
+		String[] uris = new String[2];
+		XMLResponseREPLY reply = SKOSXLResponseManager.addHiddenLabelRequest(ontoInfo, conceptURI, label, lang);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
+			{
+				if(stResource.getRole().toString().equals("xLabel"))
+				{
+					uris[0] =  stResource.getARTNode().asURIResource().getURI();
+				}
+			}
+			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForHiddenXLabel"))
+			{
+				uris[1] = randomForPrefXLabelElement.getTextContent();
+			}
+		}
+		return uris;
+	}
+	
+	
+	/**
 	 * @param conceptURI
 	 * @param lang
 	 * @return
@@ -247,54 +447,10 @@ public class SKOSXLManager extends ResponseManager{
 	 * @param conceptURI
 	 * @param label
 	 * @param lang
-	 * @return
-	 */
-	public static String setPrefLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
-	{
-		XMLResponseREPLY reply = SKOSXLResponseManager.setPrefLabelRequest(ontoInfo, conceptURI, label, lang);
-		if(reply!=null)
-		{
-			Element dataElement = reply.getDataElement();
-			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
-			{
-				if(stResource.getRole().toString().equals("xLabel"))
-				{
-					return stResource.getARTNode().asURIResource().getURI();
-				}
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * @param conceptURI
-	 * @param label
-	 * @param lang
 	 */
 	public static void removePrefLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
 	{
 		SKOSXLResponseManager.removePrefLabelRequest(ontoInfo, conceptURI, label, lang);
-	}
-	
-	/**
-	 * @param conceptURI
-	 * @param label
-	 * @param lang
-	 * @return
-	 */
-	public static String addAltLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
-	{
-		XMLResponseREPLY reply = SKOSXLResponseManager.addAltLabelRequest(ontoInfo, conceptURI, label, lang);
-		if(reply!=null)
-		{
-			Element dataElement = reply.getDataElement();
-			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
-			{
-				if(stResource.getRole().toString().equals("xLabel"))
-					return stResource.getARTNode().asURIResource().getURI();
-			}
-		}
-		return null;
 	}
 	
 	/**

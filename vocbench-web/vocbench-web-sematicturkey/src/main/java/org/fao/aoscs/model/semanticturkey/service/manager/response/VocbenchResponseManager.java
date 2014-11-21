@@ -20,82 +20,6 @@ public class VocbenchResponseManager extends ResponseManager {
 	
 	protected static Logger logger = LoggerFactory.getLogger(VocbenchResponseManager.class);
 	
-	
-	/**
-	 * @param ontoInfo
-	 * @param conceptURI
-	 * @param broaderConceptURI
-	 * @param schemeURI
-	 * @param prefLabel
-	 * @param prefLabelLang
-	 * @return
-	 */
-	public static XMLResponseREPLY createConceptRequest(OntologyInfo ontoInfo, String conceptURI, String broaderConceptURI, String schemeURI, String prefLabel, String prefLabelLang)
-	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOSXL.Req.createConceptRequest, 
-					STModel.par(SKOS.Par.concept, conceptURI),
-					STModel.par(SKOS.Par.broaderConcept, broaderConceptURI), 
-					STModel.par(SKOS.Par.scheme, schemeURI),
-					STModel.par(SKOS.Par.prefLabel, prefLabel), 
-					STModel.par(SKOS.Par.prefLabelLang, prefLabelLang), 
-					STModel.par("ctx_project", ontoInfo.getDbTableName()));
-		return getXMLResponseREPLY(resp);
-	}
-	
-	/**
-	 * @param ontoInfo
-	 * @param conceptURI
-	 * @param label
-	 * @param lang
-	 * @return
-	 */
-	public static XMLResponseREPLY setPrefLabelRequest(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
-	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOSXL.Req.setPrefLabelRequest, 
-				STModel.par(SKOS.Par.concept, conceptURI), 
-				STModel.par(SKOS.Par.label, label), 
-				STModel.par(SKOS.Par.lang, lang), 
-				STModel.par(SKOSXL.Par.mode, "uri"), 
-				STModel.par("ctx_project", ontoInfo.getDbTableName()));
-		return getXMLResponseREPLY(resp);
-	}
-	
-	/**
-	 * @param ontoInfo
-	 * @param conceptURI
-	 * @param label
-	 * @param lang
-	 * @return
-	 */
-	public static XMLResponseREPLY addAltLabelRequest(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
-	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOSXL.Req.addAltLabelRequest, 
-				STModel.par(SKOS.Par.concept, conceptURI), 
-				STModel.par(SKOS.Par.label, label), 
-				STModel.par(SKOS.Par.lang, lang), 
-				STModel.par(SKOSXL.Par.mode, "uri"), 
-				STModel.par("ctx_project", ontoInfo.getDbTableName()));
-		return getXMLResponseREPLY(resp);
-	}
-	
-	/**
-	 * @param ontoInfo
-	 * @param conceptURI
-	 * @param label
-	 * @param lang
-	 * @return
-	 */
-	public static XMLResponseREPLY addHiddenLabelRequest(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
-	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(SKOSXL.Req.addHiddenLabelRequest, 
-				STModel.par(SKOS.Par.concept, conceptURI), 
-				STModel.par(SKOS.Par.label, label), 
-				STModel.par(SKOS.Par.lang, lang), 
-				STModel.par(SKOSXL.Par.mode, "uri"), 
-				STModel.par("ctx_project", ontoInfo.getDbTableName()));
-		return getXMLResponseREPLY(resp);
-	}
-	
 	/**
 	 * 
 	 * @param schemeURI
@@ -161,7 +85,7 @@ public class VocbenchResponseManager extends ResponseManager {
 	public static XMLResponseREPLY getTermTabsCountsRequest(OntologyInfo ontoInfo, String xlabelURI)
 	{
 		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getTermTabsCountsRequest, 
-				STModel.par(VOCBENCH.ParVocBench.xlabelURI, xlabelURI), 
+				STModel.par(SKOSXL.Par.xlabelURI, xlabelURI), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
@@ -187,50 +111,6 @@ public class VocbenchResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.getLabelDescriptionRequest, 
 				STModel.par(SKOS.Par.concept, termURI), 
-				STModel.par("ctx_project", ontoInfo.getDbTableName()));
-		return getXMLResponseREPLY(resp);
-	}
-	
-	/**
-	 * @param termURI
-	 * @param label
-	 * @param lang
-	 * @return
-	 */
-	public static XMLResponseREPLY changeLabelInfoRequest(OntologyInfo ontoInfo, String termURI, String label, String lang)
-	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeLabelInfoRequest, 
-				STModel.par(VOCBENCH.ParVocBench.xlabelURI, termURI), 
-				STModel.par(SKOS.Par.label, label), 
-				STModel.par(VOCBENCH.langTag, lang), 
-				STModel.par("ctx_project", ontoInfo.getDbTableName()));
-		return getXMLResponseREPLY(resp);
-	}
-	
-	/**
-	 * @param conceptURI
-	 * @param termURI
-	 * @return
-	 */
-	public static XMLResponseREPLY prefToAltLabelRequest(OntologyInfo ontoInfo, String conceptURI, String termURI)
-	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.prefToAltLabelRequest, 
-				STModel.par(SKOS.Par.concept, conceptURI), 
-				STModel.par(VOCBENCH.ParVocBench.xlabelURI, termURI), 
-				STModel.par("ctx_project", ontoInfo.getDbTableName()));
-		return getXMLResponseREPLY(resp);
-	}
-	
-	/**
-	 * @param conceptURI
-	 * @param termURI
-	 * @return
-	 */
-	public static XMLResponseREPLY altToPrefLabelRequest(OntologyInfo ontoInfo, String conceptURI, String termURI)
-	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.altToPrefLabelRequest, 
-				STModel.par(SKOS.Par.concept, conceptURI), 
-				STModel.par(VOCBENCH.ParVocBench.xlabelURI, termURI), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}

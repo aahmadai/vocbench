@@ -1225,12 +1225,12 @@ public class ValidationServiceSTImpl {
 	{
 		TermObject tObj = (TermObject)val.getOldObject().get(0);
 
-		VocbenchManager.changeLabelInfo(ontoInfo, tObj.getUri(), tObj.getLabel(), tObj.getLang());
+		SKOSXLManager.changeLabelInfo(ontoInfo, tObj.getUri(), tObj.getLabel(), tObj.getLang());
         
         if(tObj.isMainLabel())
-        	VocbenchManager.altToPrefLabel(ontoInfo, val.getConceptObject().getUri(), tObj.getUri());
+        	SKOSXLManager.altToPrefLabel(ontoInfo, val.getConceptObject().getUri(), tObj.getUri());
         else
-        	VocbenchManager.prefToAltLabel(ontoInfo, val.getConceptObject().getUri(), tObj.getUri());
+        	SKOSXLManager.prefToAltLabel(ontoInfo, val.getConceptObject().getUri(), tObj.getUri());
         
         PropertyManager.removeAllPropValue(ontoInfo, tObj.getUri(), STModelConstants.VOCBENCHNAMESPACE+STModelConstants.HASSTATUS);
 		PropertyManager.addPlainLiteralPropValue(ontoInfo, tObj.getUri(), STModelConstants.VOCBENCHNAMESPACE+STModelConstants.HASSTATUS, val.getStatusLabel(), null);

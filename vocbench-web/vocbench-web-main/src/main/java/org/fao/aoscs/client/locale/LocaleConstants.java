@@ -1383,6 +1383,7 @@ public interface LocaleConstants extends Constants{
 	//buttons
 	public String buttonAdd();
 	public String buttonAddAgain();
+	public String buttonCreateAddMoreTerms();
 	public String buttonOk();
 	public String buttonEdit();
 	public String buttonDelete();

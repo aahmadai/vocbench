@@ -81,7 +81,7 @@ public class AddConcept extends FlexDialogBox {
     public AddConcept(ConceptCellTreeAOS tree, final InitializeConceptData initData, ConceptObject selectedConceptObject, CheckBox showAlsoNonpreferredTerms) {
     	
     	//super(constants.buttonCreate(), constants.buttonCancel());
-    	super(constants.buttonCreate(), constants.buttonCancel(), constants.buttonAddAgain());
+    	super(constants.buttonCreate(), constants.buttonCancel(), constants.buttonCreateAddMoreTerms());
     	this.tree = tree;
     	this.initData = initData;
     	this.selectedConceptObject = selectedConceptObject;
@@ -489,7 +489,7 @@ public class AddConcept extends FlexDialogBox {
 						loop.setVisible(true);
 						isFirstCheckDone = true;
 						checkExistance.setVisible(false);
-						setSubmitLabel(true, constants.buttonAdd());
+						setSubmitLabel(true, constants.buttonCreate());
 						center();
 					}
 				}

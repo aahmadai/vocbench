@@ -261,7 +261,7 @@ public class ConceptServiceSTImpl {
 		conceptObject.setScheme(schemeURI);
 		
 		// ADD CONCEPT
-		String[] uris = VocbenchManager.createConcept(ontoInfo, conceptObject.getUri(), parentConceptURI, schemeURI, termObject.getLabel(), termObject.getLang());
+		String[] uris = SKOSXLManager.createConcept(ontoInfo, conceptObject.getUri(), parentConceptURI, schemeURI, termObject.getLabel(), termObject.getLang());
 		
 		conceptObject.setUri(uris[0]);
 		String termURI = uris[1];
@@ -470,11 +470,11 @@ public class ConceptServiceSTImpl {
 		String[] uris = new String[2];
 		if(termObject.isMainLabel())
 		{
-			uris = VocbenchManager.setPrefLabel(ontoInfo, conceptObject.getUri(), termObject.getLabel(), termObject.getLang());
+			uris = SKOSXLManager.setPrefLabel(ontoInfo, conceptObject.getUri(), termObject.getLabel(), termObject.getLang());
 		}
 		else
 		{
-			uris = VocbenchManager.addAltLabel(ontoInfo, conceptObject.getUri(), termObject.getLabel(), termObject.getLang());
+			uris = SKOSXLManager.addAltLabel(ontoInfo, conceptObject.getUri(), termObject.getLabel(), termObject.getLang());
 		}
 		String termURI = uris[0];
 		String agrovocCode = uris[1];
@@ -1299,7 +1299,7 @@ public class ConceptServiceSTImpl {
 
 		if(!newObject.getLabel().equals(oldObject.getLabel()) || !newObject.getLang().equals(oldObject.getLang()))
 		{
-			VocbenchManager.changeLabelInfo(ontoInfo, newObject.getUri(), newObject.getLabel(), newObject.getLang());
+			SKOSXLManager.changeLabelInfo(ontoInfo, newObject.getUri(), newObject.getLabel(), newObject.getLang());
 			
 			if(ontoInfo.isIndexing())
 			{
@@ -1312,9 +1312,9 @@ public class ConceptServiceSTImpl {
 		if(newObject.isMainLabel()!=oldObject.isMainLabel())
 		{
 			if(newObject.isMainLabel())
-				VocbenchManager.altToPrefLabel(ontoInfo, conceptObject.getUri(), newObject.getUri());
+				SKOSXLManager.altToPrefLabel(ontoInfo, conceptObject.getUri(), newObject.getUri());
 			else
-				VocbenchManager.prefToAltLabel(ontoInfo, conceptObject.getUri(), newObject.getUri());
+				SKOSXLManager.prefToAltLabel(ontoInfo, conceptObject.getUri(), newObject.getUri());
 		}
 		
 		PropertyManager.removeAllPropValue(ontoInfo, newObject.getUri(), STModelConstants.VOCBENCHNAMESPACE+STModelConstants.HASSTATUS);

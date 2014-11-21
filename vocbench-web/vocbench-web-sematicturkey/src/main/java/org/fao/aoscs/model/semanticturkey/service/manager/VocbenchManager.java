@@ -21,7 +21,6 @@ import org.fao.aoscs.model.semanticturkey.service.manager.response.ResponseManag
 import org.fao.aoscs.model.semanticturkey.service.manager.response.VocbenchResponseManager;
 import org.fao.aoscs.model.semanticturkey.util.STLiteral;
 import org.fao.aoscs.model.semanticturkey.util.STLiteralImpl;
-import org.fao.aoscs.model.semanticturkey.util.STResource;
 import org.fao.aoscs.model.semanticturkey.util.STUtility;
 import org.fao.aoscs.model.semanticturkey.util.STXMLUtility;
 import org.slf4j.Logger;
@@ -36,127 +35,7 @@ public class VocbenchManager extends ResponseManager {
 	
 	protected static Logger logger = LoggerFactory.getLogger(VocbenchManager.class);
 	
-	/**
-	 * @param ontoInfo
-	 * @param conceptURI
-	 * @param broaderConceptURI
-	 * @param schemeURI
-	 * @param prefLabel
-	 * @param prefLabelLanguage
-	 * @return
-	 */
-	public static String[] createConcept(OntologyInfo ontoInfo, String conceptURI, String broaderConceptURI, String schemeURI, String prefLabel, String prefLabelLanguage)
-	{
-		String[] uris = new String[4];
-		XMLResponseREPLY reply = VocbenchResponseManager.createConceptRequest(ontoInfo, conceptURI, broaderConceptURI, schemeURI, prefLabel, prefLabelLanguage);
-		if(reply!=null)
-		{
-			Element dataElement = reply.getDataElement();
-			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
-			{
-				if(stResource.getRole().toString().equals("concept"))
-					uris[0] =  stResource.getARTNode().asURIResource().getURI();
-				if(stResource.getRole().toString().equals("xLabel"))
-					uris[1] =  stResource.getARTNode().asURIResource().getURI();
-			}
-			for(Element randomForConceptElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForConcept"))
-			{
-				uris[2] = randomForConceptElement.getTextContent();
-			}
-			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForPrefXLabel"))
-			{
-				uris[3] = randomForPrefXLabelElement.getTextContent();
-			}
-		}
-		return uris;
-	}
 	
-	/**
-	 * @param ontoInfo
-	 * @param conceptURI
-	 * @param label
-	 * @param lang
-	 * @return
-	 */
-	public static String[] setPrefLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
-	{
-		String[] uris = new String[2];
-		XMLResponseREPLY reply = VocbenchResponseManager.setPrefLabelRequest(ontoInfo, conceptURI, label, lang);
-		if(reply!=null)
-		{
-			Element dataElement = reply.getDataElement();
-			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
-			{
-				if(stResource.getRole().toString().equals("xLabel"))
-				{
-					uris[0] =  stResource.getARTNode().asURIResource().getURI();
-				}
-			}
-			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForPrefXLabel"))
-			{
-				uris[1] = randomForPrefXLabelElement.getTextContent();
-			}
-		}
-		return uris;
-	}
-	
-	/**
-	 * @param ontoInfo
-	 * @param conceptURI
-	 * @param label
-	 * @param lang
-	 * @return
-	 */
-	public static String[] addAltLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
-	{
-		String[] uris = new String[2];
-		XMLResponseREPLY reply = VocbenchResponseManager.addAltLabelRequest(ontoInfo, conceptURI, label, lang);
-		if(reply!=null)
-		{
-			Element dataElement = reply.getDataElement();
-			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
-			{
-				if(stResource.getRole().toString().equals("xLabel"))
-				{
-					uris[0] =  stResource.getARTNode().asURIResource().getURI();
-				}
-			}
-			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForAltXLabel"))
-			{
-				uris[1] = randomForPrefXLabelElement.getTextContent();
-			}
-		}
-		return uris;
-	}
-	
-	/**
-	 * @param ontoInfo
-	 * @param conceptURI
-	 * @param label
-	 * @param lang
-	 * @return
-	 */
-	public static String[] addHiddenLabel(OntologyInfo ontoInfo, String conceptURI, String label, String lang)
-	{
-		String[] uris = new String[2];
-		XMLResponseREPLY reply = VocbenchResponseManager.addHiddenLabelRequest(ontoInfo, conceptURI, label, lang);
-		if(reply!=null)
-		{
-			Element dataElement = reply.getDataElement();
-			for(STResource stResource : STXMLUtility.getURIResource(dataElement))
-			{
-				if(stResource.getRole().toString().equals("xLabel"))
-				{
-					uris[0] =  stResource.getARTNode().asURIResource().getURI();
-				}
-			}
-			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForHiddenXLabel"))
-			{
-				uris[1] = randomForPrefXLabelElement.getTextContent();
-			}
-		}
-		return uris;
-	}
 	
 	/**
 	 * @param schemeURI
@@ -265,37 +144,6 @@ public class VocbenchManager extends ResponseManager {
 			}
 		}
 		return treeObjList;
-	}
-	
-	/**
-	 * @param termURI
-	 * @param label
-	 * @param lang
-	 * @return
-	 */
-	public static void changeLabelInfo(OntologyInfo ontoInfo, String termURI, String label, String lang)
-	{
-		VocbenchResponseManager.changeLabelInfoRequest(ontoInfo, termURI, label, lang);
-	}
-	
-	/**
-	 * @param conceptURI
-	 * @param termURI
-	 * @return
-	 */
-	public static void prefToAltLabel(OntologyInfo ontoInfo, String conceptURI, String termURI)
-	{
-		VocbenchResponseManager.prefToAltLabelRequest(ontoInfo, conceptURI, termURI);
-	}
-	
-	/**
-	 * @param conceptURI
-	 * @param termURI
-	 * @return
-	 */
-	public static void altToPrefLabel(OntologyInfo ontoInfo, String conceptURI, String termURI)
-	{
-		VocbenchResponseManager.altToPrefLabelRequest(ontoInfo, conceptURI, termURI);
 	}
 	
 	/**
