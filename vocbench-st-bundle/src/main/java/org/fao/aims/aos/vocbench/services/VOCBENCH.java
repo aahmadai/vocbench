@@ -2307,8 +2307,8 @@ public class VOCBENCH extends SKOSXL {
 			}
 			it.close();
 			//now sum the sameAsImplicitCount and the mappingRelationImplicitCount
-			sameAsAndMappingRelationImplicitCount = (Integer.getInteger(sameAsImplicitCount) +
-					Integer.getInteger(mappingRelationImplicitCount)) + "";
+			sameAsAndMappingRelationImplicitCount = (Integer.parseInt(sameAsImplicitCount) +
+					Integer.parseInt(mappingRelationImplicitCount)) + "";
 			
 			
 			//now execute the query for the explicit values
@@ -2371,12 +2371,12 @@ public class VOCBENCH extends SKOSXL {
 
 					"\nUNION"+
 
-					"\n{?subPropSameAs <"+SUBPROPERTY+">*+ <"+SAMEAS+"> . "+ //owl:sameAs and its SUBPROPERTY 
+					"\n{?subPropSameAs <"+SUBPROPERTY+">* <"+SAMEAS+"> . "+ //owl:sameAs and its SUBPROPERTY 
 					"\n<"+conceptUri+"> ?subPropSameAs ?sameAs . }"+
 
 					"\nUNION"+
 
-					"\n{?subPropMappingRelation <"+SUBPROPERTY+">*+ <"+MAPPINGRELATION+"> . "+ //skos:mappingRelation and its SUBPROPERTY 
+					"\n{?subPropMappingRelation <"+SUBPROPERTY+">* <"+MAPPINGRELATION+"> . "+ //skos:mappingRelation and its SUBPROPERTY 
 					"\n<"+conceptUri+"> ?subPropMappingRelation ?mappingRelation . }"+
 						
 					
@@ -2430,8 +2430,8 @@ public class VOCBENCH extends SKOSXL {
 			}
 			it.close();
 			//now sum the sameAsExplicitCount and the mappingRelationExplicitCount
-			sameAsAndMappingRelationExplicitCount = (Integer.getInteger(sameAsExplicitCount) +
-					Integer.getInteger(mappingRelationExplicitCount)) + "";
+			sameAsAndMappingRelationExplicitCount = (Integer.parseInt(sameAsExplicitCount) +
+					Integer.parseInt(mappingRelationExplicitCount)) + "";
 			
 			Element propCollection = XMLHelp.newElement(dataElement, "collection");
 			
@@ -2869,12 +2869,14 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource defOrImageURI = null;
 			ARTLiteral createdLiteral = null, modifiedLiteral= null, sourceLinkLiteral=null, 
 					sourceLiteral=null, labelLiteral=null, commentLiteral=null;
+			Collection<ARTLiteral> justLabelLiteralList = new ArrayList<ARTLiteral>();
 			while(it.hasNext()){ //iterate over all the definition and their associated info
 				TupleBindings tuple = it.getNext();
 				
 				if(tuple.hasBinding("definitionOrImageURI")){
 					//check if we are in a tuple with a different definitionOrImageURI than the previous one
-					if(defOrImageURI != null){
+					if(defOrImageURI != null && 
+							tuple.getBinding("definitionOrImageURI").getBoundValue().isURIResource()){
 						if(tuple.getBinding("definitionOrImageURI").getBoundValue().asURIResource()
 								.getURI().compareTo(defOrImageURI.getURI())!=0){
 							// To see if the uri belongs to a definition or to an image, use the local name 
@@ -2901,9 +2903,10 @@ public class VOCBENCH extends SKOSXL {
 						defOrImageURI = tuple.getBinding("definitionOrImageURI").getBoundValue().asURIResource();
 					} else{
 						// the definition is a literal, not a URI, so add it in the labelLiteralList
-						labelLiteral = tuple.getBinding("definitionOrImageURI").getBoundValue().asLiteral();
-						if(!labelLiteralList.contains(labelLiteral)){
-							labelLiteralList.add(labelLiteral);
+						ARTLiteral tempLabelLiteral = 
+								tuple.getBinding("definitionOrImageURI").getBoundValue().asLiteral();
+						if(!justLabelLiteralList.contains(tempLabelLiteral)){
+							justLabelLiteralList.add(tempLabelLiteral);
 						}
 					}
 					
@@ -2944,8 +2947,9 @@ public class VOCBENCH extends SKOSXL {
 				createSingleDefElement(definitionsElem, defOrImageURI, createdLiteral, modifiedLiteral, 
 					sourceLinkLiteral, sourceLiteral, labelLiteralList, commentLiteralList, isImage);
 				//}
-			} else if(labelLiteralList.size()>0){
-				createSinglePlainDefElement(definitionsElem, labelLiteralList);
+			} 
+			if(justLabelLiteralList.size()>0){
+				createSinglePlainDefElement(definitionsElem, justLabelLiteralList);
 			}
 			
 		} catch (ModelAccessException e) {
