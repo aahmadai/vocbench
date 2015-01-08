@@ -29,6 +29,7 @@ public interface UsersPreferenceService extends RemoteService{
 	public ArrayList<String> getNonAssignedLanguage(int userID) throws Exception;
 	public ArrayList<String[]> getNonAssignedAndPendingLanguage(int userID) throws Exception;
 	public void addUsersLanguage(ArrayList<UsersLanguage> langlist) throws Exception;
+	public ArrayList<String[]> deleteUsersPendingLanguage(int userID, ArrayList<String> langlist) throws Exception;
 	public ArrayList<UsersLanguage> deleteUsersLanguage(int userID, ArrayList<String> langlist) throws Exception;
 	
 	public ArrayList<String[]> getUserOntology(int userID) throws Exception;
@@ -36,6 +37,7 @@ public interface UsersPreferenceService extends RemoteService{
 	public ArrayList<String[]> getNonAssignedOntology(int userID) throws Exception;
 	public ArrayList<String[]> getNonAssignedAndPendingOntology(int userID) throws Exception;
 	public void addUsersOntology(ArrayList<UsersOntology> userOntology) throws Exception;
+	public ArrayList<String[]> deleteUsersPendingOntology(int userID, ArrayList<String> langlist) throws Exception;
 	public ArrayList<String[]> deleteUsersOntology(int userID, ArrayList<String> list) throws Exception;
 	
 	public static class UserPreferenceServiceUtil{
