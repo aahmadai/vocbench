@@ -81,6 +81,10 @@ public class UsersPreferenceServiceImpl extends PersistentRemoteService implemen
 	public ArrayList<String[]> getPendingOntology(int userID) {
 		return usersPreferenceServiceSystemImpl.getPendingOntology(userID);
 	}
+	public ArrayList<String[]> deleteUsersPendingLanguage(int userID,
+			ArrayList<String> langlist) throws Exception {
+		return usersPreferenceServiceSystemImpl.deleteUsersPendingLanguage(userID, langlist);
+	}
 	public ArrayList<String[]> getNonAssignedOntology(int userID) {
 		return usersPreferenceServiceSystemImpl.getNonAssignedOntology(userID);
 	}
@@ -94,6 +98,8 @@ public class UsersPreferenceServiceImpl extends PersistentRemoteService implemen
 			ArrayList<String> list) {
 		return usersPreferenceServiceSystemImpl.deleteUsersOntology(userID, list);
 	}
-
-
+	public ArrayList<String[]> deleteUsersPendingOntology(int userID,
+			ArrayList<String> list) throws Exception {
+		return usersPreferenceServiceSystemImpl.deleteUsersPendingOntology(userID, list);
+	}
 }

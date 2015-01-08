@@ -72,6 +72,9 @@ public class WBPreferences extends Composite implements ClickHandler{
 	private Image btnaddlang = new Image("images/add-grey.gif");
 	private Image btnremovelang = new Image("images/delete-grey.gif");
 	
+	private Image btnremovependinglang = new Image("images/delete-grey.gif");
+	private Image btnremovependingonto = new Image("images/delete-grey.gif");
+	
 	private Image btnaddonto = new Image("images/add-grey.gif");
 	private Image btnremoveonto = new Image("images/delete-grey.gif");
 	
@@ -226,16 +229,26 @@ public class WBPreferences extends Composite implements ClickHandler{
 
 		btnaddlang.setTitle(constants.buttonAdd());
 		btnaddlang.addClickHandler(this);
+		
 		btnremovelang.setTitle(constants.buttonRemove());
 		btnremovelang.addClickHandler(this);
+		
+		btnremovependinglang.setTitle(constants.buttonRemove());
+		btnremovependinglang.addClickHandler(this);
+
+		btnremovependingonto.setTitle(constants.buttonRemove());
+		btnremovependingonto.addClickHandler(this);
 		
 		HorizontalPanel hpnbtngroup = new HorizontalPanel();
 		hpnbtngroup.add(btnaddlang);
 		hpnbtngroup.add(btnremovelang);
 		
 		TitleBodyWidget vpLang = new TitleBodyWidget(constants.prefUserLanguage(), langlistCS, hpnbtngroup, ((MainApp.getBodyPanelWidth()-120)/4)  + "px", "100%");
-	
-		TitleBodyWidget vpLang_pending = new TitleBodyWidget(constants.prefUserPendingLanguage(), langlistCSPending, null, ((MainApp.getBodyPanelWidth()-120)/4)  + "px", "100%");
+		
+		HorizontalPanel hpnbtnpendinglang = new HorizontalPanel();
+		hpnbtnpendinglang.add(btnremovependinglang);
+		
+		TitleBodyWidget vpLang_pending = new TitleBodyWidget(constants.prefUserPendingLanguage(), langlistCSPending, hpnbtnpendinglang, ((MainApp.getBodyPanelWidth()-120)/4)  + "px", "100%");
 		
 		VerticalPanel lang_panel = new VerticalPanel();
 		lang_panel.setSpacing(1);
@@ -255,7 +268,10 @@ public class WBPreferences extends Composite implements ClickHandler{
 		
 		TitleBodyWidget ontology_ft = new TitleBodyWidget(constants.prefUserOntology(), ontologylist, hpnbtnonto, ((MainApp.getBodyPanelWidth()-120)/4)  + "px", "100%");
 		
-		TitleBodyWidget ontology_ft_pending = new TitleBodyWidget(constants.prefUserPendingOntology(), ontologylistPending, null, ((MainApp.getBodyPanelWidth()-120)/4)  + "px", "100%");
+		HorizontalPanel hpnbtnpendingonto = new HorizontalPanel();
+		hpnbtnpendingonto.add(btnremovependingonto);
+		
+		TitleBodyWidget ontology_ft_pending = new TitleBodyWidget(constants.prefUserPendingOntology(), ontologylistPending, hpnbtnpendingonto, ((MainApp.getBodyPanelWidth()-120)/4)  + "px", "100%");
 		
 		VerticalPanel ontology_panel = new VerticalPanel();
 		ontology_panel.setSpacing(1);
@@ -600,6 +616,27 @@ public class WBPreferences extends Composite implements ClickHandler{
 			deleteUsersLanguage(deleteList);
 											    
 		}
+		else if (sender==btnremovependinglang){
+			if(langlistCSPending.getSelectedIndex()==-1)
+			{
+				Window.alert(constants.prefLanguageNotSelected());
+				return;
+			}
+			else if((Window.confirm(constants.prefLanguageSelectRemove()))==false)
+			{
+				return;
+			}
+			ArrayList<String> deleteList = new ArrayList<String>();
+			for(int i = langlistCSPending.getItemCount() -1;i>=0; i--){
+				if( langlistCSPending.isItemSelected(i))
+				{
+					LanguageCode lc = (LanguageCode) langlistCSPending.getObject(i);
+					deleteList.add(lc.getLanguageCode());
+				}
+			}
+			deleteUsersPendingLanguage(deleteList);
+											    
+		}
 		else if (sender==btnaddonto){
 			if(newontoDialog == null || !newontoDialog.isLoaded)
 				newontoDialog = new OntologyPendingDialog();				
@@ -635,6 +672,26 @@ public class WBPreferences extends Composite implements ClickHandler{
 				}
 			}
 			deleteUsersOntology(deleteList);
+											    
+		}
+		else if (sender==btnremovependingonto){
+			if(ontologylistPending.getSelectedIndex()==-1)
+			{
+				Window.alert(constants.prefOntologyNotSelected());
+				return;
+			}
+			else if((Window.confirm(constants.prefOntologySelectRemove()))==false)
+			{
+				return;
+			}
+			ArrayList<String> deleteList = new ArrayList<String>();
+			for(int i = ontologylistPending.getItemCount() -1;i>=0; i--){
+				if( ontologylistPending.isItemSelected(i))
+				{
+					deleteList.add(ontologylistPending.getValue(i));
+				}
+			}
+			deleteUsersPendingOntology(deleteList);
 											    
 		}
 		else if(sender == clearpref){			
@@ -716,6 +773,32 @@ public class WBPreferences extends Composite implements ClickHandler{
 		UserPreferenceServiceUtil.getInstance().deleteUsersLanguage(MainApp.userId, langlist, callbackpref);
 	}
 	
+	private void deleteUsersPendingLanguage(final ArrayList<String> langlist)
+	{
+		AsyncCallback<ArrayList<String[]>> callbackpref = new AsyncCallback<ArrayList<String[]>>() {
+			public void onSuccess(ArrayList<String[]> result) {
+				langlistCSPending.clear();
+		    	ArrayList<String> userLang = new ArrayList<String>();
+		    	for(String[] item: result)
+		    	{
+		    		userLang.add(item[1]);
+		    	}
+				ArrayList<LanguageCode> lang = (ArrayList<LanguageCode>) MainApp.languageCode;
+		    	for(LanguageCode lc : lang)
+				{
+					if(userLang.contains(lc.getLanguageCode().toLowerCase()))	
+					{
+						langlistCSPending.addItem(lc.getLanguageNote(), lc);
+					}
+				}
+			}
+			public void onFailure(Throwable caught) {
+				ExceptionManager.showException(caught, constants.prefLanguageSaveFail());
+			}
+		};
+		UserPreferenceServiceUtil.getInstance().deleteUsersPendingLanguage(MainApp.userId, langlist, callbackpref);
+	}
+	
 	private void deleteUsersOntology(final ArrayList<String> langlist)
 	{
 		AsyncCallback<ArrayList<String[]>> callbackpref = new AsyncCallback<ArrayList<String[]>>() {
@@ -731,6 +814,23 @@ public class WBPreferences extends Composite implements ClickHandler{
 		    }
 		};
 		UserPreferenceServiceUtil.getInstance().deleteUsersOntology(MainApp.userId, langlist, callbackpref);
+	}
+	
+	private void deleteUsersPendingOntology(final ArrayList<String> langlist)
+	{
+		AsyncCallback<ArrayList<String[]>> callbackpref = new AsyncCallback<ArrayList<String[]>>() {
+			public void onSuccess(ArrayList<String[]> list) {
+				ontologylistPending.clear();
+				for(int i=0;i<list.size();i++){
+		    		String[] item = (String[]) list.get(i);
+		    		ontologylistPending.addItem(item[0], item[1]);					    		
+		    	}
+			}
+			public void onFailure(Throwable caught) {
+				ExceptionManager.showException(caught, constants.prefOntologySaveFail());
+			}
+		};
+		UserPreferenceServiceUtil.getInstance().deleteUsersPendingOntology(MainApp.userId, langlist, callbackpref);
 	}
 	
 	public void updatePref()

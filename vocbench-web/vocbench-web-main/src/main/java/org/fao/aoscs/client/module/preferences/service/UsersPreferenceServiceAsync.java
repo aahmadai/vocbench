@@ -26,6 +26,7 @@ public interface UsersPreferenceServiceAsync<T> {
 	public void getNonAssignedLanguage(int userID, AsyncCallback<ArrayList<String>> callback);
 	public void getNonAssignedAndPendingLanguage(int userID, AsyncCallback<ArrayList<String[]>> callback);
 	public void addUsersLanguage(ArrayList<UsersLanguage> langlist, AsyncCallback<Void> callback);
+	public void deleteUsersPendingLanguage(int userID, ArrayList<String> langlist, AsyncCallback<ArrayList<String[]>> callback);
 	public void deleteUsersLanguage(int userID, ArrayList<String> langlist, AsyncCallback<ArrayList<UsersLanguage>> callback);
 	
 	public void getUserOntology(int userID, AsyncCallback<ArrayList<String[]>> callback);
@@ -34,4 +35,6 @@ public interface UsersPreferenceServiceAsync<T> {
 	public void getNonAssignedAndPendingOntology(int userID, AsyncCallback<ArrayList<String[]>> callback);
 	public void addUsersOntology(ArrayList<UsersOntology> userOntology, AsyncCallback<Void> callback);
 	public void deleteUsersOntology(int userID, ArrayList<String> list, AsyncCallback<ArrayList<String[]>> callback);
+	public void deleteUsersPendingOntology(int userID, ArrayList<String> langlist,
+			AsyncCallback<ArrayList<String[]>> callback);
 }

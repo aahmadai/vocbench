@@ -251,6 +251,32 @@ public class UsersPreferenceServiceSystemImpl {
 		return getUsersLanguage(userID);
 	}
 	
+	public ArrayList<String[]> deleteUsersPendingLanguage(int userID, ArrayList<String> langList)
+	{
+		try
+		{
+			if(langList.size()>0)
+			{
+				String query1 = "";
+				for(String lang : langList)
+				{	
+					if(query1.length()>0)	
+						query1 += ", "+"'"+lang+"'";
+					else
+					query1 = "'"+lang+"'";
+				}
+				
+				String query = "delete from users_language where user_id='" + userID + "' AND status=0 AND language_code IN ("+query1+")";
+				QueryFactory.hibernateExecuteSQLUpdate(query);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return getPendingLanguage(userID);
+	}
+	
 	public ArrayList<String[]> deleteUsersOntology(int userID, ArrayList<String> list)
 	{
 		try
@@ -266,7 +292,7 @@ public class UsersPreferenceServiceSystemImpl {
 					query1 = "'"+ontology+"'";
 				}
 				
-				String query = "delete from users_ontology where user_id='" + userID + "' and ontology_id IN ("+query1+")";
+				String query = "delete from users_ontology where user_id='" + userID + "' AND ontology_id IN ("+query1+")";
 				QueryFactory.hibernateExecuteSQLUpdate(query);
 			}
 		}
@@ -275,6 +301,32 @@ public class UsersPreferenceServiceSystemImpl {
 			e.printStackTrace();
 		}
 		return getUserOntology(userID);
+	}
+	
+	public ArrayList<String[]> deleteUsersPendingOntology(int userID, ArrayList<String> list)
+	{
+		try
+		{
+			if(list.size()>0)
+			{
+				String query1 = "";
+				for(String ontology : list)
+				{	
+					if(query1.length()>0)	
+						query1 += ", "+"'"+ontology+"'";
+					else
+						query1 = "'"+ontology+"'";
+				}
+				
+				String query = "delete from users_ontology where user_id='" + userID + "'  AND status=0 AND ontology_id IN ("+query1+")";
+				QueryFactory.hibernateExecuteSQLUpdate(query);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return getPendingOntology(userID);
 	}
 	
 	public UsersPreference getUsersPreference(int userID) {
