@@ -31,6 +31,8 @@ import it.uniroma2.art.owlart.query.TupleQuery;
 import it.uniroma2.art.owlart.query.Update;
 import it.uniroma2.art.owlart.utilities.RDFIterators;
 import it.uniroma2.art.owlart.vocabulary.RDFResourceRolesEnum;
+import it.uniroma2.art.semanticturkey.data.id.ARTURIResAndRandomString;
+import it.uniroma2.art.semanticturkey.data.id.URIGenerator;
 import it.uniroma2.art.semanticturkey.exceptions.DuplicatedResourceException;
 import it.uniroma2.art.semanticturkey.exceptions.HTTPParameterUnspecifiedException;
 import it.uniroma2.art.semanticturkey.exceptions.InvalidProjectNameException;
@@ -5411,20 +5413,9 @@ public class VOCBENCH extends SKOSXL {
 		if(entityPrefix == null){
 			entityPrefix = DEFAULT_VALUE;
 		}
-		ARTURIResource newConcept = null;
-		boolean newConceptGenerated = false;
-		String randomValue = null;
-		while(!newConceptGenerated){
-			randomValue = randomGenerator();
-			//check if the new concept already exists, in this case generate a new one until a not alredy
-			// existing URI has been generated
-			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
-			newConcept = skosxlModel.createURIResource(newConceptURI);
-			if(!skosxlModel.existsResource(newConcept, graphs)){
-				newConceptGenerated = true;
-			};
-		}
-		return new ARTURIResAndRandomString(randomValue, newConcept);
+		
+		URIGenerator uriGen = new URIGenerator(skosxlModel, graphs, projectName);
+		return uriGen.generateURI(entityPrefix+"$rand()", null);
 	}
 	
 	//moved to SKOSXL.java
@@ -5474,20 +5465,9 @@ public class VOCBENCH extends SKOSXL {
 		if(entityPrefix == null){
 			entityPrefix = DEFAULT_VALUE;
 		}
-		ARTURIResource newConcept = null;
-		boolean newConceptGenerated = false;
-		String randomValue = null;
-		while(!newConceptGenerated){
-			randomValue = randomGenerator();
-			//check if the new image already exists, in this case generate a new one until a not alredy
-			// existing URI has been generated
-			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
-			newConcept = skosxlModel.createURIResource(newConceptURI);
-			if(!skosxlModel.existsResource(newConcept, graphs)){
-				newConceptGenerated = true;
-			};
-		}
-		return new ARTURIResAndRandomString(randomValue, newConcept);
+		
+		URIGenerator uriGen = new URIGenerator(skosxlModel, graphs, projectName);
+		return uriGen.generateURI(entityPrefix+"$rand()", null);
 	}
 	
 	protected ARTURIResAndRandomString generateDefURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
@@ -5504,20 +5484,8 @@ public class VOCBENCH extends SKOSXL {
 		if(entityPrefix == null){
 			entityPrefix = DEFAULT_VALUE;
 		}
-		ARTURIResource newConcept = null;
-		boolean newConceptGenerated = false;
-		String randomValue = null;
-		while(!newConceptGenerated){
-			randomValue = randomGenerator();
-			//check if the new image already exists, in this case generate a new one until a not alredy
-			// existing URI has been generated
-			String newConceptURI = skosxlModel.getDefaultNamespace()+entityPrefix+randomValue;
-			newConcept = skosxlModel.createURIResource(newConceptURI);
-			if(!skosxlModel.existsResource(newConcept, graphs)){
-				newConceptGenerated = true;
-			};
-		}
-		return new ARTURIResAndRandomString(randomValue, newConcept);
+		URIGenerator uriGen = new URIGenerator(skosxlModel, graphs, projectName);
+		return uriGen.generateURI(entityPrefix+"$rand()", null);
 	}
 	
 	//moved to SKOS.java
