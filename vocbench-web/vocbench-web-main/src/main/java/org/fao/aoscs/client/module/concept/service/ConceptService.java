@@ -145,6 +145,16 @@ public interface ConceptService extends RemoteService{
 	public boolean checkConceptAddToScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI) throws Exception;
 	public boolean checkRemoveConceptFromScheme(OntologyInfo ontoInfo, String conceptURI, String schemeURI) throws Exception;
 	
+	public HashMap<String, String> getConceptAlignment(OntologyInfo ontoInfo) throws Exception;
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptAlignmentValue(
+			String resourceURI, boolean isExplicit, OntologyInfo ontoInfo);
+	
+	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptAlignmentValue(
+			OntologyInfo ontoInfo, String conceptURI, String propertyURI, String destConceptURI, 
+			boolean isExplicit);
+	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptAlignmentValue(
+			OntologyInfo ontoInfo, String conceptURI, String propertyURI, String destConceptURI, 
+			boolean isExplicit);
 	
 	public static class ConceptServiceUtil{
 		private static ConceptServiceAsync<?> instance;

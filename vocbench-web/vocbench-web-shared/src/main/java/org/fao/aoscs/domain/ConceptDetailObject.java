@@ -19,6 +19,7 @@ public class ConceptDetailObject extends LightEntity{
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> attributeObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> noteObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> notationObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
+	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> alignmentObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<String, String> schemeObject = null;
 	
 	private int termCount = 0;
@@ -30,6 +31,7 @@ public class ConceptDetailObject extends LightEntity{
 	private int historyCount = 0;
 	private int imageCount = 0;
 	private int schemeCount = 0;
+	private int alignmentCount = 0;
 	private int conceptMappedCount = 0;
 
 	/**
@@ -218,6 +220,30 @@ public class ConceptDetailObject extends LightEntity{
 	}
 	public void setSchemeCount(int schemeCount) {
 		this.schemeCount = schemeCount;
+	}
+	/**
+	 * @return the alignmentCount
+	 */
+	public int getAlignmentCount() {
+		return alignmentCount;
+	}
+	/**
+	 * @param alignmentCount the alignmentCount to set
+	 */
+	public void setAlignmentCount(int alignmentCount) {
+		this.alignmentCount = alignmentCount;
+	}
+	/**
+	 * @return the alignmentObject
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getAlignmentObject() {
+		return alignmentObject;
+	}
+	/**
+	 * @param alignmentObject the alignmentObject to set
+	 */
+	public void setAlignmentObject(HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> alignmentObject) {
+		this.alignmentObject = alignmentObject;
 	}
 }
 

@@ -83,6 +83,17 @@ public class PropertyManager extends ResponseManager {
 	}
 	
 	/**
+	 * @param ontoInfo
+	 * @return
+	 */
+	public static HashMap<String, String> getConceptAlignment(OntologyInfo ontoInfo){
+		ArrayList<String> subPropOf = new ArrayList<String>();
+		subPropOf.add(SKOS.MAPPINGRELATION);
+		
+		return getPropertyList(ontoInfo, PropertyManager.OBJECTPROPERTY, subPropOf, null, true);
+	}
+	
+	/**
 	 * @return
 	 */
 	public static ArrayList<String> getConceptObjectProperties(){
@@ -377,6 +388,19 @@ public class PropertyManager extends ResponseManager {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param resourceURI
+	 * @param propertyURI
+	 * @param value
+	 * @return
+	 */
+	public static boolean addExternalPropValue(OntologyInfo ontoInfo, String resourceURI, String propertyURI, String value)
+	{
+		XMLResponseREPLY reply = PropertyResponseManager.addExternalPropValueRequest(ontoInfo, resourceURI, propertyURI, value);
+		return getReplyStatus(reply);
 	}
 	
 	/**

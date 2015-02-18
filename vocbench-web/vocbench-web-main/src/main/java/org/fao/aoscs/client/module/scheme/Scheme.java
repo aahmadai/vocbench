@@ -177,20 +177,9 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener, SchemeLa
 			CheckBox chk = (CheckBox)schemeDataTable.getWidget(i, 0);
 			chk.setValue(chk.getText().equals(schemeName));
 		}
-		AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
-			public void onSuccess(Boolean result) {
-				if(result)
-				{
-					MainApp.schemeUri = scheme;
-					Window.alert(messages.conceptSchemeSelected(schemeName, scheme));
-					ModuleManager.resetConcept();
-				}
-			}
-			public void onFailure(Throwable caught) {
-				ExceptionManager.showException(caught, constants.conceptSchemeSetSchemeFail());
-			}
-		};
-		Service.schemeService.setScheme(MainApp.userOntology, scheme, callback);
+		MainApp.schemeUri = scheme;
+		Window.alert(messages.conceptSchemeSelected(schemeName, scheme));
+		ModuleManager.resetConcept();
 	}
 	
 	/**
@@ -203,7 +192,7 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener, SchemeLa
         			public void onSuccess(HashMap<String, String> list) {
         				schemeDataTable.removeAllRows();
         				int i=0;
-        				for(String schemeName : list.keySet())
+        				for(final String schemeName : list.keySet())
         				{
         					
         					final String scheme = list.get(schemeName);
@@ -244,10 +233,33 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener, SchemeLa
         						}
         					});
         					
+        					HTML defaultButton = new HTML(constants.conceptSetAsDefaultScheme());
+        					defaultButton.setWordWrap(false);
+        					defaultButton.setTitle(constants.conceptSetAsDefaultScheme());
+        					defaultButton.setStyleName(Style.Link);
+        					defaultButton.addClickHandler(new ClickHandler() {
+        						public void onClick(ClickEvent event) {
+        							AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+        								public void onSuccess(Boolean result) {
+        									if(result)
+        									{
+        										selectCheckBox(schemeName, scheme);
+        									}
+        								}
+        								public void onFailure(Throwable caught) {
+        									ExceptionManager.showException(caught, constants.conceptSchemeSetSchemeFail());
+        								}
+        							};
+        							Service.schemeService.setScheme(MainApp.userOntology, scheme, callback);
+        						}
+        					});
+        					
         					HorizontalPanel functionalPanel = new HorizontalPanel();
         					functionalPanel.setSpacing(3);
         					functionalPanel.add(edit);
         					functionalPanel.add(delete);
+        					if(MainApp.groupId==1)
+        						functionalPanel.add(defaultButton);
         					
         					schemeDataTable.setWidget(i, 2 , functionalPanel);
         					schemeDataTable.getCellFormatter().setWidth(i, 2, "5%");

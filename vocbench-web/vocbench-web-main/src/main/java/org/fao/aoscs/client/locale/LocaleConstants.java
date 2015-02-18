@@ -965,6 +965,8 @@ public interface LocaleConstants extends Constants{
 	public String conceptAttributes();
 	public String conceptNotation();
 	public String conceptNotations();
+	public String conceptAlignment();
+	public String conceptAlignments();
 	public String conceptRelationship();
 	public String conceptRelationships();
 	public String conceptImage();
@@ -1025,6 +1027,11 @@ public interface LocaleConstants extends Constants{
 	public String conceptEditAttributes();
 	public String conceptDeleteAttributes();
 	public String conceptNoAttributes();
+	public String conceptAddAlignment();
+	public String conceptEditAlignment();
+	public String conceptDeleteAlignment();
+	public String conceptNoAlignment();
+	public String conceptSelectAlignment();
 	public String conceptAddDefinitionLabel();
 	public String conceptEditDefinitionLabel();
 	public String conceptDeleteDefinitionLabel();
@@ -1077,6 +1084,12 @@ public interface LocaleConstants extends Constants{
 	public String conceptShowAdvOptionsHelp();
 	public String conceptFoundExistingConcepts();
 	public String conceptNoSchemes();
+	public String conceptAlignmentProject();
+	public String conceptAlignmentSchemes();
+	public String conceptAlignmentProjectReload();
+	public String conceptAlignmentSchemesReload();
+	public String conceptAlignmentProjectSelect();
+	public String conceptAlignmentSchemesSelect();
 
 	// Concept>messages
 	public String conceptSchemeAdded();
@@ -1132,6 +1145,7 @@ public interface LocaleConstants extends Constants{
 	public String conceptDeleteRelationshipFail();
 	public String conceptGetSearchResultFail();
 	public String conceptAttributeFail();
+	public String conceptAlignmentFail();
 	public String conceptGetTermFail();
 	public String conceptAddTermFail();
 	public String conceptAddTermFailDuplicate();
@@ -1356,6 +1370,7 @@ public interface LocaleConstants extends Constants{
 	public String conceptSchemeAddSchemeLabel();
 	public String conceptSchemeEditSchemeLabel();
 	public String conceptSchemeDeleteSchemeLabel();
+	public String conceptSetAsDefaultScheme();
 	
 	//Concept Scheme/messages
 	public String conceptSchemeGetSchemeFail();

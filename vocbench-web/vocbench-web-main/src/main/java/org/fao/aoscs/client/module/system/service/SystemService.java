@@ -76,6 +76,7 @@ public interface SystemService extends RemoteService {
 	public HashMap<String, ConfigObject> loadConfigConstants() throws Exception;
 	public void updateConfigConstants(HashMap<String, ConfigObject> configObjectMap) throws Exception;
 	public HashMap<String, ConfigObject> getConfigConstants(String filename) throws Exception;
+	public ArrayList<OntologyInfo> getOntology() throws Exception;
 	public ArrayList<OntologyInfo> getOntology(String userid) throws Exception;
 	public OntologyInfo addOntology(String userid, OntologyInfo ontoInfo) throws Exception;
 	public ArrayList<OntologyInfo> deleteOntology(String userid, int ontologyId) throws Exception;

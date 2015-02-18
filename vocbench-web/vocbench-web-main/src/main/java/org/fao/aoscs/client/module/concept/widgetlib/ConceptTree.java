@@ -243,11 +243,11 @@ public class ConceptTree extends Composite{
 	    functionPanel.setVisible(false);
 	    detailPanel.setVisible(false);
 	    getURIPanel.setVisible(false);
-		treePanel.gotoItem(targetItem, initTab, !MainApp.userPreference.isHideNonpreferred(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+		treePanel.gotoItem(targetItem, initTab, !MainApp.userPreference.isHideNonpreferred(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 	}
 	
 	public void reloadItem(final String targetItem, final int initTab){
-		treePanel.reloadItem(targetItem, initTab, !MainApp.userPreference.isHideNonpreferred(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+		treePanel.reloadItem(targetItem, initTab, !MainApp.userPreference.isHideNonpreferred(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 		final ConceptBrowser cb =((MainApp) RootPanel.get().getWidget(0)).conceptBrowser;
 		if(cb!=null)
 			cb.reload();
@@ -734,9 +734,9 @@ public class ConceptTree extends Composite{
 
 	private void loadTreePanel(String conceptURI, int tabNumber){
 		if(conceptURI!=null && !conceptURI.equals("")){
-			treePanel = new ConceptCellTreeAOS(initData.getConceptTreeObject(), CellTreeAOS.TYPE_CONCEPT, conceptURI, tabNumber);
+			treePanel = new ConceptCellTreeAOS(initData.getConceptTreeObject(), CellTreeAOS.TYPE_CONCEPT, conceptURI, tabNumber, MainApp.schemeUri, MainApp.userOntology);
 		}else{		
-			treePanel = new ConceptCellTreeAOS(initData.getConceptTreeObject(), CellTreeAOS.TYPE_CONCEPT);	
+			treePanel = new ConceptCellTreeAOS(initData.getConceptTreeObject(), CellTreeAOS.TYPE_CONCEPT, MainApp.schemeUri, MainApp.userOntology);	
 		}
 		setTreePanelSize();
 	}

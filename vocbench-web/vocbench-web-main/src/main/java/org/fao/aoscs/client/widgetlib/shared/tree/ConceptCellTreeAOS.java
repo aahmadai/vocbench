@@ -10,6 +10,7 @@ import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
 import org.fao.aoscs.client.widgetlib.shared.tree.ConceptTreeObjectViewModel.OnChildReady;
 import org.fao.aoscs.domain.NtreeItemObject;
+import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.TreeObject;
 import org.fao.aoscs.domain.TreePathObject;
 
@@ -33,30 +34,36 @@ public class ConceptCellTreeAOS extends Composite{
 	private DeckPanel panel = new DeckPanel();
 	private LoadingDialog sayLoading = new LoadingDialog();
 	private int type;
+	private String schemeURI;
+	private OntologyInfo ontoInfo;
 	private ConceptTreeObjectViewModel model;
 
-	public ConceptCellTreeAOS(ArrayList<TreeObject> ctObj, int type){
+	public ConceptCellTreeAOS(ArrayList<TreeObject> ctObj, int type, String schemeURI, OntologyInfo ontoInfo){
 		this.type = type;
-		init(ctObj);
+		this.schemeURI = schemeURI;
+		this.ontoInfo = ontoInfo;
+		init(ctObj, schemeURI, ontoInfo);
 	}
 
 	/**Creating dynamic tree with the started selected item*/
-	public ConceptCellTreeAOS(ArrayList<TreeObject> ctObj, int type, String initURI, int infoTab){
+	public ConceptCellTreeAOS(ArrayList<TreeObject> ctObj, int type, String initURI, int infoTab, String schemeURI, OntologyInfo ontoInfo){
 		this.type = type;
-		init(ctObj, initURI, infoTab, !MainApp.userPreference.isHideNonpreferred(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+		this.schemeURI = schemeURI;
+		this.ontoInfo = ontoInfo;
+		init(ctObj, initURI, infoTab, !MainApp.userPreference.isHideNonpreferred(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, schemeURI, ontoInfo);
 	}
 
-	private void init(ArrayList<TreeObject> ctObj)
+	private void init(ArrayList<TreeObject> ctObj, final String schemeURI, final OntologyInfo ontoInfo)
 	{
-		init(ctObj, null, 0, false, false, null);
+		init(ctObj, null, 0, false, false, null, schemeURI, ontoInfo);
 	}
 
-	private void init(ArrayList<TreeObject> ctObj, final String targetItem, final int initTab, final boolean showAlsoNonpreferredTerms, final boolean isHideDeprecated, final ArrayList<String> langList)
+	private void init(ArrayList<TreeObject> ctObj, final String targetItem, final int initTab, final boolean showAlsoNonpreferredTerms, final boolean isHideDeprecated, final ArrayList<String> langList, final String schemeURI, final OntologyInfo ontoInfo)
 	{
 		panel.add(sayLoading);
 		initWidget(panel);
 		
-		model = new ConceptTreeObjectViewModel(ctObj, type);
+		model = new ConceptTreeObjectViewModel(ctObj, type, schemeURI, ontoInfo);
 		tree = new CellTreeAOS(model, null, type);
 		tree.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 		tree.setAnimationEnabled(true);
@@ -66,7 +73,7 @@ public class ConceptCellTreeAOS extends Composite{
 		{
 			Scheduler.get().scheduleDeferred(new Command() {
 				public void execute() {
-					gotoItem(targetItem, initTab, showAlsoNonpreferredTerms, isHideDeprecated, langList);
+					gotoItem(targetItem, initTab, showAlsoNonpreferredTerms, isHideDeprecated, langList, schemeURI, ontoInfo);
 				}
 			});
 		}
@@ -83,33 +90,41 @@ public class ConceptCellTreeAOS extends Composite{
 		});
 	}
 
-	public void load(final ArrayList<TreeObject> startConceptList, final String targetItem, final int initTab, final boolean showAlsoNonpreferredTerms, final boolean isHideDeprecated, final ArrayList<String> langList){
+	public void load(final ArrayList<TreeObject> startConceptList, final String targetItem, final int initTab, final boolean showAlsoNonpreferredTerms, final boolean isHideDeprecated, final ArrayList<String> langList, final String schemeURI, final OntologyInfo ontoInfo){
 		Scheduler.get().scheduleDeferred(new Command() {
 			public void execute() {
 				model.updateData(startConceptList);
 				showLoading(false);
 				if(targetItem!=null && !targetItem.equals(""))
-					gotoItem(targetItem, initTab, showAlsoNonpreferredTerms, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+					gotoItem(targetItem, initTab, showAlsoNonpreferredTerms, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, schemeURI, ontoInfo);
 			}
 		});
 	}
+	
+	/*public void reloadItem(final String targetItem, final int initTab, final boolean showAlsoNonpreferredTerms, final boolean isHideDeprecated, final ArrayList<String> langList){		
+		reloadItem(targetItem, initTab, showAlsoNonpreferredTerms, isHideDeprecated, langList, MainApp.schemeUri, MainApp.userOntology);
+	}*/
 
-	public void reloadItem(final String targetItem, final int initTab, final boolean showAlsoNonpreferredTerms, final boolean isHideDeprecated, final ArrayList<String> langList){		
+	public void reloadItem(final String targetItem, final int initTab, final boolean showAlsoNonpreferredTerms, final boolean isHideDeprecated, final ArrayList<String> langList, final String schemeURI, final OntologyInfo ontoInfo){		
 		AsyncCallback<ArrayList<TreeObject>> callback = new AsyncCallback<ArrayList<TreeObject>>()
 		{
 			public void onSuccess(final ArrayList<TreeObject> result)
 			{
-				load(result, targetItem, initTab, showAlsoNonpreferredTerms, isHideDeprecated, langList);		
+				load(result, targetItem, initTab, showAlsoNonpreferredTerms, isHideDeprecated, langList, schemeURI, ontoInfo);		
 			}
 			public void onFailure(Throwable caught)
 			{
 				ExceptionManager.showException(caught, constants.conceptReloadFail()+"\n\n"+caught.getLocalizedMessage());
 			}
 		};
-		Service.treeService.getTreeObject(null, MainApp.schemeUri, MainApp.userOntology, showAlsoNonpreferredTerms, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, callback);
+		Service.treeService.getTreeObject(null, schemeURI, ontoInfo, showAlsoNonpreferredTerms, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, callback);
 	}
 
-	public void gotoItem(final String targetItem, final int initTab, final boolean showAlsoNonpreferredTerms, final boolean isHideDeprecated, final ArrayList<String> langList){		
+	/*public void gotoItem(final String targetItem, final int initTab, final boolean showAlsoNonpreferredTerms, final boolean isHideDeprecated, final ArrayList<String> langList){		
+		gotoItem(targetItem, initTab, showAlsoNonpreferredTerms, isHideDeprecated, langList, MainApp.schemeUri, MainApp.userOntology);
+	}*/
+	
+	public void gotoItem(final String targetItem, final int initTab, final boolean showAlsoNonpreferredTerms, final boolean isHideDeprecated, final ArrayList<String> langList, String schemeURI, OntologyInfo ontoInfo){		
 		showLoading(true);
 		AsyncCallback<TreePathObject> callback = new AsyncCallback<TreePathObject>(){
 			public void onSuccess(final TreePathObject tpObj){
@@ -133,7 +148,7 @@ public class ConceptCellTreeAOS extends Composite{
 				ExceptionManager.showException(caught, constants.sharedGetTreePathFail());
 			}
 		};
-		Service.treeService.getTreePath(targetItem, MainApp.schemeUri, MainApp.userOntology, showAlsoNonpreferredTerms, isHideDeprecated, langList, callback);
+		Service.treeService.getTreePath(targetItem, schemeURI, ontoInfo, showAlsoNonpreferredTerms, isHideDeprecated, langList, callback);
 	}
 	 
 	private void openTreePath(TreePathObject tpObj,  String targetUri){

@@ -251,5 +251,25 @@ public interface ConceptServiceAsync<T> {
 	void getExcludedConceptSchemes(String conceptURI, String schemeLang,
 			boolean isExplicit, OntologyInfo ontoInfo,
 			AsyncCallback<HashMap<String, String>> callback);
+	void getConceptAlignmentValue(String resourceURI,
+			boolean isExplicit,
+			OntologyInfo ontoInfo,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void getConceptAlignment(OntologyInfo ontoInfo,
+			AsyncCallback<HashMap<String, String>> callback);
+	void addConceptAlignmentValue(
+			OntologyInfo ontoInfo,
+			String conceptURI,
+			String propertyURI,
+			String destConceptURI,
+			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void deleteConceptAlignmentValue(
+			OntologyInfo ontoInfo,
+			String conceptURI,
+			String propertyURI,
+			String destConceptURI,
+			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
 	
 }

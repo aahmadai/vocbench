@@ -21,6 +21,7 @@ import org.fao.aoscs.client.widgetlib.shared.table.IconCellAOS;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.ConceptShowObject;
 import org.fao.aoscs.domain.LabelObject;
+import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.RelationshipObject;
 import org.fao.aoscs.domain.Request;
 import org.fao.aoscs.domain.SearchParameterObject;
@@ -60,225 +61,17 @@ public class SearchCellTable {
 	
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	private	SearchParameterObject searchObj = new SearchParameterObject();
+	private OntologyInfo selectedOntoInfo = MainApp.userOntology;
 	
 	private static final int PAGE_SIZE = 15;
 	private DateTimeFormat sdf = DateTimeFormat.getFormat("dd-MM-yyyy HH:mm:ss");
 	
-	private int type = 0 ;
-	
+	private int type = 0;
 	
 	private VerticalPanel vp = new VerticalPanel();
 	private DataGridAOS<SearchResultObject> table;
 	
-	/*private HorizontalPanel pagingPanel = new HorizontalPanel();
-	
-	
-	*//**
-	   * The {@link CachedTableModel} around the main table model.
-	   *//*
-	  private CachedTableModel<SearchResultObject> cachedTableModel = null;
-	  
-	  *//**
-	   * The {@link PagingScrollTable}.
-	   *//*
-	  private PagingScrollTable<SearchResultObject> pagingScrollTable = null;
-	  
-	  
-	  *//**
-	   * The {@link DataSourceTableModel}.
-	   *//*
-	  private SearchTableModel tableModel = null;
-
-	  *//**
-	   * The {@link DefaultTableDefinition}.
-	   *//*
-	  private DefaultTableDefinition<SearchResultObject> tableDefinition = null;
-
-	  *//**
-	   * @return the cached table model
-	   *//*
-	  public CachedTableModel<SearchResultObject> getCachedTableModel() {
-	    return cachedTableModel;
-	  }
-
-	 
-	  *//**
-	   * @return the {@link PagingScrollTable}
-	   *//*
-	  public PagingScrollTable<SearchResultObject> getPagingScrollTable() {
-	    return pagingScrollTable;
-	  }
-
-	  *//**
-	   * @return the table definition of columns
-	   *//*
-	  public DefaultTableDefinition<SearchResultObject> getTableDefinition() {
-	    return tableDefinition;
-	  }
-
-	  *//**
-	   * @return the table model
-	   *//*
-	  public SearchTableModel getTableModel() {
-	    return tableModel;
-	  }
-
-	  public void insertDataRow(int beforeRow) {
-	    getCachedTableModel().insertRow(beforeRow);
-	  }
-
-	  *//**
-	   * The main layout panel.
-	   *//*
-	  private FlexTable layout = new FlexTable();
-
-	  *//**
-	   * The scroll table.
-	   *//*
-	  private AbstractScrollTable scrollTable = null;
-
-	  *//**
-	   * @return the data table.
-	   *//*
-	  public FixedWidthGrid getDataTable() {
-	    return getScrollTable().getDataTable();
-	  }
-
-	  *//**
-	   * @return the footer table.
-	   *//*
-	  public FixedWidthFlexTable getFooterTable() {
-	    return getScrollTable().getFooterTable();
-	  }
-
-	  *//**
-	   * @return the header table.
-	   *//*
-	  public FixedWidthFlexTable getHeaderTable() {
-	    return getScrollTable().getHeaderTable();
-	  }
-
-	  *//**
-	   * @return the scroll table.
-	   *//*
-	  public AbstractScrollTable getScrollTable() {
-	    return scrollTable;
-	  }
-
-	  *//**
-	   * @return the new header table
-	   *//*
-	  protected FixedWidthFlexTable createHeaderTable(SearchParameterObject searchObj) {
-	    FixedWidthFlexTable headerTable = new FixedWidthFlexTable();
-
-	    // Level 1 headers
-	    FlexCellFormatter formatter = headerTable.getFlexCellFormatter();
-	    
-		headerTable.setHTML(0, 0, constants.searchConcept());
-		formatter.setHorizontalAlignment(0, 0,HasHorizontalAlignment.ALIGN_CENTER);
-		
-		if(searchObj.getRelationship()!=null)
-		{
-			headerTable.setHTML(0, 1, constants.relRelationship());
-			formatter.setHorizontalAlignment(0, 1,HasHorizontalAlignment.ALIGN_CENTER);
-			headerTable.setHTML(0, 2, constants.searchConcept());
-			formatter.setHorizontalAlignment(0, 2,HasHorizontalAlignment.ALIGN_CENTER);
-		}
-		else
-		{
-			headerTable.setHTML(0, 1, constants.searchDate());
-			formatter.setHorizontalAlignment(0, 1,HasHorizontalAlignment.ALIGN_CENTER);
-		}
-
-	    return headerTable;
-	  }
-
-	  *//**
-	   * @return the newly created data table.
-	   *//*
-	  protected FixedWidthGrid createDataTable() {
-	    FixedWidthGrid dataTable = new FixedWidthGrid();
-	    if(type==ModuleManager.MODULE_CONCEPT_BROWSER)
-	    {
-		    dataTable.setSelectionEnabled(true);
-		    dataTable.setSelectionPolicy(SelectionPolicy.ONE_ROW);
-		    dataTable.addRowSelectionHandler(new RowSelectionHandler()
-		    {
-				public void onRowSelection(RowSelectionEvent event) {
-					int selectedRowIndex = -1;
-					for (Row row : event.getSelectedRows()) {
-						selectedRowIndex = row.getRowIndex();
-					}
-					ConceptObject cObj = pagingScrollTable.getRowValue(selectedRowIndex).();
-					ModuleManager.gotoItem(cObj.getUri(), cObj.getScheme(), true, InfoTab.term, cObj.getBelongsToModule(), type);					
-				}
-		    	
-		    });
-	    }
-	    else
-	    {
-	    	dataTable.setSelectionEnabled(false);
-	    }
-	    return dataTable;
-	  }
-
-	  protected AbstractScrollTable createScrollTable(
-	      FixedWidthFlexTable headerTable, FixedWidthGrid dataTable, SearchParameterObject searchObj) {
-	    // Setup the controller
-	    tableModel = new SearchTableModel();
-	    cachedTableModel = new CachedTableModel<SearchResultObject>(tableModel);
-	    cachedTableModel.setPreCachedRowCount(0);
-	    cachedTableModel.setPostCachedRowCount(0);
-	    	
-	    // Create a TableCellRenderer
-	    TableDefinition<SearchResultObject> tableDef = createTableDefinition(searchObj);
-
-	    // Create the scroll table
-	    pagingScrollTable = new PagingScrollTable<SearchResultObject>(cachedTableModel, dataTable, headerTable, tableDef);
-	    pagingScrollTable.setPageSize(15);
-	    pagingScrollTable.setEmptyTableWidget(new HTML("<span style='color:red'>"+constants.searchNoResult()+"</span>"));
-
-	    // Setup the bulk renderer
-	    FixedWidthGridBulkRenderer<SearchResultObject> bulkRenderer = new FixedWidthGridBulkRenderer<SearchResultObject>(dataTable, pagingScrollTable);
-	    pagingScrollTable.setBulkRenderer(bulkRenderer);
-
-	    
-	    // Setup the formatting
-	    pagingScrollTable.setCellPadding(3);
-	    pagingScrollTable.setCellSpacing(0);
-	    pagingScrollTable.setResizePolicy(ScrollTable.ResizePolicy.FILL_WIDTH);
-
-	    return pagingScrollTable;
-	  }
-
-	  
-	  *//**
-	   * @return the main layout panel
-	   *//*
-	  public FlexTable getLayout() {
-	    return layout;
-	  }
-
-	  *//**
-	   * Called when the module has finished loading.
-	   *//*
-	  protected void onModuleLoaded() {
-	      pagingScrollTable.gotoFirstPage();
-
-	  }
-	  
-	  public void onTableLoad(int count) {
-		  
-		//System.out.println("Table count: "+tableModel.getRowCount());
-		  tableModel.setRowCount(count);
-		  //System.out.println("Table count: "+tableModel.getRowCount());
-		  cachedTableModel.clearCache();
-		  cachedTableModel.setRowCount(tableModel.getRowCount()); 
-		  pagingScrollTable.redraw();
-				  
-	}*/
-	  
-	  @SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	private DataGridAOS<SearchResultObject> createTable() 
 		{
 
@@ -308,7 +101,6 @@ public class SearchCellTable {
 			
 			conceptObjectColumn.setFieldUpdater(new FieldUpdater<SearchResultObject, String>() {
 		        public void update(int index, SearchResultObject object, String value) {
-		             //Window.alert("You have clicked: " + object.());
 		             ConceptObject cObj = object.getConceptShowObject().getConceptObject();
 		             onLabelClicked(cObj.getUri(), cObj.getScheme(), true, InfoTab.term, cObj.getBelongsToModule(), type);
 		        }
@@ -515,17 +307,21 @@ public class SearchCellTable {
 							updateRowData(start, result.getSearchResultObjectList());
 						}
 					};
-					Service.searchSerice.requestSearchResultsRows(request, searchObj, MainApp.userOntology, callback);
+					Service.searchSerice.requestSearchResultsRows(request, searchObj, selectedOntoInfo, callback);
 				}
 			};
 			
 			provider.addDataDisplay(table);
 		}
 	  
-	  public void setSearchTable(SearchParameterObject searchObj1, int type1) {
+		public void setSearchTable(SearchParameterObject searchObj1, int type1) {
+			setSearchTable(searchObj1, type1, MainApp.userOntology);
+		}
+		public void setSearchTable(SearchParameterObject searchObj1, int type1, OntologyInfo selectedOntoInfo1) {
 			  
 		  	this.searchObj = searchObj1;
 		  	this.type = type1;
+		  	this.selectedOntoInfo = selectedOntoInfo1;
 		  
 			// Create a CellTable.
 			table = createTable();
@@ -553,23 +349,18 @@ public class SearchCellTable {
 			
 			final CellTablePagerAOS pager = new CellTablePagerAOS(TextLocation.CENTER, false, 0, true);
 			pager.setDisplay(table);
-			
 			if(type==ModuleManager.MODULE_SEARCH)
 			{
-				//table.setWidth(MainApp.getBodyPanelWidth() - 32 + "px");
 				table.setHeight(MainApp.getBodyPanelHeight() - 80  +"px");
 			}
-			else if(type==ModuleManager.MODULE_CONCEPT_BROWSER)
+			else if(type==ModuleManager.MODULE_CONCEPT_BROWSER || type==ModuleManager.MODULE_CONCEPT_ALIGNMENT_BROWSER)
 			{
-				//table.setWidth(700 - 32 + "px");
 				table.setHeight(400 - 110 +"px");
-				//pager.setWidth(700 - 42 + "px");
 			}
 			else if(type==ModuleManager.MODULE_CONCEPT_CHECK_EXIST)
 			{
 				table.setWidth(500 - 32 + "px");
 				table.setHeight(300 - 110 +"px");
-				//pager.setWidth(500 - 42 + "px");
 			}
 			
 		    Window.addResizeHandler(new ResizeHandler()
@@ -578,20 +369,15 @@ public class SearchCellTable {
 		    		
 		    		if(type==ModuleManager.MODULE_SEARCH)
 		    		{
-		    			//table.setWidth(MainApp.getBodyPanelWidth() - 42 + "px");
 		    			table.setHeight(MainApp.getBodyPanelHeight() - 80 +"px");
-		    			//pager.setWidth(MainApp.getBodyPanelWidth() - 42 + "px");
 		    		}
-		    		else if(type==ModuleManager.MODULE_CONCEPT_BROWSER)
+		    		else if(type==ModuleManager.MODULE_CONCEPT_BROWSER || type==ModuleManager.MODULE_CONCEPT_ALIGNMENT_BROWSER)
 		    		{
-		    			//table.setWidth(700 - 42 + "px");
 		    			table.setHeight(400 - 110 +"px");
-		    			//pager.setWidth(700 - 42 + "px");
 		    		}
 		    		else if(type==ModuleManager.MODULE_CONCEPT_CHECK_EXIST)
 		    		{
 		    			table.setWidth(500 - 42 + "px");
-		    			//pager.setWidth(500 - 42 + "px");
 		    			table.setHeight(300 - 110 +"px");
 		    		}
 				}
@@ -615,276 +401,6 @@ public class SearchCellTable {
 			vp.setCellVerticalAlignment(hp, HasVerticalAlignment.ALIGN_BOTTOM);
 			
 		} 
-	
-	/*public void setSearchTable(SearchParameterObject searchObj, int type1) {
-		
-		this.searchObj = searchObj;
-		type = type1;
-
-		// Initialize the tables
-		FixedWidthFlexTable headerTable = createHeaderTable(searchObj);
-		FixedWidthGrid dataTable = createDataTable();
-		scrollTable = createScrollTable(headerTable, dataTable, searchObj);
-		
-		if(type==ModuleManager.MODULE_SEARCH)
-		{
-			scrollTable.setWidth("100%");
-			//scrollTable.setWidth(MainApp.getBodyPanelWidth() - 42 + "px");
-			scrollTable.setHeight(MainApp.getBodyPanelHeight() - 115 +"px");
-			//pagingPanel.setWidth(MainApp.getBodyPanelWidth() - 42 + "px");
-		}
-		else if(type==ModuleManager.MODULE_CONCEPT_BROWSER)
-		{
-			scrollTable.setWidth(700 - 42 + "px");
-			scrollTable.setHeight(400 - 110 +"px");
-			pagingPanel.setWidth(700 - 42 + "px");
-		}
-		else if(type==ModuleManager.MODULE_CONCEPT_CHECK_EXIST)
-		{
-			scrollTable.setWidth(500 - 42 + "px");
-			scrollTable.setHeight(300 - 110 +"px");
-			pagingPanel.setWidth(500 - 42 + "px");
-		}
-		
-		// Add the main layout to the page
-		layout.setWidth("100%");
-		layout.setCellPadding(0);
-		layout.setCellSpacing(0);
-		layout.setWidget(0, 0, scrollTable);		// Add the scroll table to the layout
-		
-	    Window.addResizeHandler(new ResizeHandler()
-	    {
-	    	public void onResize(ResizeEvent event) {
-	    		
-	    		if(type==ModuleManager.MODULE_SEARCH)
-	    		{
-	    			scrollTable.setWidth("100%");
-	    			//scrollTable.setWidth(MainApp.getBodyPanelWidth() - 42 + "px");
-	    			scrollTable.setHeight(MainApp.getBodyPanelHeight() - 115 +"px");
-	    			//pagingPanel.setWidth(MainApp.getBodyPanelWidth() - 42 + "px");
-	    		}
-	    		else if(type==ModuleManager.MODULE_CONCEPT_BROWSER)
-	    		{
-	    			scrollTable.setWidth(700 - 42 + "px");
-	    			scrollTable.setHeight(400 - 110 +"px");
-	    			pagingPanel.setWidth(700 - 42 + "px");
-	    		}
-	    		else if(type==ModuleManager.MODULE_CONCEPT_CHECK_EXIST)
-	    		{
-	    			scrollTable.setWidth(500 - 42 + "px");
-	    			scrollTable.setHeight(300 - 110 +"px");
-	    			pagingPanel.setWidth(500 - 42 + "px");
-	    		}
-				scrollTable.redraw();
-			}
-	    });
-	    
-		// Create an paging options
-		PagingOptions pagingOptions = new PagingOptions(getPagingScrollTable());
-		pagingPanel.setSpacing(0);
-		pagingPanel.setWidth("100%");
-		pagingPanel.setHeight("100%");
-	    pagingPanel.add(pagingOptions);
-	    pagingPanel.setStyleName("gwt-PagingOptionsPanel");
-	    pagingPanel.setCellHeight(pagingOptions, "100%");
-	    pagingPanel.setCellWidth(pagingOptions, "100%");
-		layout.insertRow(1);
-		layout.setWidget(1,0, pagingPanel);
-		
-		// Do any required post processing
-		onModuleLoaded();
-}
-	
-	public abstract class SearchColumnDefiniton<ColType> extends AbstractColumnDefinition<SearchResultObject, ColType> {
-
-		*//**
-		 * Construct a new {@link SearchColumnDefiniton}.
-		 * 
-		 *//*
-		public SearchColumnDefiniton() {}
-
-	}
-	
-	 *//**
-	   * @return the {@link TableDefinition} with all ColumnDefinitions defined.
-	   *//*
-	 private TableDefinition<SearchResultObject> createTableDefinition(SearchParameterObject searchObj) {
-	    
-
-	    // Create the table definition
-	    tableDefinition = new DefaultTableDefinition<SearchResultObject>();
-	    
-
-	    // concept
-	    {
-			SearchColumnDefiniton<Object> columnDef = new SearchColumnDefiniton<Object>() {
-
-				@Override
-				public Object getCellValue(SearchResultObject rowValue) {
-					return null;
-				}
-
-				@Override
-				public void setCellValue(SearchResultObject rowValue, Object cellValue) {
-				
-				}
-
-			};
-			columnDef.setCellRenderer(new CellRenderer<SearchResultObject, Object>() {
-				public void renderRowValue(SearchResultObject rowValue, ColumnDefinition<SearchResultObject, Object> columnDef,AbstractCellView<SearchResultObject> view) {
-					view.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-					view.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_DEFAULT);
-					Widget w = (Widget) getConceptColumn((ConceptObject)rowValue.(), type);
-			    	w.addStyleName("gwt-NoBorder");
-			    	view.setWidget(w);
-				}
-			});
-			//columnDef.setMinimumColumnWidth(150);
-			//columnDef.setPreferredColumnWidth(150);
-			//columnDef.setMaximumColumnWidth(150);
-			columnDef.setColumnSortable(false);
-			tableDefinition.addColumnDefinition(columnDef);
-	    }
-	    
-	    if(searchObj.getRelationship()!=null)
-	    {
-		 // relationship
-		    {
-				SearchColumnDefiniton<Object> columnDef = new SearchColumnDefiniton<Object>() {
-	
-					@Override
-					public Object getCellValue(SearchResultObject rowValue) {
-						return null;
-					}
-	
-					@Override
-					public void setCellValue(SearchResultObject rowValue, Object cellValue) {
-					
-					}
-	
-				};
-				columnDef.setCellRenderer(new CellRenderer<SearchResultObject, Object>() {
-					public void renderRowValue(SearchResultObject rowValue, ColumnDefinition<SearchResultObject, Object> columnDef,AbstractCellView<SearchResultObject> view) {
-						view.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-						view.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_DEFAULT);
-						Widget w = (Widget) getRelationshipColumn((RelationshipObject)rowValue.getRelationshipObject());
-				    	w.addStyleName("gwt-NoBorder");
-				    	view.setWidget(w);
-					}
-				});
-				//columnDef.setMinimumColumnWidth(150);
-				//columnDef.setPreferredColumnWidth(150);
-				//columnDef.setMaximumColumnWidth(150);
-				columnDef.setColumnSortable(false);
-				tableDefinition.addColumnDefinition(columnDef);
-		    }
-		    
-		 // destinationConcept
-		    {
-				SearchColumnDefiniton<Object> columnDef = new SearchColumnDefiniton<Object>() {
-	
-					@Override
-					public Object getCellValue(SearchResultObject rowValue) {
-						return null;
-					}
-	
-					@Override
-					public void setCellValue(SearchResultObject rowValue, Object cellValue) {
-					
-					}
-	
-				};
-				columnDef.setCellRenderer(new CellRenderer<SearchResultObject, Object>() {
-					public void renderRowValue(SearchResultObject rowValue, ColumnDefinition<SearchResultObject, Object> columnDef,AbstractCellView<SearchResultObject> view) {
-						view.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-						view.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_DEFAULT);
-						Widget w = (Widget) getDestConceptColumn((ArrayList<ConceptObject>)rowValue.getDestConceptObject(), type);
-				    	w.addStyleName("gwt-NoBorder");
-				    	view.setWidget(w);
-					}
-				});
-				//columnDef.setMinimumColumnWidth(150);
-				//columnDef.setPreferredColumnWidth(150);
-				//columnDef.setMaximumColumnWidth(150);
-				columnDef.setColumnSortable(false);
-				tableDefinition.addColumnDefinition(columnDef);
-		    }
-	    }
-	    else
-	    {
-	    
-			// Date
-			{
-				SearchColumnDefiniton<Date> columnDef = new SearchColumnDefiniton<Date>() {
-					@Override
-					public Date getCellValue(SearchResultObject rowValue) {
-						return rowValue.().getDateModified();
-					}
-				
-					@Override
-					public void setCellValue(SearchResultObject rowValue, Date cellValue) {
-						rowValue.().setDateModified(cellValue);
-						
-					}
-	
-				};
-				columnDef.setCellRenderer(new CellRenderer<SearchResultObject, Date>() {
-					public void renderRowValue(SearchResultObject rowValue, ColumnDefinition<SearchResultObject, Date> columnDef,AbstractCellView<SearchResultObject> view) {
-						view.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-						view.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-						view.setStyleName("gwt-ScrollTable-NoLink");
-						view.setHTML(""+"&nbsp;"+formatDate(rowValue.().getDateModified()));
-					}
-				});
-				columnDef.setMinimumColumnWidth(150);
-				columnDef.setPreferredColumnWidth(150);
-				columnDef.setMaximumColumnWidth(150);
-				columnDef.setColumnSortable(true);
-				tableDefinition.addColumnDefinition(columnDef);
-		    }
-	    }
-	    
-	    return tableDefinition;
-	  }
-
-	 private class SearchTableModel extends MutableTableModel<SearchResultObject> {
-			  
-		@SuppressWarnings("unchecked")
-		public void requestRows(final Request request, final Callback<SearchResultObject> callback) {
-			
-			// Send RPC request for data
-			Service.searchSerice.requestSearchResultsRows(request, searchObj, MainApp.userOntology, new AsyncCallback<SearchResultObjectList>() 
-					{
-				        public void onFailure(final Throwable caught) {
-				          callback.onFailure(new Exception(constants.searchListError()));
-				        }
-	
-				        @SuppressWarnings("rawtypes")
-						public void onSuccess(SearchResultObjectList searchResultListObject) {
-							Response response = new SerializableResponse(searchResultListObject.getSearchResultObjectList());
-							callback.onRowsReady(request, (Response) response);
-							//System.out.println("test1");
-							onTableLoad(searchResultListObject.getSearchResultTotalCount());
-							//System.out.println("test2");
-				        }
-			      });
-		}
-
-		@Override
-		protected boolean onRowInserted(int beforeRow) {
-			return false;
-		}
-
-		@Override
-		protected boolean onRowRemoved(int row) {
-			return false;
-		}
-
-		@Override
-		protected boolean onSetRowValue(int row, SearchResultObject rowValue) {
-			return false;
-		}
-	}*/
 	
 	 public  Widget getConceptLabelPanel(ConceptShowObject conceptShowObject, int type)
 	 {
@@ -960,18 +476,7 @@ public class SearchCellTable {
 	 
 	 public Widget getConceptColumn(ConceptShowObject conceptShowObject, int type)
 	 {
-		 /*String imgURL = "";
-		 if(cObj.getUri().startsWith(ModelConstants.ONTOLOGYBASENAMESPACE))
-			 imgURL = "images/concept_logo.gif";
-		 else 
-			 imgURL = "images/category_logo.gif";
-		 
-		 FlowPanel panel = new FlowPanel();
-			//panel.add(new Image(imgURL));
-			//panel.add(new Spacer("15", "15"));
-			panel.add(getConceptLabelPanel(cObj, type));
-			return panel;*/
-			return getConceptLabelPanel(conceptShowObject, type);
+		return getConceptLabelPanel(conceptShowObject, type);
 	 }
 	 
 	 public Widget getDestConceptColumn(ArrayList<ConceptShowObject> conceptShowObjectList, int type)
@@ -1048,16 +553,8 @@ public class SearchCellTable {
 				label.setHTML("&nbsp;"+text);
 				if(link!=null)
 				{
-					//if(!link.equals(ModelConstants.CDOMAINCONCEPT))
-					{
-						label.setStyleName(style);
-						label.setTitle(title);
-						/*label.addClickHandler(new ClickHandler() {
-							public void onClick(ClickEvent event) {
-								onLabelClicked(link, schemeURI, isAddAction, tab, belongsToModule, type);
-							}
-						});*/
-					}
+					label.setStyleName(style);
+					label.setTitle(title);
 				}
 				return label;
 			}
@@ -1066,11 +563,6 @@ public class SearchCellTable {
 				Image image = new Image("images/label-not-found.gif");
 				image.setStyleName(style);
 				image.setTitle(constants.homeNoTerm());
-/*				image.addClickHandler(new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						onLabelClicked(link, schemeURI, isAddAction, tab, belongsToModule, type);
-					}
-				});*/
 				return image;
 			}
 		}

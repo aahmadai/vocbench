@@ -342,20 +342,20 @@ public class AddConcept extends FlexDialogBox {
 							newTerm.addFlexDialogClickedHandler(new FlexDialogClickedHandler() {
 								public void onFlexDialogSubmitClicked(ClickEvent event) {
 									newTerm.hide();
-									tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+									tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 								}
 								public void onFlexDialogLoopClicked(ClickEvent event) {
 								}
 								public void onFlexDialogCancelClicked(ClickEvent event) {
 									newTerm.hide();
-									tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+									tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 								}
 							});
 							newTerm.show();
 						}
 						else
 						{
-							tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+							tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 						}
 						
 							
@@ -378,13 +378,13 @@ public class AddConcept extends FlexDialogBox {
 							AddNewTerm newTerm = new AddNewTerm(initData, conceptObject, name.getText() + " (" + language.getValue(language.getSelectedIndex()) + ")");
 							newTerm.addAddNewTermSuccessHandler(new AddNewTermSuccessHandler(){
 								public void onAddNewTermSuccess(ConceptTermObject results) {
-									tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+									tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 								}
 							});
 							
 							newTerm.addFlexDialogClickedHandler(new FlexDialogClickedHandler(){
 								public void onFlexDialogCancelClicked(ClickEvent event) {
-									tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+									tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 								}
 								public void onFlexDialogLoopClicked(ClickEvent event) {
 								}
@@ -395,11 +395,11 @@ public class AddConcept extends FlexDialogBox {
 						}
 						else
 						{
-							tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+							tree.reloadItem(conceptObject.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 						}
 					}
 					public void onFailure(Throwable caught){
-						tree.reloadItem(cObj.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+						tree.reloadItem(cObj.getUri(), InfoTab.term, showAlsoNonpreferredTerms.getValue(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 						ExceptionManager.showException(caught, constants.conceptAddFail());
 					}
 				};
@@ -448,7 +448,7 @@ public class AddConcept extends FlexDialogBox {
 					final ConfirmGoToExistingConcept d = new ConfirmGoToExistingConcept();
 					d.addFlexDialogClickedHandler(new FlexDialogClickedHandler(){
 						public void onFlexDialogSubmitClicked(ClickEvent event) {
-							tree.reloadItem(link, InfoTab.term, false, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+							tree.reloadItem(link, InfoTab.term, false, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 							d.hide();
 							hideAddConcept();
 						}

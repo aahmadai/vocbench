@@ -48,6 +48,26 @@ public class PropertyResponseManager extends ResponseManager {
 				);
 		return getXMLResponseREPLY(resp);
 	}
+
+	/**
+	 * @param ontoInfo
+	 * @param resourceURI
+	 * @param propertyURI
+	 * @param value
+	 * @return
+	 */
+	public static XMLResponseREPLY addExternalPropValueRequest(OntologyInfo ontoInfo, String resourceURI, String propertyURI, String value)
+	{
+		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(
+				Property.Req.addExternalPropValueRequest, 
+				STModel.par(Property.Par.instanceQNamePar, resourceURI), 
+				STModel.par(Property.Par.propertyQNamePar, propertyURI),
+				STModel.par(Property.Par.valueField, value),
+				STModel.par(Property.Par.type, RDFTypesEnum.uri.toString()), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName())
+				);
+		return getXMLResponseREPLY(resp);
+	}
 	
 	/**
 	 * @param resourceURI

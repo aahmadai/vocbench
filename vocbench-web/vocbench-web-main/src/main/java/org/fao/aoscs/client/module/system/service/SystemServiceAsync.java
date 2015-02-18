@@ -95,5 +95,6 @@ public interface SystemServiceAsync<T> {
 
 	void deleteSTServer(OntologyInfo ontoInfo, StInstances stInstances,
 			AsyncCallback<Boolean> callback);
+	void getOntology(AsyncCallback<ArrayList<OntologyInfo>> callback);
 	
 }

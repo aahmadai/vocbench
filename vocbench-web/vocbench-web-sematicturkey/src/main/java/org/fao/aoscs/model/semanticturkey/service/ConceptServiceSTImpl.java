@@ -1510,6 +1510,7 @@ public class ConceptServiceSTImpl {
 		cDetailObj.setNotationObject(null);
 		cDetailObj.setHierarchyObject(null);
 		cDetailObj.setSchemeObject(null);
+		cDetailObj.setAlignmentObject(null);
 		
 		XMLResponseREPLY resp = VocbenchResponseManager.getConceptTabsCountsRequest(ontoInfo, conceptURI);
 		if(resp!=null)
@@ -1524,6 +1525,7 @@ public class ConceptServiceSTImpl {
 				cDetailObj.setNotationCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "notation", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setRelationCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "related", isExplicit?"countExplicit":"count"));
 				cDetailObj.setImageCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "images", isExplicit?"numberExplicit":"number"));
+				cDetailObj.setAlignmentCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "sameAsMappingRelation", isExplicit?"numberExplicit":"number"));
 			}
 		}
 		// //TODO on ST UPDATE : Add scheme count in the ST service getConceptTabsCountsRequest
@@ -1820,6 +1822,10 @@ public class ConceptServiceSTImpl {
 		return list;
 	}
 	
+	public HashMap<String, String> getConceptAlignment(OntologyInfo ontoInfo){
+		return PropertyManager.getConceptAlignment(ontoInfo);
+	}
+	
 	/**
 	 * @param resourceURI
 	 * @param ontoInfo
@@ -1859,6 +1865,44 @@ public class ConceptServiceSTImpl {
 	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptNotationValue(
 			String resourceURI, boolean isExplicit, OntologyInfo ontoInfo) {
 		return getPropertyValue(ontoInfo, ResourceManager.getValuesOfProperties(ontoInfo, resourceURI, SKOS.NOTATION, true, false, null, isExplicit));
+	}
+	
+	/**
+	 * @param resourceURI
+	 * @param isExplicit
+	 * @param ontoInfo
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptAlignmentValue(String resourceURI, boolean isExplicit, OntologyInfo ontoInfo){
+		return getPropertyValue(ontoInfo, ResourceManager.getValuesOfProperties(ontoInfo, resourceURI, SKOS.MAPPINGRELATION, true, false, null, isExplicit));
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param propertyURI
+	 * @param isExplicit
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptAlignmentValue(OntologyInfo ontoInfo, String conceptURI, String propertyURI, String destConceptURI, boolean isExplicit){
+		PropertyManager.addExternalPropValue(ontoInfo, conceptURI, propertyURI, destConceptURI);
+		STUtility.setInstanceUpdateDate(ontoInfo, conceptURI);
+		return getConceptAlignmentValue(conceptURI, isExplicit, ontoInfo);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @param propertyURI
+	 * @param isExplicit
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptAlignmentValue(
+			OntologyInfo ontoInfo, String conceptURI, String propertyURI, String destConceptURI, 
+			 boolean isExplicit) {
+		PropertyManager.removeResourcePropValue(ontoInfo, conceptURI, propertyURI, destConceptURI);
+		STUtility.setInstanceUpdateDate(ontoInfo, conceptURI);
+		return getConceptAlignmentValue(conceptURI, isExplicit, ontoInfo);
 	}
 
 	/* (non-Javadoc)

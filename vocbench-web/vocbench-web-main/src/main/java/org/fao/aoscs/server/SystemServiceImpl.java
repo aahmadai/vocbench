@@ -386,6 +386,13 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	public ArrayList<OntologyInfo> deleteOntology(String userid, int ontologyId) {
 		return systemServiceSystemImpl.deleteOntology(userid, ontologyId);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.system.service.SystemService#getOntology()
+	 */
+	public ArrayList<OntologyInfo> getOntology() throws Exception {
+		return systemServiceSystemImpl.getOntology();
+	}
 
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.system.service.SystemService#getOntology(java.lang.String)
@@ -452,6 +459,5 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	public Boolean deleteSTServer(OntologyInfo ontoInfo, StInstances stInstances) {
 		return systemServiceSystemImpl.deleteSTServer(ontoInfo, stInstances);
 	}
-
 }
 

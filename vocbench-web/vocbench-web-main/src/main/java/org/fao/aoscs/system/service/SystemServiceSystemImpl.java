@@ -487,6 +487,25 @@ public class SystemServiceSystemImpl {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public ArrayList<OntologyInfo> getOntology()
+	{
+		try {
+			String sqlStr = "SELECT * FROM ontology_info WHERE version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1' AND ontology_id IN ( SELECT ontology_id FROM users_ontology WHERE status = 1) order by ontology_name";
+			
+			Session s = HibernateUtilities.currentSession();
+			ArrayList<OntologyInfo> list = (ArrayList<OntologyInfo>) s.createSQLQuery(sqlStr).addEntity(OntologyInfo.class).list();
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<OntologyInfo>();
+		} finally {
+			HibernateUtilities.closeSession();
+		}
+
+	}
+	
+	@SuppressWarnings("unchecked")
 	public ArrayList<OntologyInfo> getOntology(int ontology_id)
 	{
 		try {

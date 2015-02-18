@@ -456,8 +456,46 @@ public class ConceptServiceImpl extends PersistentRemoteService implements Conce
 		return conceptService.getConceptSchemeValue(conceptURI, isExplicit, ontoInfo);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#getExcludedConceptSchemes(java.lang.String, java.lang.String, boolean, org.fao.aoscs.domain.OntologyInfo)
+	 */
 	public HashMap<String, String> getExcludedConceptSchemes(String conceptURI, String schemeLang,
 			boolean isExplicit, OntologyInfo ontoInfo) throws Exception {
 		return conceptService.getExcludedConceptSchemes(conceptURI, schemeLang, isExplicit, ontoInfo);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#getConceptAlignmentValue(java.lang.String, boolean, org.fao.aoscs.domain.OntologyInfo)
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptAlignmentValue(
+			String resourceURI, boolean isExplicit, OntologyInfo ontoInfo) {
+		return conceptService.getConceptAlignmentValue(resourceURI, isExplicit, ontoInfo);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#getConceptAlignment(org.fao.aoscs.domain.OntologyInfo)
+	 */
+	public HashMap<String, String> getConceptAlignment(OntologyInfo ontoInfo)
+			throws Exception {
+		return conceptService.getConceptAlignment(ontoInfo);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#addConceptAlignmentValue(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, java.lang.String, boolean)
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptAlignmentValue(
+			OntologyInfo ontoInfo, String conceptURI, String propertyURI,
+			String destConceptURI, boolean isExplicit) {
+		return conceptService.addConceptAlignmentValue(ontoInfo, conceptURI, propertyURI, destConceptURI, isExplicit);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#deleteConceptAlignmentValue(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, boolean)
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptAlignmentValue(
+			OntologyInfo ontoInfo, String conceptURI, String propertyURI, String destConceptURI, 
+			 boolean isExplicit) {
+		return conceptService.deleteConceptAlignmentValue(ontoInfo, conceptURI, propertyURI, destConceptURI, isExplicit);
+	}
+
 }

@@ -27,6 +27,7 @@ public class ModuleManager {
 	public static int MODULE_CONCEPT_BROWSER = 5;
 	public static int MODULE_SEARCH = 6;
 	public static int MODULE_CONCEPT_CHECK_EXIST = 7;
+	public static int MODULE_CONCEPT_ALIGNMENT_BROWSER = 8;
 	
 	/**Use to select any specific item in concept tree from any module of this project*/
 	public static void gotoItem(final String treeItem, final String schemeURI, final boolean isAddAction, final int infoTab, final int belongsToModule, final int type){
@@ -41,7 +42,7 @@ public class ModuleManager {
 				gotoItemFinal(treeItem, schemeURI, isAddAction, infoTab, belongsToModule, type);
 			}*/
 		}
-		else if(type!=MODULE_CONCEPT_BROWSER && (MainApp.schemeUri==null || !MainApp.schemeUri.equals(schemeURI)))
+		else if(type!=MODULE_CONCEPT_BROWSER && type!=MODULE_CONCEPT_ALIGNMENT_BROWSER && (MainApp.schemeUri==null || !MainApp.schemeUri.equals(schemeURI)))
 		{
 			if(Window.confirm(messages.conceptSchemeBelongDifferentScheme(schemeURI)))
 			{
@@ -81,6 +82,8 @@ public class ModuleManager {
 			selectModule(treeItem, schemeURI, isAddAction, infoTab, belongsToModule);
 		else if(type==MODULE_CONCEPT_BROWSER)
 			gotoConceptBrowserItem(treeItem);
+		else if(type==MODULE_CONCEPT_ALIGNMENT_BROWSER)
+			gotoConceptAlignmentBrowserItem(treeItem);
 		else if(type==MODULE_SEARCH)
 			selectModule(treeItem, schemeURI, isAddAction, infoTab, belongsToModule);
 		else if(type==MODULE_CONCEPT_CHECK_EXIST)
@@ -102,6 +105,11 @@ public class ModuleManager {
 	public static void gotoConceptBrowserItem(String treeItem){
 		MainApp m = getMainApp();
 		if(m!=null)	m.goToConceptBrowserModuleWithInitTreeItem(treeItem);
+	}
+	
+	public static void gotoConceptAlignmentBrowserItem(String treeItem){
+		MainApp m = getMainApp();
+		if(m!=null)	m.goToConceptAlignmentBrowserModuleWithInitTreeItem(treeItem);
 	}
 	
 	public static void gotoConceptItem(String treeItem, boolean isAddAction, int infoTab){

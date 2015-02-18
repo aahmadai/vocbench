@@ -84,7 +84,7 @@ public class DeleteConcept extends FormDialogBox{
 
 		AsyncCallback<Void> callback = new AsyncCallback<Void>(){
 			public void onSuccess(Void result){
-				treePanel.reloadItem(selectedConceptObject.getUri(), InfoTab.history, showAlsoNonpreferredTerms, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage);
+				treePanel.reloadItem(selectedConceptObject.getUri(), InfoTab.history, showAlsoNonpreferredTerms, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 				ModuleManager.resetValidation();
 			}
 			public void onFailure(Throwable caught){

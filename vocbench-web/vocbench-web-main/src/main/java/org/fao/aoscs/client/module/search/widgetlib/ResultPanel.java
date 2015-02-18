@@ -1,9 +1,11 @@
 package org.fao.aoscs.client.module.search.widgetlib;
 
+import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.utility.ModuleManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
 import org.fao.aoscs.client.widgetlib.shared.panel.BodyPanel;
+import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.SearchParameterObject;
 
 import com.google.gwt.core.client.GWT;
@@ -40,6 +42,10 @@ public class ResultPanel extends Composite{
 	}
 	
 	public void search(final SearchParameterObject searchObj, int type1){
+		search(searchObj, type1, MainApp.userOntology);
+	}
+	
+	public void search(final SearchParameterObject searchObj, int type1, OntologyInfo ontoInfo){
 		this.type = type1;
 		clearPanel();	
 		// Get result from server 
@@ -56,7 +62,7 @@ public class ResultPanel extends Composite{
 				*/clearPanel();
 
 				searchTable = new SearchCellTable();
-				searchTable.setSearchTable(searchObj, type);
+				searchTable.setSearchTable(searchObj, type, ontoInfo);
 				Widget searchPanel = searchTable.getLayout(); 
 				//searchPanel.setHeight("100%");
 				
@@ -70,7 +76,7 @@ public class ResultPanel extends Composite{
 				bodyPanel.setCellHorizontalAlignment(searchPanel, HasHorizontalAlignment.ALIGN_CENTER);
 				
 				BodyPanel vvp = null;
-				if(type==ModuleManager.MODULE_CONCEPT_BROWSER)
+				if(type==ModuleManager.MODULE_CONCEPT_BROWSER || type==ModuleManager.MODULE_CONCEPT_ALIGNMENT_BROWSER)
 				{
 					vvp = new BodyPanel(constants.searchResults() , bodyPanel , null, 700, 400);
 				}

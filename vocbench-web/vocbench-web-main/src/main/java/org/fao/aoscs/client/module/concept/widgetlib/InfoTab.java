@@ -10,7 +10,8 @@ public class InfoTab {
 	public static int history = 6;
 	public static int image = 7;
 	public static int scheme = 8;
-	public static int hierarchy = 9;
-	public static int conceptmap = 10;
+	public static int alignment = 9;
+	public static int hierarchy = 10;
+	public static int conceptmap = 11;
 	public static int tabSelect = 0;
 }

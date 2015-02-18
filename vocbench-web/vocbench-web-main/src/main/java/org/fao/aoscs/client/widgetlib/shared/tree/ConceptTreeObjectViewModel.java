@@ -10,6 +10,7 @@ import org.fao.aoscs.client.module.concept.Concept;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.ModuleManager;
+import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.TreeObject;
 
 import com.google.gwt.cell.client.AbstractCell;
@@ -35,11 +36,16 @@ public class ConceptTreeObjectViewModel implements TreeViewModel {
 	
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	private List<TreeObject> treeObjectList;
+	private String schemeURI;
+	private OntologyInfo ontoInfo;
 	private ListDataProvider<TreeObject> dataProvider;
 	public SingleSelectionModel<TreeObject> selectionModel = new SingleSelectionModel<TreeObject>();
 	
-	public ConceptTreeObjectViewModel(ArrayList<TreeObject> treeObjectList, final int type) {
+	public ConceptTreeObjectViewModel(ArrayList<TreeObject> treeObjectList, final int type, final String schemeURI, final OntologyInfo ontoInfo) {
 		this.treeObjectList = treeObjectList;
+		this.schemeURI = schemeURI;
+		this.ontoInfo = ontoInfo;
+		
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 		      public void onSelectionChange(SelectionChangeEvent event) {
 		        Object selected = selectionModel.getSelectedObject();
@@ -67,7 +73,7 @@ public class ConceptTreeObjectViewModel implements TreeViewModel {
 		}
 		else {
             TreeObject myValue = (TreeObject) value;
-            return new DefaultNodeInfo<TreeObject>(new TreeObjectListDataProvider(myValue.getUri()), treeObjCell, selectionModel, null);
+            return new DefaultNodeInfo<TreeObject>(new TreeObjectListDataProvider(myValue.getUri(), schemeURI, ontoInfo), treeObjCell, selectionModel, null);
         }
 	}
 	
@@ -120,10 +126,14 @@ public class ConceptTreeObjectViewModel implements TreeViewModel {
 	private class TreeObjectListDataProvider extends AsyncDataProvider<TreeObject> {
 
 		private final String uri;
+		private String schemeURI;
+		private OntologyInfo ontoInfo;
 
-		public TreeObjectListDataProvider(String uri) {
+		public TreeObjectListDataProvider(String uri, String schemeURI, OntologyInfo ontoInfo) {
 			super(null);
 			this.uri = uri;
+			this.schemeURI = schemeURI;
+			this.ontoInfo = ontoInfo;
 		}
     
 		@Override
@@ -148,7 +158,7 @@ public class ConceptTreeObjectViewModel implements TreeViewModel {
 			  		ExceptionManager.showException(caught, constants.conceptReloadFail());
 			  	}
 			};
-			Service.treeService.getTreeObject(uri, MainApp.schemeUri, MainApp.userOntology, !MainApp.userPreference.isHideNonpreferred(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, callback);
+			Service.treeService.getTreeObject(uri, schemeURI, ontoInfo, !MainApp.userPreference.isHideNonpreferred(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, callback);
     	}
 	}
 	

@@ -4,6 +4,7 @@ import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 import it.uniroma2.art.semanticturkey.servlet.main.SPARQL;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.ResponseManager;
@@ -54,26 +55,35 @@ public class SparqlManager extends ResponseManager {
 						for(Element resultElement : STXMLUtility.getChildElementByTagName(resultsElement, "result"))
 						{
 							ArrayList<String> row = new ArrayList<String>();
+							HashMap<String, String> rowMap = new HashMap<String, String>();
 							for(Element bindingElement : STXMLUtility.getChildElementByTagName(resultElement, "binding"))
 							{
-								for(Element uriElement : STXMLUtility.getChildElementByTagName(bindingElement, "uri"))
-								{
-									row.add(uriElement.getTextContent());
-								}
-								for(Element literalElement : STXMLUtility.getChildElementByTagName(bindingElement, "literal"))
-								{
-									String lang = literalElement.getAttribute("xml:lang");
-									lang = lang.equals("")?"":" ("+lang+")";
-									row.add(literalElement.getTextContent()+lang);
-								}
-								for(Element typedLiteralElement : STXMLUtility.getChildElementByTagName(bindingElement, "typed-literal"))
-								{
-									row.add(typedLiteralElement.getTextContent());
-								}
-								for(Element bnodeElement : STXMLUtility.getChildElementByTagName(bindingElement, "bnode"))
-								{
-									row.add(bnodeElement.getTextContent());
-								}
+									String headerName = bindingElement.getAttribute("name");
+									String headerValue = "";
+									for(Element uriElement : STXMLUtility.getChildElementByTagName(bindingElement, "uri"))
+									{
+										headerValue= uriElement.getTextContent();
+									}
+									for(Element literalElement : STXMLUtility.getChildElementByTagName(bindingElement, "literal"))
+									{
+										String lang = literalElement.getAttribute("xml:lang");
+										lang = lang.equals("")?"":" ("+lang+")";
+										headerValue = literalElement.getTextContent()+lang;
+									}
+									for(Element typedLiteralElement : STXMLUtility.getChildElementByTagName(bindingElement, "typed-literal"))
+									{
+										headerValue = typedLiteralElement.getTextContent();
+									}
+									for(Element bnodeElement : STXMLUtility.getChildElementByTagName(bindingElement, "bnode"))
+									{
+										headerValue = bnodeElement.getTextContent();
+									}
+									rowMap.put(headerName, headerValue);
+							}
+							for(String header: headrow)
+							{
+								System.out.println("header: "+header+" :: "+rowMap.get(header));
+								row.add(rowMap.get(header));
 							}
 							list.add(row);
 						}

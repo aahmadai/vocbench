@@ -5,6 +5,7 @@ import java.util.Date;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
+import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.SearchRequest;
 import org.fao.aoscs.domain.SearchResponse;
 
@@ -23,6 +24,7 @@ public class SuggestBoxAOS extends SuggestBox{
 	private MultiWordSuggestOracle oracle;
 	private boolean includeNotes = false;
 	private long timestamp = 0;
+	private OntologyInfo ontoInfo = MainApp.userOntology;
 	
 	private Timer timer = new Timer() {
 		public void run() {
@@ -30,6 +32,13 @@ public class SuggestBoxAOS extends SuggestBox{
 		}
 	};
 	
+	/**
+	 * @param ontoInfo the ontoInfo to set
+	 */
+	public void setOntoInfo(OntologyInfo ontoInfo) {
+		this.ontoInfo = ontoInfo;
+	}
+
 	public SuggestBoxAOS(){
 		super();
 		setDefaultValue();
@@ -49,6 +58,13 @@ public class SuggestBoxAOS extends SuggestBox{
 	public SuggestBoxAOS(MultiWordSuggestOracle oracle){
 		super(oracle);
 		this.oracle = oracle;
+		setDefaultValue();
+	}
+	
+	public SuggestBoxAOS(MultiWordSuggestOracle oracle, OntologyInfo ontoInfo){
+		super(oracle);
+		this.oracle = oracle;
+		this.ontoInfo = ontoInfo;
 		setDefaultValue();
 	}
 	
@@ -123,7 +139,7 @@ public class SuggestBoxAOS extends SuggestBox{
 		req.setTimestamp(timestamp);
 		req.setLimit(getLimit());
 		req.setQuery(getText().trim());
-		Service.searchSerice.getSuggestions(req, includeNotes, MainApp.userSelectedLanguage, MainApp.userOntology, callback);
+		Service.searchSerice.getSuggestions(req, includeNotes, MainApp.userSelectedLanguage, ontoInfo, callback);
 	}
 
 }

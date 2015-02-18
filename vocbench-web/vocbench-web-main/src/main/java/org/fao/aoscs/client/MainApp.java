@@ -45,6 +45,7 @@ import org.fao.aoscs.client.utility.HelpUtility;
 import org.fao.aoscs.client.widgetlib.Main.Footer;
 import org.fao.aoscs.client.widgetlib.Main.QuickLinks;
 import org.fao.aoscs.client.widgetlib.Main.ToolBarContainer;
+import org.fao.aoscs.client.widgetlib.shared.dialog.ConceptAlignmentBrowser;
 import org.fao.aoscs.client.widgetlib.shared.dialog.ConceptBrowser;
 import org.fao.aoscs.client.widgetlib.shared.dialog.RelationshipBrowser;
 import org.fao.aoscs.client.widgetlib.shared.label.LinkLabel;
@@ -154,6 +155,7 @@ public class MainApp extends Composite { // Application container
     public ResultPanel resultPanel = null;
     public RelationshipBrowser relationshipBrowser = null;
     public ConceptBrowser conceptBrowser = null;
+    public ConceptAlignmentBrowser conceptAlignmentBrowser = null;
     public String currentModule;
     
     public UserLogin uo;
@@ -339,6 +341,7 @@ public class MainApp extends Composite { // Application container
     {
     	 relationshipBrowser = new RelationshipBrowser();
          conceptBrowser = new ConceptBrowser();
+         conceptAlignmentBrowser = new ConceptAlignmentBrowser();
     }
 
     public static ArrayList<String[]> getLanguage()
@@ -478,6 +481,11 @@ public class MainApp extends Composite { // Application container
     public void goToConceptBrowserModuleWithInitTreeItem(String targetItem)
     {
     	conceptBrowser.gotoItem(targetItem);
+    }
+    
+    public void goToConceptAlignmentBrowserModuleWithInitTreeItem(String targetItem)
+    {
+    	conceptAlignmentBrowser.gotoItem(targetItem);
     }
 
     public void reloadConceptTree()
