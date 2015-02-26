@@ -114,6 +114,10 @@
     	<servlet-name>org.fao.aoscs.server.ICVServiceImpl</servlet-name>
     	<servlet-class>org.fao.aoscs.server.ICVServiceImpl</servlet-class>
   	</servlet>
+  	<servlet>
+    	<servlet-name>org.fao.aoscs.server.RefactorServiceImpl</servlet-name>
+    	<servlet-class>org.fao.aoscs.server.RefactorServiceImpl</servlet-class>
+  	</servlet>
 	 <servlet>
     	<servlet-name>org.fao.aoscs.server.FileUpload</servlet-name>
     	<servlet-class>org.fao.aoscs.server.FileUpload</servlet-class>
@@ -263,6 +267,11 @@
 		<url-pattern>/vocbench/icv</url-pattern>
 	</servlet-mapping>
 	
+ 	 <servlet-mapping>
+		<servlet-name>org.fao.aoscs.server.RefactorServiceImpl</servlet-name>
+		<url-pattern>/vocbench/refactor</url-pattern>
+	</servlet-mapping>
+ 	 
 	<servlet-mapping>
 	  	<servlet-name>org.fao.aoscs.server.FileUpload</servlet-name>
 	  	<url-pattern>/vocbench/fileupload</url-pattern>
@@ -291,7 +300,6 @@
 	<session-config>
 		<session-timeout>360</session-timeout>
 	</session-config>
-	
 
  	<welcome-file-list>
   		<welcome-file>index.html</welcome-file>

@@ -37,6 +37,7 @@ public class STModel {
 	public ServiceWrapper pluginsService;
 	public ServiceWrapper resourceViewService;
 	public ServiceWrapper icvService;
+	public ServiceWrapper refactorService;
 	public ServiceWrapper resourceService;
 	public ServiceWrapper sparqlService;
 	public ServiceWrapper statementService;
@@ -115,6 +116,7 @@ public class STModel {
 		resourceService = new ServiceHttpWrapper("resource", stURL);
 		resourceViewService = new ServiceHttpWrapper("ResourceView", stURL);
 		icvService = new ServiceHttpWrapper("SKOS_ICV", stURL);
+		refactorService = new ServiceHttpWrapper("Refactor", stURL);
 		searchOntologyService = new ServiceHttpWrapper("ontologySearch", stURL);
 		synonymsService = new ServiceHttpWrapper("synonyms", stURL);
 		systemStartService = new ServiceHttpWrapper("systemStart", stURL);

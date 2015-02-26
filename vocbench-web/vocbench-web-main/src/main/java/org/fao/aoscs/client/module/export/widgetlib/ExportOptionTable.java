@@ -269,6 +269,7 @@ public class ExportOptionTable extends Composite{
 	private HorizontalPanel getExportFormat(){
 		//format.addItem("--None--", "--None--");
 		format.addItem(ExportFormat.SKOSXL, ExportFormat.SKOSXL);
+		format.addItem(ExportFormat.SKOS, ExportFormat.SKOS);
 		//format.addItem(constants.exportSQL(), ExportFormat.RDBMS_SQL_FORMAT);
 		format.setWidth("100%");
 		format.addChangeHandler(new ChangeHandler(){

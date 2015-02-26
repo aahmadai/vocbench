@@ -27,6 +27,7 @@ import org.fao.aoscs.client.module.logging.LogManager;
 import org.fao.aoscs.client.module.logging.LogViewer;
 import org.fao.aoscs.client.module.ontology.OntologyAssignment;
 import org.fao.aoscs.client.module.preferences.Preferences;
+import org.fao.aoscs.client.module.refactor.Refactor;
 import org.fao.aoscs.client.module.relationship.Relationship;
 import org.fao.aoscs.client.module.scheme.Scheme;
 import org.fao.aoscs.client.module.search.Search;
@@ -132,6 +133,7 @@ public class MainApp extends Composite { // Application container
     // module
     public DeckPanel modulePanel = new DeckPanel();
     public Search search = null;
+    public Refactor refactor = null;
     public Sparql sparql = null;
     public Concept concept = null;
     public Preferences preference = null;
@@ -561,6 +563,15 @@ public class MainApp extends Composite { // Application container
                 }
             });
         }
+        else if (name.equals("Refactor"))
+        {
+        	if(modulePanel.getWidgetIndex(refactor) == -1 || refactor == null)
+            {
+        		refactor = new Refactor();
+                modulePanel.add(refactor);
+            }
+            modulePanel.showWidget(modulePanel.getWidgetIndex(refactor) );
+        }
         else if (name.equals("Sparql"))
         {
         	if(modulePanel.getWidgetIndex(sparql) == -1 || sparql == null)
@@ -822,12 +833,17 @@ public class MainApp extends Composite { // Application container
 		});
 		HorizontalPanel languageBar = getInterfaceLanguage();
 		
+		HorizontalPanel global = getGlobalDataManagementMenu();
 		HorizontalPanel admin = getAdminsiterMenu();
 		AboutVocBenchMenu about = new AboutVocBenchMenu();
-        HTML delimiter = new HTML("|");
+		HTML delimiter = new HTML("|");
+        HTML delimiter1 = new HTML("|");
         HTML delimiter2 = new HTML("|");
         //hp.add(comment);
         
+		hp.add(global);
+		hp.add(new HTML("&nbsp;"));
+		hp.add(delimiter1);
 		hp.add(admin);
 		hp.add(new HTML("&nbsp;"));
 		hp.add(delimiter2);
@@ -849,6 +865,8 @@ public class MainApp extends Composite { // Application container
         //hp.setCellVerticalAlignment(comment, HasVerticalAlignment.ALIGN_MIDDLE);
         //hp.setCellVerticalAlignment(glossary, HasVerticalAlignment.ALIGN_MIDDLE);
         //hp.setCellVerticalAlignment(help, HasVerticalAlignment.ALIGN_MIDDLE);
+        hp.setCellVerticalAlignment(global, HasVerticalAlignment.ALIGN_MIDDLE);
+        hp.setCellVerticalAlignment(delimiter1, HasVerticalAlignment.ALIGN_MIDDLE);
         hp.setCellVerticalAlignment(admin, HasVerticalAlignment.ALIGN_MIDDLE);
         hp.setCellVerticalAlignment(delimiter, HasVerticalAlignment.ALIGN_MIDDLE);
         hp.setCellVerticalAlignment(about, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -1171,7 +1189,7 @@ public class MainApp extends Composite { // Application container
         {
         	iconContainer.disableMenu(constants.toolbarConsistency(), constants.toolbarConsistencyTitle(), "Consistency");
         }
-         */
+         
         if (menuMap.containsKey("Import"))
         {
             iconContainer.addMenu(constants.toolbarImport(), constants.toolbarImportTitle(), "Import");
@@ -1198,7 +1216,7 @@ public class MainApp extends Composite { // Application container
         {
         	iconContainer.disableMenu(constants.toolbarStatistics(), constants.toolbarStatisticsTitle(), "Statistics");
         }
-        
+        */
         if (menuMap.containsKey("Sparql"))
         {
             iconContainer.addMenu(constants.toolbarSparql(), constants.toolbarSparqlTitle(), "Sparql");
@@ -1305,7 +1323,7 @@ public class MainApp extends Composite { // Application container
     	LinkedHashMap<String, String> user = new LinkedHashMap<String, String>();
         user.put("Users", constants.menuUsers());
         user.put("Groups", constants.menuGroups());
-        user.put("Ontology", constants.menuOntology());
+        //user.put("Ontology", constants.menuOntology());
         user.put("Configuration", constants.menuConfiguration());
         //user.put("Comments", constants.menuComments());
         //user.put("Logs", constants.menuLogViewer());
@@ -1369,6 +1387,54 @@ public class MainApp extends Composite { // Application container
             adminPanel.setCellHorizontalAlignment(adminTab, HasHorizontalAlignment.ALIGN_LEFT);
         }
         return adminPanel;
+    }
+    
+    public HorizontalPanel getGlobalDataManagementMenu()
+    {
+
+        // FULL MENU ITEM OF USER
+    	LinkedHashMap<String, String> menuList = new LinkedHashMap<String, String>();
+        menuList.put("Ontology", constants.menuOntology());
+        menuList.put("Import", constants.toolbarImport());
+        menuList.put("Export", constants.toolbarExport());
+        menuList.put("Statistics", constants.toolbarStatistics());
+        menuList.put("Refactor", "Refactor");
+        
+        MenuBarAOS globalTab = new MenuBarAOS();
+
+        for (final String item: menuList.keySet())
+        {
+        	if (userMenu.contains(item))
+            {
+            	globalTab.addMenuItem((String) menuList.get(item), false, true, new Command() {
+                    public void execute()
+                    {
+                    	goToModule(item);
+                    }
+                });
+            }
+            else
+            {
+            	globalTab.addMenuItem((String) menuList.get(item), false, false, null);
+            }
+        }
+        
+        
+        
+        MenuBar menu = new MenuBar();
+        menu.setAutoOpen(true);
+        menu.ensureDebugId("cwMenuBar");
+        menu.setAnimationEnabled(true);
+        menu.setSize("100%", "100%");
+
+        HorizontalPanel globalPanel = new HorizontalPanel();
+        {
+            globalTab.setMainLabel("Global data management");
+            globalPanel.add(globalTab);
+            globalPanel.setCellVerticalAlignment(globalTab, HasVerticalAlignment.ALIGN_MIDDLE);
+            globalPanel.setCellHorizontalAlignment(globalTab, HasHorizontalAlignment.ALIGN_LEFT);
+        }
+        return globalPanel;
     }
 
     public HorizontalPanel getOntologyPanel()

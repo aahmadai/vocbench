@@ -22,6 +22,8 @@ import org.fao.aoscs.client.module.preferences.service.UsersPreferenceService.Us
 import org.fao.aoscs.client.module.preferences.service.UsersPreferenceServiceAsync;
 import org.fao.aoscs.client.module.project.service.ProjectService.ProjectServiceUtil;
 import org.fao.aoscs.client.module.project.service.ProjectServiceAsync;
+import org.fao.aoscs.client.module.refactor.service.RefactorService.RefactorServiceUtil;
+import org.fao.aoscs.client.module.refactor.service.RefactorServiceAsync;
 import org.fao.aoscs.client.module.relationship.service.RelationshipService.RelationshipServiceUtil;
 import org.fao.aoscs.client.module.relationship.service.RelationshipServiceAsync;
 import org.fao.aoscs.client.module.resourceview.service.ResourceService.ResourceServiceUtil;
@@ -62,4 +64,5 @@ public class Service {
 	public static ProjectServiceAsync<?> projectService = ProjectServiceUtil.getInstance();
 	public static ResourceServiceAsync<?> resourceService = ResourceServiceUtil.getInstance();
 	public static ICVServiceAsync<?> icvService = ICVServiceUtil.getInstance();
+	public static RefactorServiceAsync<?> refactorService = RefactorServiceUtil.getInstance();
 }

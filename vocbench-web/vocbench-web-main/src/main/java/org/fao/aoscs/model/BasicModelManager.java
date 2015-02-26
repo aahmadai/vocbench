@@ -8,6 +8,7 @@ import org.fao.aoscs.client.module.icv.service.ICVService;
 import org.fao.aoscs.client.module.importdata.service.ImportService;
 import org.fao.aoscs.client.module.ontology.service.OntologyService;
 import org.fao.aoscs.client.module.project.service.ProjectService;
+import org.fao.aoscs.client.module.refactor.service.RefactorService;
 import org.fao.aoscs.client.module.relationship.service.RelationshipService;
 import org.fao.aoscs.client.module.resourceview.service.ResourceService;
 import org.fao.aoscs.client.module.scheme.service.SchemeService;
@@ -35,4 +36,5 @@ public interface BasicModelManager {
 	public ProjectService getProjectService();
 	public ResourceService getResourceService();
 	public ICVService getICVService();
+	public RefactorService getRefactorService();
 }

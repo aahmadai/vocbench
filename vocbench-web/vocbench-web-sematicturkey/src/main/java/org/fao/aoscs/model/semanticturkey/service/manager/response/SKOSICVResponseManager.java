@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SKOSICVResponseManager extends ResponseManager {
 	
-	protected static Logger logger = LoggerFactory.getLogger(ResourceViewResponseManager.class);
+	protected static Logger logger = LoggerFactory.getLogger(SKOSICVResponseManager.class);
 	
 	public static XMLResponseREPLY listDanglingConceptsRequest(OntologyInfo ontoInfo)
 	{
