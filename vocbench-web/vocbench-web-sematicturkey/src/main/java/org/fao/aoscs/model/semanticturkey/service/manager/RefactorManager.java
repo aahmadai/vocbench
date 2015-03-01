@@ -25,7 +25,7 @@ public class RefactorManager extends ResponseManager {
 	 */
 	public static Boolean changeResourceName(OntologyInfo ontoInfo, String oldResource, String newResource)
 	{
-		XMLResponseREPLY reply = RefactorResponseManager.convertLabelsToSKOSXLRequest(ontoInfo);
+		XMLResponseREPLY reply = RefactorResponseManager.changeResourceNameRequest(ontoInfo, oldResource, newResource);
 		return  reply.isAffirmative();
 	}
 	
@@ -38,7 +38,7 @@ public class RefactorManager extends ResponseManager {
 	public static Boolean replaceBaseURI(OntologyInfo ontoInfo, String sourceBaseURI, String targetBaseURI, String graphArrayString)
 	{
 		
-		XMLResponseREPLY reply = RefactorResponseManager.convertLabelsToSKOSXLRequest(ontoInfo);
+		XMLResponseREPLY reply = RefactorResponseManager.replaceBaseURIRequest(ontoInfo, sourceBaseURI, targetBaseURI, graphArrayString);
 		return reply.isAffirmative();
 	}
 	
@@ -79,7 +79,7 @@ public class RefactorManager extends ResponseManager {
 	 */
 	public static Boolean reifySKOSDefinitions(OntologyInfo ontoInfo)
 	{
-		XMLResponseREPLY reply = RefactorResponseManager.convertLabelsToSKOSXLRequest(ontoInfo);
+		XMLResponseREPLY reply = RefactorResponseManager.reifySKOSDefinitionsRequest(ontoInfo);
 		return reply.isAffirmative();
 	}
 	
@@ -100,6 +100,31 @@ public class RefactorManager extends ResponseManager {
 		if(!filename.equals(""))
 		{
 			XMLResponseREPLY reply = RefactorResponseManager.exportWithFlatSKOSDefinitionsRequest(ontoInfo, filename);
+			if(reply!=null && reply.isAffirmative())
+				return filename;
+		}
+		return "";
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param copyAlsoSKOSXLabels
+	 * @param copyAlsoReifiedDefinition
+	 * @return
+	 * @throws Exception
+	 */
+	public static String exportWithTransformations(OntologyInfo ontoInfo, boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition) throws Exception {
+		String filename = "";
+		File tempfile;
+		try {
+			tempfile = STUtility.createTempFile();
+			filename = tempfile.getPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(!filename.equals(""))
+		{
+			XMLResponseREPLY reply = RefactorResponseManager.exportWithTransformations(ontoInfo, filename, copyAlsoSKOSXLabels, copyAlsoReifiedDefinition);
 			if(reply!=null && reply.isAffirmative())
 				return filename;
 		}

@@ -11,6 +11,7 @@ import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.concept.widgetlib.dialog.AddConcept;
 import org.fao.aoscs.client.module.concept.widgetlib.dialog.AddConceptToScheme;
 import org.fao.aoscs.client.module.concept.widgetlib.dialog.DeleteConcept;
+import org.fao.aoscs.client.module.concept.widgetlib.dialog.ManageResourceURI;
 import org.fao.aoscs.client.module.concept.widgetlib.dialog.RemoveConceptToScheme;
 import org.fao.aoscs.client.module.constant.ConceptActionKey;
 import org.fao.aoscs.client.module.constant.OWLActionConstants;
@@ -108,6 +109,7 @@ public class ConceptTree extends Composite{
     private RemoveConcept removeConcept;
     private AddConceptToScheme addConceptToScheme;
     private RemoveConceptToScheme removeConceptToScheme;
+    private ManageResourceURI manageResourceURI;
     
     private ImageAOS resourceView;
     private ResourceViewer resourceViewer;
@@ -311,14 +313,27 @@ public class ConceptTree extends Composite{
 		HTML label = new HTML("&nbsp;&nbsp;"+constants.conceptUri()+":&nbsp;");
 		label.setStyleName(Style.fontWeightBold);
 		
+		Image editURI = new Image("images/edit-grey.gif");
+		editURI.setTitle(constants.buttonEdit());
+		editURI.setStyleName(Style.Link);
+		editURI.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(manageResourceURI == null || !manageResourceURI.isLoaded )
+					manageResourceURI = new ManageResourceURI();
+				manageResourceURI.show(URI.getText());
+			}
+		});
+		
 		HorizontalPanel hp = new HorizontalPanel();
 		hp.add(label);		
 		hp.add(URI);
+		hp.add(editURI);
 		hp.setWidth("100%");
 		hp.setVisible(false);
 		hp.setStyleName("showuri");
 		hp.setCellWidth(URI, "100%");
 		hp.setCellHorizontalAlignment(URI, HasHorizontalAlignment.ALIGN_LEFT);
+		hp.setCellHorizontalAlignment(editURI, HasHorizontalAlignment.ALIGN_RIGHT);
 		return hp;
 	}
 	

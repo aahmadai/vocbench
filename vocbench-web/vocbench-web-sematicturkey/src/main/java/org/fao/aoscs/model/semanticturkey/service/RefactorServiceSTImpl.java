@@ -69,4 +69,15 @@ public class RefactorServiceSTImpl {
 		return RefactorManager.exportWithFlatSKOSDefinitions(ontoInfo);
 	}
 	
+	/**
+	 * @param ontoInfo
+	 * @param copyAlsoSKOSXLabels
+	 * @param copyAlsoReifiedDefinition
+	 * @return
+	 * @throws Exception
+	 */
+	public String exportWithTransformations(OntologyInfo ontoInfo, boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition) throws Exception {
+		return RefactorManager.exportWithTransformations(ontoInfo, copyAlsoSKOSXLabels, copyAlsoReifiedDefinition);
+	}
+	
 }

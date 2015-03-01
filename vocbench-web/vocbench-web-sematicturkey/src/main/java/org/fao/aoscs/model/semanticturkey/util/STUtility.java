@@ -6,13 +6,18 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.fao.aoscs.client.module.constant.OWLStatusConstants;
@@ -781,6 +786,29 @@ public class STUtility {
 		tempfile.setReadable(true, false);
 		tempfile.setWritable(true, false);
 		return tempfile;
+	}
+	
+	public static String unzip(String zipFile) throws IOException {
+
+		File outputFolder = new File(zipFile).getParentFile();
+		outputFolder.setReadable(true, false);
+   	 	outputFolder.setWritable(true, false);
+   	 	
+   	 	String outFile = zipFile;
+		
+		ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+	    ZipEntry entry;
+	    while ((entry = zis.getNextEntry()) != null) {
+	        File newFile = new File(outputFolder, entry.getName());
+	        if (!newFile.isHidden() && !entry.isDirectory()) {
+	        	outFile = newFile.getPath();
+	            FileOutputStream fos = new FileOutputStream(newFile);
+	            IOUtils.copy(zis, fos);
+	            IOUtils.closeQuietly(fos);
+	        }
+	    }
+	    IOUtils.closeQuietly(zis);
+	    return outFile;
 	}
 	
 }

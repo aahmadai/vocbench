@@ -235,7 +235,7 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener, SchemeLa
         					
         					HTML defaultButton = new HTML(constants.conceptSetAsDefaultScheme());
         					defaultButton.setWordWrap(false);
-        					defaultButton.setTitle(constants.conceptSetAsDefaultScheme());
+        					defaultButton.setTitle(constants.conceptSetAsDefaultSchemeTooltip());
         					defaultButton.setStyleName(Style.Link);
         					defaultButton.addClickHandler(new ClickHandler() {
         						public void onClick(ClickEvent event) {

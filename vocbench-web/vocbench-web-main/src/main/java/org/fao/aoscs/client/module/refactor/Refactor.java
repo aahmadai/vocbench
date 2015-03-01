@@ -5,7 +5,6 @@ package org.fao.aoscs.client.module.refactor;
 
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.refactor.widgetlib.ExportWithFlatSKOSDefinitionsWidget;
 import org.fao.aoscs.client.module.refactor.widgetlib.LabelsToSKOSXLWidget;
 import org.fao.aoscs.client.module.refactor.widgetlib.ReifySKOSDefinitionsWidget;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
@@ -66,7 +65,7 @@ public class Refactor extends Composite {
 			}
 	    });
 	    
-	    BodyPanel vpPanel = new BodyPanel("Refactor" , leftTopWidget, bodyPanel , new HorizontalPanel());
+	    BodyPanel vpPanel = new BodyPanel(constants.menuRefactor() , leftTopWidget, bodyPanel , new HorizontalPanel());
 	    panel.clear();
 	    panel.setSize("100%", "100%");
 	    panel.add(vpPanel);	      
@@ -77,10 +76,9 @@ public class Refactor extends Composite {
 	
 	private HorizontalPanel getRefactorList(){
 		
-		listBox.addItem("SELECT", "0");
-		listBox.addItem("SKOS<-->SKOSXL", "1");
-		listBox.addItem("Reify Definition", "2");
-		listBox.addItem("Export with flat SKOS Definitions", "3");
+		listBox.addItem(constants.refactorSelectActions(), "0");
+		listBox.addItem(constants.refactorSKOStoSKOSXLConversion(), "1");
+		listBox.addItem(constants.refactorReifyDefinition(), "2");
 		
 		listBox.addChangeHandler(new ChangeHandler(){
 			public void onChange(ChangeEvent event) {
@@ -159,11 +157,6 @@ public class Refactor extends Composite {
 			case 2:     
 				sc.clear();
 				sc.add(new ReifySKOSDefinitionsWidget());
-				 break;
-				 
-			case 3:     
-				sc.clear();
-				sc.add(new ExportWithFlatSKOSDefinitionsWidget());
 				 break;
 				 
 			 default: 

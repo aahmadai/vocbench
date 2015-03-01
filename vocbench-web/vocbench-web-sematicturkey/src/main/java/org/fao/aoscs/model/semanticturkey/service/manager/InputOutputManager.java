@@ -19,6 +19,13 @@ public class InputOutputManager extends ResponseManager {
 	
 	protected static Logger logger = LoggerFactory.getLogger(InputOutputManager.class);
 	
+	/**
+	 * @param ontoInfo
+	 * @param inputFile
+	 * @param baseURI
+	 * @param formatName
+	 * @return
+	 */
 	public static boolean loadRDF(OntologyInfo ontoInfo, String inputFile, String baseURI, String formatName)
 	{
 		XMLResponseREPLY reply = InputOutputResponseManager.loadRDFRequest(ontoInfo, inputFile, baseURI, formatName);
@@ -27,8 +34,6 @@ public class InputOutputManager extends ResponseManager {
 	
 	/**
 	 * @param ontoInfo
-	 * @param outputFile
-	 * @param allNGsPar
 	 * @return
 	 */
 	public static String saveRDF(OntologyInfo ontoInfo)

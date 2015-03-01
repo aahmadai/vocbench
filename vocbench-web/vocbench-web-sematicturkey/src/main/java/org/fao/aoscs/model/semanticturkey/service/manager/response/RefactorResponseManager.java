@@ -42,7 +42,7 @@ public class RefactorResponseManager extends ResponseManager {
 	public static XMLResponseREPLY replaceBaseURIRequest(OntologyInfo ontoInfo, String sourceBaseURI, String targetBaseURI, String graphArrayString)
 	{
 		
-		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest(Refactor.Req.replaceBaseURIRequest, 
+		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("replaceBaseURI", 
 				STModel.par("sourceBaseURI", sourceBaseURI),
 				STModel.par("targetBaseURI", targetBaseURI),
 				STModel.par("graphArrayString", graphArrayString),
@@ -98,6 +98,25 @@ public class RefactorResponseManager extends ResponseManager {
 		
 		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest(Refactor.Req.exportWithFlatSKOSDefinitionsRequest, 
 				STModel.par("exportPackage", exportPackage),
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+
+
+	/**
+	 * @param ontoInfo
+	 * @param exportPackage
+	 * @param copyAlsoSKOSXLabels
+	 * @param copyAlsoReifiedDefinition
+	 * @return
+	 */
+	public static XMLResponseREPLY exportWithTransformations(OntologyInfo ontoInfo, String exportPackage, Boolean copyAlsoSKOSXLabels, Boolean copyAlsoReifiedDefinition)
+	{
+		
+		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest(Refactor.Req.exportWithFlatSKOSDefinitionsRequest, 
+				STModel.par("exportPackage", exportPackage),
+				STModel.par("copyAlsoSKOSXLabels", copyAlsoSKOSXLabels.toString()),
+				STModel.par("copyAlsoReifiedDefinition", copyAlsoReifiedDefinition.toString()),
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}

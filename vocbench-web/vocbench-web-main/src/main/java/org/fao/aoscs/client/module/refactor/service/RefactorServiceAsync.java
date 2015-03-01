@@ -25,5 +25,9 @@ public interface RefactorServiceAsync<T> {
 
 	void exportWithFlatSKOSDefinitions(OntologyInfo ontoInfo,
 			AsyncCallback<String> callback);
+
+	void exportWithTransformations(OntologyInfo ontoInfo,
+			boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition,
+			AsyncCallback<String> callback);
 	
 }

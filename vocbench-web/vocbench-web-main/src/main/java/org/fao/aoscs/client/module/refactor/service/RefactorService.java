@@ -15,6 +15,7 @@ public interface RefactorService extends RemoteService{
 	public String exportWithSKOSLabels(OntologyInfo ontoInfo)throws Exception;
 	public boolean reifySKOSDefinitions(OntologyInfo ontoInfo) throws Exception;
 	public String exportWithFlatSKOSDefinitions(OntologyInfo ontoInfo) throws Exception;
+	public String exportWithTransformations(OntologyInfo ontoInfo, boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition) throws Exception;
 	
 	public static class RefactorServiceUtil{
 		private static RefactorServiceAsync<?> instance;

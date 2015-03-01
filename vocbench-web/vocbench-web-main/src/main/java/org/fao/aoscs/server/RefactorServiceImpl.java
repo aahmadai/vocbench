@@ -67,6 +67,12 @@ public class RefactorServiceImpl extends PersistentRemoteService implements Refa
 	public String exportWithFlatSKOSDefinitions(OntologyInfo ontoInfo) throws Exception {
 		return refactorService.exportWithFlatSKOSDefinitions(ontoInfo);		
 	}
+	@Override
+	public String exportWithTransformations(OntologyInfo ontoInfo,
+			boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition)
+			throws Exception {
+		return refactorService.exportWithTransformations(ontoInfo, copyAlsoSKOSXLabels, copyAlsoReifiedDefinition);
+	}
 	
 	
 	

@@ -46,4 +46,11 @@ public class RefactorServiceSTAdapter implements RefactorService {
 		return refactorService.exportWithFlatSKOSDefinitions(ontoInfo);		
 	}
 
+	@Override
+	public String exportWithTransformations(OntologyInfo ontoInfo,
+			boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition)
+			throws Exception {
+		return refactorService.exportWithTransformations(ontoInfo, copyAlsoSKOSXLabels, copyAlsoReifiedDefinition);		
+	}
+
 }

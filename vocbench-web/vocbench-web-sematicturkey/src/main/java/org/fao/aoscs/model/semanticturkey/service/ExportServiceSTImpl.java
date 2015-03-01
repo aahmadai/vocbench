@@ -10,7 +10,6 @@ import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.RecentChangeData;
 import org.fao.aoscs.hibernate.DatabaseUtil;
 import org.fao.aoscs.model.semanticturkey.service.manager.InputOutputManager;
-import org.fao.aoscs.model.semanticturkey.service.manager.RefactorManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.SKOSXLManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.VocbenchManager;
 
@@ -24,7 +23,6 @@ public class ExportServiceSTImpl {
 	public InitializeExportData initData(OntologyInfo ontoInfo){
 	    InitializeExportData data = new InitializeExportData();
     	data.setScheme(SKOSXLManager.getAllSchemesList(ontoInfo, null));
-		//data.setTermCodeProperties(PropertyManager.getTermCodePropertiesName(ontoInfo));
 		return data;
 	}
 	
@@ -89,10 +87,6 @@ public class ExportServiceSTImpl {
 				filename = InputOutputManager.saveRDF(ontoInfo);
 			else
 				filename = VocbenchManager.exportRequest(ontoInfo, concepturi, isIncludeChildren, scheme, termcode, getLabelForRelatedConcepts);
-		}
-		else if(expformat.equals("SKOS")) 
-		{
-			filename = RefactorManager.exportWithSKOSLabels(ontoInfo);
 		}
 			
 		return filename;

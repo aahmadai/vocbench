@@ -90,4 +90,8 @@ public class Concept extends Composite{
 	public void reload(){
 		conceptTree.reload();
 	}
+	
+	public void reload(String uri){
+		conceptTree.reload(uri);
+	}
 }

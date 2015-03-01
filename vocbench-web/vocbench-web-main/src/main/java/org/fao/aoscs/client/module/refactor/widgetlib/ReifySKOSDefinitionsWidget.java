@@ -12,7 +12,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -34,10 +33,15 @@ public class ReifySKOSDefinitionsWidget extends Composite{
 	
 	private void initLayout(){
 		
+		HTML title = new HTML(constants.refactorReifyDefinition());
+		title.setWordWrap(false);
+		title.setStyleName("font-weight-bold");
+		title.setWidth("100%");
+		
 		final VerticalPanel bodyPanel= new VerticalPanel();
-		bodyPanel.setSpacing(10);
+		bodyPanel.setSpacing(5);
 		bodyPanel.setSize("100%", "100%");
-		bodyPanel.add(new HTML("ReifySKOSDefinitionsWidget"));
+		bodyPanel.add(title);
 		
 		final Button submit = new Button(constants.buttonSubmit());
 			
@@ -57,18 +61,20 @@ public class ReifySKOSDefinitionsWidget extends Composite{
 		optionPanel.setCellVerticalAlignment(bodyPanel,HasVerticalAlignment.ALIGN_TOP);
 		optionPanel.setCellVerticalAlignment(bottombar,HasVerticalAlignment.ALIGN_BOTTOM);
 		
-		VerticalPanel tempmainPanel= new VerticalPanel();
-		tempmainPanel.setWidth("100%");
-		tempmainPanel.setSpacing(10);
-		tempmainPanel.add(optionPanel);
+		mainBodypanel.setWidth("100%");
+		mainBodypanel.setSpacing(10);
+		mainBodypanel.add(optionPanel);
+		mainBodypanel.setCellHorizontalAlignment(optionPanel, HasHorizontalAlignment.ALIGN_CENTER);
+		mainBodypanel.setCellVerticalAlignment(optionPanel, HasVerticalAlignment.ALIGN_TOP);
+		mainBodypanel.setCellWidth(optionPanel, "100%");
 		
 		
 		panel.clear();
 		panel.setSize("100%", "100%");
-		panel.add(tempmainPanel);	
+		panel.add(mainBodypanel);	
 		panel.add(loadingDialog);
-	    panel.setCellHorizontalAlignment(tempmainPanel,  HasHorizontalAlignment.ALIGN_CENTER);
-	    panel.setCellVerticalAlignment(tempmainPanel,  HasVerticalAlignment.ALIGN_TOP);
+	    panel.setCellHorizontalAlignment(mainBodypanel,  HasHorizontalAlignment.ALIGN_CENTER);
+	    panel.setCellVerticalAlignment(mainBodypanel,  HasVerticalAlignment.ALIGN_TOP);
 	    showLoading(false);
 		
 		submit.addClickHandler(new ClickHandler() {
@@ -80,14 +86,14 @@ public class ReifySKOSDefinitionsWidget extends Composite{
 						{
 							showLoading(false);
 							if(key)
-								Window.alert("Action completed");
+								Window.alert(constants.refactorActionCompleted());
 							else
-								Window.alert("Action failed");
+								Window.alert(constants.refactorActionFailed());
 								
 						}
 						public void onFailure(Throwable caught){
 							showLoading(false);
-							ExceptionManager.showException(caught, constants.exportDataFail());
+							ExceptionManager.showException(caught, constants.refactorActionFailed());
 						}
 					};
 					Service.refactorService.reifySKOSDefinitions(MainApp.userOntology, callback);

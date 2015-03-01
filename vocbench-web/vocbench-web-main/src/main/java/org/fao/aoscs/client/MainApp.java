@@ -437,7 +437,6 @@ public class MainApp extends Composite { // Application container
         if (modulePanel.getWidgetIndex(concept) != -1)
         {
             modulePanel.showWidget(modulePanel.getWidgetIndex(concept));
-            // ConceptTree.treePanel.gotoItem(initURI,InfoTab);
             ((Concept) modulePanel.getWidget(modulePanel.getWidgetIndex(concept))).gotoItem(initURI, InfoTab);
             History.newItem("Concepts");
         }
@@ -495,6 +494,14 @@ public class MainApp extends Composite { // Application container
         if (modulePanel.getWidgetIndex(concept) != -1)
         {
             ((Concept) modulePanel.getWidget(modulePanel.getWidgetIndex(concept))).reload();
+        }
+    }
+    
+    public void reloadConceptTree(String uri)
+    {
+        if (modulePanel.getWidgetIndex(concept) != -1)
+        {
+            ((Concept) modulePanel.getWidget(modulePanel.getWidgetIndex(concept))).reload(uri);
         }
     }
     
@@ -1398,7 +1405,7 @@ public class MainApp extends Composite { // Application container
         menuList.put("Import", constants.toolbarImport());
         menuList.put("Export", constants.toolbarExport());
         menuList.put("Statistics", constants.toolbarStatistics());
-        menuList.put("Refactor", "Refactor");
+        menuList.put("Refactor", constants.menuRefactor());
         
         MenuBarAOS globalTab = new MenuBarAOS();
 

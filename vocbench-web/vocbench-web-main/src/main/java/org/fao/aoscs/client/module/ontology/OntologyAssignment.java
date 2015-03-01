@@ -62,6 +62,7 @@ public class OntologyAssignment extends Composite implements NSMappingDialogBoxO
 	
 	private int tableWidth = MainApp.getBodyPanelWidth()-70;
 	
+	private ManageBaseURI manageBaseURI;
 	private ManageNSMapping addNSMapping;
 	private ManageNSImport addNSImport;
 	private ManageNSImport deleteNSImport;
@@ -119,9 +120,21 @@ public class OntologyAssignment extends Composite implements NSMappingDialogBoxO
 				loadDefaultNamespace();
 			}
 		});
+		
+		Image edit = new Image("images/edit-grey.gif");
+		edit.setTitle(constants.buttonEdit());
+		edit.setStyleName(Style.Link);
+		edit.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(manageBaseURI == null || !manageBaseURI.isLoaded )
+					manageBaseURI = new ManageBaseURI();
+				manageBaseURI.show(txtBaseURI.getValue());
+			}
+		});
 	    
 	    HorizontalPanel hp = new HorizontalPanel();
 	    hp.add(reload);
+	    hp.add(edit);
 		
 		return makeWidget(constants.ontologyDefaultConfigurationManagement(), vpanel, hp);
 	}

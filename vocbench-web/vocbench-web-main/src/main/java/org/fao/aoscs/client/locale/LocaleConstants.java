@@ -75,6 +75,7 @@ public interface LocaleConstants extends Constants{
 	public String menuWebServices();
 	public String menuUsers();
 	public String menuOntology();
+	public String menuRefactor();
 	public String menuConfiguration();
 	public String menuGroups();
 	public String menuPreferences();
@@ -873,6 +874,21 @@ public interface LocaleConstants extends Constants{
 	public String ontologyImportsManageFail();
 	public String ontologyNamedGraphLoadFail();
 	
+	public String ontologyReplaceBaseURI();
+	public String ontologyUseDefaultBaseURI();
+	public String ontologyOldBaseURI();
+	public String ontologyNewBaseURI();
+	public String ontologyConfirmRefactor();
+	
+	//Refactor
+	public String refactorSelectActions();
+	public String refactorSKOStoSKOSXLConversion();
+	public String refactorReifyDefinition();
+	public String refactorActionCompleted();
+	public String refactorActionFailed();
+	public String refactorRemoveSKOSXLLabels();
+	public String refactorRemoveReifiedDefinitions();
+	
 	//LoadingDialog
 	public String ldLoading();
 
@@ -948,6 +964,9 @@ public interface LocaleConstants extends Constants{
 	public String conceptAddNamespace();
 
 	public String conceptShowURI();
+	public String conceptChangeURI();
+	public String conceptOldURI();
+	public String conceptNewURI();
 	public String conceptShowNonPreferredTermsAlso();
 	public String conceptShowInferredAndExplicit();
 	public String conceptTerm();
@@ -1371,6 +1390,7 @@ public interface LocaleConstants extends Constants{
 	public String conceptSchemeEditSchemeLabel();
 	public String conceptSchemeDeleteSchemeLabel();
 	public String conceptSetAsDefaultScheme();
+	public String conceptSetAsDefaultSchemeTooltip();
 	
 	//Concept Scheme/messages
 	public String conceptSchemeGetSchemeFail();

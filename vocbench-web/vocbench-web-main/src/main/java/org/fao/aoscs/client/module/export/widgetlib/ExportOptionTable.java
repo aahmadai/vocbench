@@ -110,7 +110,7 @@ public class ExportOptionTable extends Composite{
 		exportOption.add(GridStyle.setTableRowStyle(table, "#F4F4F4", "#E8E8E8", 3));
 		
 		final Button export = new Button(constants.exportButton());
-		final CheckBox chkZip = new CheckBox("Use zip compression");
+		final CheckBox chkZip = new CheckBox(constants.exportUseZip());
 			
 		HorizontalPanel bottombar = new HorizontalPanel();
 		bottombar.setSpacing(5);

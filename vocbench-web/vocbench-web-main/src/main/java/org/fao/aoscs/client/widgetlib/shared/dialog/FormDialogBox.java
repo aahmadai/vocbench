@@ -170,7 +170,8 @@ public class FormDialogBox extends DialogBoxAOS implements ClickHandler{
 			{
 				if(passCheckUri())
 				{
-					this.hide();
+					if(passCheckHide())
+						this.hide();
 					if(sender.equals(submit))
 					{
 						submit.setEnabled(false);
@@ -201,6 +202,9 @@ public class FormDialogBox extends DialogBoxAOS implements ClickHandler{
 		return true;
 	}
 	public boolean passCheckUri(){
+		return true;
+	}
+	public boolean passCheckHide(){
 		return true;
 	}
 	
