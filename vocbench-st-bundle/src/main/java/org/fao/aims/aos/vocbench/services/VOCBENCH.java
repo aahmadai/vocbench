@@ -33,7 +33,6 @@ import it.uniroma2.art.owlart.utilities.RDFIterators;
 import it.uniroma2.art.owlart.vocabulary.RDFResourceRolesEnum;
 import it.uniroma2.art.semanticturkey.data.id.ARTURIResAndRandomString;
 import it.uniroma2.art.semanticturkey.data.id.URIGenerator;
-import it.uniroma2.art.semanticturkey.exceptions.DuplicatedResourceException;
 import it.uniroma2.art.semanticturkey.exceptions.HTTPParameterUnspecifiedException;
 import it.uniroma2.art.semanticturkey.exceptions.InvalidProjectNameException;
 import it.uniroma2.art.semanticturkey.exceptions.NonExistingRDFResourceException;
@@ -2202,6 +2201,7 @@ public class VOCBENCH extends SKOSXL {
 						"\n(COUNT (DISTINCT ?image) AS ?imageCount)" +
 						"\n(COUNT (DISTINCT ?sameAs) AS ?sameAsCount)" +
 						"\n(COUNT (DISTINCT ?mappingRelation) AS ?mappingRelationCount)" +
+						"\n(COUNT (DISTINCT ?annotationProp) AS ?annotationCount)" +
 						"\nWHERE{" +
 						
 						"\n{<"+conceptUri+"> <"+PREFLABEL+"> ?xlabel . }"+
@@ -2258,6 +2258,15 @@ public class VOCBENCH extends SKOSXL {
 						"\n{?subPropMappingRelation <"+SUBPROPERTY+">+ <"+MAPPINGRELATION+"> . "+ //skos:mappingRelation and its SUBPROPERTY 
 						"\n<"+conceptUri+"> ?subPropMappingRelation ?mappingRelation . }"+
 						
+						
+						"\nUNION"+
+						
+						"\n{?annotationProp <"+TYPE+"> <"+ANNOTATIONPROPERTY+"> ."+ // the annotation properties 
+						"\nFILTER NOT EXISTS{?annotationProp <"+SUBPROPERTY+">+ <"+LABEL+"> }" + // excluding rdfs:label (and its children) 
+						"\nFILTER NOT EXISTS{?annotationProp <"+SUBPROPERTY+">+ <"+NOTE+"> }" + // excluding skos:note (and its children) 
+						"\n<"+conceptUri+"> ?annotationProp ?annotationValue . " +		
+						"\n}"+
+						
 						"\n}" +
 						"\nGROUP BY ?subPropRel";
 			
@@ -2277,6 +2286,8 @@ public class VOCBENCH extends SKOSXL {
 			String sameAsImplicitCount = "0";
 			String mappingRelationImplicitCount = "0";
 			String sameAsAndMappingRelationImplicitCount = "0";
+			
+			String annotationImplicitCount = "0";
 			
 			boolean first = true;
 			while(it.hasNext()){
@@ -2299,6 +2310,8 @@ public class VOCBENCH extends SKOSXL {
 						sameAsImplicitCount = tuple.getBinding("sameAsCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("mappingRelationCount"))
 						mappingRelationImplicitCount = tuple.getBinding("mappingRelationCount").getBoundValue().getNominalValue();
+					if(tuple.hasBinding("annotationCount"))
+						annotationImplicitCount = tuple.getBinding("annotationCount").getBoundValue().getNominalValue();
 				}
 				if(tuple.hasBinding("subPropRel") && tuple.hasBinding("relatedCount")){
 					String propName = tuple.getBinding("subPropRel").getBoundValue().getNominalValue();
@@ -2325,6 +2338,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n(COUNT (DISTINCT ?image) AS ?imageCount)" +
 					"\n(COUNT (DISTINCT ?sameAs) AS ?sameAsCount)" +
 					"\n(COUNT (DISTINCT ?mappingRelation) AS ?mappingRelationCount)" +
+					"\n(COUNT (DISTINCT ?annotationProp) AS ?annotationCount)" +
 					"\nWHERE{" +
 					
 					"\n{<"+conceptUri+"> <"+PREFLABEL+"> ?xlabel . }"+
@@ -2380,7 +2394,14 @@ public class VOCBENCH extends SKOSXL {
 
 					"\n{?subPropMappingRelation <"+SUBPROPERTY+">* <"+MAPPINGRELATION+"> . "+ //skos:mappingRelation and its SUBPROPERTY 
 					"\n<"+conceptUri+"> ?subPropMappingRelation ?mappingRelation . }"+
-						
+					
+					"\nUNION"+
+
+					"\n{?annotationProp <"+TYPE+"> <"+ANNOTATIONPROPERTY+"> ."+ // the annotation properties 
+					"\nFILTER NOT EXISTS{?annotationProp <"+SUBPROPERTY+">* <"+LABEL+"> }" + // excluding rdfs:label (and its children) 
+					"\nFILTER NOT EXISTS{?annotationProp <"+SUBPROPERTY+">* <"+NOTE+"> }" + // excluding skos:note (and its children) 
+					"\n<"+conceptUri+"> ?annotationProp ?annotationValue . " +		
+					"\n}"+
 					
 					"\n}" +
 					"\nGROUP BY ?subPropRel";
@@ -2400,6 +2421,8 @@ public class VOCBENCH extends SKOSXL {
 			String sameAsExplicitCount = "0";
 			String mappingRelationExplicitCount = "0";
 			String sameAsAndMappingRelationExplicitCount = "0";
+			
+			String annotationExplicitCount = "0";
 			
 			first = true;
 			while(it.hasNext()){
@@ -2422,6 +2445,8 @@ public class VOCBENCH extends SKOSXL {
 						sameAsExplicitCount = tuple.getBinding("sameAsCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("mappingRelationCount"))
 						mappingRelationExplicitCount = tuple.getBinding("mappingRelationCount").getBoundValue().getNominalValue();
+					if(tuple.hasBinding("annotationCount"))
+						annotationExplicitCount = tuple.getBinding("annotationCount").getBoundValue().getNominalValue();
 				}
 				if(tuple.hasBinding("subPropRel") && tuple.hasBinding("relatedCount")){
 					String propName = tuple.getBinding("subPropRel").getBoundValue().getNominalValue();
@@ -2492,6 +2517,10 @@ public class VOCBENCH extends SKOSXL {
 			Element sameAsMappingRelation = XMLHelp.newElement(propCollection, "sameAsMappingRelation");
 			sameAsMappingRelation.setAttribute("number", sameAsAndMappingRelationImplicitCount);
 			sameAsMappingRelation.setAttribute("numberExplicit", sameAsAndMappingRelationExplicitCount);
+			
+			Element annotationElem = XMLHelp.newElement(propCollection, "annotation");
+			annotationElem.setAttribute("number", annotationImplicitCount);
+			annotationElem.setAttribute("numberExplicit", annotationExplicitCount);
 			
 			
 			

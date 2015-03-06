@@ -14,20 +14,22 @@ public class VocBenchResourcesURI {
 	
 	//rdf + xmls
 	final static public String PROPERTY = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property";
-	final static public String COMMENT = "http://www.w3.org/2000/01/rdf-schema#comment";
+	final static public String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 	final static public String VALUE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#value";
 	final static public String DATETIME = "http://www.w3.org/2001/XMLSchema#dateTime";
 	final static public String STRINGRDF = "http://www.w3.org/2001/XMLSchema#string";
 	
 	//rdfs
+	final static public String COMMENT = "http://www.w3.org/2000/01/rdf-schema#comment";
 	final static public String DOMAIN = "http://www.w3.org/2000/01/rdf-schema#domain";
 	final static public String RANGE = "http://www.w3.org/2000/01/rdf-schema#range";
 	final static public String SUBPROPERTY = "http://www.w3.org/2000/01/rdf-schema#subPropertyOf";
-	final static public String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+	final static public String LABEL = "http://www.w3.org/2000/01/rdf-schema#label";
 	
 	//owl
 	final static public String OBJECTPROPERTY = "http://www.w3.org/2002/07/owl#ObjectProperty";
 	final static public String DATATYPEPROPERTY = "http://www.w3.org/2002/07/owl#DatatypeProperty";
+	final static public String ANNOTATIONPROPERTY = "http://www.w3.org/2002/07/owl#AnnotationProperty";
 	final static public String SAMEAS = "http://www.w3.org/2002/07/owl#sameAs";
 	
 	
@@ -45,6 +47,10 @@ public class VocBenchResourcesURI {
 	final static public String INSCHEME= "http://www.w3.org/2004/02/skos/core#inScheme";
 	final static public String RELATED = "http://www.w3.org/2004/02/skos/core#related";
 	final static public String MAPPINGRELATION = "http://www.w3.org/2004/02/skos/core#mappingRelation";
+	final static public String SKOS_PREFLABEL = "http://www.w3.org/2004/02/skos/core#prefLabel";
+	final static public String SKOS_ALTLABEL = "http://www.w3.org/2004/02/skos/core#altLabel";
+	final static public String SKOS_HIDDENLABEL = "http://www.w3.org/2004/02/skos/core#hiddenLabel";
+	
 	
 	//skosxl
 	final static public String LITERALFORM = "http://www.w3.org/2008/05/skos-xl#literalForm";
