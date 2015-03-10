@@ -116,7 +116,10 @@ public class ResourceManager extends ResponseManager {
 					{
 						clsObj.setUri(uriElem.getTextContent());
 						clsObj.setName(uriElem.getAttribute("show"));
-						clsObj.setLabel(uriElem.getAttribute("show"));
+						if(uriElem.getAttribute("show").equals(""))
+							clsObj.setLabel(uriElem.getTextContent());
+						else
+							clsObj.setLabel(uriElem.getAttribute("show"));
 					}
 				}
 				
@@ -138,6 +141,73 @@ public class ResourceManager extends ResponseManager {
 					}
 				}
 				list = getDatatypePropertyElements(propertyValuesElem, list, explicit);
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * @param reply
+	 * @param explicit
+	 * @return
+	 */
+	private static HashMap<ClassObject, ArrayList<STNode>> getValuesOfAnnotationProperties(XMLResponseREPLY reply, boolean explicit)
+	{
+		HashMap<ClassObject, ArrayList<STNode>> list = new HashMap<ClassObject, ArrayList<STNode>>();
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			list = getAnnotationPropertyElements(dataElement, list, explicit);
+		}
+		return list;
+	}
+	
+	/**
+	 * @param dataElement
+	 * @param list
+	 * @param explicit
+	 * @return
+	 */
+	public static HashMap<ClassObject, ArrayList<STNode>> getAnnotationPropertyElements(Element dataElement, HashMap<ClassObject, ArrayList<STNode>> list, boolean explicit)
+	{
+		for (Element collectionElem : STXMLUtility.getChildElementByTagName(dataElement, "collection"))
+		{
+			for (Element propertyValuesElem : STXMLUtility.getChildElementByTagName(collectionElem, "propertyValues"))
+			{
+				ClassObject clsObj = new ClassObject();
+				ArrayList<STNode> stNodeList = new ArrayList<STNode>();
+				
+				for (Element propertyElem : STXMLUtility.getChildElementByTagName(propertyValuesElem, "property"))
+				{
+					for (Element uriElem : STXMLUtility.getChildElementByTagName(propertyElem, RDFTypesEnum.uri.toString()))
+					{
+						clsObj.setUri(uriElem.getTextContent());
+						clsObj.setName(uriElem.getAttribute("show"));
+						if(uriElem.getAttribute("show").equals(""))
+							clsObj.setLabel(uriElem.getTextContent());
+						else
+							clsObj.setLabel(uriElem.getAttribute("show"));
+					}
+				}
+				
+				for (Element valuesElem : STXMLUtility.getChildElementByTagName(propertyValuesElem, "values"))
+				{
+					for (Element colElem : STXMLUtility.getChildElementByTagName(valuesElem, "collection"))
+					{
+						stNodeList.addAll(STXMLUtility.getPlainLiteral(colElem, explicit));
+						stNodeList.addAll(STXMLUtility.getTypedLiteral(colElem, explicit));
+						stNodeList.addAll(STXMLUtility.getURIResource(colElem, explicit));
+						stNodeList.addAll(STXMLUtility.getBlankNode(colElem, explicit));
+					}
+				}
+				if(!clsObj.getUri().equals(""))
+				{
+					if(stNodeList.size()>0)
+					{
+						list.put(clsObj, stNodeList);
+					}
+				}
+				list = getAnnotationPropertyElements(propertyValuesElem, list, explicit);
 			}
 		}
 		return list;
@@ -371,5 +441,11 @@ public class ResourceManager extends ResponseManager {
 		return list;
 	}
 	
+	public static HashMap<ClassObject, ArrayList<STNode>> getValuesOfAnnotationsPropertiesHierarchically(OntologyInfo ontoInfo, String resourceURI, ArrayList<String> excludedProps, boolean explicit)
+	{
+		XMLResponseREPLY reply = ResourceResponseManager.getValuesOfAnnotationsPropertiesHierarchicallyRequest(ontoInfo, resourceURI, excludedProps);
+		HashMap<ClassObject, ArrayList<STNode>> list = getValuesOfAnnotationProperties(reply, explicit);
+		return list;
+	}
 	
 }

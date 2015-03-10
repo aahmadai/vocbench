@@ -50,10 +50,12 @@ public interface ConceptService extends RemoteService{
 	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptNoteValue(String cls, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
 	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptAttributeValue(String cls, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
 	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptNotationValue(String cls, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptAnnotationValue(String cls, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
 	
 	public HashMap<String, String> getConceptNotes(String resourceURI, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
 	public HashMap<String, String> getConceptAttributes(String resourceURI, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
 	public HashMap<String, String> getConceptNotation(String resourceURI, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
+	public HashMap<String, String> getConceptAnnotation(String resourceURI, boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
 	
 	public DomainRangeObject getPropertyRange(String resourceURI, OntologyInfo ontoInfo) throws Exception;
 	
@@ -121,6 +123,17 @@ public interface ConceptService extends RemoteService{
 			boolean isExplicit) throws Exception;
 	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptNotationValue(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId, NonFuncObject oldValue, String propertyURI,ConceptObject conceptObject, boolean isExplicit) throws Exception;
 
+	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptAnnotationValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
+			ConceptObject conceptObject, boolean isExplicit) throws Exception;
+	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> editConceptAnnotationValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, NonFuncObject newValue,
+			String propertyURI, DomainRangeObject drObj, ConceptObject conceptObject,
+			boolean isExplicit) throws Exception;
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptAnnotationValue(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId, NonFuncObject oldValue, String propertyURI,ConceptObject conceptObject, boolean isExplicit) throws Exception;
+	
 	public RelationObject addNewRelationship(OntologyInfo ontoInfo, String rObj, String conceptURI,String destConceptURI,OwlStatus status,int actionId,int userId, boolean isExplicit) throws Exception;
 	RelationObject editRelationship(OntologyInfo ontoInfo,
 			String rObj, String newRObj,

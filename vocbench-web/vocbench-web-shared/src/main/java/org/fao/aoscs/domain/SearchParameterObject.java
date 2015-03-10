@@ -43,6 +43,8 @@ public class SearchParameterObject extends LightEntity{
 	
 	private String scheme = null;
 	
+	private String conceptURI = null;
+	
 	private HashMap<String,ArrayList<NonFuncObject>> conceptAttribute = new HashMap<String,ArrayList<NonFuncObject>>();
 	private HashMap<String,ArrayList<NonFuncObject>> conceptNote = new HashMap<String,ArrayList<NonFuncObject>>();
 	
@@ -190,6 +192,8 @@ public class SearchParameterObject extends LightEntity{
 		termAttribute = new HashMap<String,ArrayList<NonFuncObject>>();
 		
 		selectedLangauge = new ArrayList<String>();
+		
+		conceptURI = null;
 	}
 
 	public void setSelectedLangauge(ArrayList<String> selectedLangauge) {
@@ -391,6 +395,14 @@ public class SearchParameterObject extends LightEntity{
 	 */
 	public void setTermRelationship(String termRelationship) {
 		this.termRelationship = termRelationship;
+	}
+
+	public String getConceptURI() {
+		return conceptURI;
+	}
+
+	public void setConceptURI(String conceptURI) {
+		this.conceptURI = conceptURI;
 	}
 	
 }

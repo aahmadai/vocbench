@@ -683,6 +683,26 @@ public class ObjectManager extends ResponseManager {
 	}
 	
 	/**
+	 * @param ontoInfo
+	 * @param conceptURI
+	 * @return
+	 */
+	public static ConceptShowObject createConceptShowObject(OntologyInfo ontoInfo, String conceptURI)
+	{
+		ConceptShowObject conceptShowObject = new ConceptShowObject();
+		XMLResponseREPLY reply = VocbenchResponseManager.getConceptDescriptionRequest(ontoInfo, conceptURI);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(Element conceptInfoElement : STXMLUtility.getChildElementByTagName(dataElement, "conceptInfo"))
+			{
+				conceptShowObject = createConceptShowObject(ontoInfo, conceptInfoElement);
+			}
+		}
+		return conceptShowObject;
+	}
+	
+	/**
 	 * @param termName
 	 * @param termURI
 	 * @param isMainLabel

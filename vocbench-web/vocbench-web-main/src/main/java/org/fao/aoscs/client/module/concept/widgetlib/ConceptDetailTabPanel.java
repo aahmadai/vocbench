@@ -36,6 +36,7 @@ public class ConceptDetailTabPanel extends Composite{
 	public ConceptProperty cNote;
 	public ConceptProperty cAttrib;
 	public ConceptProperty cNotation;
+	public ConceptProperty cAnnotation;
 	public ConceptSchemes cScheme;
 	public ConceptAlignment cAlign;
 	public ConceptHierarchy cHier;
@@ -50,6 +51,7 @@ public class ConceptDetailTabPanel extends Composite{
 		cNote.sayLoading();
 		cAttrib.sayLoading();
 		cNotation.sayLoading();
+		cAnnotation.sayLoading();
 		cScheme.sayLoading();
 		cAlign.sayLoading();
 		cHier.sayLoading();
@@ -57,6 +59,11 @@ public class ConceptDetailTabPanel extends Composite{
 	
 	public void setSetSelectedTab(int index){
 		tabPanel.selectTab(index);
+	}
+	
+	public int getSelectedTab()
+	{
+		return tabPanel.getTabBar().getSelectedTab();
 	}
 	
 	public void reload(){
@@ -68,6 +75,7 @@ public class ConceptDetailTabPanel extends Composite{
 		cNote.reload();
 		cAttrib.reload();
 		cNotation.reload();
+		cAnnotation.reload();
 		cScheme.reload();
 		cAlign.reload();
 		cHier.reload();
@@ -91,6 +99,7 @@ public class ConceptDetailTabPanel extends Composite{
 		cNote = new ConceptProperty(ConceptProperty.CONCEPTNOTE, permisstionTable, initData, this, null);
 		cAttrib = new ConceptProperty(ConceptProperty.CONCEPTATTRIBUTE, permisstionTable, initData, this, null);
 		cNotation = new ConceptProperty(ConceptProperty.CONCEPTNOTATION, permisstionTable, initData, this, null);
+		cAnnotation = new ConceptProperty(ConceptProperty.CONCEPTANNOTATION, permisstionTable, initData, this, null);
 		cScheme = new ConceptSchemes(permisstionTable, initData, this, null);
 		cAlign = new ConceptAlignment(permisstionTable, initData, this, null);
 		cHier = new ConceptHierarchy(permisstionTable, initData, this, null);
@@ -101,6 +110,7 @@ public class ConceptDetailTabPanel extends Composite{
 		tabPanel.add(cNote, Convert.replaceSpace(constants.conceptNote()));
 		tabPanel.add(cAttrib, Convert.replaceSpace(constants.conceptAttribute()));
 		tabPanel.add(cNotation, Convert.replaceSpace(constants.conceptNotation()));
+		tabPanel.add(cAnnotation, Convert.replaceSpace(constants.conceptAnnotation()));
 		tabPanel.add(cRel, Convert.replaceSpace(constants.conceptRelationship()));
 		tabPanel.add(cInfo, Convert.replaceSpace(constants.conceptHistory()));
 		tabPanel.add(cImage, Convert.replaceSpace(constants.conceptImage()));
@@ -134,27 +144,31 @@ public class ConceptDetailTabPanel extends Composite{
 					if(cNotation.getConceptObject()!=null)
 						cNotation.initData();
 					break;
-				case 5://Relationship
+				case 5://Annotation
+					if(cAnnotation.getConceptObject()!=null)
+						cAnnotation.initData();
+					break;
+				case 6://Relationship
 					if(cRel.getConceptObject()!=null)
 						cRel.initData();
 					break;
-				case 6://History
+				case 7://History
 					if(cInfo.getConceptObject()!=null)
 						cInfo.initData();
 					break;
-				case 7://Image
+				case 8://Image
 					if(cImage.getConceptObject()!=null)
 						cImage.initData();
 					break;
-				case 8://Schemes
+				case 9://Schemes
 					if(cScheme.getConceptObject()!=null)
 						cScheme.initData();
 					break;
-				case 9://Alignment
+				case 10://Alignment
 					if(cAlign.getConceptObject()!=null)
 						cAlign.initData();
 					break;
-				case 10://Hierarchy
+				case 11://Hierarchy
 					if(cHier.getConceptObject()!=null)
 						cHier.initData();
 					break;
@@ -208,6 +222,7 @@ public class ConceptDetailTabPanel extends Composite{
 		tabPanel.getTabBar().setTabHTML(InfoTab.note, Convert.replaceSpace(constants.conceptNote()));
 		tabPanel.getTabBar().setTabHTML(InfoTab.attribute, Convert.replaceSpace(constants.conceptAttribute()));
 		tabPanel.getTabBar().setTabHTML(InfoTab.notation, Convert.replaceSpace(constants.conceptNotation()));
+		tabPanel.getTabBar().setTabHTML(InfoTab.annotation, Convert.replaceSpace(constants.conceptAnnotation()));
 		tabPanel.getTabBar().setTabHTML(InfoTab.relationship, Convert.replaceSpace(constants.conceptRelationship()));
 		tabPanel.getTabBar().setTabHTML(InfoTab.history, Convert.replaceSpace(constants.conceptHistory()));
 		tabPanel.getTabBar().setTabHTML(InfoTab.image, Convert.replaceSpace(constants.conceptImage()));
@@ -224,6 +239,7 @@ public class ConceptDetailTabPanel extends Composite{
 			cNote.setConceptObject(cDetailObj.getConceptObject());
 			cAttrib.setConceptObject(cDetailObj.getConceptObject());
 			cNotation.setConceptObject(cDetailObj.getConceptObject());
+			cAnnotation.setConceptObject(cDetailObj.getConceptObject());
 			cRel.setConceptObject(cDetailObj.getConceptObject());
 			cInfo.setConceptObject(cDetailObj.getConceptObject());
 			cImage.setConceptObject(cDetailObj.getConceptObject());
@@ -236,6 +252,7 @@ public class ConceptDetailTabPanel extends Composite{
 			cNote.setConceptDetailObject(cDetailObj);
 			cAttrib.setConceptDetailObject(cDetailObj);
 			cNotation.setConceptDetailObject(cDetailObj);
+			cAnnotation.setConceptDetailObject(cDetailObj);
 			cRel.setConceptDetailObject(cDetailObj);
 			cInfo.setConceptDetailObject(cDetailObj);
 			cImage.setConceptDetailObject(cDetailObj);
@@ -248,14 +265,15 @@ public class ConceptDetailTabPanel extends Composite{
 		
 	}
 	
-	public void loadTab(ConceptDetailObject cDetailObj)
+	public void loadTab(ConceptDetailObject cDetailObj, int selectedTab)
 	{
-		tabPanel.selectTab(InfoTab.tabSelect);
-		//tabPanel.getTabBar().setTabHTML(InfoTab.term, Convert.replaceSpace((cDetailObj.getTermCount())>1? constants.conceptTerms():constants.conceptTerm() ) +"&nbsp;("+(cDetailObj.getTermCount())+")" );
+		tabPanel.selectTab(selectedTab);
+		tabPanel.getTabBar().setTabHTML(InfoTab.term, Convert.replaceSpace((cDetailObj.getTermCount())>1? constants.conceptTerms():constants.conceptTerm() ) +"&nbsp;("+(cDetailObj.getTermCount())+")" );
 		tabPanel.getTabBar().setTabHTML(InfoTab.definition, Convert.replaceSpace((cDetailObj.getDefinitionCount())>1? constants.conceptDefinitions():constants.conceptDefinition() ) +"&nbsp;("+(cDetailObj.getDefinitionCount())+")" );
 		tabPanel.getTabBar().setTabHTML(InfoTab.note, Convert.replaceSpace((cDetailObj.getNoteCount())>1? constants.conceptNotes():constants.conceptNote() ) +"&nbsp;("+(cDetailObj.getNoteCount())+")" );
 		tabPanel.getTabBar().setTabHTML(InfoTab.attribute, Convert.replaceSpace((cDetailObj.getAttributeCount())>1? constants.conceptAttributes():constants.conceptAttribute() ) +"&nbsp;("+(cDetailObj.getAttributeCount())+")" );
 		tabPanel.getTabBar().setTabHTML(InfoTab.notation, Convert.replaceSpace((cDetailObj.getNotationCount())>1? constants.conceptNotations():constants.conceptNotation() ) +"&nbsp;("+(cDetailObj.getNotationCount())+")" );
+		tabPanel.getTabBar().setTabHTML(InfoTab.annotation, Convert.replaceSpace((cDetailObj.getAnnotationCount())>1? constants.conceptAnnotations():constants.conceptAnnotation() ) +"&nbsp;("+(cDetailObj.getAnnotationCount())+")" );
 		tabPanel.getTabBar().setTabHTML(InfoTab.relationship, Convert.replaceSpace((cDetailObj.getRelationCount())>1? constants.conceptRelationships():constants.conceptRelationship() ) +"&nbsp;("+(cDetailObj.getRelationCount())+")" );
 		//tabPanel.getTabBar().setTabHTML(InfoTab.history, Convert.replaceSpace((cDetailObj.getHistoryCount())>1? constants.conceptHistory():constants.conceptHistory() ) +"&nbsp;("+(cDetailObj.getHistoryCount())+")" );
 		tabPanel.getTabBar().setTabHTML(InfoTab.image, Convert.replaceSpace((cDetailObj.getImageCount())>1? constants.conceptImages():constants.conceptImage() ) +"&nbsp;("+(cDetailObj.getImageCount())+")" );
@@ -275,6 +293,7 @@ public class ConceptDetailTabPanel extends Composite{
 		cNote.sayLoading();
 		cAttrib.sayLoading();
 		cNotation.sayLoading();
+		cAnnotation.sayLoading();
 		cRel.sayLoading();
 		cInfo.sayLoading();
 		cImage.sayLoading();

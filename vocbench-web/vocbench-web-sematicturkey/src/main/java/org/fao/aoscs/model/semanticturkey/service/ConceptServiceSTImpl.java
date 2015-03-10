@@ -1,5 +1,6 @@
 package org.fao.aoscs.model.semanticturkey.service;
 
+import it.uniroma2.art.owlart.vocabulary.RDFS;
 import it.uniroma2.art.owlart.vocabulary.SKOS;
 import it.uniroma2.art.owlart.vocabulary.XmlSchema;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
@@ -442,6 +443,26 @@ public class ConceptServiceSTImpl {
 			ConceptObject conceptObject, boolean isExplicit) {
 		addPropertyValue(ontoInfo, actionId, status, userId, value, propertyURI, drObj, conceptObject, isExplicit);
 		return getConceptNotationValue(conceptObject.getUri(), isExplicit, ontoInfo);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param actionId
+	 * @param status
+	 * @param userId
+	 * @param value
+	 * @param propertyURI
+	 * @param drObj
+	 * @param conceptObject
+	 * @param isExplicit
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptAnnotationValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
+			ConceptObject conceptObject, boolean isExplicit) {
+		addPropertyValue(ontoInfo, actionId, status, userId, value, propertyURI, drObj, conceptObject, isExplicit);
+		return getConceptAnnotationValue(conceptObject.getUri(), isExplicit, ontoInfo);
 	}
 
 	
@@ -915,6 +936,25 @@ public class ConceptServiceSTImpl {
 		return getConceptNotationValue(conceptObject.getUri(), isExplicit, ontoInfo);
 	}
 	
+	/**
+	 * @param ontoInfo
+	 * @param actionId
+	 * @param status
+	 * @param userId
+	 * @param oldValue
+	 * @param propertyURI
+	 * @param conceptObject
+	 * @param isExplicit
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptAnnotationValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, String propertyURI,
+			ConceptObject conceptObject, boolean isExplicit) {
+		deletePropertyValue(ontoInfo, actionId, status, userId, oldValue, propertyURI, conceptObject, isExplicit);
+		return getConceptAnnotationValue(conceptObject.getUri(), isExplicit, ontoInfo);
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#deleteRelationship(org.fao.aoscs.domain.OntologyInfo, org.fao.aoscs.domain.RelationshipObject, org.fao.aoscs.domain.ConceptObject, org.fao.aoscs.domain.ConceptObject, org.fao.aoscs.domain.OwlStatus, int, int, boolean)
 	 */
@@ -1190,6 +1230,29 @@ public class ConceptServiceSTImpl {
 		return getConceptNotationValue(conceptObject.getUri(), isExplicit, ontoInfo);
 	}
 
+	
+	/**
+	 * @param ontoInfo
+	 * @param actionId
+	 * @param status
+	 * @param userId
+	 * @param oldValue
+	 * @param newValue
+	 * @param propertyURI
+	 * @param drObj
+	 * @param conceptObject
+	 * @param isExplicit
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> editConceptAnnotationValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, NonFuncObject newValue, String propertyURI,
+			DomainRangeObject drObj, ConceptObject conceptObject,
+			boolean isExplicit) {
+		editPropertyValue(ontoInfo, actionId, status, userId, oldValue, newValue, propertyURI, drObj, conceptObject, isExplicit);
+		return getConceptAnnotationValue(conceptObject.getUri(), isExplicit, ontoInfo);
+	}
+	
 	
 	/**
 	 * @param ontoInfo
@@ -1508,9 +1571,15 @@ public class ConceptServiceSTImpl {
 		cDetailObj.setNoteObject(null);
 		cDetailObj.setAttributeObject(null);
 		cDetailObj.setNotationObject(null);
+		cDetailObj.setAnnotationObject(null);
 		cDetailObj.setHierarchyObject(null);
 		cDetailObj.setSchemeObject(null);
 		cDetailObj.setAlignmentObject(null);
+		
+		//cDetailObj.setAnnotationCount(0);
+		//cDetailObj.setAnnotationObject(getConceptAnnotationValue(cObj.getUri(), isExplicit, ontoInfo));
+		//cDetailObj.setAnnotationCount(cDetailObj.getAnnotationObject().size());
+		//System.out.println("before"+cDetailObj.getAnnotationCount());
 		
 		XMLResponseREPLY resp = VocbenchResponseManager.getConceptTabsCountsRequest(ontoInfo, conceptURI);
 		if(resp!=null)
@@ -1523,6 +1592,7 @@ public class ConceptServiceSTImpl {
 				cDetailObj.setNoteCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "notes", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setAttributeCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "attributes", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setNotationCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "notation", isExplicit?"numberExplicit":"number"));
+				cDetailObj.setAnnotationCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "annotation", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setRelationCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "related", isExplicit?"countExplicit":"count"));
 				cDetailObj.setImageCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "images", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setAlignmentCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "sameAsMappingRelation", isExplicit?"numberExplicit":"number"));
@@ -1531,6 +1601,10 @@ public class ConceptServiceSTImpl {
 		// //TODO on ST UPDATE : Add scheme count in the ST service getConceptTabsCountsRequest
 		cDetailObj.setSchemeObject(getConceptSchemeValue(cObj.getUri(), isExplicit, ontoInfo));
 		cDetailObj.setSchemeCount(cDetailObj.getSchemeObject().size());
+		
+		
+		
+		//System.out.println("after"+cDetailObj.getAnnotationCount());
 		
 		return cDetailObj;
 	}
@@ -1822,6 +1896,20 @@ public class ConceptServiceSTImpl {
 		return list;
 	}
 	
+	/**
+	 * @param resourceURI
+	 * @param isExplicit
+	 * @param ontoInfo
+	 * @return
+	 */
+	public HashMap<String, String> getConceptAnnotation(String resourceURI, boolean isExplicit, OntologyInfo ontoInfo){
+		ArrayList<String> excludedProps = new ArrayList<String>();
+		excludedProps.add(SKOS.NOTE);
+		excludedProps.add(RDFS.LABEL);
+		
+		return PropertyManager.getAnnotationPropertiesTree(ontoInfo, excludedProps, isExplicit);
+	}
+	
 	public HashMap<String, String> getConceptAlignment(OntologyInfo ontoInfo){
 		return PropertyManager.getConceptAlignment(ontoInfo);
 	}
@@ -1865,6 +1953,20 @@ public class ConceptServiceSTImpl {
 	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptNotationValue(
 			String resourceURI, boolean isExplicit, OntologyInfo ontoInfo) {
 		return getPropertyValue(ontoInfo, ResourceManager.getValuesOfProperties(ontoInfo, resourceURI, SKOS.NOTATION, true, false, null, isExplicit));
+	}
+	
+	/**
+	 * @param resourceURI
+	 * @param isExplicit
+	 * @param ontoInfo
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptAnnotationValue(
+			String resourceURI, boolean isExplicit, OntologyInfo ontoInfo) {
+		ArrayList<String> excludedProps = new ArrayList<String>();
+		excludedProps.add(SKOS.NOTE);
+		excludedProps.add(RDFS.LABEL);
+		return getPropertyValue(ontoInfo, ResourceManager.getValuesOfAnnotationsPropertiesHierarchically(ontoInfo, resourceURI, excludedProps, isExplicit));
 	}
 	
 	/**

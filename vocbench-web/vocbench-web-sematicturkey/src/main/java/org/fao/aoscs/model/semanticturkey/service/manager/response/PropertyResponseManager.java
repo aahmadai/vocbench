@@ -438,4 +438,19 @@ public class PropertyResponseManager extends ResponseManager {
 	}
 	
 	
+	/**
+	 * @param ontoInfo
+	 * @param propertyRequest
+	 * @param excludedProps
+	 * @return
+	 */
+	public static XMLResponseREPLY getAnnotationPropertiesTreeRequest(OntologyInfo ontoInfo, ArrayList<String> excludedProps)
+	{
+		String excludedPropsStr = STUtility.convertArrayToString(excludedProps, STXMLUtility.ST_SEPARATOR);
+		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(Property.Req.getAnnotationPropertiesTreeRequest, 
+				STModel.par(Property.Par.excludedProps, excludedPropsStr), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
 }

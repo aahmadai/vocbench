@@ -498,4 +498,43 @@ public class ConceptServiceImpl extends PersistentRemoteService implements Conce
 		return conceptService.deleteConceptAlignmentValue(ontoInfo, conceptURI, propertyURI, destConceptURI, isExplicit);
 	}
 
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptAnnotationValue(
+			String cls, boolean isExplicit, OntologyInfo ontoInfo)
+			throws Exception {
+		return conceptService.getConceptAnnotationValue(cls, isExplicit, ontoInfo);
+	}
+
+	@Override
+	public HashMap<String, String> getConceptAnnotation(String resourceURI,
+			boolean isExplicit, OntologyInfo ontoInfo) throws Exception {
+		return conceptService.getConceptAnnotation(resourceURI, isExplicit, ontoInfo);
+	}
+
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptAnnotationValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
+			ConceptObject conceptObject, boolean isExplicit) throws Exception {
+		return conceptService.addConceptAnnotationValue(ontoInfo, actionId, status, userId, value, propertyURI, drObj, conceptObject, isExplicit);
+	}
+
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> editConceptAnnotationValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, NonFuncObject newValue, String propertyURI,
+			DomainRangeObject drObj, ConceptObject conceptObject,
+			boolean isExplicit) throws Exception {
+		return conceptService.editConceptAnnotationValue(ontoInfo, actionId, status, userId, oldValue, newValue, propertyURI, drObj, conceptObject, isExplicit);
+	}
+
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptAnnotationValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, String propertyURI,
+			ConceptObject conceptObject, boolean isExplicit) throws Exception {
+		return conceptService.deleteConceptAnnotationValue(ontoInfo, actionId, status, userId, oldValue, propertyURI, conceptObject, isExplicit);
+	}
+
+
 }

@@ -176,30 +176,40 @@ public class SearchServiceSTImpl {
 		logger.debug("getting search results size for search parameter object: " + searchObj);
 		//printSearchParameterObject(searchObj);
 		
-		String[] conceptAttributes = convertAttributesToString(searchObj.getConceptAttribute());
-		String[] termAttributes = convertAttributesToString(searchObj.getTermAttribute());
+		if(searchObj.getConceptURI()!=null)
+		{
+			ArrayList<ConceptShowObject> list = new ArrayList<ConceptShowObject>();
+			list.add(ObjectManager.createConceptShowObject(ontoInfo, searchObj.getConceptURI()));
+			return list;
+		}
+		else
+		{
 		
-		return VocbenchManager.searchConcept(ontoInfo, 
-			getSearchRegex(searchObj.getRegex()), 
-			searchObj.getKeyword(), 
-			STUtility.convertArrayToString(searchObj.getSelectedLangauge(), STXMLUtility.ST_LANG_SEPARATOR), 
-			!searchObj.getCaseSensitive(), 
-			searchObj.isOnlyPreferredTerm(),
-			ontoInfo.isIndexing(),
-			false,
-			searchObj.getIncludeNotes(),
-			checkNull(searchObj.getTermCodeRepository()),
-			checkNull(searchObj.getTermCode()),
-			checkNull(searchObj.getConceptRelationship()),
-			"",
-			checkNull(searchObj.getTermRelationship()),
-			"",
-			conceptAttributes[0],
-			conceptAttributes[1],
-			termAttributes[0],
-			termAttributes[1],
-			checkNull(searchObj.getStatus()),
-			checkNull(searchObj.getScheme()));	
+			String[] conceptAttributes = convertAttributesToString(searchObj.getConceptAttribute());
+			String[] termAttributes = convertAttributesToString(searchObj.getTermAttribute());
+			
+			return VocbenchManager.searchConcept(ontoInfo, 
+				getSearchRegex(searchObj.getRegex()), 
+				searchObj.getKeyword(), 
+				STUtility.convertArrayToString(searchObj.getSelectedLangauge(), STXMLUtility.ST_LANG_SEPARATOR), 
+				!searchObj.getCaseSensitive(), 
+				searchObj.isOnlyPreferredTerm(),
+				ontoInfo.isIndexing(),
+				false,
+				searchObj.getIncludeNotes(),
+				checkNull(searchObj.getTermCodeRepository()),
+				checkNull(searchObj.getTermCode()),
+				checkNull(searchObj.getConceptRelationship()),
+				"",
+				checkNull(searchObj.getTermRelationship()),
+				"",
+				conceptAttributes[0],
+				conceptAttributes[1],
+				termAttributes[0],
+				termAttributes[1],
+				checkNull(searchObj.getStatus()),
+				checkNull(searchObj.getScheme()));	
+		}
 		
 	}
 	

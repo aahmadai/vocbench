@@ -192,6 +192,7 @@ public class PropertyManager extends ResponseManager {
 					ClassObject classObj = new ClassObject();
 					classObj.setType(DomainRangeObject.RANGE);
 					classObj.setUri(uriElem.getTextContent());
+					classObj.setLabel(uriElem.getTextContent());
 					drObject.addRange(classObj);
 				}
 				
@@ -733,6 +734,46 @@ public class PropertyManager extends ResponseManager {
 				{
 					list.put(stResource.getARTNode().asURIResource().getURI(), stResource.getRendering());
 				}
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param excludedProps
+	 * @param explicit
+	 * @return
+	 */
+	public static HashMap<String, String> getAnnotationPropertiesTree(OntologyInfo ontoInfo, ArrayList<String> excludedProps, boolean explicit)
+	{
+		HashMap<String, String> list = new HashMap<String, String>();
+		XMLResponseREPLY reply = PropertyResponseManager.getAnnotationPropertiesTreeRequest(ontoInfo, excludedProps);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(Element propElement : STXMLUtility.getChildElementByTagName(dataElement, "Property"))
+			{
+				list.put(propElement.getAttribute("uri"), propElement.getAttribute("name"));
+				list = getChildProperty(ontoInfo, propElement, list);
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param dataElement
+	 * @param list
+	 * @return
+	 */
+	private static HashMap<String, String> getChildProperty(OntologyInfo ontoInfo, Element dataElement, HashMap<String, String> list)
+	{
+		for(Element subpropElement : STXMLUtility.getChildElementByTagName(dataElement, "SubProperties"))
+		{
+			for(Element propElement : STXMLUtility.getChildElementByTagName(subpropElement, "Property"))
+			{
+				list.put(propElement.getAttribute("uri"), propElement.getAttribute("name"));
 			}
 		}
 		return list;

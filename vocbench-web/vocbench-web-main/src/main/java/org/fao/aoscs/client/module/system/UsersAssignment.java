@@ -614,16 +614,16 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 	}   	
 
 	private void initUserOntology(String userid) {
-		lstuserlangs.clear();
+		lstuserontology.clear();
 
 		String query = "";
 		// if VISITOR then load read only ontology
-		if(ConfigConstants.ISVISITOR){
-			query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
-		}
-		else{
+		//if(ConfigConstants.ISVISITOR){
+		//	query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
+		//}
+		//else{
 			query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1'";
-		}
+		//}
 
 		query += "AND ontology_id IN ( SELECT ontology_id FROM users_ontology WHERE user_id =  '"+userid +"' and status=1)"; 
 

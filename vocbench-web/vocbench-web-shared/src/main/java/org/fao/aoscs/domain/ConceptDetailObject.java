@@ -15,10 +15,10 @@ public class ConceptDetailObject extends LightEntity{
 	private DefinitionObject definitionObject = new DefinitionObject();
 	private HierarchyObject hierarchyObject = new HierarchyObject();
 	private RelationObject relationObject =  new RelationObject();
-	private ConceptMappedObject conceptMappedObject =  new ConceptMappedObject();
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> attributeObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> noteObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> notationObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
+	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> annotationObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> alignmentObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<String, String> schemeObject = null;
 	
@@ -27,12 +27,12 @@ public class ConceptDetailObject extends LightEntity{
 	private int noteCount = 0;
 	private int attributeCount = 0;
 	private int notationCount = 0;
+	private int annotationCount = 0;
 	private int relationCount = 0;
 	private int historyCount = 0;
 	private int imageCount = 0;
 	private int schemeCount = 0;
 	private int alignmentCount = 0;
-	private int conceptMappedCount = 0;
 
 	/**
 	 * @return the conceptObject
@@ -71,12 +71,6 @@ public class ConceptDetailObject extends LightEntity{
 		return relationObject;
 	}
 	/**
-	 * @return the conceptMappedObject
-	 */
-	public ConceptMappedObject getConceptMappedObject() {
-		return conceptMappedObject;
-	}
-	/**
 	 * @param conceptObject the conceptObject to set
 	 */
 	public void setConceptObject(ConceptObject conceptObject) {
@@ -111,12 +105,6 @@ public class ConceptDetailObject extends LightEntity{
 	 */
 	public void setRelationObject(RelationObject relationObject) {
 		this.relationObject = relationObject;
-	}
-	/**
-	 * @param conceptMappedObject the conceptMappedObject to set
-	 */
-	public void setConceptMappedObject(ConceptMappedObject conceptMappedObject) {
-		this.conceptMappedObject = conceptMappedObject;
 	}
 	/**
 	 * @param attributeObject the attributeObject to set
@@ -167,12 +155,6 @@ public class ConceptDetailObject extends LightEntity{
 	public void setRelationCount(int relationCount) {
 		this.relationCount = relationCount;
 	}
-	public int getConceptMappedCount() {
-		return conceptMappedCount;
-	}
-	public void setConceptMappedCount(int conceptMappedCount) {
-		this.conceptMappedCount = conceptMappedCount;
-	}
 	public int getAttributeCount() {
 		return attributeCount;
 	}
@@ -184,6 +166,12 @@ public class ConceptDetailObject extends LightEntity{
 	}
 	public void setNotationCount(int notationCount) {
 		this.notationCount = notationCount;
+	}
+	public int getAnnotationCount() {
+		return annotationCount;
+	}
+	public void setAnnotationCount(int annotationCount) {
+		this.annotationCount = annotationCount;
 	}
 	public int getNoteCount() {
 		return noteCount;
@@ -208,6 +196,13 @@ public class ConceptDetailObject extends LightEntity{
 	}
 	public void setNotationObject(HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> notationObject) {
 		this.notationObject = notationObject;
+	}
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getAnnotationObject() {
+		return annotationObject;
+	}
+	public void setAnnotationObject(
+			HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> annotationObject) {
+		this.annotationObject = annotationObject;
 	}
 	public HashMap<String, String> getSchemeObject() {
 		return schemeObject;

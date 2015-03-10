@@ -271,5 +271,46 @@ public interface ConceptServiceAsync<T> {
 			String destConceptURI,
 			boolean isExplicit,
 			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void getConceptAnnotationValue(
+			String cls,
+			boolean isExplicit,
+			OntologyInfo ontoInfo,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void getConceptAnnotation(String resourceURI, boolean isExplicit,
+			OntologyInfo ontoInfo,
+			AsyncCallback<HashMap<String, String>> callback);
+	void addConceptAnnotationValue(
+			OntologyInfo ontoInfo,
+			int actionId,
+			OwlStatus status,
+			int userId,
+			NonFuncObject value,
+			String propertyURI,
+			DomainRangeObject drObj,
+			ConceptObject conceptObject,
+			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void editConceptAnnotationValue(
+			OntologyInfo ontoInfo,
+			int actionId,
+			OwlStatus status,
+			int userId,
+			NonFuncObject oldValue,
+			NonFuncObject newValue,
+			String propertyURI,
+			DomainRangeObject drObj,
+			ConceptObject conceptObject,
+			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void deleteConceptAnnotationValue(
+			OntologyInfo ontoInfo,
+			int actionId,
+			OwlStatus status,
+			int userId,
+			NonFuncObject oldValue,
+			String propertyURI,
+			ConceptObject conceptObject,
+			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
 	
 }

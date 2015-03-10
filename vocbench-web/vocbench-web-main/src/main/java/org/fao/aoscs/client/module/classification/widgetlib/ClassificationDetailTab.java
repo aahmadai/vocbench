@@ -3,7 +3,6 @@ package org.fao.aoscs.client.module.classification.widgetlib;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.module.concept.widgetlib.ConceptDefinition;
 import org.fao.aoscs.client.module.concept.widgetlib.ConceptInformation;
-import org.fao.aoscs.client.module.concept.widgetlib.ConceptMap;
 import org.fao.aoscs.client.module.concept.widgetlib.ConceptProperty;
 import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
 import org.fao.aoscs.client.module.concept.widgetlib.Term;
@@ -30,14 +29,12 @@ public class ClassificationDetailTab extends Composite{
 	public ConceptDefinition c2Def ;
 	public ConceptProperty c2Note;
 	public ConceptProperty c2Attrib;
-	public ConceptMap c2Map;
 	public Term t2 ;
 	
 	public  void sayLoading(){
 		t2.sayLoading();
 		c2Info.sayLoading();
 		c2Def.sayLoading();
-		c2Map.sayLoading();
 		c2Note.sayLoading();
 		c2Attrib.sayLoading();
 	}
@@ -48,7 +45,6 @@ public class ClassificationDetailTab extends Composite{
 		t2.reload();
 		c2Info.reload();
 		c2Def.reload();
-		c2Map.reload();
 		c2Note.reload();
 		c2Attrib.reload();
 	}
@@ -70,14 +66,12 @@ public class ClassificationDetailTab extends Composite{
 		c2Def = new ConceptDefinition(permisstionTable,initData, null, this);
 		c2Note = new ConceptProperty(ConceptProperty.CONCEPTNOTE, permisstionTable,initData, null, this);
 		c2Attrib = new ConceptProperty(ConceptProperty.CONCEPTATTRIBUTE, permisstionTable,initData, null, this);
-		c2Map = new ConceptMap(permisstionTable,initData, null, this);
 		c2Info = new ConceptInformation(permisstionTable,initData, null, this);
 
 		tab2Panel.add(t2, Convert.replaceSpace(constants.conceptTerms()));
 		tab2Panel.add(c2Def, Convert.replaceSpace(constants.conceptDefinitions()));
 		tab2Panel.add(c2Note, Convert.replaceSpace(constants.conceptNotes()));
 		tab2Panel.add(c2Attrib, Convert.replaceSpace(constants.conceptAttributes()));
-		tab2Panel.add(c2Map, Convert.replaceSpace(constants.conceptMappedConcepts()));
 		tab2Panel.add(c2Info, Convert.replaceSpace(constants.conceptHistory()));
 
 		tab2Panel.addSelectionHandler(new SelectionHandler<Integer>()
@@ -101,10 +95,6 @@ public class ClassificationDetailTab extends Composite{
 						case 3: //Attribute
 							if(c2Attrib.getConceptObject()!=null)
 								c2Attrib.initData();
-							break;
-						case 4://Mapped Concept
-							if(c2Map.getConceptObject()!=null)
-								c2Map.initData();
 							break;
 						case 5://History
 							if(c2Info.getConceptObject()!=null)
@@ -150,7 +140,6 @@ public class ClassificationDetailTab extends Composite{
 		tab2Panel.getTabBar().setTabHTML(InfoTab.definition, Convert.replaceSpace(constants.conceptDefinition()));
 		tab2Panel.getTabBar().setTabHTML(InfoTab.note, Convert.replaceSpace(constants.conceptNote()));
 		tab2Panel.getTabBar().setTabHTML(InfoTab.attribute, Convert.replaceSpace(constants.conceptAttribute()));
-		tab2Panel.getTabBar().setTabHTML(InfoTab.conceptmap, Convert.replaceSpace(constants.conceptMappedConcept()));
 		tab2Panel.getTabBar().setTabHTML(InfoTab.history, Convert.replaceSpace(constants.conceptHistory()));
 	}
 	
@@ -161,13 +150,11 @@ public class ClassificationDetailTab extends Composite{
 			c2Def.setConceptObject(cDetailObj.getConceptObject());
 			c2Note.setConceptObject(cDetailObj.getConceptObject());
 			c2Attrib.setConceptObject(cDetailObj.getConceptObject());
-			c2Map.setConceptObject(cDetailObj.getConceptObject());
 			c2Info.setConceptObject(cDetailObj.getConceptObject());
 			t2.setConceptDetailObject(cDetailObj);
 			c2Def.setConceptDetailObject(cDetailObj);
 			c2Note.setConceptDetailObject(cDetailObj);
 			c2Attrib.setConceptDetailObject(cDetailObj);
-			c2Map.setConceptDetailObject(cDetailObj);
 			c2Info.setConceptDetailObject(cDetailObj);
 			t2.initData();
 		}
@@ -181,7 +168,6 @@ public class ClassificationDetailTab extends Composite{
 		tab2Panel.getTabBar().setTabHTML(InfoTab.definition, Convert.replaceSpace((cDetailObj.getDefinitionCount())>1? constants.conceptDefinitions():constants.conceptDefinition() ) +"&nbsp;("+(cDetailObj.getDefinitionCount())+")" );
 		tab2Panel.getTabBar().setTabHTML(InfoTab.note, Convert.replaceSpace((cDetailObj.getNoteCount())>1? constants.conceptNotes():constants.conceptNote() ) +"&nbsp;("+(cDetailObj.getNoteCount())+")" );
 		tab2Panel.getTabBar().setTabHTML(InfoTab.attribute, Convert.replaceSpace((cDetailObj.getAttributeCount())>1? constants.conceptAttributes():constants.conceptAttribute() ) +"&nbsp;("+(cDetailObj.getAttributeCount())+")" );
-		tab2Panel.getTabBar().setTabHTML(InfoTab.conceptmap, Convert.replaceSpace((cDetailObj.getConceptMappedCount())>1? constants.conceptMappedConcepts():constants.conceptMappedConcept() ) +"&nbsp;("+(cDetailObj.getConceptMappedCount())+")" );
 		tab2Panel.getTabBar().setTabHTML(InfoTab.history, Convert.replaceSpace((cDetailObj.getHistoryCount())>1? constants.conceptHistory():constants.conceptHistory() ) +"&nbsp;("+(cDetailObj.getHistoryCount())+")" );
 	}
 	
@@ -190,7 +176,6 @@ public class ClassificationDetailTab extends Composite{
 		c2Def.sayLoading();
 		c2Note.sayLoading();
 		c2Attrib.sayLoading();
-		c2Map.sayLoading();
 		c2Info.sayLoading();
 	}
 

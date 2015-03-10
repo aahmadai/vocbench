@@ -87,7 +87,8 @@ public class ConceptTree extends Composite{
 	public InitializeConceptData initData;
 	private ConceptDetailTabPanel detailPanel;
 	private ConceptObject selectedConceptObject;
-	private ConceptDetailObject cDetailObj; 
+	private int selectedTab = InfoTab.term; 
+	private ConceptDetailObject cDetailObj;
 	private HorizontalPanel functionPanel;
 	private HorizontalPanel getURIPanel = new HorizontalPanel();
 	private VerticalPanel header = new VerticalPanel();
@@ -836,7 +837,7 @@ public class ConceptTree extends Composite{
 				cDetailObj = (ConceptDetailObject) result;
 				selectedConceptObject = cDetailObj.getConceptObject();
 				selectedConceptObject.setParentURI(tObj.getParentURI());
-				
+				selectedTab = detailPanel.getSelectedTab();
 				String status = selectedConceptObject.getStatus();
 				addConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTCREATE, OWLStatusConstants.getOWLStatusID(status)));
 				deleteConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTDELETE, OWLStatusConstants.getOWLStatusID(status)));
@@ -857,7 +858,7 @@ public class ConceptTree extends Composite{
 				Scheduler.get().scheduleDeferred(new Command() {
 		            public void execute()
 		            {  
-		            	detailPanel.loadTab(cDetailObj);
+		            	detailPanel.loadTab(cDetailObj, selectedTab);
 		            }
 		        });
 			}

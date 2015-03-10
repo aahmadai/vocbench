@@ -118,12 +118,12 @@ public class UsersPreferenceServiceSystemImpl {
 		String query = "";
 		
 		// if VISITOR then load read only ontology
-		if(ConfigConstants.ISVISITOR){
-			query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2' ";
-		}
-		else{
+		//if(ConfigConstants.ISVISITOR){
+		//	query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2' ";
+		//}
+		//else{
 			query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1' ";
-		}
+		//}
 		
 		query += " AND ontology_id NOT IN(SELECT ontology_id FROM users_ontology WHERE user_id='"+userID+"')"; 
 		
@@ -139,12 +139,12 @@ public class UsersPreferenceServiceSystemImpl {
 		String query = "";
 		
 		// if VISITOR then load read only ontology
-		if(ConfigConstants.ISVISITOR){
-			query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
-		}
-		else{
+		//if(ConfigConstants.ISVISITOR){
+		//	query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
+		//}
+		//else{
 			query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1'";
-		}
+		//}
 	
 		query += "AND ontology_id NOT IN(" +
 		"SELECT ontology_id FROM users_ontology WHERE user_id='"+userID+"' AND status=1)"; 
@@ -159,12 +159,12 @@ public class UsersPreferenceServiceSystemImpl {
 		String query = "";
 		
 		// if VISITOR then load read only ontology
-		if(ConfigConstants.ISVISITOR){
-			query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
-		}
-		else{
+		//if(ConfigConstants.ISVISITOR){
+		//	query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
+		//}
+		//else{
 			query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1'";
-		}
+		//}
 		
 		query += " AND ontology_id IN(SELECT ontology_id FROM users_ontology WHERE user_id='"+userID+"' AND status=0)"; 
 		
@@ -179,12 +179,12 @@ public class UsersPreferenceServiceSystemImpl {
 		String query = "";
 		
 		// if VISITOR then load read only ontology
-		if(ConfigConstants.ISVISITOR){
-			query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
-		}
-		else{
+		//if(ConfigConstants.ISVISITOR){
+		//	query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
+		//}
+		//else{
 			query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1'";
-		}
+		//}
 
 		query += "AND ontology_id IN ( SELECT ontology_id FROM users_ontology WHERE user_id =  '"+userID +"' and status=1)"; 
 

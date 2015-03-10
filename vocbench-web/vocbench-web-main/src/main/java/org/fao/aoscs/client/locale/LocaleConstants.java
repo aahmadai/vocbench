@@ -348,6 +348,8 @@ public interface LocaleConstants extends Constants{
 	public String searchIncludeNotes();
 	public String searchPreferredTermsOnly();
 	public String searchIncludeSpell();
+	public String searchConceptURI();
+	public String searchSearchByConceptURI();
 	public String searchAdvSearch();
 	public String searchConceptRelationship();
 	public String searchTermRelationship();
@@ -983,6 +985,8 @@ public interface LocaleConstants extends Constants{
 	public String conceptAttribute();
 	public String conceptAttributes();
 	public String conceptNotation();
+	public String conceptAnnotation();
+	public String conceptAnnotations();
 	public String conceptNotations();
 	public String conceptAlignment();
 	public String conceptAlignments();
@@ -1042,6 +1046,10 @@ public interface LocaleConstants extends Constants{
 	public String conceptEditNotation();
 	public String conceptDeleteNotation();
 	public String conceptNoNotation();
+	public String conceptAddAnnotation();
+	public String conceptEditAnnotation();
+	public String conceptDeleteAnnotation();
+	public String conceptNoAnnotation();
 	public String conceptAddAttributes();
 	public String conceptEditAttributes();
 	public String conceptDeleteAttributes();
