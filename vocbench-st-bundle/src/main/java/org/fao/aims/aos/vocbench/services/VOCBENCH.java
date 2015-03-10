@@ -66,7 +66,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -2202,6 +2201,7 @@ public class VOCBENCH extends SKOSXL {
 						"\n(COUNT (DISTINCT ?sameAs) AS ?sameAsCount)" +
 						"\n(COUNT (DISTINCT ?mappingRelation) AS ?mappingRelationCount)" +
 						"\n(COUNT (DISTINCT ?annotationValue) AS ?annotationCount)" +
+						"\n(COUNT (DISTINCT ?plainRDFPropValue) AS ?plainRDFPropCount)" +
 						"\nWHERE{" +
 						
 						"\n{<"+conceptUri+"> <"+PREFLABEL+"> ?xlabel . }"+
@@ -2267,6 +2267,18 @@ public class VOCBENCH extends SKOSXL {
 						"\n<"+conceptUri+"> ?annotationProp ?annotationValue . " +		
 						"\n}"+
 						
+						"\nUNION"+
+						
+						"\n{?plainRDFProp <"+TYPE+"> <"+PROPERTY+"> ."+ // all the plainRDFProperty
+						"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+OBJECTPROPERTY+"> }"+ // exclude the ObjectProperties 
+						"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+DATATYPEPROPERTY+"> }"+ // exclude the DatatypeProperies
+						"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+ANNOTATIONPROPERTY+"> }"+ // exclude the AnnotationProperties
+						"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+ONTOLOGYPROPERTY+"> }"+ // exclude the OntologyProperties
+						"\n<" + conceptUri + ">  ?plainRDFProp ?plainRDFPropValue ." +
+						"\nFILTER (?plainRDFProp != <"+TYPE+">)"+
+						"\nFILTER (?plainRDFProp != <"+DIRECTSESAMETYPE+">)"+
+						"\n}"+
+						
 						"\n}" +
 						"\nGROUP BY ?subPropRel";
 			
@@ -2288,6 +2300,8 @@ public class VOCBENCH extends SKOSXL {
 			String sameAsAndMappingRelationImplicitCount = "0";
 			
 			String annotationImplicitCount = "0";
+			
+			String plainRDFPropImplicitCount = "0";
 			
 			boolean first = true;
 			while(it.hasNext()){
@@ -2312,6 +2326,8 @@ public class VOCBENCH extends SKOSXL {
 						mappingRelationImplicitCount = tuple.getBinding("mappingRelationCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("annotationCount"))
 						annotationImplicitCount = tuple.getBinding("annotationCount").getBoundValue().getNominalValue();
+					if(tuple.hasBinding("plainRDFPropCount"))
+						plainRDFPropImplicitCount = tuple.getBinding("plainRDFPropCount").getBoundValue().getNominalValue();
 				}
 				if(tuple.hasBinding("subPropRel") && tuple.hasBinding("relatedCount")){
 					String propName = tuple.getBinding("subPropRel").getBoundValue().getNominalValue();
@@ -2339,6 +2355,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n(COUNT (DISTINCT ?sameAs) AS ?sameAsCount)" +
 					"\n(COUNT (DISTINCT ?mappingRelation) AS ?mappingRelationCount)" +
 					"\n(COUNT (DISTINCT ?annotationValue) AS ?annotationCount)" +
+					"\n(COUNT (DISTINCT ?plainRDFPropValue) AS ?plainRDFPropCount)" +
 					"\nWHERE{" +
 					
 					"\n{<"+conceptUri+"> <"+PREFLABEL+"> ?xlabel . }"+
@@ -2403,6 +2420,18 @@ public class VOCBENCH extends SKOSXL {
 					"\n<"+conceptUri+"> ?annotationProp ?annotationValue . " +		
 					"\n}"+
 					
+					"\nUNION"+
+
+					"\n{?plainRDFProp <"+TYPE+"> <"+PROPERTY+"> ."+ // all the plainRDFProperty
+					"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+OBJECTPROPERTY+"> }"+ // exclude the ObjectProperties 
+					"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+DATATYPEPROPERTY+"> }"+ // exclude the DatatypeProperies
+					"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+ANNOTATIONPROPERTY+"> }"+ // exclude the AnnotationProperties
+					"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+ONTOLOGYPROPERTY+"> }"+ // exclude the OntologyProperties
+					"\n<" + conceptUri + ">  ?plainRDFProp ?plainRDFPropValue ." +
+					"\nFILTER (?plainRDFProp != <"+TYPE+">)"+
+					"\nFILTER (?plainRDFProp != <"+DIRECTSESAMETYPE+">)"+
+					"\n}"+
+						
 					"\n}" +
 					"\nGROUP BY ?subPropRel";
 			
@@ -2423,6 +2452,8 @@ public class VOCBENCH extends SKOSXL {
 			String sameAsAndMappingRelationExplicitCount = "0";
 			
 			String annotationExplicitCount = "0";
+			
+			String plainRDFPropExplicitCount = "0";
 			
 			first = true;
 			while(it.hasNext()){
@@ -2447,6 +2478,8 @@ public class VOCBENCH extends SKOSXL {
 						mappingRelationExplicitCount = tuple.getBinding("mappingRelationCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("annotationCount"))
 						annotationExplicitCount = tuple.getBinding("annotationCount").getBoundValue().getNominalValue();
+					if(tuple.hasBinding("plainRDFPropCount"))
+						plainRDFPropExplicitCount = tuple.getBinding("plainRDFPropCount").getBoundValue().getNominalValue();
 				}
 				if(tuple.hasBinding("subPropRel") && tuple.hasBinding("relatedCount")){
 					String propName = tuple.getBinding("subPropRel").getBoundValue().getNominalValue();
@@ -2522,6 +2555,9 @@ public class VOCBENCH extends SKOSXL {
 			annotationElem.setAttribute("number", annotationImplicitCount);
 			annotationElem.setAttribute("numberExplicit", annotationExplicitCount);
 			
+			Element plainRDFPropElem = XMLHelp.newElement(propCollection, "others");
+			plainRDFPropElem.setAttribute("number", plainRDFPropImplicitCount);
+			plainRDFPropElem.setAttribute("numberExplicit", plainRDFPropExplicitCount);
 			
 			
 		} catch (ModelAccessException e) {

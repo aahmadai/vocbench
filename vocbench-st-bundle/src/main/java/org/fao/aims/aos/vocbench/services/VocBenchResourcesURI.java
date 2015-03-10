@@ -30,6 +30,7 @@ public class VocBenchResourcesURI {
 	final static public String OBJECTPROPERTY = "http://www.w3.org/2002/07/owl#ObjectProperty";
 	final static public String DATATYPEPROPERTY = "http://www.w3.org/2002/07/owl#DatatypeProperty";
 	final static public String ANNOTATIONPROPERTY = "http://www.w3.org/2002/07/owl#AnnotationProperty";
+	final static public String ONTOLOGYPROPERTY = "http://www.w3.org/2002/07/owl#OntologyProperty";
 	final static public String SAMEAS = "http://www.w3.org/2002/07/owl#sameAs";
 	
 	
@@ -83,6 +84,7 @@ public class VocBenchResourcesURI {
 	final static public String CREATED = "http://purl.org/dc/terms/created";
 	final static public String MODIFIED = "http://purl.org/dc/terms/modified";
 	
+	final static public String DIRECTSESAMETYPE = "http://www.openrdf.org/schema/sesame#directType";
 	
 	private VocBenchResourcesURI() {
 	}
