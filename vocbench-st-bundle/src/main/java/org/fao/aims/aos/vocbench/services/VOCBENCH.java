@@ -2201,7 +2201,7 @@ public class VOCBENCH extends SKOSXL {
 						"\n(COUNT (DISTINCT ?image) AS ?imageCount)" +
 						"\n(COUNT (DISTINCT ?sameAs) AS ?sameAsCount)" +
 						"\n(COUNT (DISTINCT ?mappingRelation) AS ?mappingRelationCount)" +
-						"\n(COUNT (DISTINCT ?annotationProp) AS ?annotationCount)" +
+						"\n(COUNT (DISTINCT ?annotationValue) AS ?annotationCount)" +
 						"\nWHERE{" +
 						
 						"\n{<"+conceptUri+"> <"+PREFLABEL+"> ?xlabel . }"+
@@ -2338,7 +2338,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n(COUNT (DISTINCT ?image) AS ?imageCount)" +
 					"\n(COUNT (DISTINCT ?sameAs) AS ?sameAsCount)" +
 					"\n(COUNT (DISTINCT ?mappingRelation) AS ?mappingRelationCount)" +
-					"\n(COUNT (DISTINCT ?annotationProp) AS ?annotationCount)" +
+					"\n(COUNT (DISTINCT ?annotationValue) AS ?annotationCount)" +
 					"\nWHERE{" +
 					
 					"\n{<"+conceptUri+"> <"+PREFLABEL+"> ?xlabel . }"+
