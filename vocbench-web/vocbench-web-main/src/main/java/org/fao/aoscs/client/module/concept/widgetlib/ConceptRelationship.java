@@ -121,7 +121,7 @@ class ConceptRelationship extends ConceptTemplate{
 		label.setTitle(cObj.getUri());
 		label.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				ModuleManager.gotoItem(cObj.getUri(), cObj.getScheme(), true, InfoTab.relationship, cObj.getBelongsToModule(), ModuleManager.MODULE_CONCEPT);
+				ModuleManager.gotoItem(cObj.getUri(), cObj.getScheme(), true, ConceptTab.RELATIONSHIP.getTabIndex(), cObj.getBelongsToModule(), ModuleManager.MODULE_CONCEPT);
 			}
 		});
 		
@@ -246,13 +246,13 @@ class ConceptRelationship extends ConceptTemplate{
 				 i++;
 				 count += conceptList.size();
 			 }
-			 if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(InfoTab.relationship, Convert.replaceSpace(count>1?constants.conceptRelationships():constants.conceptRelationship())+"&nbsp;("+(count)+")");
-			 if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(InfoTab.relationship, Convert.replaceSpace(count>1?constants.conceptRelationships():constants.conceptRelationship())+"&nbsp;("+(count)+")");
+			 if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.RELATIONSHIP.getTabIndex(), Convert.replaceSpace(count>1?constants.conceptRelationships():constants.conceptRelationship())+"&nbsp;("+(count)+")");
+			 if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.RELATIONSHIP.getTabIndex(), Convert.replaceSpace(count>1?constants.conceptRelationships():constants.conceptRelationship())+"&nbsp;("+(count)+")");
 			 conceptRootPanel.add(GridStyle.setTableConceptDetailStyleTop(table,"gstFR1","gstFC1","gstR1","gstPanel1",true));
 		 }else{
 			 Label sayNo = new Label(constants.conceptNoRelationships());
-			 if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(InfoTab.relationship, Convert.replaceSpace(constants.conceptRelationship())+"&nbsp;(0)");
-			 if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(InfoTab.relationship, Convert.replaceSpace(constants.conceptRelationship())+"&nbsp;(0)");
+			 if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.RELATIONSHIP.getTabIndex(), Convert.replaceSpace(constants.conceptRelationship())+"&nbsp;(0)");
+			 if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.RELATIONSHIP.getTabIndex(), Convert.replaceSpace(constants.conceptRelationship())+"&nbsp;(0)");
 			 conceptRootPanel.add(sayNo);
 			 conceptRootPanel.setCellHorizontalAlignment(sayNo, HasHorizontalAlignment.ALIGN_CENTER);
 		 }	

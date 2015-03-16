@@ -8,7 +8,7 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.constant.OWLStatusConstants;
 import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.module.validation.widgetlib.Validator;
@@ -98,7 +98,7 @@ public class RecentChangesCellTable {
 	    				if(cObj!=null)
 	    				{
 	    					//Window.alert("You have clicked: " + cObj.getUri());
-	    					ModuleManager.gotoItem(cObj.getUri(), cObj.getScheme(), true, InfoTab.term, cObj.getBelongsToModule(), ModuleManager.MODULE_CONCEPT);
+	    					ModuleManager.gotoItem(cObj.getUri(), cObj.getScheme(), true, ConceptTab.TERM.getTabIndex(), cObj.getBelongsToModule(), ModuleManager.MODULE_CONCEPT);
 	    				}
 	    			}
 	    		}

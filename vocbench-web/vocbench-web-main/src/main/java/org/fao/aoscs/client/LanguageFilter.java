@@ -9,7 +9,7 @@ import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.classification.Classification;
 import org.fao.aoscs.client.module.concept.Concept;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.consistency.Consistency;
 import org.fao.aoscs.client.module.constant.OWLActionConstants;
 import org.fao.aoscs.client.module.document.About;
@@ -613,7 +613,7 @@ public class LanguageFilter extends DialogBoxAOS {
 				{
 					if(uri != null)
 					{
-						mainApp.goToModule("Concepts", uri, ""+InfoTab.term);
+						mainApp.goToModule("Concepts", uri, ""+ConceptTab.TERM.getTabIndex());
 					}
 					else
 					{

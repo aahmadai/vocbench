@@ -220,4 +220,20 @@ public class ResourceResponseManager extends ResponseManager {
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param resourceURI
+	 * @param excludedProps
+	 * @return
+	 */
+	public static XMLResponseREPLY getValuesOfPlainRDFPropertiesRequest(OntologyInfo ontoInfo, String resourceURI, ArrayList<String> excludedProps)
+	{
+		String propURIs = STUtility.convertArrayToString(excludedProps, STXMLUtility.ST_SEPARATOR);
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getValuesOfPlainRDFPropertiesRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.excludedProps, propURIs), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
 }

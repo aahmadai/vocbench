@@ -7,7 +7,7 @@ import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.constant.ConceptActionKey;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.ModuleManager;
@@ -84,7 +84,7 @@ public class DeleteConcept extends FormDialogBox{
 
 		AsyncCallback<Void> callback = new AsyncCallback<Void>(){
 			public void onSuccess(Void result){
-				treePanel.reloadItem(selectedConceptObject.getUri(), InfoTab.history, showAlsoNonpreferredTerms, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
+				treePanel.reloadItem(selectedConceptObject.getUri(), ConceptTab.HISTORY.getTabIndex(), showAlsoNonpreferredTerms, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 				ModuleManager.resetValidation();
 			}
 			public void onFailure(Throwable caught){

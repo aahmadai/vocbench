@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.fao.aoscs.client.image.AOSImageManager;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ModuleManager;
 import org.fao.aoscs.client.utility.TimeConverter;
@@ -250,7 +250,7 @@ public class ConceptNavigationHistory extends DialogBoxAOS implements ClickHandl
 			{
 
 				public void onClick(ClickEvent event) {
-					ModuleManager.gotoItem(cObj.getUri(), cObj.getScheme(), true, InfoTab.term, cObj.getBelongsToModule(), ModuleManager.MODULE_CONCEPT);
+					ModuleManager.gotoItem(cObj.getUri(), cObj.getScheme(), true, ConceptTab.TERM.getTabIndex(), cObj.getBelongsToModule(), ModuleManager.MODULE_CONCEPT);
 					ConceptNavigationHistory.this.hide();
 					
 				}

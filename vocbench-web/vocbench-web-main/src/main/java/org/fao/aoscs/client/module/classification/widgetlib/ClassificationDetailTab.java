@@ -4,7 +4,7 @@ import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.module.concept.widgetlib.ConceptDefinition;
 import org.fao.aoscs.client.module.concept.widgetlib.ConceptInformation;
 import org.fao.aoscs.client.module.concept.widgetlib.ConceptProperty;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.concept.widgetlib.Term;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.domain.ConceptDetailObject;
@@ -136,11 +136,11 @@ public class ClassificationDetailTab extends Composite{
 	public void resetTab()
 	{
 		tab2Panel.selectTab(0);
-		tab2Panel.getTabBar().setTabHTML(InfoTab.term, Convert.replaceSpace(constants.conceptTerm()));
-		tab2Panel.getTabBar().setTabHTML(InfoTab.definition, Convert.replaceSpace(constants.conceptDefinition()));
-		tab2Panel.getTabBar().setTabHTML(InfoTab.note, Convert.replaceSpace(constants.conceptNote()));
-		tab2Panel.getTabBar().setTabHTML(InfoTab.attribute, Convert.replaceSpace(constants.conceptAttribute()));
-		tab2Panel.getTabBar().setTabHTML(InfoTab.history, Convert.replaceSpace(constants.conceptHistory()));
+		tab2Panel.getTabBar().setTabHTML(ConceptTab.TERM.getTabIndex(), Convert.replaceSpace(constants.conceptTerm()));
+		tab2Panel.getTabBar().setTabHTML(ConceptTab.DEFINITION.getTabIndex(), Convert.replaceSpace(constants.conceptDefinition()));
+		tab2Panel.getTabBar().setTabHTML(ConceptTab.NOTE.getTabIndex(), Convert.replaceSpace(constants.conceptNote()));
+		tab2Panel.getTabBar().setTabHTML(ConceptTab.ATTRIBUTE.getTabIndex(), Convert.replaceSpace(constants.conceptAttribute()));
+		tab2Panel.getTabBar().setTabHTML(ConceptTab.HISTORY.getTabIndex(), Convert.replaceSpace(constants.conceptHistory()));
 	}
 	
 	public void initData(ConceptDetailObject cDetailObj){
@@ -164,11 +164,11 @@ public class ClassificationDetailTab extends Composite{
 	public void loadTab(ConceptDetailObject cDetailObj)
 	{
 		tab2Panel.selectTab(0);
-		tab2Panel.getTabBar().setTabHTML(InfoTab.term, Convert.replaceSpace((cDetailObj.getTermCount())>1? constants.conceptTerms():constants.conceptTerm() ) +"&nbsp;("+(cDetailObj.getTermCount())+")" );
-		tab2Panel.getTabBar().setTabHTML(InfoTab.definition, Convert.replaceSpace((cDetailObj.getDefinitionCount())>1? constants.conceptDefinitions():constants.conceptDefinition() ) +"&nbsp;("+(cDetailObj.getDefinitionCount())+")" );
-		tab2Panel.getTabBar().setTabHTML(InfoTab.note, Convert.replaceSpace((cDetailObj.getNoteCount())>1? constants.conceptNotes():constants.conceptNote() ) +"&nbsp;("+(cDetailObj.getNoteCount())+")" );
-		tab2Panel.getTabBar().setTabHTML(InfoTab.attribute, Convert.replaceSpace((cDetailObj.getAttributeCount())>1? constants.conceptAttributes():constants.conceptAttribute() ) +"&nbsp;("+(cDetailObj.getAttributeCount())+")" );
-		tab2Panel.getTabBar().setTabHTML(InfoTab.history, Convert.replaceSpace((cDetailObj.getHistoryCount())>1? constants.conceptHistory():constants.conceptHistory() ) +"&nbsp;("+(cDetailObj.getHistoryCount())+")" );
+		tab2Panel.getTabBar().setTabHTML(ConceptTab.TERM.getTabIndex(), Convert.replaceSpace((cDetailObj.getTermCount())>1? constants.conceptTerms():constants.conceptTerm() ) +"&nbsp;("+(cDetailObj.getTermCount())+")" );
+		tab2Panel.getTabBar().setTabHTML(ConceptTab.DEFINITION.getTabIndex(), Convert.replaceSpace((cDetailObj.getDefinitionCount())>1? constants.conceptDefinitions():constants.conceptDefinition() ) +"&nbsp;("+(cDetailObj.getDefinitionCount())+")" );
+		tab2Panel.getTabBar().setTabHTML(ConceptTab.NOTE.getTabIndex(), Convert.replaceSpace((cDetailObj.getNoteCount())>1? constants.conceptNotes():constants.conceptNote() ) +"&nbsp;("+(cDetailObj.getNoteCount())+")" );
+		tab2Panel.getTabBar().setTabHTML(ConceptTab.ATTRIBUTE.getTabIndex(), Convert.replaceSpace((cDetailObj.getAttributeCount())>1? constants.conceptAttributes():constants.conceptAttribute() ) +"&nbsp;("+(cDetailObj.getAttributeCount())+")" );
+		tab2Panel.getTabBar().setTabHTML(ConceptTab.HISTORY.getTabIndex(), Convert.replaceSpace((cDetailObj.getHistoryCount())>1? constants.conceptHistory():constants.conceptHistory() ) +"&nbsp;("+(cDetailObj.getHistoryCount())+")" );
 	}
 	
 	public void clearData(){

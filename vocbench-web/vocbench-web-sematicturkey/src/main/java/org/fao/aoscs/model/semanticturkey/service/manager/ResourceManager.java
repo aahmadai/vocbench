@@ -448,4 +448,10 @@ public class ResourceManager extends ResponseManager {
 		return list;
 	}
 	
+	public static HashMap<ClassObject, ArrayList<STNode>> getValuesOfPlainRDFProperties(OntologyInfo ontoInfo, String resourceURI, ArrayList<String> excludedProps, boolean explicit)
+	{
+		XMLResponseREPLY reply = ResourceResponseManager.getValuesOfPlainRDFPropertiesRequest(ontoInfo, resourceURI, excludedProps);
+		HashMap<ClassObject, ArrayList<STNode>> list = getValuesOfDatatypeProperties(reply, explicit);
+		return list;
+	}
 }

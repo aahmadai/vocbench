@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.image.AOSImageManager;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.constant.OWLStatusConstants;
 import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.module.constant.TreeItemColor;
@@ -138,7 +138,7 @@ public class HierarchyAOS extends Composite{
 		label.addClickHandler(new ClickHandler()
 		{
 			public void onClick(ClickEvent event) {
-				ModuleManager.selectModule(tObj.getUri(), conceptObject.getScheme(), true, InfoTab.hierarchy, conceptObject.getBelongsToModule());
+				ModuleManager.selectModule(tObj.getUri(), conceptObject.getScheme(), true, ConceptTab.HIERARCHY.getTabIndex(), conceptObject.getBelongsToModule());
 			}
 			
 		});

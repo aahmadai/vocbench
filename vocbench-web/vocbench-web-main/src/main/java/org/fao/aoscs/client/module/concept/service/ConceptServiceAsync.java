@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import org.fao.aoscs.domain.ClassObject;
 import org.fao.aoscs.domain.ConceptDetailObject;
-import org.fao.aoscs.domain.ConceptMappedObject;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.ConceptTermObject;
 import org.fao.aoscs.domain.DefinitionObject;
@@ -55,7 +54,6 @@ public interface ConceptServiceAsync<T> {
 	void getTerm(String cls, OntologyInfo ontoInfo,AsyncCallback<ConceptTermObject> callback);
 	void getConceptRelationship(String cls, boolean isExplicit,
 			OntologyInfo ontoInfo, AsyncCallback<RelationObject> callback);
-	void getMappedConcept(String cls, OntologyInfo ontoInfo,AsyncCallback<ConceptMappedObject> callback);
 	void getConceptHistoryInitData(String uri, int ontologyId , int type ,AsyncCallback<RecentChangesInitObject> callback);
 	void requestConceptHistoryRows(Request request, int ontologyId, String uri, int type, AsyncCallback<ArrayList<RecentChanges>> callback);
 	void getConceptHierarchy(OntologyInfo ontologyInfo, String uri, String schemeUri, boolean showAlsoNonpreferredTerms, boolean isHideDeprecated, ArrayList<String> langList, AsyncCallback<HierarchyObject> callback);
@@ -106,8 +104,6 @@ public interface ConceptServiceAsync<T> {
 	void moveTerm(OntologyInfo ontoInfo ,int actionId, OwlStatus status,int userId,TermObject termObject,TermMoveObject termMoveObject, AsyncCallback<TermMoveObject> callback);
 	
 	
-	void addMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,String destConceptURI,String conceptURI,AsyncCallback<ConceptMappedObject> callback);
-	void deleteMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,ConceptObject destConceptObj,ConceptObject conceptObject,AsyncCallback<ConceptMappedObject> callback);
 
 	void moveConcept(OntologyInfo ontoInfo, String oldSchemeUri, String newSchemeUri, String conceptURI, String oldParentConceptURI, String newParentConceptURI, OwlStatus status, int actionId, int userId, AsyncCallback<Void> callback);
 	void copyConcept(OntologyInfo ontoInfo, String oldSchemeUri, String newSchemeUri,
@@ -311,6 +307,47 @@ public interface ConceptServiceAsync<T> {
 			String propertyURI,
 			ConceptObject conceptObject,
 			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void addConceptOtherValue(
+			OntologyInfo ontoInfo,
+			int actionId,
+			OwlStatus status,
+			int userId,
+			NonFuncObject value,
+			String propertyURI,
+			DomainRangeObject drObj,
+			ConceptObject conceptObject,
+			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void deleteConceptOtherValue(
+			OntologyInfo ontoInfo,
+			int actionId,
+			OwlStatus status,
+			int userId,
+			NonFuncObject oldValue,
+			String propertyURI,
+			ConceptObject conceptObject,
+			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void getConceptOther(String resourceURI, boolean isExplicit,
+			OntologyInfo ontoInfo,
+			AsyncCallback<HashMap<String, String>> callback);
+	void editConceptOtherValue(
+			OntologyInfo ontoInfo,
+			int actionId,
+			OwlStatus status,
+			int userId,
+			NonFuncObject oldValue,
+			NonFuncObject newValue,
+			String propertyURI,
+			DomainRangeObject drObj,
+			ConceptObject conceptObject,
+			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void getConceptOtherValue(
+			String cls,
+			boolean isExplicit,
+			OntologyInfo ontoInfo,
 			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
 	
 }

@@ -279,14 +279,14 @@ public class ConceptDefinition extends ConceptTemplate{
 				table.setWidget(i+1, 0, getDefinitionNumber(i+1, dObj));
 				table.setWidget(i+1, 1, vp);
 			}
-			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(InfoTab.definition, Convert.replaceSpace(dObjList.size()>1? constants.conceptDefinitions():constants.conceptDefinition())+"&nbsp;("+(dObjList.size())+")");
-			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(InfoTab.definition, Convert.replaceSpace(dObjList.size()>1? constants.conceptDefinitions():constants.conceptDefinition())+"&nbsp;("+(dObjList.size())+")");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.DEFINITION.getTabIndex(), Convert.replaceSpace(dObjList.size()>1? constants.conceptDefinitions():constants.conceptDefinition())+"&nbsp;("+(dObjList.size())+")");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.DEFINITION.getTabIndex(), Convert.replaceSpace(dObjList.size()>1? constants.conceptDefinitions():constants.conceptDefinition())+"&nbsp;("+(dObjList.size())+")");
 			conceptRootPanel.add(GridStyle.setTableConceptDetailStyleTop(table,"gstFR1","gstFC1","gstR1","gstPanel1",true));
 		}else{
 			attachNewDefButton();
 			Label sayNo = new Label(constants.conceptNoDefinition());
-			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(InfoTab.definition, Convert.replaceSpace(constants.conceptDefinition())+"&nbsp;(0)");
-			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(InfoTab.definition, Convert.replaceSpace(constants.conceptDefinition())+"&nbsp;(0)");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.DEFINITION.getTabIndex(), Convert.replaceSpace(constants.conceptDefinition())+"&nbsp;(0)");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.DEFINITION.getTabIndex(), Convert.replaceSpace(constants.conceptDefinition())+"&nbsp;(0)");
 			conceptRootPanel.add(sayNo);
 			conceptRootPanel.setCellHorizontalAlignment(sayNo, HasHorizontalAlignment.ALIGN_CENTER);
 		}

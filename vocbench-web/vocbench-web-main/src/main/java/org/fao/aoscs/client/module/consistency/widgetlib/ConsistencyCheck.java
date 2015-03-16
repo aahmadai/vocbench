@@ -9,7 +9,7 @@ import java.util.Iterator;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.consistency.ConsistencyTemplate;
 import org.fao.aoscs.client.module.constant.ConsistencyConstants;
 import org.fao.aoscs.client.module.constant.Style;
@@ -822,26 +822,26 @@ public class ConsistencyCheck extends ConsistencyTemplate {
 				ConsistencyObject co = (ConsistencyObject) col.get(j);
 				int type = ConsistencyConstants.getResultType((Integer.parseInt(listBox.getValue(listBox.getSelectedIndex()))));
 				if(co.getType()==ConsistencyObject.Label)
-					table.setWidget(i,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, type, false, false, true));
+					table.setWidget(i,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, type, false, false, true));
 				else if(co.getType()==ConsistencyObject.DestLabel)
-					table.setWidget(i,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, type, true, false, true));
+					table.setWidget(i,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, type, true, false, true));
 				else if(co.getType()==ConsistencyObject.TermBundledInDestConcept)
-					table.setWidget(i,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, 2, true, false, true));
+					table.setWidget(i,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, 2, true, false, true));
 				else if(co.getType()==ConsistencyObject.TermConcept)
-					table.setWidget(i,j,  makeLabel(c, "term-Label", true, InfoTab.term, 1, 1, false, false, true));
+					table.setWidget(i,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), 1, 1, false, false, true));
 				else if(co.getType()==ConsistencyObject.RelationLabel)
-					table.setWidget(i,j,  makeLabel(c, "term-Label", true, InfoTab.term, 3, 3, false, false, true));
+					table.setWidget(i,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), 3, 3, false, false, true));
 				else if(co.getType()==ConsistencyObject.ConceptWithImgOnEachItem)
-					table.setWidget(i,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, 1, false, true, true));
+					table.setWidget(i,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, 1, false, true, true));
 				else if(co.getType()==ConsistencyObject.TermWithImgOnEachItem)
-					table.setWidget(i,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, 2, false, true, true));
+					table.setWidget(i,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, 2, false, true, true));
 				else if(co.getType()==ConsistencyObject.ConceptAndTerm)
 				{
 					if(c.getTerm().getUri()==null) 
 						type = 1;
 					else
 						type = 2;
-					table.setWidget(i,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, type, false, false,true));
+					table.setWidget(i,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, type, false, false,true));
 				}
 			}
 			
@@ -880,7 +880,7 @@ public class ConsistencyCheck extends ConsistencyTemplate {
 				ConsistencyObject co = (ConsistencyObject) col.get(j);
 				int type = ConsistencyConstants.getResultType((Integer.parseInt(listBox.getValue(listBox.getSelectedIndex()))));
 				if(co.getType()==ConsistencyObject.Label)
-					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, type, false, false, true));
+					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, type, false, false, true));
 				else if(co.getType()==ConsistencyObject.CDate)
 				{
 					table.setWidget(i+1,j,  new Label(formatDate(c.getDateCreate())));
@@ -905,31 +905,31 @@ public class ConsistencyCheck extends ConsistencyTemplate {
 				}
 				else if(co.getType()==ConsistencyObject.DestLabel)
 				{
-					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, type, true, false, true));
+					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, type, true, false, true));
 				}
 				else if(co.getType()==ConsistencyObject.TermBundledInDestConcept)
 				{
-					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, 2, true, false, true));
+					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, 2, true, false, true));
 				}
 				else if(co.getType()==ConsistencyObject.TermBundledInDestConceptIgnoreLangFilter)
 				{
-					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, 2, true, false, false));
+					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, 2, true, false, false));
 				}
 				else if(co.getType()==ConsistencyObject.TermConcept)
 				{
-					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, InfoTab.term, 1, 1, false, false, true));
+					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), 1, 1, false, false, true));
 				}
 				else if(co.getType()==ConsistencyObject.RelationLabel)
 				{
-					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, InfoTab.term, 3, 3, false, false, true));
+					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), 3, 3, false, false, true));
 				}
 				else if(co.getType()==ConsistencyObject.ConceptWithImgOnEachItem)
 				{
-					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, type, false, true, true));
+					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, type, false, true, true));
 				}
 				else if(co.getType()==ConsistencyObject.TermWithImgOnEachItem)
 				{
-					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, 2, false, true, true));
+					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, 2, false, true, true));
 				}
 				else if(co.getType()==ConsistencyObject.TermCode)
 				{
@@ -945,7 +945,7 @@ public class ConsistencyCheck extends ConsistencyTemplate {
 						type = 1;
 					else
 						type = 2;
-					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, InfoTab.term, type, type, false, false, true));
+					table.setWidget(i+1,j,  makeLabel(c, "term-Label", true, ConceptTab.TERM.getTabIndex(), type, type, false, false, true));
 				}
 				
 			}

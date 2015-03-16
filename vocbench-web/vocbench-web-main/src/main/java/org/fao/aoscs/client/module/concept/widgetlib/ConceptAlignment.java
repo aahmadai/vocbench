@@ -189,12 +189,12 @@ public class ConceptAlignment extends ConceptTemplate{
 				i++;
 			}
 
-			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(InfoTab.alignment, Convert.replaceSpace(cnt>1? constants.conceptAlignments():constants.conceptAlignment())+"&nbsp;("+(cnt)+")");
-			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(InfoTab.alignment, Convert.replaceSpace(cnt>1? constants.conceptAlignments():constants.conceptAlignment())+"&nbsp;("+(cnt)+")");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.ALIGNMENT.getTabIndex(), Convert.replaceSpace(cnt>1? constants.conceptAlignments():constants.conceptAlignment())+"&nbsp;("+(cnt)+")");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.ALIGNMENT.getTabIndex(), Convert.replaceSpace(cnt>1? constants.conceptAlignments():constants.conceptAlignment())+"&nbsp;("+(cnt)+")");
 			conceptRootPanel.add(GridStyle.setTableConceptDetailStyleTop(table,"gstFR1","gstFC1","gstR1","gstPanel1",true));
 		}else{
-			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(InfoTab.alignment, Convert.replaceSpace(constants.conceptAlignment())+"&nbsp;(0)");
-			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(InfoTab.alignment, Convert.replaceSpace(constants.conceptAlignment())+"&nbsp;(0)");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.ALIGNMENT.getTabIndex(), Convert.replaceSpace(constants.conceptAlignment())+"&nbsp;(0)");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.ALIGNMENT.getTabIndex(), Convert.replaceSpace(constants.conceptAlignment())+"&nbsp;(0)");
 			Label sayNo = new Label(constants.conceptNoAlignment());
 			conceptRootPanel.add(sayNo);
 			conceptRootPanel.setCellHorizontalAlignment(sayNo, HasHorizontalAlignment.ALIGN_CENTER);

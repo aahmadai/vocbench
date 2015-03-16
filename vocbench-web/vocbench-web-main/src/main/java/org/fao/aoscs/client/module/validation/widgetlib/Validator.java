@@ -8,7 +8,8 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.image.AOSImageManager;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.validation.ValidationTemplate;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ModuleManager;
@@ -439,269 +440,269 @@ public class Validator extends ValidationTemplate {
 		switch (v.getAction()) {
 
 		 case 1:     //     "concept-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.term, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.TERM.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 2:     //     "concept-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, false, InfoTab.term, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, false, InfoTab.term, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, false, InfoTab.term, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, false, ConceptTab.TERM.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, false, ConceptTab.TERM.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, false, ConceptTab.TERM.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 3:     //     "concept-relationship-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.relationship, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.relationship, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.relationship, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.RELATIONSHIP.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.RELATIONSHIP.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.RELATIONSHIP.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 4:     //     "concept-relationship-edit"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.relationship, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.relationship, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.relationship, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.RELATIONSHIP.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.RELATIONSHIP.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.RELATIONSHIP.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 5:     //     "concept-relationship-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.relationship, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.relationship, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.relationship, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.RELATIONSHIP.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.RELATIONSHIP.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.RELATIONSHIP.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 6:     //     "term-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.term, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, true, false);	
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.TERM.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, true, false);	
 			 break;
 	
 		 case 7:     //     "term-edit"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.term, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.TERM.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, true, false);
 			 break;
 	
 		 case 8:     //     "term-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.term, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.TERM.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, true, false);
 			 break;
 	
 		 case 9:     //     "term-relationship-add"
-			 if(col==0) return makeTermLabel(v.getConceptObject(), v.getTermObject(), v.getConceptObject().getScheme(),style, true, InfoTab.term, 2);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, true, false);
+			 if(col==0) return makeTermLabel(v.getConceptObject(), v.getTermObject(), v.getConceptObject().getScheme(),style, true, ConceptTab.TERM.getTabIndex(), 2);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, true, false);
 			 break;
 	
 		 case 10:     //     "term-relationship-edit"
-			 if(col==0) return makeTermLabel(v.getConceptObject(), v.getTermObject(), v.getConceptObject().getScheme(),style, true, InfoTab.term, 2);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, true, false);
+			 if(col==0) return makeTermLabel(v.getConceptObject(), v.getTermObject(), v.getConceptObject().getScheme(),style, true, ConceptTab.TERM.getTabIndex(), 2);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, true, false);
 			 break;
 	
 		 case 11:     //     "term-relationship-delete"
-			 if(col==0) return makeTermLabel(v.getConceptObject(), v.getTermObject(), v.getConceptObject().getScheme(),style, true, InfoTab.term, 2);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 2, true, false);
+			 if(col==0) return makeTermLabel(v.getConceptObject(), v.getTermObject(), v.getConceptObject().getScheme(),style, true, ConceptTab.TERM.getTabIndex(), 2);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 2, true, false);
 			 break;
 	
 		 case 12:     //     "term-note-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.term, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.TERM.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 13:     //     "term-note-edit"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.term, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.TERM.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 14:     //     "term-note-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.term, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.TERM.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 15:     //     "term-attribute-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.term, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.TERM.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 16:     //     "term-attribute-edit"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.term, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.TERM.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 17:     //     "term-attribute-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.term, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.term, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.TERM.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.TERM.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 18:     //     "concept-edit-note-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 19:     //     "concept-edit-note-edit"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 20:     //     "concept-edit-note-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 21:     //     "concept-edit-definition-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.definition, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.DEFINITION.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 22:     //     "concept-edit-definition-translation-edit"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.definition, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.DEFINITION.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 23:     //     "concept-edit-definition-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.definition, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.DEFINITION.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, true, false);
 			 break;
 		 
 		 case 24:     //     "concept-edit-image-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.image, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.IMAGE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, true, false);
 			 break;
 		 
 		 case 25:     //     "concept-edit-image-edit"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.image, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.IMAGE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, true, false);
 			 break;
 		 
 		 case 26:     //     "concept-edit-image-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.image, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.IMAGE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, true, false);
 			 break;
 			 
 		 case 27:     //     "concept-edit-image-translation-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.image, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.IMAGE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, true, false);
 			 break;
 			 
 		 case 28:     //     "concept-edit-image-translation-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.image, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.IMAGE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, true, false);
 			 break;
 			 
 		 case 29:     //     "concept-edit-definition-translation-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.definition, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.DEFINITION.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, true, false);
 			 break;
 			 
 		 case 30:     //     "concept-edit-definition-translation-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.definition, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.DEFINITION.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, true, false);
 			 break;
 			 
 		 case 31:     //     "concept-edit-ext-source-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.definition, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, false, true);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, true, true);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.DEFINITION.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, false, true);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, true, true);
 			 break;
 			 
 		 case 32:     //     "concept-edit-ext-source-edit"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.definition, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, false, true);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, true, true);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.DEFINITION.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, false, true);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, true, true);
 			 break;
 			 
 		 case 33:     //     "concept-edit-ext-source-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.definition, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, false, true);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.definition, 1, true, true);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.DEFINITION.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, false, true);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.DEFINITION.getTabIndex(), 1, true, true);
 			 break;
 			 
 		 case 34:     //     "concept-edit-image-source-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.image, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, false, true);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, true, true);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.IMAGE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, false, true);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, true, true);
 			 break;
 			 
 		 case 35:     //     "concept-edit-image-source-edit"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.image, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, false, true);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, true, true);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.IMAGE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, false, true);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, true, true);
 			 break;
 			 
 		 case 36:     //     "concept-edit-image-source-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.image, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, false, true);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.image, 1, true, true);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.IMAGE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, false, true);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.IMAGE.getTabIndex(), 1, true, true);
 			 break;
 			 
 		 case 37:     //     "concept-edit-attribute-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 38:     //     "concept-edit-attribute-edit"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, true, false);
 			 break;
 	
 		 case 39:     //     "concept-edit-attribute-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, true, false);
 			 break;
 		 case 40:     //     "scheme-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 4);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 4, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 4, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 4);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 4, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 4, true, false);
 			 break;
 		 case 41:     //     ""mapping-create"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, true, false);
 			 break;
 		 case 42:     //     "mapping-delete"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, true, false);
 			 break;
 		 case 76:     //     "move-concept"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, true, false);
 			 break;
 			 
 		 case 77:     //     "link-concept"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, true, false);
 			 break;
 			 
 		 case 78:     //     "unlink-concept"
-			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, InfoTab.note, 1);
-			 if(col==1) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, false, false);
-			 if(col==2) return makeLabelWithRelation(v, style, true, InfoTab.note, 1, true, false);
+			 if(col==0) return makeConceptLabel(v.getConceptObject(), style, true, ConceptTab.NOTE.getTabIndex(), 1);
+			 if(col==1) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, false, false);
+			 if(col==2) return makeLabelWithRelation(v, style, true, ConceptTab.NOTE.getTabIndex(), 1, true, false);
 			 break;
 		 default: 
 			 GWT.log("Invalid Action.", null);	

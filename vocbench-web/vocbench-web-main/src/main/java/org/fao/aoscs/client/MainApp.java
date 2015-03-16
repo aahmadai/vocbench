@@ -14,7 +14,7 @@ import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.classification.Classification;
 import org.fao.aoscs.client.module.comment.CommentViewer;
 import org.fao.aoscs.client.module.concept.Concept;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.consistency.Consistency;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.constant.OWLActionConstants;
@@ -616,7 +616,7 @@ public class MainApp extends Composite { // Application container
         					concept = new Concept(permissionTable, uri, tab);
         			}
             		else
-            			concept = new Concept(permissionTable, uri, InfoTab.term);
+            			concept = new Concept(permissionTable, uri, ConceptTab.TERM.getTabIndex());
             	}
             	else{
             		concept = new Concept(permissionTable);

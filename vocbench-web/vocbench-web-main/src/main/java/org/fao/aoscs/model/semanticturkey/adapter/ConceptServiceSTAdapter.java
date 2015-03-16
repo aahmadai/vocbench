@@ -6,7 +6,6 @@ import java.util.HashMap;
 import org.fao.aoscs.client.module.concept.service.ConceptService;
 import org.fao.aoscs.domain.ClassObject;
 import org.fao.aoscs.domain.ConceptDetailObject;
-import org.fao.aoscs.domain.ConceptMappedObject;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.ConceptTermObject;
 import org.fao.aoscs.domain.DefinitionObject;
@@ -298,31 +297,10 @@ public class ConceptServiceSTAdapter implements ConceptService {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#getMappedConcept(java.lang.String, org.fao.aoscs.domain.OntologyInfo)
-	 */
-	public ConceptMappedObject getMappedConcept(String cls, OntologyInfo ontoInfo) {
-		return conceptService.getMappedConcept(cls, ontoInfo);
-	}
-
-	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#getConceptRelationship(java.lang.String, boolean, org.fao.aoscs.domain.OntologyInfo)
 	 */
 	public RelationObject getConceptRelationship(String cls, boolean isExplicit, OntologyInfo ontoInfo) {
 		return conceptService.getConceptRelationship(cls, isExplicit, ontoInfo);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#addMappedConcept(org.fao.aoscs.domain.OntologyInfo, int, org.fao.aoscs.domain.OwlStatus, int, java.lang.String, java.lang.String)
-	 */
-	public ConceptMappedObject addMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,String destconceptUri,String conceptUri){
-		return conceptService.addMappedConcept(ontoInfo, actionId, status, userId, destconceptUri, conceptUri);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#deleteMappedConcept(org.fao.aoscs.domain.OntologyInfo, int, org.fao.aoscs.domain.OwlStatus, int, org.fao.aoscs.domain.ConceptObject, org.fao.aoscs.domain.ConceptObject)
-	 */
-	public ConceptMappedObject deleteMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,ConceptObject destConceptObj,ConceptObject conceptObject){
-		return conceptService.deleteMappedConcept(ontoInfo, actionId, status, userId, destConceptObj, conceptObject);
 	}
 	
 	/* (non-Javadoc)
@@ -628,6 +606,44 @@ public class ConceptServiceSTAdapter implements ConceptService {
 			NonFuncObject oldValue, String propertyURI,
 			ConceptObject conceptObject, boolean isExplicit) throws Exception {
 		return conceptService.deleteConceptAnnotationValue(ontoInfo, actionId, status, userId, oldValue, propertyURI, conceptObject, isExplicit);
+	}
+
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptOtherValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
+			ConceptObject conceptObject, boolean isExplicit) throws Exception {
+		return conceptService.addConceptOtherValue(ontoInfo, actionId, status, userId, value, propertyURI, drObj, conceptObject, isExplicit);
+	}
+
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptOtherValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, String propertyURI,
+			ConceptObject conceptObject, boolean isExplicit) throws Exception {
+		return conceptService.deleteConceptOtherValue(ontoInfo, actionId, status, userId, oldValue, propertyURI, conceptObject, isExplicit);
+	}
+
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> editConceptOtherValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, NonFuncObject newValue, String propertyURI,
+			DomainRangeObject drObj, ConceptObject conceptObject,
+			boolean isExplicit) throws Exception {
+		return conceptService.editConceptOtherValue(ontoInfo, actionId, status, userId, oldValue, newValue, propertyURI, drObj, conceptObject, isExplicit);
+	}
+
+	@Override
+	public HashMap<String, String> getConceptOther(String resourceURI,
+			boolean isExplicit, OntologyInfo ontoInfo) throws Exception {
+		return conceptService.getConceptOther(resourceURI, isExplicit, ontoInfo);
+	}
+
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptOtherValue(
+			String cls, boolean isExplicit, OntologyInfo ontoInfo)
+			throws Exception {
+		return conceptService.getConceptOtherValue(cls, isExplicit, ontoInfo);
 	}
 
 }

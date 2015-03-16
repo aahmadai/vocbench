@@ -285,12 +285,12 @@ public class ConceptImage extends ConceptTemplate{
 				table.setWidget(i+1, 0, getImageNumber(i+1, dObj));
 			}
 			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE)
-				conceptDetailPanel.tabPanel.getTabBar().setTabHTML(InfoTab.image, Convert.replaceSpace(iObjList.size()>1?constants.conceptImages():constants.conceptImage())+"&nbsp;("+(iObjList.size())+")");
+				conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.IMAGE.getTabIndex(), Convert.replaceSpace(iObjList.size()>1?constants.conceptImages():constants.conceptImage())+"&nbsp;("+(iObjList.size())+")");
 			conceptRootPanel.add(GridStyle.setTableConceptDetailStyleTop(table,"gstFR1","gstFC1","gstR1","gstPanel1", true));
 		}else{
 			attachNewImgButton();
 			Label sayNo = new Label(constants.conceptNoImages());
-			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(InfoTab.image, Convert.replaceSpace(constants.conceptImage())+"&nbsp;(0)");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.IMAGE.getTabIndex(), Convert.replaceSpace(constants.conceptImage())+"&nbsp;(0)");
 			conceptRootPanel.add(sayNo);
 			conceptRootPanel.setCellHorizontalAlignment(sayNo, HasHorizontalAlignment.ALIGN_CENTER);
 		}

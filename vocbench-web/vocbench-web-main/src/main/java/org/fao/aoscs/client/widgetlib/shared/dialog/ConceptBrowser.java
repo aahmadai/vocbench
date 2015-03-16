@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.search.widgetlib.ResultPanel;
 import org.fao.aoscs.client.module.search.widgetlib.SuggestBoxAOS;
 import org.fao.aoscs.client.utility.ExceptionManager;
@@ -341,7 +341,7 @@ public class ConceptBrowser extends FormDialogBox {
     }
     
     public void gotoItem(String targetItem){
-    	conceptTree.gotoItem(targetItem, InfoTab.term, false, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, schemeURI, MainApp.userOntology);
+    	conceptTree.gotoItem(targetItem, ConceptTab.TERM.getTabIndex(), false, MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, schemeURI, MainApp.userOntology);
     	selectWidget(true);
 	}
 }

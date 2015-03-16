@@ -294,14 +294,14 @@ public class Term extends ConceptTemplate{
 				count += list.size();
 			}
 			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE)
-				conceptDetailPanel.tabPanel.getTabBar().setTabHTML(0, Convert.replaceSpace( (count)>1? constants.conceptTerms():constants.conceptTerm() ) +"&nbsp;("+(count)+")" );
+				conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.TERM.getTabIndex(), Convert.replaceSpace( (count)>1? constants.conceptTerms():constants.conceptTerm() ) +"&nbsp;("+(count)+")" );
 			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE)
-				classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(InfoTab.term, Convert.replaceSpace( (count)>1? constants.conceptTerms():constants.conceptTerm() )+"&nbsp;("+(count)+")");
+				classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.TERM.getTabIndex(), Convert.replaceSpace( (count)>1? constants.conceptTerms():constants.conceptTerm() )+"&nbsp;("+(count)+")");
 			conceptRootPanel.add(GridStyle.setTableConceptDetailStyleTop(table,"gstFR1","gstFC1","gstR1","gstPanel1",true));
 		}else{
 			Label sayNo = new Label(constants.conceptNoTerm());
-			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(0, Convert.replaceSpace(constants.conceptTerm())+"&nbsp;(0)");
-			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(0, Convert.replaceSpace(constants.conceptTerm())+"&nbsp;(0)");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.TERM.getTabIndex(), Convert.replaceSpace(constants.conceptTerm())+"&nbsp;(0)");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.TERM.getTabIndex(), Convert.replaceSpace(constants.conceptTerm())+"&nbsp;(0)");
 			conceptRootPanel.add(sayNo);
 			conceptRootPanel.setCellHorizontalAlignment(sayNo, HasHorizontalAlignment.ALIGN_CENTER);
 		}

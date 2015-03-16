@@ -121,8 +121,8 @@ public class ConceptInformation extends ConceptTemplate{
 		tbPanel.setCellWidth(tb, "100%");
 		tbPanel.setCellHeight(tb, "100%");
 		
-		if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(InfoTab.history, Convert.replaceSpace(constants.conceptHistory())+"&nbsp;("+(list.getSize())+")");
-		if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(InfoTab.history, Convert.replaceSpace(constants.conceptHistory())+"&nbsp;("+(list.getSize())+")");
+		if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.HISTORY.getTabIndex(), Convert.replaceSpace(constants.conceptHistory())+"&nbsp;("+(list.getSize())+")");
+		if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.HISTORY.getTabIndex(), Convert.replaceSpace(constants.conceptHistory())+"&nbsp;("+(list.getSize())+")");
 	
 	}
 	

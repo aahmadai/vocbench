@@ -87,7 +87,7 @@ public class ConceptTree extends Composite{
 	public InitializeConceptData initData;
 	private ConceptDetailTabPanel detailPanel;
 	private ConceptObject selectedConceptObject;
-	private int selectedTab = InfoTab.term; 
+	//private ConceptTab selectedTab = ConceptTab.TERM; 
 	private ConceptDetailObject cDetailObj;
 	private HorizontalPanel functionPanel;
 	private HorizontalPanel getURIPanel = new HorizontalPanel();
@@ -138,7 +138,7 @@ public class ConceptTree extends Composite{
 		this.initData = initData;
 		this.detailPanel = new ConceptDetailTabPanel(permissionTable, initData);
 		this.detailPanel.setVisible(false);
-		detailPanel.setSetSelectedTab(initTab);
+		detailPanel.setSelectedTab(initTab);
 		this.permissionTable = permissionTable;
 		init(initURI, initTab);
 	}
@@ -837,7 +837,7 @@ public class ConceptTree extends Composite{
 				cDetailObj = (ConceptDetailObject) result;
 				selectedConceptObject = cDetailObj.getConceptObject();
 				selectedConceptObject.setParentURI(tObj.getParentURI());
-				selectedTab = detailPanel.getSelectedTab();
+
 				String status = selectedConceptObject.getStatus();
 				addConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTCREATE, OWLStatusConstants.getOWLStatusID(status)));
 				deleteConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTDELETE, OWLStatusConstants.getOWLStatusID(status)));
@@ -858,7 +858,7 @@ public class ConceptTree extends Composite{
 				Scheduler.get().scheduleDeferred(new Command() {
 		            public void execute()
 		            {  
-		            	detailPanel.loadTab(cDetailObj, selectedTab);
+		            	detailPanel.loadTab(cDetailObj);
 		            }
 		        });
 			}
@@ -1042,7 +1042,7 @@ public class ConceptTree extends Composite{
 				treePanel.showLoading(true);
 				AsyncCallback<Void> callback = new AsyncCallback<Void>(){
 					public void onSuccess(Void results){
-						ConceptTree.this.reloadItem(conceptObject.getUri(), InfoTab.term);
+						ConceptTree.this.reloadItem(conceptObject.getUri(), ConceptTab.TERM.getTabIndex());
 					}
 					public void onFailure(Throwable caught){
 						treePanel.showLoading(false);
@@ -1160,7 +1160,7 @@ public class ConceptTree extends Composite{
 				treePanel.showLoading(true);
 				AsyncCallback<Void> callback = new AsyncCallback<Void>(){
 					public void onSuccess(Void results){
-						ConceptTree.this.reloadItem(conceptObject.getUri(), InfoTab.term);
+						ConceptTree.this.reloadItem(conceptObject.getUri(), ConceptTab.TERM.getTabIndex());
 					}
 					public void onFailure(Throwable caught){
 						treePanel.showLoading(false);
@@ -1226,7 +1226,7 @@ public class ConceptTree extends Composite{
 					int cnt = result;
 					if(cnt>1)
 					{
-						ConceptTree.this.reloadItem(cObj.getParentURI(), InfoTab.term);
+						ConceptTree.this.reloadItem(cObj.getParentURI(), ConceptTab.TERM.getTabIndex());
 					}
 					else
 					{

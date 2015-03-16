@@ -779,6 +779,28 @@ public class PropertyManager extends ResponseManager {
 		return list;
 	}
 	
+	/**
+	 * @param ontoInfo
+	 * @param excludedProps
+	 * @param explicit
+	 * @return
+	 */
+	public static HashMap<String, String> getPlainRDFProperties(OntologyInfo ontoInfo, ArrayList<String> excludedProps, boolean explicit)
+	{
+		HashMap<String, String> list = new HashMap<String, String>();
+		XMLResponseREPLY reply = PropertyResponseManager.getPlainRDFPropertiesRequest(ontoInfo, excludedProps);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(Element propElement : STXMLUtility.getChildElementByTagName(dataElement, "Property"))
+			{
+				list.put(propElement.getAttribute("uri"), propElement.getAttribute("name"));
+				list = getChildProperty(ontoInfo, propElement, list);
+			}
+		}
+		return list;
+	}
+	
 		/**
 		 * @return
 		 */

@@ -1,6 +1,5 @@
 package org.fao.aoscs.model.semanticturkey.service.manager.response;
 
-import it.uniroma2.art.semanticturkey.services.core.Refactor;
 import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 
@@ -57,7 +56,7 @@ public class RefactorResponseManager extends ResponseManager {
 	public static XMLResponseREPLY convertLabelsToSKOSXLRequest(OntologyInfo ontoInfo)
 	{
 		
-		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest(Refactor.Req.convertLabelsToSKOSXLRequest, 
+		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("convertLabelsToSKOSXL", 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
@@ -83,7 +82,7 @@ public class RefactorResponseManager extends ResponseManager {
 	public static XMLResponseREPLY reifySKOSDefinitionsRequest(OntologyInfo ontoInfo)
 	{
 		
-		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest(Refactor.Req.reifySKOSDefinitionsRequest, 
+		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("reifySKOSDefinitions", 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
@@ -96,7 +95,7 @@ public class RefactorResponseManager extends ResponseManager {
 	public static XMLResponseREPLY exportWithFlatSKOSDefinitionsRequest(OntologyInfo ontoInfo, String exportPackage)
 	{
 		
-		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest(Refactor.Req.exportWithFlatSKOSDefinitionsRequest, 
+		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("exportWithFlatSKOSDefinitions", 
 				STModel.par("exportPackage", exportPackage),
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
@@ -113,7 +112,7 @@ public class RefactorResponseManager extends ResponseManager {
 	public static XMLResponseREPLY exportWithTransformations(OntologyInfo ontoInfo, String exportPackage, Boolean copyAlsoSKOSXLabels, Boolean copyAlsoReifiedDefinition)
 	{
 		
-		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest(Refactor.Req.exportWithFlatSKOSDefinitionsRequest, 
+		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("exportWithFlatSKOSDefinitions", 
 				STModel.par("exportPackage", exportPackage),
 				STModel.par("copyAlsoSKOSXLabels", copyAlsoSKOSXLabels.toString()),
 				STModel.par("copyAlsoReifiedDefinition", copyAlsoReifiedDefinition.toString()),

@@ -1,5 +1,7 @@
 package org.fao.aoscs.model.semanticturkey.service;
 
+import it.uniroma2.art.owlart.sesame2impl.vocabulary.SESAME;
+import it.uniroma2.art.owlart.vocabulary.RDF;
 import it.uniroma2.art.owlart.vocabulary.RDFS;
 import it.uniroma2.art.owlart.vocabulary.SKOS;
 import it.uniroma2.art.owlart.vocabulary.XmlSchema;
@@ -12,7 +14,6 @@ import java.util.HashMap;
 import org.fao.aoscs.domain.AttributesObject;
 import org.fao.aoscs.domain.ClassObject;
 import org.fao.aoscs.domain.ConceptDetailObject;
-import org.fao.aoscs.domain.ConceptMappedObject;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.ConceptShowObject;
 import org.fao.aoscs.domain.ConceptTermObject;
@@ -59,6 +60,7 @@ import org.fao.aoscs.model.semanticturkey.util.STXMLUtility;
 import org.fao.aoscs.server.utility.DateUtility;
 import org.fao.aoscs.system.util.SystemUtility;
 import org.hibernate.Hibernate;
+import org.openrdf.Sesame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -463,6 +465,26 @@ public class ConceptServiceSTImpl {
 			ConceptObject conceptObject, boolean isExplicit) {
 		addPropertyValue(ontoInfo, actionId, status, userId, value, propertyURI, drObj, conceptObject, isExplicit);
 		return getConceptAnnotationValue(conceptObject.getUri(), isExplicit, ontoInfo);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param actionId
+	 * @param status
+	 * @param userId
+	 * @param value
+	 * @param propertyURI
+	 * @param drObj
+	 * @param conceptObject
+	 * @param isExplicit
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptOtherValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
+			ConceptObject conceptObject, boolean isExplicit) {
+		addPropertyValue(ontoInfo, actionId, status, userId, value, propertyURI, drObj, conceptObject, isExplicit);
+		return getConceptOtherValue(conceptObject.getUri(), isExplicit, ontoInfo);
 	}
 
 	
@@ -955,6 +977,25 @@ public class ConceptServiceSTImpl {
 		return getConceptAnnotationValue(conceptObject.getUri(), isExplicit, ontoInfo);
 	}
 	
+	/**
+	 * @param ontoInfo
+	 * @param actionId
+	 * @param status
+	 * @param userId
+	 * @param oldValue
+	 * @param propertyURI
+	 * @param conceptObject
+	 * @param isExplicit
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptOtherValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, String propertyURI,
+			ConceptObject conceptObject, boolean isExplicit) {
+		deletePropertyValue(ontoInfo, actionId, status, userId, oldValue, propertyURI, conceptObject, isExplicit);
+		return getConceptOtherValue(conceptObject.getUri(), isExplicit, ontoInfo);
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#deleteRelationship(org.fao.aoscs.domain.OntologyInfo, org.fao.aoscs.domain.RelationshipObject, org.fao.aoscs.domain.ConceptObject, org.fao.aoscs.domain.ConceptObject, org.fao.aoscs.domain.OwlStatus, int, int, boolean)
 	 */
@@ -1251,6 +1292,28 @@ public class ConceptServiceSTImpl {
 			boolean isExplicit) {
 		editPropertyValue(ontoInfo, actionId, status, userId, oldValue, newValue, propertyURI, drObj, conceptObject, isExplicit);
 		return getConceptAnnotationValue(conceptObject.getUri(), isExplicit, ontoInfo);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param actionId
+	 * @param status
+	 * @param userId
+	 * @param oldValue
+	 * @param newValue
+	 * @param propertyURI
+	 * @param drObj
+	 * @param conceptObject
+	 * @param isExplicit
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> editConceptOtherValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, NonFuncObject newValue, String propertyURI,
+			DomainRangeObject drObj, ConceptObject conceptObject,
+			boolean isExplicit) {
+		editPropertyValue(ontoInfo, actionId, status, userId, oldValue, newValue, propertyURI, drObj, conceptObject, isExplicit);
+		return getConceptOtherValue(conceptObject.getUri(), isExplicit, ontoInfo);
 	}
 	
 	
@@ -1575,11 +1638,7 @@ public class ConceptServiceSTImpl {
 		cDetailObj.setHierarchyObject(null);
 		cDetailObj.setSchemeObject(null);
 		cDetailObj.setAlignmentObject(null);
-		
-		//cDetailObj.setAnnotationCount(0);
-		//cDetailObj.setAnnotationObject(getConceptAnnotationValue(cObj.getUri(), isExplicit, ontoInfo));
-		//cDetailObj.setAnnotationCount(cDetailObj.getAnnotationObject().size());
-		//System.out.println("before"+cDetailObj.getAnnotationCount());
+		cDetailObj.setOtherObject(null);
 		
 		XMLResponseREPLY resp = VocbenchResponseManager.getConceptTabsCountsRequest(ontoInfo, conceptURI);
 		if(resp!=null)
@@ -1593,6 +1652,7 @@ public class ConceptServiceSTImpl {
 				cDetailObj.setAttributeCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "attributes", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setNotationCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "notation", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setAnnotationCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "annotation", isExplicit?"numberExplicit":"number"));
+				cDetailObj.setOtherCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "others", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setRelationCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "related", isExplicit?"countExplicit":"count"));
 				cDetailObj.setImageCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "images", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setAlignmentCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "sameAsMappingRelation", isExplicit?"numberExplicit":"number"));
@@ -1601,10 +1661,6 @@ public class ConceptServiceSTImpl {
 		// //TODO on ST UPDATE : Add scheme count in the ST service getConceptTabsCountsRequest
 		cDetailObj.setSchemeObject(getConceptSchemeValue(cObj.getUri(), isExplicit, ontoInfo));
 		cDetailObj.setSchemeCount(cDetailObj.getSchemeObject().size());
-		
-		
-		
-		//System.out.println("after"+cDetailObj.getAnnotationCount());
 		
 		return cDetailObj;
 	}
@@ -1910,6 +1966,20 @@ public class ConceptServiceSTImpl {
 		return PropertyManager.getAnnotationPropertiesTree(ontoInfo, excludedProps, isExplicit);
 	}
 	
+	/**
+	 * @param resourceURI
+	 * @param isExplicit
+	 * @param ontoInfo
+	 * @return
+	 */
+	public HashMap<String, String> getConceptOther(String resourceURI, boolean isExplicit, OntologyInfo ontoInfo){
+		ArrayList<String> excludedProps = new ArrayList<String>();
+		excludedProps.add(SESAME.DIRECTTYPE);
+		excludedProps.add(RDF.TYPE);
+		
+		return PropertyManager.getPlainRDFProperties(ontoInfo, excludedProps, isExplicit);
+	}
+	
 	public HashMap<String, String> getConceptAlignment(OntologyInfo ontoInfo){
 		return PropertyManager.getConceptAlignment(ontoInfo);
 	}
@@ -1962,6 +2032,34 @@ public class ConceptServiceSTImpl {
 	 * @return
 	 */
 	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptAnnotationValue(
+			String resourceURI, boolean isExplicit, OntologyInfo ontoInfo) {
+		ArrayList<String> excludedProps = new ArrayList<String>();
+		excludedProps.add(SKOS.NOTE);
+		excludedProps.add(RDFS.LABEL);
+		return getPropertyValue(ontoInfo, ResourceManager.getValuesOfAnnotationsPropertiesHierarchically(ontoInfo, resourceURI, excludedProps, isExplicit));
+	}
+	
+	/**
+	 * @param resourceURI
+	 * @param isExplicit
+	 * @param ontoInfo
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptOtherValue(
+			String resourceURI, boolean isExplicit, OntologyInfo ontoInfo) {
+		ArrayList<String> excludedProps = new ArrayList<String>();
+		excludedProps.add(SESAME.DIRECTTYPE);
+		excludedProps.add(RDF.TYPE);
+		return getPropertyValue(ontoInfo, ResourceManager.getValuesOfPlainRDFProperties(ontoInfo, resourceURI, excludedProps, isExplicit));
+	}
+	
+	/**
+	 * @param resourceURI
+	 * @param isExplicit
+	 * @param ontoInfo
+	 * @return
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptAnnotationOther(
 			String resourceURI, boolean isExplicit, OntologyInfo ontoInfo) {
 		ArrayList<String> excludedProps = new ArrayList<String>();
 		excludedProps.add(SKOS.NOTE);
@@ -2316,109 +2414,6 @@ public class ConceptServiceSTImpl {
 			}
 		}
 		return list;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#addMappedConcept(org.fao.aoscs.domain.OntologyInfo, int, org.fao.aoscs.domain.OwlStatus, int, java.lang.String, java.lang.String)
-	 */
-	public ConceptMappedObject addMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,String destConceptName,String conceptName){
-		logger.debug("addMappedConcept(" + actionId + ", " + status + ", " + userId + ", " + destConceptName
-				+ ", " + conceptName + ")");
-		return null;
-		//TODO Replace Protege code with new one
-		/*
-		OWLModel owlModel = ProtegeModelFactory.getOWLModel(ontoInfo);
-		OWLNamedClass cls = owlModel.getOWLNamedClass(conceptName);
-		OWLIndividual ins = ProtegeUtility.getConceptInstance(owlModel, cls);
-		OWLProperty mapProp = owlModel.getOWLProperty(ProtegeModelConstants.RHASMAPPEDDOMAINCONCEPT);
-		OWLNamedClass destCls = owlModel.getOWLNamedClass(destConceptName);
-		OWLIndividual destIns = ProtegeUtility.getConceptInstance(owlModel, destCls);
-		ins.addPropertyValue(mapProp, destIns);
-		setInstanceUpdateDate(owlModel, ins);
-		
-		Validation v = new Validation();
-		v.setConcept(DatabaseUtil.setObject(ProtegeUtility.makeConceptObject(owlModel, cls)));
-		v.setAction(actionId);
-		v.setOwnerId(userId);
-		v.setModifierId(userId);
-		v.setStatus(status.getId());
-		v.setNewValue(DatabaseUtil.setObject(ProtegeUtility.makeConceptObject(owlModel, destCls)));
-		v.setOntologyId(ontoInfo.getOntologyId());
-		v.setDateCreate(DateUtility.getROMEDate());
-		v.setDateModified(DateUtility.getROMEDate());
-		DatabaseUtil.createObject(v);
-		///owlModel.dispose();
-		return getMappedConcept(owlModel, conceptName);*/
-	}
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#deleteMappedConcept(org.fao.aoscs.domain.OntologyInfo, int, org.fao.aoscs.domain.OwlStatus, int, org.fao.aoscs.domain.ConceptObject, org.fao.aoscs.domain.ConceptObject)
-	 */
-	public ConceptMappedObject deleteMappedConcept(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,ConceptObject destConceptObj,ConceptObject conceptObject){
-		logger.debug("deleteMappedConcept(" + actionId + ", " + status + ", " + userId + ", " + destConceptObj
-				+ ", " + conceptObject + ")");
-		return null;
-		//TODO Replace Protege code with new one
-		/*OWLModel owlModel = ProtegeModelFactory.getOWLModel(ontoInfo);
-		OWLNamedClass cls = owlModel.getOWLNamedClass(conceptObject.getName());
-		OWLIndividual ins = ProtegeUtility.getConceptInstance(owlModel, cls);
-		OWLProperty mapProp = owlModel.getOWLProperty(ProtegeModelConstants.RHASMAPPEDDOMAINCONCEPT);
-		OWLNamedClass destCls = owlModel.getOWLNamedClass(destConceptObj.getName());
-		OWLIndividual destIns = ProtegeUtility.getConceptInstance(owlModel, destCls);
-		ins.removePropertyValue(mapProp, destIns);
-		setInstanceUpdateDate(owlModel, ins);
-		
-		Validation v = new Validation();
-		v.setConcept(DatabaseUtil.setObject(conceptObject));
-		v.setAction(actionId);
-		v.setOwnerId(userId);
-		v.setModifierId(userId);
-		v.setStatus(status.getId());
-		v.setOldValue(DatabaseUtil.setObject(destConceptObj));
-		v.setOntologyId(ontoInfo.getOntologyId());
-		v.setDateCreate(DateUtility.getDate(""+ins.getPropertyValue(owlModel.getOWLProperty(ProtegeModelConstants.RHASDATECREATED))));
-		v.setDateModified(DateUtility.getROMEDate());
-		DatabaseUtil.createObject(v);
-		///owlModel.dispose();
-		return getMappedConcept(owlModel, conceptObject.getName());*/
-	}
-
-	/**
-	 * @param owlModel
-	 * @param cls
-	 * @return
-	 */
-	//TODO Replace Protege code with new one
-/*	private ConceptMappedObject getMappedConcept(OWLModel owlModel, String cls){
-		ConceptMappedObject cMap = new ConceptMappedObject();
-		OWLNamedClass owlCls = owlModel.getOWLNamedClass(cls);
-		OWLProperty mapProp = owlModel.getOWLProperty(ProtegeModelConstants.RHASMAPPEDDOMAINCONCEPT);
-		OWLIndividual ins = ProtegeUtility.getConceptInstance(owlModel, owlCls);
-		
-		Collection<?> co = ins.getPropertyValues(mapProp);
-		for (Iterator<?> iter = co.iterator(); iter.hasNext();) {
-			Object obj = iter.next();
-			if (obj instanceof OWLIndividual) {
-				OWLIndividual destConceptIns = (OWLIndividual) obj;
-				ConceptObject cObj = ProtegeUtility.makeConceptObject(owlModel, (OWLNamedClass)destConceptIns.getProtegeType());
-				cMap.addConceptList(cObj);
-			}
-		}
-		return cMap;
-	}
-*/	
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#getMappedConcept(java.lang.String, org.fao.aoscs.domain.OntologyInfo)
-	 */
-	public ConceptMappedObject getMappedConcept(String cls, OntologyInfo ontoInfo) {
-		logger.debug("getMappedConcept(" + cls + ")");
-		
-		//TODO Replace Protege code with new one
-		return null;
-		/*ConceptMappedObject cMap = new ConceptMappedObject();
-		OWLModel owlModel = ProtegeModelFactory.getOWLModel(ontoInfo);
-		cMap = getMappedConcept(owlModel, cls);
-		///owlModel.dispose();
-		return cMap;*/
 	}
 	
 	/* (non-Javadoc)

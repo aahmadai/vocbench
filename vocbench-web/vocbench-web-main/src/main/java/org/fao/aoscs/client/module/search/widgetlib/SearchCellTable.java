@@ -9,7 +9,7 @@ import java.util.Iterator;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.concept.widgetlib.InfoTab;
+import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
@@ -102,7 +102,7 @@ public class SearchCellTable {
 			conceptObjectColumn.setFieldUpdater(new FieldUpdater<SearchResultObject, String>() {
 		        public void update(int index, SearchResultObject object, String value) {
 		             ConceptObject cObj = object.getConceptShowObject().getConceptObject();
-		             onLabelClicked(cObj.getUri(), cObj.getScheme(), true, InfoTab.term, cObj.getBelongsToModule(), type);
+		             onLabelClicked(cObj.getUri(), cObj.getScheme(), true, ConceptTab.TERM.getTabIndex(), cObj.getBelongsToModule(), type);
 		        }
 		    });
 				
@@ -209,7 +209,7 @@ public class SearchCellTable {
 			    	  public void update(int index, SearchResultObject object, String value) {
 			    		  //Window.alert("You have clicked: " + object.());
 			    		  ConceptObject cObj = object.getConceptShowObject().getConceptObject();
-			    		  onLabelClicked(cObj.getUri(), cObj.getScheme(), true, InfoTab.term, cObj.getBelongsToModule(), type);
+			    		  onLabelClicked(cObj.getUri(), cObj.getScheme(), true, ConceptTab.TERM.getTabIndex(), cObj.getBelongsToModule(), type);
 			    	  }
 			      });
 			      
@@ -452,7 +452,7 @@ public class SearchCellTable {
 					}
 					
 					
-					labelTab.add(wrapFlow(getLabelPanel(type, Convert.getColorForTreeItem(cObj.getStatus(), label).getHTML() ,cObj.getUri(), cObj.getUri(), cObj.getScheme(), Style.Link, true, InfoTab.term, cObj.getBelongsToModule())));
+					labelTab.add(wrapFlow(getLabelPanel(type, Convert.getColorForTreeItem(cObj.getStatus(), label).getHTML() ,cObj.getUri(), cObj.getUri(), cObj.getScheme(), Style.Link, true, ConceptTab.TERM.getTabIndex(), cObj.getBelongsToModule())));
 					if(i<(sortedList.size()-1))
 					{
 						HTML htmlLabel = new HTML(";&nbsp;");
@@ -467,7 +467,7 @@ public class SearchCellTable {
 				String emptyLabel = conceptShowObject.getShow();
 				if(emptyLabel.equals(""))
 					emptyLabel = constants.searchLanguageNotFound();
-				labelTab.add(getLabelPanel(type, emptyLabel, cObj.getUri(), cObj.getUri(), cObj.getScheme(), Style.Link, true, InfoTab.term, cObj.getBelongsToModule()));
+				labelTab.add(getLabelPanel(type, emptyLabel, cObj.getUri(), cObj.getUri(), cObj.getScheme(), Style.Link, true, ConceptTab.TERM.getTabIndex(), cObj.getBelongsToModule()));
 			}
 
 		}

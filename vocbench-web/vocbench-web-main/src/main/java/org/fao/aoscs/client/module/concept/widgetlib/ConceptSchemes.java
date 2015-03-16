@@ -125,7 +125,7 @@ public class ConceptSchemes extends ConceptTemplate{
 		attachNewImgButton();
 		if(sObj!=null && sObj.size()>0){
 			int cnt = sObj.size();
-			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(InfoTab.scheme, Convert.replaceSpace(cnt>1? constants.conceptSchemes():constants.conceptScheme())+"&nbsp;("+(cnt)+")");
+			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.SCHEME.getTabIndex(), Convert.replaceSpace(cnt>1? constants.conceptSchemes():constants.conceptScheme())+"&nbsp;("+(cnt)+")");
 			conceptRootPanel.add(GridStyle.setTableConceptDetailStyleTop(getTable(sObj),"gstFR1","gstFC1","gstR1","gstPanel1",true));
 		}
 		else
