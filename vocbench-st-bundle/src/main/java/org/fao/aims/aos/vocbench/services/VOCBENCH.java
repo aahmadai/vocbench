@@ -1903,8 +1903,9 @@ public class VOCBENCH extends SKOSXL {
 		try {
 			ARTResource[] graphs = getUserNamedGraphs();
 
+			ARTURIResource skosScheme = null;
 			if (schemeUri != null) {
-				ARTURIResource skosScheme = retrieveExistingURIResource(skosxlModel, schemeUri,
+				skosScheme = retrieveExistingURIResource(skosxlModel, schemeUri,
 						getUserNamedGraphs());
 				it = skosxlModel.listTopConceptsInScheme(skosScheme, true, getUserNamedGraphs());
 			} else {
@@ -1921,10 +1922,10 @@ public class VOCBENCH extends SKOSXL {
 			while (it.hasNext()) {
 				ARTURIResource concept = it.next();
 				if(newVersion)
-					constructConceptInfo(skosxlModel, extCollection, concept);
+					constructConceptInfo(skosxlModel, extCollection, concept, skosScheme);
 				else{
 					STRDFResource stConcept = createSTConcept(skosxlModel, concept, true, defaultLanguage);
-					SKOS.decorateForTreeView(skosxlModel, stConcept, graphs);
+					SKOS.decorateForTreeView(skosxlModel, stConcept, skosScheme, true, graphs);
 	
 					addInfoStatusAndLabels(skosxlModel, stConcept, concept, graphs, extCollection, false, 
 							false, "concept", false);
@@ -1979,8 +1980,9 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResourceIterator unfilteredIt = skosxlModel.listNarrowerConcepts(concept, false, true,
 					graphs);
 			Iterator<ARTURIResource> it;
+			ARTURIResource scheme = null;
 			if (schemeName != null) {
-				ARTURIResource scheme = retrieveExistingURIResource(skosxlModel, schemeName, graphs);
+				scheme = retrieveExistingURIResource(skosxlModel, schemeName, graphs);
 				it = Iterators.filter(unfilteredIt,
 						ConceptsInSchemePredicate.getFilter(skosxlModel, scheme, graphs));
 			} else {
@@ -1996,14 +1998,17 @@ public class VOCBENCH extends SKOSXL {
 			//extCollection.setAttribute("newVersion", newVersion+"");
 			while (it.hasNext()) {
 				ARTURIResource narrowerConcept = it.next();
-				if(newVersion)
-					constructConceptInfo(skosxlModel, extCollection, narrowerConcept); 
+				if(newVersion){
+					constructConceptInfo(skosxlModel, extCollection, narrowerConcept, scheme); 
+				}
 				else{
 					STRDFResource stConcept = createSTConcept(skosxlModel, narrowerConcept, true, 
 							defaultLanguage);
-					if (TreeView)
-						SKOS.decorateForTreeView(skosxlModel, stConcept, graphs);
-
+					if (TreeView){
+						//add the more parameter
+						SKOS.decorateForTreeView(skosxlModel, stConcept, scheme, true, graphs);
+					}
+						
 					addInfoStatusAndLabels(skosxlModel, stConcept, narrowerConcept, graphs, extCollection, 
 						false, false, "concept", false);
 				}
@@ -2038,8 +2043,9 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResourceIterator unfilteredIt = skosxlModel.listBroaderConcepts(concept, false, true,
 					getUserNamedGraphs());
 			Iterator<ARTURIResource> it;
+			ARTURIResource scheme = null;
 			if (schemeName != null) {
-				ARTURIResource scheme = retrieveExistingURIResource(skosxlModel, schemeName,
+				scheme = retrieveExistingURIResource(skosxlModel, schemeName,
 						getUserNamedGraphs());
 				it = Iterators.filter(unfilteredIt,
 						ConceptsInSchemePredicate.getFilter(skosxlModel, scheme, getUserNamedGraphs()));
@@ -2054,10 +2060,10 @@ public class VOCBENCH extends SKOSXL {
 				// concepts.add(createSTConcept(skosModel, it.next(), true, defaultLanguage));
 				ARTURIResource broaderConcept = it.next();
 				if(newVersion)
-					constructConceptInfo(skosxlModel, extCollection, broaderConcept);
+					constructConceptInfo(skosxlModel, extCollection, broaderConcept, scheme);
 				else{
 					STRDFResource stConcept = createSTConcept(skosxlModel, broaderConcept, true, defaultLanguage);
-					SKOS.decorateForTreeView(skosxlModel, stConcept, graphs);
+					SKOS.decorateForTreeView(skosxlModel, stConcept, scheme, true, graphs);
 	
 					addInfoStatusAndLabels(skosxlModel, stConcept, broaderConcept, graphs, extCollection, false,
 							false, "concept", false);
@@ -2093,7 +2099,7 @@ public class VOCBENCH extends SKOSXL {
 					getUserNamedGraphs());
 
 			if(newVersion){
-				constructConceptInfo(skosxlModel, dataElement, concept);
+				constructConceptInfo(skosxlModel, dataElement, concept, null);
 			} else{
 				
 				
@@ -2103,7 +2109,7 @@ public class VOCBENCH extends SKOSXL {
 				ARTURIResource propInScheme = skosxlModel.createURIResource(INSCHEME);
 	
 				STRDFResource stConcept = createSTConcept(skosxlModel, concept, true, null);
-				SKOS.decorateForTreeView(skosxlModel, stConcept, graphs);
+				SKOS.decorateForTreeView(skosxlModel, stConcept, null, true, graphs);
 	
 				// Element extCollection = XMLHelp.newElement(dataElement, "collection");
 	
@@ -4140,13 +4146,13 @@ public class VOCBENCH extends SKOSXL {
 			Element conceptListElement = XMLHelp.newElement(dataElement, "conceptList");
 			for(ARTURIResource concept : conceptUriList){
 				if(!oldApproach){
-					constructConceptInfo(skosxlModel, conceptListElement, concept);
+					constructConceptInfo(skosxlModel, conceptListElement, concept, null);
 				} else {
 					ARTURIResource propInScheme = skosxlModel.createURIResource(INSCHEME);
 					//ARTURIResource propInScheme = retrieveExistingURIResource(skosxlModel, INSCHEME);
 	
 					STRDFResource stConcept = createSTConcept(skosxlModel, concept, true, null);
-					SKOS.decorateForTreeView(skosxlModel, stConcept, graphs);
+					SKOS.decorateForTreeView(skosxlModel, stConcept, null, true, graphs);
 	
 					// get the following information regarding the concept: uri, status, create Date, 
 					// modified Date, parentURI, scheme, isTopConcept, hasChildConcept
@@ -5138,7 +5144,8 @@ public class VOCBENCH extends SKOSXL {
 		}
 	}
 	
-	private void constructConceptInfo(SKOSXLModel skosxlModel, Element extCollection, ARTURIResource concept) 
+	private void constructConceptInfo(SKOSXLModel skosxlModel, Element extCollection, ARTURIResource concept,
+			ARTURIResource scheme) 
 			throws UnsupportedQueryLanguageException, ModelAccessException, MalformedQueryException, 
 			QueryEvaluationException, NonExistingRDFResourceException{
 		//prepare a SPARQL query to obtain all the revelevant information for a single concept, 
@@ -5154,9 +5161,9 @@ public class VOCBENCH extends SKOSXL {
 				"\n<"+conceptUri+"> <"+NARROWER+"> ?narrowerConcept . "+
 				//"\n?broderConcept1 <"+BROADER+"> <"+conceptUri+"> . "+
 				//"\n<"+conceptUri+"> <"+BROADER+"> ?statusPlcholderBroader . "+
-				"\n<"+conceptUri+"> <"+INSCHEME+"> ?scheme . "+
+				//"\n<"+conceptUri+"> <"+INSCHEME+"> ?scheme . "+
 				"\n?schemeForTopConcept1 <"+HASTOCONCEPT+"> <"+conceptUri+"> ."+
-				"\n<"+conceptUri+"> <"+TOPCONCEPTOF+">  ?schemeForTopConcept2."+
+				"\n<"+conceptUri+"> <"+TOPCONCEPTOF+">  ?schemeForTopConcept2. "+
 				"\n?prefXLabel <"+LITERALFORM+"> ?prefLabel . " +
 				"\n?prefXLabel <"+CREATED+"> ?createdPrefXLabel . "+
 				"\n?prefXLabel <"+MODIFIED+"> ?modifiedPrefXLabel . "+
@@ -5200,25 +5207,41 @@ public class VOCBENCH extends SKOSXL {
 				"\n}";*/
 		
 		query +="\nWHERE {"+
-				"\n<"+conceptUri+"> <"+INSCHEME+"> ?scheme ."+
+				//"\n<"+conceptUri+"> <"+INSCHEME+"> ?scheme ."+
 				"\n{<"+conceptUri+"> <"+HASSTATUS+"> ?statusConcept . } "+
 				"\nUNION"+
 				"\n{<"+conceptUri+"> <"+CREATED+"> ?createdConcept . } "+
 				"\nUNION"+
 				"\n{<"+conceptUri+"> <"+MODIFIED+"> ?modifiedConcept . } "+
-				"\nUNION"+
-				"\n{?schemeForTopConcept1 <"+HASTOCONCEPT+"> <"+conceptUri+"> . } "+
-				"\nUNION"+
-				"\n{<"+conceptUri+"> <"+TOPCONCEPTOF+">  ?schemeForTopConcept2. } "+
-				"\nUNION"+
-				"\n{<"+conceptUri+"> <"+NARROWER+"> ?narrowerConcept . }  "+
-				"\nUNION"+
-				"\n{?superType <"+NARROWER+"> <"+conceptUri+"> . } "+
-				"\nUNION"+
-				"\n{?narrowerConcept <"+BROADER+"> <"+conceptUri+"> . } "+
-				"\nUNION"+
-				"\n{<"+conceptUri+"> <"+BROADER+"> ?superType . }  "+
-				"\n{" +
+				"\nUNION";
+		if(scheme != null){
+			query +="\n{?schemeForTopConcept1 <"+HASTOCONCEPT+"> <"+conceptUri+"> ." +
+					"\n<"+scheme.getURI()+"> <"+HASTOCONCEPT+"> <"+conceptUri+"> ." +
+					"\n} "+
+					"\nUNION"+
+					"\n{<"+conceptUri+"> <"+TOPCONCEPTOF+">  ?schemeForTopConcept2 .  "+
+					"\n<"+conceptUri+"> <"+TOPCONCEPTOF+">  <"+scheme.getURI()+"> .  "+
+					"\n} "+
+					"\nUNION";
+		}
+		if(scheme != null){
+			query+=	"\n{<"+conceptUri+"> <"+NARROWER+"> ?narrowerConcept . " +
+					"\n?narrowerConcept <"+INSCHEME+"> <"+scheme.getURI()+"> ." +
+					"\n}  "+
+					"\nUNION"+
+					"\n{?superType <"+NARROWER+"> <"+conceptUri+"> . " +
+					"\n?superType <"+INSCHEME+"> <"+scheme.getURI()+"> ." +
+					"\n} "+
+					"\nUNION"+
+					"\n{?narrowerConcept <"+BROADER+"> <"+conceptUri+"> .  "+
+					"\n?narrowerConcept <"+INSCHEME+"> <"+scheme.getURI()+"> ." +
+					"\n} "+
+					"\nUNION"+
+					"\n{<"+conceptUri+"> <"+BROADER+"> ?superType . " +
+					"\n?superType <"+INSCHEME+"> <"+scheme.getURI()+"> ." +
+					"\n}  ";
+		}
+		query+=	"\n{" +
 				"\n<"+conceptUri+"> <"+PREFLABEL+"> ?prefXLabel ."+
 				"\n?prefXLabel <"+LITERALFORM+"> ?prefLabel ."+
 				"\nOPTIONAL{ ?prefXLabel <"+CREATED+"> ?createdPrefXLabel }"+
@@ -5247,7 +5270,7 @@ public class VOCBENCH extends SKOSXL {
 		List <ARTURIResource> broaderList = new ArrayList<ARTURIResource>();
 		List <String> broaderStringList = new ArrayList<String>();
 		boolean isTopConcept = false;
-		String scheme = null;
+		//String scheme = null;
 		String created = null;
 		String modified = null;
 		String status = null;
@@ -5282,10 +5305,9 @@ public class VOCBENCH extends SKOSXL {
 				xLabelInfoMap.put(LITERALFORM+"_lang", objLiteral.getLanguage());
 			} else if(pred.getURI().compareTo(HASTOCONCEPT) == 0 || pred.getURI().compareTo(TOPCONCEPTOF) == 0){
 				isTopConcept = true;
-			} else if(pred.getURI().compareTo(INSCHEME) == 0){
+			}/* else if(pred.getURI().compareTo(INSCHEME) == 0){
 				scheme = obj.asURIResource().getURI();
-				
-			}else if(pred.getURI().compareTo(CREATED) == 0){
+			}*/else if(pred.getURI().compareTo(CREATED) == 0){
 				ARTLiteral objLiteral = obj.asLiteral();
 				if(subj.getURI().compareTo(conceptUri) == 0){
 					created = objLiteral.getLabel();
@@ -5352,7 +5374,9 @@ public class VOCBENCH extends SKOSXL {
 		else
 			stConcept.setInfo("more", "0");
 		stConcept.setInfo("isTopConcept", isTopConcept+"");
-		stConcept.setInfo("scheme", scheme);
+		if(scheme != null){
+			stConcept.setInfo("scheme", scheme.getURI());
+		}
 		if(status != null)
 			stConcept.setInfo("status", status);
 		if(created != null)
