@@ -49,12 +49,14 @@ public class TermBrowser extends FormDialogBox implements ClickHandler {
 				VRadioButton cb = new VRadioButton("term", tObj.getLabel(),tObj);
 				HorizontalPanel hp = new HorizontalPanel();
 				hp.add(cb);
+				String status = (tObj.getStatus()==null || tObj.getStatus().equals("") || tObj.getStatus().equals("null"))?"&nbsp;":"&nbsp;(" + tObj.getStatus()+ ")&nbsp;";
+				
 				if (tObj.isMainLabel()) 
 				{
-					hp.add(new HTML("&nbsp;(" + tObj.getStatus()+ "&nbsp;[preferred]&nbsp;" + ")&nbsp;"));
+					hp.add(new HTML(status+ "&nbsp;[preferred]&nbsp;"));
 				} else 
 				{
-				    hp.add(new HTML("&nbsp;(" + tObj.getStatus()+ ")&nbsp;"));
+				    hp.add(new HTML(status));
 				}
 				hp.setCellVerticalAlignment(cb,
 						HasVerticalAlignment.ALIGN_MIDDLE);

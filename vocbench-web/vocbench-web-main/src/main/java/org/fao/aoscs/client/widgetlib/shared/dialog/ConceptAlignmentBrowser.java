@@ -7,6 +7,7 @@ import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
+import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.module.search.widgetlib.ResultPanel;
 import org.fao.aoscs.client.module.search.widgetlib.SuggestBoxAOS;
 import org.fao.aoscs.client.utility.ExceptionManager;
@@ -19,6 +20,7 @@ import org.fao.aoscs.client.widgetlib.shared.tree.CellTreeAOS;
 import org.fao.aoscs.client.widgetlib.shared.tree.ConceptCellTreeAOS;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.SearchParameterObject;
+import org.fao.aoscs.domain.TermObject;
 import org.fao.aoscs.domain.TreeObject;
 
 import com.google.gwt.core.client.GWT;
@@ -48,9 +50,11 @@ public class ConceptAlignmentBrowser extends FormDialogBox implements ChangeHand
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	private LoadingDialog ld = new LoadingDialog();
 	private ConceptCellTreeAOS conceptTree = null;	
+	private TermAlignmentBrowser termAlignmentBrowser;
 	private ArrayList<TreeObject> ctObj;
 	private String schemeURI = MainApp.schemeUri;
 	private OntologyInfo ontoInfo = MainApp.userOntology;
+	private String conceptURI = "";
 	
 	private OlistBox projectBox;
 	private OlistBox schemeBox;
@@ -300,8 +304,9 @@ public class ConceptAlignmentBrowser extends FormDialogBox implements ChangeHand
 		Service.systemService.getOntology(callback);
 	}
 	
-	public void showBrowser() 
+	public void showBrowser(String conceptURI) 
 	{		
+		this.conceptURI = conceptURI;
 		show();
 		if(projectBox.getItemCount()<1)
 			loadProject();
@@ -463,6 +468,26 @@ public class ConceptAlignmentBrowser extends FormDialogBox implements ChangeHand
 				doSearch();
 			}
 		});
+		
+		HTML suggestionBtn = new HTML(constants.searchGetSuggestionList());
+		suggestionBtn.setStyleName(Style.Link);
+		suggestionBtn.setWordWrap(false);
+		suggestionBtn.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event)
+			{
+				if(termAlignmentBrowser == null || !termAlignmentBrowser.isLoaded)
+					termAlignmentBrowser = new TermAlignmentBrowser();
+				termAlignmentBrowser.show(conceptURI);
+				termAlignmentBrowser.addSubmitClickHandler(new ClickHandler()
+				{
+					public void onClick(ClickEvent event) {
+						TermObject tObj = termAlignmentBrowser.getSelectedItem();
+						searchText.setText(tObj.getLabel());
+					}					
+				});		
+			}
+		});
+		
 		HorizontalPanel simpleSearch = new HorizontalPanel();
 		simpleSearch.setWidth("100%");
 		simpleSearch.add(filterBox);
@@ -470,10 +495,12 @@ public class ConceptAlignmentBrowser extends FormDialogBox implements ChangeHand
 		simpleSearch.add(searchText);
 		simpleSearch.add(new Spacer("5px", "100%"));
 		simpleSearch.add(btn);
+		simpleSearch.add(new Spacer("5px", "100%"));
+		simpleSearch.add(suggestionBtn);
 		simpleSearch.setCellVerticalAlignment(filterBox, HasVerticalAlignment.ALIGN_MIDDLE);
 		simpleSearch.setCellVerticalAlignment(searchText, HasVerticalAlignment.ALIGN_MIDDLE);
 		simpleSearch.setCellVerticalAlignment(btn, HasVerticalAlignment.ALIGN_MIDDLE);
-		
+		simpleSearch.setCellVerticalAlignment(suggestionBtn, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		searchPanel.setStyleName("maintopbar");
 		searchPanel.setSize("100%", "40px");

@@ -337,6 +337,7 @@ public interface LocaleConstants extends Constants{
 	public String searchEndsWith();
 	public String searchExactWord();
 	public String searchFuzzySearch();
+	public String searchGetSuggestionList();
 	public String searchConcept();
 	public String searchDate();
 	public String searchButton();

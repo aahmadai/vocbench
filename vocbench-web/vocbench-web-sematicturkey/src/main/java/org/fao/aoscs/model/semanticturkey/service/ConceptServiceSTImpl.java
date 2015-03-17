@@ -60,7 +60,6 @@ import org.fao.aoscs.model.semanticturkey.util.STXMLUtility;
 import org.fao.aoscs.server.utility.DateUtility;
 import org.fao.aoscs.system.util.SystemUtility;
 import org.hibernate.Hibernate;
-import org.openrdf.Sesame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;

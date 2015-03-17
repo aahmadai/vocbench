@@ -801,7 +801,37 @@ public class ObjectManager extends ResponseManager {
 	 * @return
 	 */
 	public static ConceptTermObject createConceptTermObject(OntologyInfo ontoInfo, String conceptURI){
-		return createConceptTermObject(SKOSXLManager.getLabels(ontoInfo, conceptURI));
+		ConceptTermObject ctObj = new ConceptTermObject();
+		XMLResponseREPLY reply = VocbenchResponseManager.getConceptDescriptionRequest(ontoInfo, conceptURI);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(Element conceptInfoElement : STXMLUtility.getChildElementByTagName(dataElement, "conceptInfo"))
+			{
+				for(Element labelsElement : STXMLUtility.getChildElementByTagName(conceptInfoElement, "labels"))
+				{
+					for(Element labelcollectionElement : STXMLUtility.getChildElementByTagName(labelsElement, "collection"))
+					{
+						for(Element typedLiteralElem : STXMLUtility.getChildElementByTagName(labelcollectionElement, RDFTypesEnum.plainLiteral.toString()))
+						{
+							String termURI = typedLiteralElem.getAttribute("termURI");
+							String label = typedLiteralElem.getTextContent();
+							String lang = typedLiteralElem.getAttribute("lang");
+							String termStatus = typedLiteralElem.getAttribute("status");
+							int termStatusID = OWLStatusConstants.getOWLStatusID(termStatus);
+							boolean isPreferred = Boolean.parseBoolean(typedLiteralElem.getAttribute("isPreferred"));
+							Date termDateCreate = DateParser.parseW3CDateTime(typedLiteralElem.getAttribute("createdDate"));
+							Date termDateModified = DateParser.parseW3CDateTime(typedLiteralElem.getAttribute("lastUpdate"));
+							
+							TermObject tObj = STUtility.createTermObject(conceptURI, termURI, label, lang, termStatus, termStatusID, termDateCreate, termDateModified, isPreferred);
+							ctObj.addTermList(tObj.getLang(), tObj);
+						}				
+					}
+				}
+			}
+		}
+		return ctObj;
+		//return createConceptTermObject(SKOSXLManager.getLabels(ontoInfo, conceptURI));
 	}
 	
 	/**

@@ -282,7 +282,7 @@ public class ConceptAlignment extends ConceptTemplate{
 				@Override
 				public void onClick(ClickEvent event) {
 					final ConceptAlignmentBrowser cb =((MainApp) RootPanel.get().getWidget(0)).conceptAlignmentBrowser;
-					cb.showBrowser();
+					cb.showBrowser(conceptObject.getUri());
 					cb.addSubmitClickHandler(new ClickHandler()
 					{
 						public void onClick(ClickEvent event) {
