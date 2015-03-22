@@ -18,6 +18,7 @@ import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -36,6 +37,7 @@ public class RelationshipBrowser extends FormDialogBox {
 	final public static int REL_TERM = 1;
 	final public static int REL_BOTH = 2;
 	final public static int REL_ALL = 3;
+	final public static int REL_CONCEPT_ALL = 4;
 	
 	private CellTreeAOS conceptRelTree = null;
 	private CellTreeAOS termRelTree = null;
@@ -54,19 +56,24 @@ public class RelationshipBrowser extends FormDialogBox {
 	private HTML expandAll = new HTML(constants.buttonExpandAll());
 	private HTML collapseAll = new HTML(constants.buttonCollapseAll());
 	private HorizontalPanel leftBottomWidget = new HorizontalPanel();
+	private HorizontalPanel showAllPanel = new HorizontalPanel();
 	
 	public RelationshipBrowser() 
 	{
 		super();
+		expandAll.setWordWrap(false);
+		collapseAll.setWordWrap(false);
+		
 		leftBottomWidget.add(new Spacer("15px", "100%"));
 		leftBottomWidget.add(addReloadWidget());
-		leftBottomWidget.add(new Spacer("20px", "100%", "|"));
+		leftBottomWidget.add(new Spacer("15px", "100%", "|"));
+		leftBottomWidget.add(addShowAllWidget());
 		leftBottomWidget.add(expandAll);
-		leftBottomWidget.add(new Spacer("20px", "100%", "|"));
+		leftBottomWidget.add(new Spacer("15px", "100%", "|"));
 		leftBottomWidget.add(collapseAll);
 		setLeftBottomWidget(leftBottomWidget);
-		panel.setSize("500px", "400px");
-		sc.setSize("500px", "400px");
+		panel.setSize("600px", "400px");
+		sc.setSize("600px", "400px");
 		addWidget(sc,true);			
 	}
 	
@@ -102,6 +109,27 @@ public class RelationshipBrowser extends FormDialogBox {
 		reloadPanel.setCellVerticalAlignment(reload, HasVerticalAlignment.ALIGN_MIDDLE);
 		reloadPanel.setCellVerticalAlignment(reloadText, HasVerticalAlignment.ALIGN_MIDDLE);
 		return reloadPanel;
+	}
+	
+	public Widget addShowAllWidget()
+	{
+		final CheckBox chkBox = new CheckBox(constants.relShowAllObjectProperties());
+		chkBox.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(chkBox.getValue())
+					relType = REL_CONCEPT_ALL;
+				else
+					relType = REL_CONCEPT;
+				reload();
+			}
+		});
+		
+		showAllPanel.add(chkBox);
+		showAllPanel.add(new Spacer("15px", "100%", "|"));
+		showAllPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		showAllPanel.setCellVerticalAlignment(chkBox, HasVerticalAlignment.ALIGN_MIDDLE);
+		showAllPanel.setVisible(false);
+		return showAllPanel;
 	}
 	
 	public void addLeftBottomWidget(final CellTreeAOS tree)
@@ -145,6 +173,7 @@ public class RelationshipBrowser extends FormDialogBox {
 		showLoading();
 		show();
 		this.relType = relType;		
+		showAllPanel.setVisible((relType==REL_CONCEPT || relType==REL_CONCEPT_ALL));
 		setText(constants.relRelationshipBrowser());	
 		CellTreeAOS relTree = getSelectedTree();
 		if(relTree == null)
@@ -155,7 +184,7 @@ public class RelationshipBrowser extends FormDialogBox {
 		{
 			setSelectedItem(null);
 			sc.clear();
-			sc.add(relTree);	
+			sc.add(relTree);
 			leftBottomWidget.setVisible(true);
 		}
 	}
@@ -173,7 +202,7 @@ public class RelationshipBrowser extends FormDialogBox {
 		{
 			public void onSuccess(RelationshipTreeObject result) {	
 				CellTreeAOS tree;
-				if(relType == REL_CONCEPT){
+				if(relType == REL_CONCEPT || relType == REL_CONCEPT_ALL){
 					conceptRelObject = new RelationshipTreeObject();
 					conceptRelObject = (RelationshipTreeObject)result;
 					conceptRelTree = makeRelationshipTree(conceptRelObject);
@@ -227,7 +256,7 @@ public class RelationshipBrowser extends FormDialogBox {
 	
 	public CellTreeAOS getSelectedTree()
 	{
-		if(relType == REL_CONCEPT)
+		if(relType == REL_CONCEPT || relType == REL_CONCEPT_ALL)
 		{
 			return conceptRelTree;
 		}
@@ -245,7 +274,7 @@ public class RelationshipBrowser extends FormDialogBox {
 	
 	public RelationshipTreeObject getSelectedRelationshipTreeObject()
 	{
-		if(relType == REL_CONCEPT)
+		if(relType == REL_CONCEPT || relType == REL_CONCEPT_ALL)
 		{
 			return conceptRelObject;
 		}

@@ -311,6 +311,21 @@ public class ResourceManager extends ResponseManager {
 	}
 	
 	/**
+	 * @param ontoInfo
+	 * @param resourceURI
+	 * @param excludedProps
+	 * @param excludeSubProps
+	 * @param explicit
+	 * @return
+	 */
+	public static HashMap<ClassObject, ArrayList<STNode>>  getValuesObjectProperties(OntologyInfo ontoInfo, String resourceURI, ArrayList<String> excludedProps, boolean excludeSubProps, boolean explicit)
+	{
+		XMLResponseREPLY reply = ResourceResponseManager.getValuesObjectPropertiesRequest(ontoInfo, resourceURI, excludedProps, excludeSubProps);
+		HashMap<ClassObject, ArrayList<STNode>> list = getValuesOfProperties(reply, explicit);
+		return list;
+	}
+	
+	/**
 	 * @param reply
 	 * @param explicit
 	 * @return

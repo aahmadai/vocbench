@@ -23,6 +23,7 @@ public class ExportServiceSTImpl {
 	public InitializeExportData initData(OntologyInfo ontoInfo){
 	    InitializeExportData data = new InitializeExportData();
     	data.setScheme(SKOSXLManager.getAllSchemesList(ontoInfo, null));
+    	data.setRDFFormat(InputOutputManager.getRDFFormat(ontoInfo));
 		return data;
 	}
 	
@@ -38,6 +39,7 @@ public class ExportServiceSTImpl {
 		String datetype = "";
 		String datestart = "";
 		String dateend = "";
+		String expfileFormat= "";
 		
 		String termcode = null;
 		String scheme = null;
@@ -52,6 +54,7 @@ public class ExportServiceSTImpl {
 		if(!exp.isEndDateEmpty()) dateend = exp.getEndDate();
 		
 		if(!exp.isFormatEmpty())expformat  = exp.getExportFormat() ;
+		if(!exp.isFileFormatEmpty()) expfileFormat  = exp.getFileFormat() ;
 		if(!exp.isSchemeURIEmpty()) scheme = exp.getSchemeURI() ;
 		if(!exp.isTermCodeEmpty()){
 			termcode = exp.getTermCode();	
@@ -84,7 +87,7 @@ public class ExportServiceSTImpl {
 		if(expformat.equals("SKOS-XL")) 
 		{
 			if(concepturi==null || concepturi.equals(""))
-				filename = InputOutputManager.saveRDF(ontoInfo);
+				filename = InputOutputManager.saveRDF(ontoInfo, expfileFormat);
 			else
 				filename = VocbenchManager.exportRequest(ontoInfo, concepturi, isIncludeChildren, scheme, termcode, getLabelForRelatedConcepts);
 		}

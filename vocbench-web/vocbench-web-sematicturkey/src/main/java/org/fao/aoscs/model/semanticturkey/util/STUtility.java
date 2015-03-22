@@ -779,10 +779,15 @@ public class STUtility {
 	
 	public static File createTempFile() throws IOException
 	{
+		return createTempFile("xml");
+	}
+	
+	public static File createTempFile(String fileFormat) throws IOException
+	{
 		File tempdir = new File(System.getProperty("java.io.tmpdir"));
 		tempdir.setReadable(true, false);
 		tempdir.setWritable(true, false);
-		File tempfile = File.createTempFile("vbdownload-", ".xml", tempdir);
+		File tempfile = File.createTempFile("vbdownload-", "."+(fileFormat.equals("")?"xml":fileFormat), tempdir);
 		tempfile.setReadable(true, false);
 		tempfile.setWritable(true, false);
 		return tempfile;

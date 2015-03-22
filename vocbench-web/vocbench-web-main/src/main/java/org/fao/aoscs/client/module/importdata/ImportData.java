@@ -6,6 +6,8 @@ import gwtupload.client.IUploader.OnFinishUploaderHandler;
 import gwtupload.client.IUploader.UploadedInfo;
 import gwtupload.client.MultiUploader;
 
+import java.util.HashMap;
+
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
@@ -26,6 +28,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -33,19 +36,43 @@ public class ImportData extends Composite{
 	
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	private VerticalPanel panel = new VerticalPanel();
+	private VerticalPanel loadingPanel = new VerticalPanel();
 	private VerticalPanel mainBodypanel = new VerticalPanel();
 	private LoadingDialog loadingDialog = new LoadingDialog(constants.exportLoading());
 	private MultiUploader uploader;
 	Button save = new Button(constants.importButton());
 	TextBox txtBaseURI = new TextBox();
+	ListBox format = new ListBox();
 	private UploadedInfo uploadedInfo = null;
 
 	public ImportData(){
-		initLayout();
+		
+		LoadingDialog sayLoading = new LoadingDialog();
+		loadingPanel.add(sayLoading);
+		loadingPanel.setCellHorizontalAlignment(sayLoading, HasHorizontalAlignment.ALIGN_RIGHT);
+		loadingPanel.setCellVerticalAlignment(sayLoading, HasVerticalAlignment.ALIGN_MIDDLE);
+		loadingPanel.setSize(MainApp.getBodyPanelWidth()-50 +"px", MainApp.getBodyPanelHeight()-100 +"px");
+		
+		panel.clear();
+		panel.add(loadingPanel);
+		
 		initWidget(panel);
+		AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>(){
+			public void onSuccess(HashMap<String, String> list){
+				panel.clear();
+				initLayout(list);
+			}
+			public void onFailure(Throwable caught){
+				panel.clear();
+				ExceptionManager.showException(caught, constants.exportInitFail());
+			}
+		};
+		Service.importService.getRDFFormat(MainApp.userOntology, callback);
+		
+		
 	}
 	
-	private void initLayout(){
+	private void initLayout(HashMap<String, String> formatList){
 		uploader = new MultiUploader();
 		uploader.setMaximumFiles(1);
 		uploader.addOnFinishUploadHandler(new OnFinishUploaderHandler() {
@@ -74,6 +101,7 @@ public class ImportData extends Composite{
 								uploadedInfo = null;
 							}
 							txtBaseURI.setText("");
+							format.setSelectedIndex(0);
 							showLoading(false);
 							if(result)
 								Window.alert(constants.importSuccess());
@@ -90,12 +118,15 @@ public class ImportData extends Composite{
 							ExceptionManager.showException(caught, constants.importFail());							
 						}
 					};
-					Service.importService.loadData(MainApp.userOntology, uploadedInfo.message, txtBaseURI.getText(), null, callback);
+					Service.importService.loadData(MainApp.userOntology, uploadedInfo.message, txtBaseURI.getText(), format.getValue(format.getSelectedIndex()), callback);
 		    	}
 		    	else
 		    		Window.alert(constants.conceptCompleteInfo()); 
 	    	}
 		});
+	    
+	    HTML formatLab = new HTML(constants.exportFormat());
+		formatLab.setWordWrap(false);
 		
 	    HTML baseURI = new HTML(constants.importBaseURI());
 	    baseURI.setWordWrap(false);
@@ -109,8 +140,10 @@ public class ImportData extends Composite{
 		table.setWidth("100%");
 		table.setWidget(0, 0, baseURI);
 		table.setWidget(0, 1, txtBaseURI);
-		table.setWidget(1, 0, file);
-		table.setWidget(1, 1, uploader);
+		table.setWidget(1, 0, formatLab);
+		table.setWidget(1, 1, getRDFFormat(formatList));
+		table.setWidget(2, 0, file);
+		table.setWidget(2, 1, uploader);
 		table.getColumnFormatter().setWidth(0, "20%");
 		table.getColumnFormatter().setWidth(1, "80%");
 		
@@ -171,5 +204,15 @@ public class ImportData extends Composite{
 			loadingDialog.setVisible(false);
 			mainBodypanel.setVisible(true);
 		}
+	}
+	
+	private ListBox getRDFFormat(HashMap<String, String> list){
+		format = new ListBox();
+		format.addItem("--Select--","--None--");
+		for(String item : list.keySet()) {
+			format.addItem(item, list.get(item));
+		}
+		format.setWidth("100%");
+		return format;
 	}
 }

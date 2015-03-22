@@ -577,7 +577,7 @@ public class SearchCellTable {
 	}
 		
 	public void onLabelClicked(String link, String schemeURI, boolean isAddAction,int tab, int belongsToModule, int type){
-		ModuleManager.gotoItem(link, schemeURI, isAddAction, tab, belongsToModule, type);
+		ModuleManager.gotoItem(link, MainApp.schemeUri/*schemeURI*/, isAddAction, tab, belongsToModule, type);
 	}
 	  
 	public static Widget wrapFlow(Widget w)

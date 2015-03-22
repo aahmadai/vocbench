@@ -8,6 +8,8 @@ public class ExportParameterObject extends LightEntity{
 
 	private static final long serialVersionUID = -7032544321200001869L;
 
+	private String fileFormat = null;
+	
 	private String format = null;
 	
 	private String schemeURI = null;
@@ -110,6 +112,14 @@ public class ExportParameterObject extends LightEntity{
 
 	public boolean isFormatEmpty(){
 		if(this.format == null){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean isFileFormatEmpty(){
+		if(this.fileFormat == null){
 			return true;
 		}else{
 			return false;
@@ -223,5 +233,19 @@ public class ExportParameterObject extends LightEntity{
 	 */
 	public void setLanglist(ArrayList<String> langlist) {
 		this.langlist = langlist;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getFileFormat() {
+		return fileFormat;
+	}
+
+	/**
+	 * @param fileFormat
+	 */
+	public void setFileFormat(String fileFormat) {
+		this.fileFormat = fileFormat;
 	}
 }

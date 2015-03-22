@@ -49,4 +49,6 @@ public interface RelationshipServiceAsync<T> {
 	public void editRange(RelationshipObject rObj, String oldURI, String newURI, int actionId, int userId, OntologyInfo ontoInfo, AsyncCallback<DomainRangeObject> callback);
 	public void editRangeValues(RelationshipObject rObj, String uri, HashMap<String, String> oldValues, HashMap<String, String> newValues, int actionId, int userId, OntologyInfo ontoInfo, AsyncCallback<DomainRangeObject> callback);
 	public void deleteRangeValue(RelationshipObject rObj, String dataRange, String value , int actionId, int userId, OntologyInfo ontoInfo, AsyncCallback<ArrayList<ClassObject>> callback);
+	void getDatatypePropertiesTree(OntologyInfo ontoInfo,
+			AsyncCallback<RelationshipTreeObject> callback);
 }

@@ -210,7 +210,6 @@ public class Convert {
 	}
 	public static ListBox makeListBoxSingleValueWithValueEmptyDefaultValue(ArrayList<String> list){
 		ListBox out = new ListBox();
-		out.addItem("--Select--","");
 		for(int i=0;i<list.size();i++){
 			String item = (String) list.get(i);
 			out.addItem(item, item);

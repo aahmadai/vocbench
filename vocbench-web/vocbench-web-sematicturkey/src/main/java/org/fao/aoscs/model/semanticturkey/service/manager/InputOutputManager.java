@@ -1,8 +1,10 @@
 package org.fao.aoscs.model.semanticturkey.service.manager;
 
+import it.uniroma2.art.owlart.io.RDFFormat;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.InputOutputResponseManager;
@@ -26,9 +28,9 @@ public class InputOutputManager extends ResponseManager {
 	 * @param formatName
 	 * @return
 	 */
-	public static boolean loadRDF(OntologyInfo ontoInfo, String inputFile, String baseURI, String formatName)
+	public static boolean loadRDF(OntologyInfo ontoInfo, String inputFile, String baseURI, String fileFormat)
 	{
-		XMLResponseREPLY reply = InputOutputResponseManager.loadRDFRequest(ontoInfo, inputFile, baseURI, formatName);
+		XMLResponseREPLY reply = InputOutputResponseManager.loadRDFRequest(ontoInfo, inputFile, baseURI, fileFormat);
 		return reply.isAffirmative();
 	}
 	
@@ -36,12 +38,32 @@ public class InputOutputManager extends ResponseManager {
 	 * @param ontoInfo
 	 * @return
 	 */
-	public static String saveRDF(OntologyInfo ontoInfo)
+	public static HashMap<String, String> getRDFFormat(OntologyInfo ontoInfo)
+	{
+		
+		HashMap<String, String> list = new HashMap<String, String>();
+		list.put(RDFFormat.RDFXML.getName(), "rdf");
+		list.put(RDFFormat.RDFXML_ABBREV.getName(), "rdf");
+		list.put(RDFFormat.NTRIPLES.getName(), "nt");
+		list.put(RDFFormat.N3.getName(), "nt");
+		list.put(RDFFormat.TRIG.getName(), "trig");
+		list.put(RDFFormat.TRIX.getName(), "trix");
+		list.put(RDFFormat.TRIXEXT.getName(), "trix-ext");
+		list.put(RDFFormat.TURTLE.getName(), "ttl");
+		list.put(RDFFormat.NQUADS.getName(), "nq");
+		return list;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @return
+	 */
+	public static String saveRDF(OntologyInfo ontoInfo, String fileFormat)
 	{
 		String content = "";
 		try {
-			content = STUtility.createTempFile().getPath();
-			InputOutputResponseManager.saveRDFRequest(ontoInfo, content, false);
+			content = STUtility.createTempFile(fileFormat).getPath();
+			InputOutputResponseManager.saveRDFRequest(ontoInfo, content, fileFormat, false);
 		} catch (IOException e) {
 		}
 		return content;

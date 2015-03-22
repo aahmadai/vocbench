@@ -4,6 +4,7 @@ import it.uniroma2.art.owlart.vocabulary.RDFTypesEnum;
 import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 import it.uniroma2.art.semanticturkey.servlet.main.Property;
+import it.uniroma2.art.semanticturkey.servlet.main.Property.Req;
 import it.uniroma2.art.semanticturkey.servlet.main.ResourceOld;
 
 import java.util.ArrayList;
@@ -31,6 +32,32 @@ public class PropertyResponseManager extends ResponseManager {
 	{
 		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(propertyRequest, 
 				STModel.par(Property.Par.inferencePar, "true"), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param excludedProps
+	 * @return
+	 */
+	public static XMLResponseREPLY getObjPropertiesTreeRequest(OntologyInfo ontoInfo, String excludedProps)
+	{
+		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(Req.getObjPropertiesTreeRequest, 
+				STModel.par(Property.Par.excludedProps, excludedProps), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param excludedProps
+	 * @return
+	 */
+	public static XMLResponseREPLY getDatatypePropertiesTreeRequest(OntologyInfo ontoInfo, String excludedProps)
+	{
+		Response resp = getSTModel(ontoInfo).propertyService.makeRequest(Req.getDatatypePropertiesTreeRequest, 
+				STModel.par(Property.Par.excludedProps, excludedProps), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}

@@ -1,6 +1,7 @@
 package org.fao.aoscs.client.module.export.widgetlib;
  
 import java.util.Date;
+import java.util.HashMap;
 
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
@@ -50,6 +51,7 @@ public class ExportSKOSXLWidget extends Composite{
 	private CheckBox conceptChildren;
 	private CheckBox includeLabelsOfRelatedConcepts;
 	private ListBox scheme = new ListBox();
+	private ListBox format = new ListBox();
 	private ExportParameterObject exp = new ExportParameterObject();
 	
 	public ExportSKOSXLWidget(InitializeExportData initData){
@@ -65,17 +67,19 @@ public class ExportSKOSXLWidget extends Composite{
 		table.setWidth("100%");
 
 		HTML conceptLab = new HTML(constants.exportConcept());
-		HTML exportLab = new HTML(constants.exportFormat());
+		HTML formatLab = new HTML(constants.exportFormat());
 		HTML schemeLab = new HTML(constants.exportScheme());
 		
 		conceptLab.setWordWrap(false);
-		exportLab.setWordWrap(false);
+		formatLab.setWordWrap(false);
 		schemeLab.setWordWrap(false);
 		        
-		table.setWidget(0, 0, schemeLab);
-		table.setWidget(0, 1, getScheme());
-		table.setWidget(1, 0, conceptLab);
-		table.setWidget(1, 1, getConcept());
+		table.setWidget(0, 0, formatLab);
+		table.setWidget(0, 1, getRDFFormat());
+		table.setWidget(1, 0, schemeLab);
+		table.setWidget(1, 1, getScheme());
+		table.setWidget(2, 0, conceptLab);
+		table.setWidget(2, 1, getConcept());
         
 		table.getColumnFormatter().setWidth(0, "15%");
 		table.getColumnFormatter().setWidth(1, "75%");
@@ -129,7 +133,14 @@ public class ExportSKOSXLWidget extends Composite{
 					{
 						public void onSuccess(String key)
 						{
-							String filename = "export_"+ExportFormat.SKOSXL.toLowerCase()+"_"+DateTimeFormat.getFormat("ddMMyyyyhhmmss").format(new Date())+".rdf";
+							String extension = ".rdf";
+							try
+							{
+								String file = key.substring(key.lastIndexOf("/"));
+								extension = file.substring(file.indexOf(".")); 
+							}
+							catch(Exception e){}
+							String filename = "export_"+ExportFormat.SKOSXL.toLowerCase()+"_"+DateTimeFormat.getFormat("ddMMyyyyhhmmss").format(new Date())+extension;
 							Window.open(GWT.getHostPageBaseURL()+"downloadExportData?filename="+filename+"&key="+key+"&size="+ConfigConstants.ZIPSIZE+"&forcezip="+chkZip.getValue(), "_download","");
 							showLoading(false);
 						}
@@ -213,6 +224,33 @@ public class ExportSKOSXLWidget extends Composite{
 			}
 		});
 		return scheme;
+	}
+	
+	private ListBox getRDFFormat(){
+		format = new ListBox();
+		format.addItem("--Select--","rdf");
+		HashMap<String, String> map = initData.getRDFFormat();
+		for(String item : map.keySet()) {
+			format.addItem(item, map.get(item));
+		}
+		format.setWidth("100%");
+		exp.setFileFormat(format.getValue(format.getSelectedIndex()));
+		format.addChangeHandler(new ChangeHandler()
+		{
+			public void onChange(ChangeEvent event)
+			{
+				String rdfFormat = format.getValue(format.getSelectedIndex());
+				if(!rdfFormat.equals("") && !rdfFormat.equals("--None--"))
+				{
+					exp.setFileFormat(rdfFormat);
+				}
+				else
+				{
+					exp.setFileFormat(null);
+				}
+			}
+		});
+		return format;
 	}
 	
 	private HorizontalPanel getConcept()

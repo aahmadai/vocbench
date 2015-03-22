@@ -9,7 +9,6 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.image.AOSImageManager;
 import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
-import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.validation.ValidationTemplate;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ModuleManager;

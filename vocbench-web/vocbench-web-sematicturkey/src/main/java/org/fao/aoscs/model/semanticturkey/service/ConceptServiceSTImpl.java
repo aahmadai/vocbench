@@ -4,6 +4,7 @@ import it.uniroma2.art.owlart.sesame2impl.vocabulary.SESAME;
 import it.uniroma2.art.owlart.vocabulary.RDF;
 import it.uniroma2.art.owlart.vocabulary.RDFS;
 import it.uniroma2.art.owlart.vocabulary.SKOS;
+import it.uniroma2.art.owlart.vocabulary.SKOSXL;
 import it.uniroma2.art.owlart.vocabulary.XmlSchema;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 
@@ -352,7 +353,12 @@ public class ConceptServiceSTImpl {
 		
 		logger.debug("addPropertyValue(" + actionId + ", " + status + ", " + userId + ", "+ value + ", " + conceptObject + ", "+ drObj.getRangeType() + ", " + value.getType() + ")");
 		
-		if(drObj.getRangeType().equals(DomainRangeObject.typedLiteral) || (value.getType()!=null && !value.getType().equals("")))
+		if(drObj.getRangeType().equals(DomainRangeObject.resource))
+		{
+			PropertyManager.addExistingPropValue(ontoInfo, conceptObject.getUri(), propertyURI, value.getValue());
+			//PropertyManager.addResourcePropValue(ontoInfo, conceptObject.getUri(), propertyURI, value.getValue(), value.getType());
+		}
+		else if(drObj.getRangeType().equals(DomainRangeObject.typedLiteral) || (value.getType()!=null && !value.getType().equals("")))
 		{
 			PropertyManager.addTypedLiteralPropValue(ontoInfo, conceptObject.getUri(), propertyURI, value.getValue(), value.getType());
 		}
@@ -870,7 +876,11 @@ public class ConceptServiceSTImpl {
 		
 		DomainRangeObject drObj = PropertyManager.getRange(ontoInfo, propertyURI);
 		
-		if(drObj.getRangeType().equals(DomainRangeObject.typedLiteral) || (oldValue.getType()!=null && !oldValue.getType().equals("")))
+		if(drObj.getRangeType().equals(DomainRangeObject.resource))
+		{
+			PropertyManager.removeResourcePropValue(ontoInfo, conceptObject.getUri(), propertyURI, oldValue.getValue());
+		}
+		else if(drObj.getRangeType().equals(DomainRangeObject.typedLiteral) || (oldValue.getType()!=null && !oldValue.getType().equals("")))
 			PropertyManager.removeTypedLiteralPropValue(ontoInfo, conceptObject.getUri(), propertyURI, oldValue.getValue(), oldValue.getType());
 		else
 			PropertyManager.removePlainLiteralPropValue(ontoInfo, conceptObject.getUri(), propertyURI, oldValue.getValue(), oldValue.getLanguage());
@@ -1789,7 +1799,21 @@ public class ConceptServiceSTImpl {
 		logger.debug("getConceptRelationship(" + resourceURI + ")");
 		RelationObject relationObject = new RelationObject();
 		
-		HashMap<ClassObject, ArrayList<STNode>> propValues = ResourceManager.getValuesOfProperties(ontoInfo, resourceURI, SKOS.RELATED, true, false, "", isExplicit);
+		
+		ArrayList<String> excludedProps = new ArrayList<String>();
+		excludedProps.add(SKOSXL.LABELRELATION);
+		excludedProps.add(SKOSXL.PREFLABEL);
+		excludedProps.add(SKOSXL.ALTLABEL);
+		excludedProps.add(SKOSXL.HIDDENLABEL);
+		excludedProps.add(SKOS.INSCHEME);
+		excludedProps.add(SKOS.BROADERTRANSITIVE);
+		excludedProps.add(SKOS.NARROWERTRANSITIVE);
+		excludedProps.add(SKOS.MAPPINGRELATION);
+		
+		HashMap<ClassObject, ArrayList<STNode>> propValues = ResourceManager.getValuesObjectProperties(ontoInfo, resourceURI, excludedProps, true, isExplicit);
+		//HashMap<ClassObject, ArrayList<STNode>> propValues = ResourceManager.getValuesOfProperties(ontoInfo, resourceURI, SKOS.RELATED, true, false, "", isExplicit);
+		
+		
 		for(ClassObject clsObj : propValues.keySet())
 		{
 			HashMap<ConceptShowObject, Boolean> conceptList = new HashMap<ConceptShowObject, Boolean>();

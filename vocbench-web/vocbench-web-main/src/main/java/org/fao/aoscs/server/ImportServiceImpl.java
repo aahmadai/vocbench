@@ -3,6 +3,8 @@
  */
 package org.fao.aoscs.server;
 
+import java.util.HashMap;
+
 import javax.servlet.ServletException;
 
 import net.sf.gilead.core.hibernate.HibernateUtil;
@@ -45,6 +47,12 @@ public class ImportServiceImpl extends PersistentRemoteService implements Import
 	{
 		return importService.loadData(ontoInfo, inputFile, baseURI, formatName);
 		
+	}
+
+	@Override
+	public HashMap<String, String> getRDFFormat(OntologyInfo ontoInfo)
+			throws Exception {
+		return importService.getRDFFormat(ontoInfo);
 	}
 	
 	

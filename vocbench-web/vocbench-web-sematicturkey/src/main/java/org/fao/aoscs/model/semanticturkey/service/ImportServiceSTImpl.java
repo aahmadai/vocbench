@@ -5,6 +5,7 @@ package org.fao.aoscs.model.semanticturkey.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.service.manager.InputOutputManager;
@@ -30,4 +31,14 @@ public class ImportServiceSTImpl {
 		}
 	    return result; 
 	}
+	
+	/**
+	 * @param ontoInfo
+	 * @return
+	 */
+	public HashMap<String, String> getRDFFormat(OntologyInfo ontoInfo)
+	{
+		return InputOutputManager.getRDFFormat(ontoInfo);
+	}
+
 }

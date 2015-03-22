@@ -1224,6 +1224,8 @@ public interface LocaleConstants extends Constants{
 	public String relDatatypeProperties();
 	public String relAnnotationProperties();
 	public String relOntologyProperties();
+	public String relShowAllObjectProperties();
+	public String relShowAllDatatypeProperties();
 	public String relShowEntireText();
 	public String relAddNewLabel();
 	public String relEditLabel();

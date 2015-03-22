@@ -44,6 +44,7 @@ public interface RelationshipService extends RemoteService{
 	public boolean deleteRelationship(RelationshipObject selectedItem, int actionId, int userId, OntologyInfo ontoInfo) throws Exception;
 	
 	public RelationshipTreeObject getObjectPropertyTree(Integer relType, boolean includeSelfRelationship, OntologyInfo ontoInfo) throws Exception;
+	public RelationshipTreeObject getDatatypePropertiesTree(OntologyInfo ontoInfo) throws Exception;
 	public ArrayList<ClassObject> getClassItemList(String rootName,OntologyInfo ontoInfo) throws Exception;
 	public void setInverseProperty(int actionId, int userId, OntologyInfo ontoInfo,RelationshipObject rObj, String insName) throws Exception;
 	public void deleteInverseProperty(int actionId, int userId, OntologyInfo ontoInfo,RelationshipObject rObj) throws Exception;

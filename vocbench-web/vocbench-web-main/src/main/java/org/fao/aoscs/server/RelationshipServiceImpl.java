@@ -287,6 +287,12 @@ public class RelationshipServiceImpl extends PersistentRemoteService  implements
 		return relationshipService.editRangeValues(rObj, uri, oldValues, newValues, actionId, userId, ontoInfo);
 	}
 
+	@Override
+	public RelationshipTreeObject getDatatypePropertiesTree(
+			OntologyInfo ontoInfo) throws Exception {
+		return relationshipService.getDatatypePropertiesTree(ontoInfo);
+	}
+
 	
 
 }

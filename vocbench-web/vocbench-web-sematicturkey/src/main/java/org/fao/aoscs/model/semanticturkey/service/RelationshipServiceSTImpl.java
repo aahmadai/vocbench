@@ -1218,6 +1218,19 @@ public class RelationshipServiceSTImpl {
 		{
 			rtObj = getPropertyTree(ontoInfo, RelationshipObject.OBJECT);
 		}
+		else if(relType == 4)
+		{
+			ArrayList<String> excludedProps = new ArrayList<String>();
+			excludedProps.add(SKOSXL.LABELRELATION);
+			excludedProps.add(SKOSXL.PREFLABEL);
+			excludedProps.add(SKOSXL.ALTLABEL);
+			excludedProps.add(SKOSXL.HIDDENLABEL);
+			excludedProps.add(SKOS.INSCHEME);
+			excludedProps.add(SKOS.BROADERTRANSITIVE);
+			excludedProps.add(SKOS.NARROWERTRANSITIVE);
+			excludedProps.add(SKOS.MAPPINGRELATION);
+			rtObj = getAllObjPropertiesTree(ontoInfo, STUtility.convertArrayToString(excludedProps, STXMLUtility.ST_SEPARATOR));
+		}
 	    return rtObj;
 	}
 	
@@ -1515,6 +1528,50 @@ public class RelationshipServiceSTImpl {
 					rtObj = getPropertyDetail(ontoInfo, rtObj, propElement.getAttribute("name"), propElement.getAttribute("uri"), null, true, type);
 					rtObj = getChildProperty(ontoInfo, propElement, rtObj, type);
 				}
+			}
+		}
+	    
+		return rtObj;
+	}
+	
+	public RelationshipTreeObject getAllObjPropertiesTree(OntologyInfo ontoInfo, String excludedProps)
+	{
+		RelationshipTreeObject rtObj = new RelationshipTreeObject();
+		XMLResponseREPLY reply = PropertyManager.getObjPropertiesTree(ontoInfo, excludedProps);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(Element propElement : STXMLUtility.getChildElementByTagName(dataElement, "Property"))
+			{
+				rtObj = getPropertyDetail(ontoInfo, rtObj, propElement.getAttribute("name"), propElement.getAttribute("uri"), null, true, RelationshipObject.OBJECT);
+				rtObj = getChildProperty(ontoInfo, propElement, rtObj, RelationshipObject.OBJECT);
+			}
+		}
+	    
+		return rtObj;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param excludedProps
+	 * @return
+	 */
+	public RelationshipTreeObject getDatatypePropertiesTree(OntologyInfo ontoInfo)
+	{
+		RelationshipTreeObject rtObj = new RelationshipTreeObject();
+		
+		ArrayList<String> excludedProps = new ArrayList<String>();
+		excludedProps.add(SKOSXL.LITERALFORM);
+		excludedProps.add(SKOS.NOTATION);
+		
+		XMLResponseREPLY reply = PropertyManager.getDatatypePropertiesTree(ontoInfo, STUtility.convertArrayToString(excludedProps, STXMLUtility.ST_SEPARATOR));
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(Element propElement : STXMLUtility.getChildElementByTagName(dataElement, "Property"))
+			{
+				rtObj = getPropertyDetail(ontoInfo, rtObj, propElement.getAttribute("name"), propElement.getAttribute("uri"), null, true, RelationshipObject.DATATYPE);
+				rtObj = getChildProperty(ontoInfo, propElement, rtObj, RelationshipObject.DATATYPE);
 			}
 		}
 	    

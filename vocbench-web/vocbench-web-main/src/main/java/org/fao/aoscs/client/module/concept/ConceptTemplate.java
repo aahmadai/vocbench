@@ -51,7 +51,10 @@ public class ConceptTemplate extends Composite{
 			sayWarning = new HTML(constants.conceptSelectConcept());
 		else
 			sayWarning = new HTML(constants.conceptSelectTreeItem());
+		
 		functionPanel = new VerticalPanel();
+		functionPanel.setSize("100%", "100%");
+		
 		rPanel.add(functionPanel);
 		
 		conceptRootPanel = new VerticalPanel();

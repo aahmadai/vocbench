@@ -21,6 +21,10 @@ import org.slf4j.LoggerFactory;
  * @author sachit
  *
  */
+/**
+ * @author Sachit
+ *
+ */
 public class ResourceResponseManager extends ResponseManager {
 	
 	protected static Logger logger = LoggerFactory.getLogger(ResourceResponseManager.class);
@@ -168,6 +172,25 @@ public class ResourceResponseManager extends ResponseManager {
 		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getValuesOfPropertiesRequest, 
 				STModel.par(ResourceOld.Par.resource, resourceURI), 
 				STModel.par(ResourceOld.Par.properties, propURIs), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	
+	/**
+	 * @param ontoInfo
+	 * @param resourceURI
+	 * @param excludedProps
+	 * @param excludeSubProps
+	 * @return
+	 */
+	public static XMLResponseREPLY getValuesObjectPropertiesRequest(OntologyInfo ontoInfo, String resourceURI, ArrayList<String> excludedProps, boolean excludeSubProps)
+	{
+		String propURIs = STUtility.convertArrayToString(excludedProps, STXMLUtility.ST_SEPARATOR);
+		Response resp = getSTModel(ontoInfo).resourceService.makeRequest(ResourceOld.Req.getValuesObjectPropertiesRequest, 
+				STModel.par(ResourceOld.Par.resource, resourceURI), 
+				STModel.par(ResourceOld.Par.excludedProps, propURIs), 
+				STModel.par(ResourceOld.Par.excludeSubProps, excludeSubProps?"true":"false"), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}

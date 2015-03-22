@@ -168,6 +168,27 @@ public class PropertyManager extends ResponseManager {
 	
 	/**
 	 * @param ontoInfo
+	 * @param excludedProps
+	 * @return
+	 */
+	public static XMLResponseREPLY getObjPropertiesTree(OntologyInfo ontoInfo, String excludedProps)
+	{
+		return PropertyResponseManager.getObjPropertiesTreeRequest(ontoInfo, excludedProps);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param excludedProps
+	 * @return
+	 */
+	public static XMLResponseREPLY getDatatypePropertiesTree(OntologyInfo ontoInfo, String excludedProps)
+	{
+		return PropertyResponseManager.getDatatypePropertiesTreeRequest(ontoInfo, excludedProps);
+	}
+	
+	
+	/**
+	 * @param ontoInfo
 	 * @param propertyURI
 	 * @return
 	 */

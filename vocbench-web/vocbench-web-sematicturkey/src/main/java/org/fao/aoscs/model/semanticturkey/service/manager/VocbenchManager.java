@@ -429,7 +429,7 @@ public class VocbenchManager extends ResponseManager {
 			Element dataElement = reply.getDataElement();
 			File tempfile;
 			try {
-				tempfile = STUtility.createTempFile();
+				tempfile = STUtility.createTempFile("rdf");
 				FileUtils.writeStringToFile(tempfile, STXMLUtility.stripCDATA(dataElement.getTextContent()), "UTF-8");
 				filename = tempfile.getPath();
 			} catch (IOException e) {
