@@ -42,6 +42,7 @@ import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFLiteral;
 import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFNode;
 import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFNodeFactory;
 import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFResource;
+import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFURI;
 import it.uniroma2.art.semanticturkey.project.Project;
 import it.uniroma2.art.semanticturkey.project.ProjectManager;
 import it.uniroma2.art.semanticturkey.servlet.Response;
@@ -5161,7 +5162,7 @@ public class VOCBENCH extends SKOSXL {
 				"\n<"+conceptUri+"> <"+NARROWER+"> ?narrowerConcept . "+
 				//"\n?broderConcept1 <"+BROADER+"> <"+conceptUri+"> . "+
 				//"\n<"+conceptUri+"> <"+BROADER+"> ?statusPlcholderBroader . "+
-				//"\n<"+conceptUri+"> <"+INSCHEME+"> ?scheme . "+
+				"\n<"+conceptUri+"> <"+INSCHEME+"> ?scheme . "+
 				"\n?schemeForTopConcept1 <"+HASTOCONCEPT+"> <"+conceptUri+"> ."+
 				"\n<"+conceptUri+"> <"+TOPCONCEPTOF+">  ?schemeForTopConcept2. "+
 				"\n?prefXLabel <"+LITERALFORM+"> ?prefLabel . " +
@@ -5207,7 +5208,7 @@ public class VOCBENCH extends SKOSXL {
 				"\n}";*/
 		
 		query +="\nWHERE {"+
-				//"\n<"+conceptUri+"> <"+INSCHEME+"> ?scheme ."+
+				"\n<"+conceptUri+"> <"+INSCHEME+"> ?scheme ."+
 				"\n{<"+conceptUri+"> <"+HASSTATUS+"> ?statusConcept . } "+
 				"\nUNION"+
 				"\n{<"+conceptUri+"> <"+CREATED+"> ?createdConcept . } "+
@@ -5271,6 +5272,7 @@ public class VOCBENCH extends SKOSXL {
 		List <String> broaderStringList = new ArrayList<String>();
 		boolean isTopConcept = false;
 		//String scheme = null;
+		List<String> schemeList = new ArrayList<String>();
 		String created = null;
 		String modified = null;
 		String status = null;
@@ -5305,9 +5307,12 @@ public class VOCBENCH extends SKOSXL {
 				xLabelInfoMap.put(LITERALFORM+"_lang", objLiteral.getLanguage());
 			} else if(pred.getURI().compareTo(HASTOCONCEPT) == 0 || pred.getURI().compareTo(TOPCONCEPTOF) == 0){
 				isTopConcept = true;
-			}/* else if(pred.getURI().compareTo(INSCHEME) == 0){
-				scheme = obj.asURIResource().getURI();
-			}*/else if(pred.getURI().compareTo(CREATED) == 0){
+			} else if(pred.getURI().compareTo(INSCHEME) == 0){
+				if(!schemeList.contains(obj.asURIResource().getURI())){
+					schemeList.add(obj.asURIResource().getURI());
+				}
+				//scheme = obj.asURIResource().getURI();
+			}else if(pred.getURI().compareTo(CREATED) == 0){
 				ARTLiteral objLiteral = obj.asLiteral();
 				if(subj.getURI().compareTo(conceptUri) == 0){
 					created = objLiteral.getLabel();
@@ -5385,7 +5390,17 @@ public class VOCBENCH extends SKOSXL {
 			stConcept.setInfo("lastUpdate", modified);
 		RDFXMLHelp.addRDFNode(conceptElem, stConcept);
 		
+		//add the schemes list
+		Element schemesElem = XMLHelp.newElement(conceptInfoElement, "schemes"); 
+		Element schemesCollElem = XMLHelp.newElement(schemesElem, "collection");
+		for(String singleScheme : schemeList){
+			ARTURIResource schemeUri = skosxlModel.createURIResource(singleScheme);
+			STRDFURI stScheme= STRDFNodeFactory.createSTRDFURI(skosxlModel, schemeUri, true, true, true);
+			RDFXMLHelp.addRDFNode(schemesCollElem, stScheme);
+		}
 		
+		
+		//add the labels list
 		Element labelsElem = XMLHelp.newElement(conceptInfoElement, "labels");
 		Element labelsCollElem = XMLHelp.newElement(labelsElem, "collection");
 		for(String xlabelUri : xLabelUriToMapXLabelInfoMap.keySet()){
