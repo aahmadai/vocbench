@@ -2201,7 +2201,7 @@ public class VOCBENCH extends SKOSXL {
 						"\n(COUNT (DISTINCT ?definition) AS ?definitionCount) " +
 						"\n(COUNT (?noteForCount) AS ?notesCount) " +
 						"\n(COUNT (DISTINCT ?attributesForCount) AS ?attributesCount) " +
-						"\n?subPropRel "+
+						"\n?objProp "+
 						"\n(COUNT (DISTINCT ?relatedForCount) AS ?relatedCount) " +
 						"\n(COUNT (DISTINCT ?notationForCount) AS ?notationCount) " +
 						"\n(COUNT (DISTINCT ?image) AS ?imageCount)" +
@@ -2223,11 +2223,14 @@ public class VOCBENCH extends SKOSXL {
 						
 						"\nUNION"+
 						
+						//TABS DEFINITION
 						"\n{<"+conceptUri+"> <"+DEFINITION+"> ?definition ."+
-						"\n?definition ?genericPropForDefinition ?genericValueForDefinition. }"+
+						//"\n?definition ?genericPropForDefinition ?genericValueForDefinition. " +
+						"\n}"+
 						
 						"\nUNION"+
 						
+						//TABS NOTE
 						"\n{?subPropNote <"+SUBPROPERTY+">+ <"+NOTE+"> . "+ //note and its SUBPROPERTY 
 						"\nFILTER (?subPropNote != <"+DEFINITION+"> )" +
 						"\n<"+conceptUri+"> ?subPropNote ?note . " +
@@ -2235,12 +2238,14 @@ public class VOCBENCH extends SKOSXL {
 						
 						"\nUNION"+
 
+						//TABS NOTATION
 						"\n{?subPropNotation <"+SUBPROPERTY+">+ <"+NOTATION+"> . "+ //notation and its SUBPROPERTY 
 						"\n<"+conceptUri+"> ?subPropNotation ?notation . " +
 						"\nBIND( CONCAT (STR(?subPropNotation), STR(?notation) ) AS ?notationForCount ) }"+
 						
 						"\nUNION"+
 						
+						//TABS ATTRIBUTE
 						"\n{?datatypeProp <"+TYPE+"> <"+DATATYPEPROPERTY+"> ." + 
 						"\n FILTER(?datatypeProp != <"+HASSTATUS+"> &&  ?datatypeProp != <"+MODIFIED+"> " +
 								"&& ?datatypeProp != <"+CREATED+">)"+
@@ -2250,28 +2255,48 @@ public class VOCBENCH extends SKOSXL {
 						
 						"\nUNION"+
 						
-						"\n{?subPropRel <"+SUBPROPERTY+">+ <"+RELATED+"> . "+ //related and its SUBPROPERTY 
-						"\n<"+conceptUri+"> ?subPropRel ?related . "+
-						"\nBIND( CONCAT (STR(?subPropRel), STR(?related) ) AS ?relatedForCount ) }"+
+						//TABS RELATIONSHIP 
+						//OLD
+						//"\n{?subPropRel <"+SUBPROPERTY+">+ <"+RELATED+"> . "+ //related and its SUBPROPERTY 
+						//"\n<"+conceptUri+"> ?subPropRel ?related . "+
+						//"\nBIND( CONCAT (STR(?subPropRel), STR(?related) ) AS ?relatedForCount ) }"+
+						"\n{" +
+						"\n?objProp <"+TYPE+"> <"+OBJECTPROPERTY+"> ." +
+						"\n<"+conceptUri+"> ?objProp ?related ." +
+						"\nBIND( CONCAT (STR(?objProp), STR(?related) ) AS ?relatedForCount ) "+
+						"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">+ <"+LABELRELATION+"> }" + // exclude LABELRELATION
+						"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">+ <"+PREFLABEL+"> }" + // exclude PREFLABEL
+						"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">+ <"+ALTLABEL+"> }" + // exclude ALTLABEL
+						"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">+ <"+HIDDENLABEL+">  }" + // exclude HIDDENLABEL
+						"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">+ <"+INSCHEME+"> }" + // exclude INSCHEME
+						"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">+ <"+BROADERTRANSITIVE+">  }" + // exclude BROADERTRANSITIVE
+						"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">+ <"+NARROWERTRANSITIVE+"> }" + // exclude NARROWERTRANSITIVE
+						"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">+ <"+MAPPINGRELATION+">}"+ // exclude MAPPINGRELATION
+						"\n}"+
+						
 						
 						"\nUNION"+
 						
+						//TABS IMAGE
 						"\n{<"+conceptUri+"> <"+DEPICTION+"> ?image . }"+
 						
 						"\nUNION"+
 
+						
 						"\n{?subPropSameAs <"+SUBPROPERTY+">+ <"+SAMEAS+"> . "+ //owl:sameAs and its SUBPROPERTY 
 						"\n<"+conceptUri+"> ?subPropSameAs ?sameAs . "+
 						"\nBIND( CONCAT (STR(?subPropSameAs), STR(?sameAs) ) AS ?sameAsForCount ) }"+
 						
 						"\nUNION"+
 
+						//TABS ALIGNEMENT
 						"\n{?subPropMappingRelation <"+SUBPROPERTY+">+ <"+MAPPINGRELATION+"> . "+ //skos:mappingRelation and its SUBPROPERTY 
 						"\n<"+conceptUri+"> ?subPropMappingRelation ?mappingRelation . "+
 						"\nBIND( CONCAT (STR(?subPropMappingRelation), STR(?mappingRelation) ) AS ?mappingRelationForCount ) }"+
 						
 						"\nUNION"+
 						
+						//TABS ANNOTAION
 						"\n{?annotationProp <"+TYPE+"> <"+ANNOTATIONPROPERTY+"> ."+ // the annotation properties 
 						"\nFILTER NOT EXISTS{?annotationProp <"+SUBPROPERTY+">+ <"+LABEL+"> }" + // excluding rdfs:label (and its children) 
 						"\nFILTER NOT EXISTS{?annotationProp <"+SUBPROPERTY+">+ <"+NOTE+"> }" + // excluding skos:note (and its children) 
@@ -2280,6 +2305,7 @@ public class VOCBENCH extends SKOSXL {
 						
 						"\nUNION"+
 						
+						//TABS OTHER
 						"\n{?plainRDFProp <"+TYPE+"> <"+PROPERTY+"> ."+ // all the plainRDFProperty
 						"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+OBJECTPROPERTY+"> }"+ // exclude the ObjectProperties 
 						"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+DATATYPEPROPERTY+"> }"+ // exclude the DatatypeProperies
@@ -2291,7 +2317,7 @@ public class VOCBENCH extends SKOSXL {
 						"\nBIND( CONCAT (STR(?plainRDFProp), STR(?plainRDFPropValue) ) AS ?plainRDFPropForCount ) }"+
 						
 						"\n}" +
-						"\nGROUP BY ?subPropRel";
+						"\nGROUP BY ?objProp";
 			
 			logger.debug("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(query);
@@ -2340,8 +2366,8 @@ public class VOCBENCH extends SKOSXL {
 					if(tuple.hasBinding("plainRDFPropCount"))
 						plainRDFPropImplicitCount = tuple.getBinding("plainRDFPropCount").getBoundValue().getNominalValue();
 				}
-				if(tuple.hasBinding("subPropRel") && tuple.hasBinding("relatedCount")){
-					String propName = tuple.getBinding("subPropRel").getBoundValue().getNominalValue();
+				if(tuple.hasBinding("objProp") && tuple.hasBinding("relatedCount")){
+					String propName = tuple.getBinding("objProp").getBoundValue().getNominalValue();
 					relatedImplicitCount = tuple.getBinding("relatedCount").getBoundValue().getNominalValue();
 					propImplicitCountMap.put(propName, relatedImplicitCount);
 				}
@@ -2359,7 +2385,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n(COUNT (DISTINCT ?definition) AS ?definitionCount) " +
 					"\n(COUNT (?noteForCount) AS ?notesCount) " +
 					"\n(COUNT (DISTINCT ?attributesForCount) AS ?attributesCount) " +
-					"\n?subPropRel "+
+					"\n?objProp "+
 					"\n(COUNT (DISTINCT ?relatedForCount) AS ?relatedCount) " +
 					"\n(COUNT (DISTINCT ?notationForCount) AS ?notationCount) " +
 					"\n(COUNT (DISTINCT ?image) AS ?imageCount)" +
@@ -2381,11 +2407,13 @@ public class VOCBENCH extends SKOSXL {
 					
 					"\nUNION"+
 					
+					//TABS DEFINITION
 					"\n{<"+conceptUri+"> <"+DEFINITION+"> ?definition ." +
 					"\n?definition ?genericPropForDefinition ?genericValueForDefinition. }"+
 					
 					"\nUNION"+
 					
+					//TABS NOTE
 					"\n{?subPropNote <"+SUBPROPERTY+">* <"+NOTE+"> . "+ //note and its SUBPROPERTY 
 					"\nFILTER (?subPropNote != <"+DEFINITION+"> )" +
 					"\n<"+conceptUri+"> ?subPropNote ?note . "+
@@ -2393,12 +2421,14 @@ public class VOCBENCH extends SKOSXL {
 					
 					"\nUNION"+
 
+					//TABS NOTATION
 					"\n{?subPropNotation <"+SUBPROPERTY+">* <"+NOTATION+"> . "+ //notation and its SUBPROPERTY 
 					"\n<"+conceptUri+"> ?subPropNotation ?notation . "+
 					"\nBIND( CONCAT (STR(?subPropNotation), STR(?notation) ) AS ?notationForCount ) }"+
 					
 					"\nUNION"+
 					
+					//TABS ATTRIBUTE
 					"\n{?datatypeProp <"+TYPE+"> <"+DATATYPEPROPERTY+"> ." + 
 					"\n FILTER(?datatypeProp != <"+HASSTATUS+"> &&  ?datatypeProp != <"+MODIFIED+"> " +
 							"&& ?datatypeProp != <"+CREATED+">)"+
@@ -2408,12 +2438,28 @@ public class VOCBENCH extends SKOSXL {
 					
 					"\nUNION"+
 					
-					"\n{?subPropRel <"+SUBPROPERTY+">* <"+RELATED+"> . "+ //related and its SUBPROPERTY  
-					"\n<"+conceptUri+"> ?subPropRel ?related . "+
-					"\nBIND( CONCAT (STR(?subPropRel), STR(?related) ) AS ?relatedForCount ) }"+
+					//TABS RELATIONSHIP 
+					//OLD
+					//"\n{?subPropRel <"+SUBPROPERTY+">+ <"+RELATED+"> . "+ //related and its SUBPROPERTY 
+					//"\n<"+conceptUri+"> ?subPropRel ?related . "+
+					//"\nBIND( CONCAT (STR(?subPropRel), STR(?related) ) AS ?relatedForCount ) }"+
+					"\n{" +
+					"\n?objProp <"+TYPE+"> <"+OBJECTPROPERTY+"> ." +
+					"\n<"+conceptUri+"> ?objProp ?related ." +
+					"\nBIND( CONCAT (STR(?objProp), STR(?related) ) AS ?relatedForCount ) "+
+					"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">* <"+LABELRELATION+"> }" + // exclude LABELRELATION
+					"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">* <"+PREFLABEL+"> }" + // exclude PREFLABEL
+					"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">* <"+ALTLABEL+"> }" + // exclude ALTLABEL
+					"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">* <"+HIDDENLABEL+">  }" + // exclude HIDDENLABEL
+					"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">* <"+INSCHEME+">  }" + // exclude INSCHEME
+					"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">* <"+BROADERTRANSITIVE+">  }" + // exclude BROADERTRANSITIVE
+					"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">* <"+NARROWERTRANSITIVE+"> }" + // exclude NARROWERTRANSITIVE
+					"\nFILTER NOT EXISTS{?objProp <"+SUBPROPERTY+">* <"+MAPPINGRELATION+">}"+ // exclude MAPPINGRELATION
+					"\n}"+
 					
 					"\nUNION"+
 					
+					//TABS IMAGE
 					"\n{<"+conceptUri+"> <"+DEPICTION+"> ?image . }"+
 
 					"\nUNION"+
@@ -2423,13 +2469,15 @@ public class VOCBENCH extends SKOSXL {
 					"\nBIND( CONCAT (STR(?subPropSameAs), STR(?sameAs) ) AS ?sameAsForCount ) }"+
 					
 					"\nUNION"+
-
+					
+					//TABS ALIGNEMENT
 					"\n{?subPropMappingRelation <"+SUBPROPERTY+">* <"+MAPPINGRELATION+"> . "+ //skos:mappingRelation and its SUBPROPERTY 
 					"\n<"+conceptUri+"> ?subPropMappingRelation ?mappingRelation . "+
 					"\nBIND( CONCAT (STR(?subPropMappingRelation), STR(?mappingRelation) ) AS ?mappingRelationForCount ) }"+
 					
 					"\nUNION"+
 
+					//TABS ANNOTAION
 					"\n{?annotationProp <"+TYPE+"> <"+ANNOTATIONPROPERTY+"> ."+ // the annotation properties 
 					"\nFILTER NOT EXISTS{?annotationProp <"+SUBPROPERTY+">* <"+LABEL+"> }" + // excluding rdfs:label (and its children) 
 					"\nFILTER NOT EXISTS{?annotationProp <"+SUBPROPERTY+">* <"+NOTE+"> }" + // excluding skos:note (and its children) 
@@ -2437,7 +2485,8 @@ public class VOCBENCH extends SKOSXL {
 					"\nBIND( CONCAT (STR(?annotationProp), STR(?annotationValue) ) AS ?annotationForCount ) }"+
 					
 					"\nUNION"+
-
+					
+					//TABS OTHER
 					"\n{?plainRDFProp <"+TYPE+"> <"+PROPERTY+"> ."+ // all the plainRDFProperty
 					"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+OBJECTPROPERTY+"> }"+ // exclude the ObjectProperties 
 					"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+DATATYPEPROPERTY+"> }"+ // exclude the DatatypeProperies
@@ -2449,7 +2498,7 @@ public class VOCBENCH extends SKOSXL {
 					"\nBIND( CONCAT (STR(?plainRDFProp), STR(?plainRDFPropValue) ) AS ?plainRDFPropForCount ) }"+
 						
 					"\n}" +
-					"\nGROUP BY ?subPropRel";
+					"\nGROUP BY ?objProp";
 			
 			logger.debug("query = "+query); // DEBUG
 			tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(query);
@@ -2498,8 +2547,8 @@ public class VOCBENCH extends SKOSXL {
 					if(tuple.hasBinding("plainRDFPropCount"))
 						plainRDFPropExplicitCount = tuple.getBinding("plainRDFPropCount").getBoundValue().getNominalValue();
 				}
-				if(tuple.hasBinding("subPropRel") && tuple.hasBinding("relatedCount")){
-					String propName = tuple.getBinding("subPropRel").getBoundValue().getNominalValue();
+				if(tuple.hasBinding("objProp") && tuple.hasBinding("relatedCount")){
+					String propName = tuple.getBinding("objProp").getBoundValue().getNominalValue();
 					relatedExplicitCount = tuple.getBinding("relatedCount").getBoundValue().getNominalValue();
 					propExplicitCountMap.put(propName, relatedExplicitCount);
 				}

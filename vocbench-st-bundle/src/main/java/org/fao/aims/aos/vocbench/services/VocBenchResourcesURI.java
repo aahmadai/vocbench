@@ -51,6 +51,8 @@ public class VocBenchResourcesURI {
 	final static public String SKOS_PREFLABEL = "http://www.w3.org/2004/02/skos/core#prefLabel";
 	final static public String SKOS_ALTLABEL = "http://www.w3.org/2004/02/skos/core#altLabel";
 	final static public String SKOS_HIDDENLABEL = "http://www.w3.org/2004/02/skos/core#hiddenLabel";
+	final static public String BROADERTRANSITIVE = "http://www.w3.org/2004/02/skos/core#broaderTransitive";
+	final static public String NARROWERTRANSITIVE = "http://www.w3.org/2004/02/skos/core#narrowerTransitive";
 	
 	
 	//skosxl
