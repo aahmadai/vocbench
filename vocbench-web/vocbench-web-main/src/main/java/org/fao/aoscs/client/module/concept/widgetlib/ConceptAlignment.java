@@ -309,7 +309,7 @@ public class ConceptAlignment extends ConceptTemplate{
 			table.getColumnFormatter().setWidth(1, "80%");
 			table.setWidget(0, 0, new HTML(constants.conceptValue()));
 			table.setWidget(0, 1, hp);
-			table.setWidget(1, 0, new HTML(constants.conceptRelationship()));
+			table.setWidget(1, 0, new HTML(constants.conceptProperty()));
 			table.setWidget(1, 1, relationship);
 
 			addWidget(GridStyle.setTableConceptDetailStyleleft(table, "gslRow1", "gslCol1", "gslPanel1"));

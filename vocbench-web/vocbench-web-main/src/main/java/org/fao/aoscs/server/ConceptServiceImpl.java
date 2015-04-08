@@ -24,6 +24,7 @@ import org.fao.aoscs.domain.InitializeConceptData;
 import org.fao.aoscs.domain.NonFuncObject;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlStatus;
+import org.fao.aoscs.domain.PropertyTreeObject;
 import org.fao.aoscs.domain.RecentChanges;
 import org.fao.aoscs.domain.RecentChangesInitObject;
 import org.fao.aoscs.domain.RelationObject;
@@ -492,7 +493,7 @@ public class ConceptServiceImpl extends PersistentRemoteService implements Conce
 	}
 
 	@Override
-	public HashMap<String, String> getConceptAnnotation(String resourceURI,
+	public PropertyTreeObject getConceptAnnotation(String resourceURI,
 			boolean isExplicit, OntologyInfo ontoInfo) throws Exception {
 		return conceptService.getConceptAnnotation(resourceURI, isExplicit, ontoInfo);
 	}
@@ -548,7 +549,7 @@ public class ConceptServiceImpl extends PersistentRemoteService implements Conce
 	}
 
 	@Override
-	public HashMap<String, String> getConceptOther(String resourceURI,
+	public PropertyTreeObject getConceptOther(String resourceURI,
 			boolean isExplicit, OntologyInfo ontoInfo) throws Exception {
 		return conceptService.getConceptOther(resourceURI, isExplicit, ontoInfo);
 	}

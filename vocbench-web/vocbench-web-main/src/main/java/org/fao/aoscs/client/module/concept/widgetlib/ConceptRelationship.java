@@ -335,7 +335,7 @@ class ConceptRelationship extends ConceptTemplate{
 		public void initLayout() {
 			
 			Grid table = new Grid(2,2);
-			table.setWidget(0, 0, new HTML(constants.conceptRelationship()));
+			table.setWidget(0, 0, new HTML(constants.conceptProperty()));
 			table.setWidget(1, 0,new HTML(constants.conceptDestination()));
 			table.setWidget(0, 1, getRelationshipBrowserButton());
 			table.setWidget(1, 1, getConceptBrowseButton());
@@ -429,7 +429,7 @@ class ConceptRelationship extends ConceptTemplate{
 		public void initLayout() {
 			
 			Grid table = new Grid(2,2);
-			table.setWidget(0, 0, new HTML(constants.conceptRelationship()));
+			table.setWidget(0, 0, new HTML(constants.conceptProperty()));
 			table.setWidget(1, 0, new HTML(constants.conceptDestination()));
 			table.setWidget(0, 1, getRelationshipBrowserButton());
 			table.setWidget(1, 1, getConceptBrowseButton());

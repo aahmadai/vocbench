@@ -17,6 +17,7 @@ import org.fao.aoscs.domain.InitializeConceptData;
 import org.fao.aoscs.domain.NonFuncObject;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlStatus;
+import org.fao.aoscs.domain.PropertyTreeObject;
 import org.fao.aoscs.domain.RecentChanges;
 import org.fao.aoscs.domain.RecentChangesInitObject;
 import org.fao.aoscs.domain.RelationObject;
@@ -257,7 +258,7 @@ public interface ConceptService extends RemoteService {
 	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptAlignmentValue(
 			String resourceURI, boolean isExplicit, OntologyInfo ontoInfo);
 
-	HashMap<String, String> getConceptAnnotation(String resourceURI,
+	PropertyTreeObject getConceptAnnotation(String resourceURI,
 			boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
 
 	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptAnnotationValue(
@@ -309,7 +310,7 @@ public interface ConceptService extends RemoteService {
 			String cls, boolean isExplicit, OntologyInfo ontoInfo)
 			throws Exception;
 
-	HashMap<String, String> getConceptOther(String resourceURI,
+	PropertyTreeObject getConceptOther(String resourceURI,
 			boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
 
 	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptOtherValue(

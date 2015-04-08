@@ -23,6 +23,7 @@ public class CellTreeAOS extends CellTree{
 	public static int TYPE_SUBVOCABULARY_BROWSER = 6;
 	public static int TYPE_ClASS = 7;
 	public static int TYPE_VALIDATON_FILTER = 8;
+	public static int TYPE_PROPERTY_BROWSER = 9;
 	
 	public static String SUBLEVEL = "subClass";
 	public static String SAMELEVEL = "sameLevel";

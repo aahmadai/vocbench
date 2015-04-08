@@ -17,6 +17,7 @@ import org.fao.aoscs.domain.InitializeConceptData;
 import org.fao.aoscs.domain.NonFuncObject;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlStatus;
+import org.fao.aoscs.domain.PropertyTreeObject;
 import org.fao.aoscs.domain.RecentChanges;
 import org.fao.aoscs.domain.RecentChangesInitObject;
 import org.fao.aoscs.domain.RelationObject;
@@ -273,8 +274,7 @@ public interface ConceptServiceAsync<T> {
 			OntologyInfo ontoInfo,
 			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
 	void getConceptAnnotation(String resourceURI, boolean isExplicit,
-			OntologyInfo ontoInfo,
-			AsyncCallback<HashMap<String, String>> callback);
+			OntologyInfo ontoInfo, AsyncCallback<PropertyTreeObject> callback);
 	void addConceptAnnotationValue(
 			OntologyInfo ontoInfo,
 			int actionId,
@@ -330,8 +330,7 @@ public interface ConceptServiceAsync<T> {
 			boolean isExplicit,
 			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
 	void getConceptOther(String resourceURI, boolean isExplicit,
-			OntologyInfo ontoInfo,
-			AsyncCallback<HashMap<String, String>> callback);
+			OntologyInfo ontoInfo, AsyncCallback<PropertyTreeObject> callback);
 	void editConceptOtherValue(
 			OntologyInfo ontoInfo,
 			int actionId,

@@ -20,8 +20,10 @@ import org.fao.aoscs.client.utility.GridStyle;
 import org.fao.aoscs.client.utility.ModuleManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.ConceptBrowser;
 import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
+import org.fao.aoscs.client.widgetlib.shared.dialog.PropertyBrowser;
 import org.fao.aoscs.client.widgetlib.shared.label.LabelAOS;
 import org.fao.aoscs.client.widgetlib.shared.label.LinkLabelAOS;
+import org.fao.aoscs.client.widgetlib.shared.label.ValidatorWidgetAOS;
 import org.fao.aoscs.client.widgetlib.shared.misc.OlistBox;
 import org.fao.aoscs.domain.ClassObject;
 import org.fao.aoscs.domain.ConceptObject;
@@ -30,8 +32,9 @@ import org.fao.aoscs.domain.InitializeConceptData;
 import org.fao.aoscs.domain.NonFuncObject;
 import org.fao.aoscs.domain.OwlStatus;
 import org.fao.aoscs.domain.PermissionObject;
+import org.fao.aoscs.domain.PropertyObject;
+import org.fao.aoscs.domain.PropertyTreeObject;
 import org.fao.aoscs.domain.RelationshipObject;
-import org.fao.aoscs.domain.RelationshipTreeObject;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -100,13 +103,13 @@ public class ConceptProperty extends ConceptTemplate{
 			label = constants.conceptAddOther();
 			permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_ATTRIBUTECREATE, getConceptObject().getStatusID());
 		}
-
+		final String txt = label;
 		//permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_NOTECREATE, getConceptObject().getStatusID());
 		LinkLabelAOS add = new LinkLabelAOS("images/add-grey.gif", "images/add-grey-disabled.gif", label, label, permission, new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if(addValue == null || !addValue.isLoaded)
 					addValue = new AddValue();
-				addValue.show();
+				addValue.show(txt);
 			}
 		});
 		add.setLabelText(label);
@@ -436,6 +439,7 @@ public class ConceptProperty extends ConceptTemplate{
 	public class EditValue extends FormDialogBox implements ClickHandler{
 		private TextArea value;
 		private ListBox values;
+		private TextBox dataTypes;
 		private ListBox language;
 		private LabelAOS relationship;
 		private NonFuncObject oldValue;
@@ -443,9 +447,9 @@ public class ConceptProperty extends ConceptTemplate{
 		private String relURI;
 		private ArrayList<String> list = null;
 		private String type = "";
-		
+		private ArrayList<String> datatype = null;
 
-		public EditValue(String relURI/*RelationshipObject rObj*/, NonFuncObject oldValue){
+		public EditValue(String relURI, NonFuncObject oldValue){
 			super();
 			this.relURI = relURI;
 			this.oldValue = oldValue;
@@ -473,18 +477,17 @@ public class ConceptProperty extends ConceptTemplate{
 			
 			
 			relationship = new LabelAOS();
-			//relationship.setText(Convert.getRelationshipLabel(rObj, constants.mainLocale()), rObj);
 			relationship.setText(relURI);
 
 			final FlexTable table = new FlexTable();
 			table.setWidth("100%");
 			table.getColumnFormatter().setWidth(1, "80%");
-			table.setWidget(0, 0, new HTML(constants.conceptRelationship()));
+			table.setWidget(0, 0, new HTML(constants.conceptProperty()));
 			table.setWidget(0, 1, relationship);
 			
 			type = "";
 			list = null;
-
+			datatype = new ArrayList<String>();
 			
 			if(relURI!=null && !relURI.equals(""))
 			{
@@ -494,18 +497,26 @@ public class ConceptProperty extends ConceptTemplate{
 						{
 							drObj = results;
 							type = drObj.getRangeType();
+							datatype = new ArrayList<String>();
 							list = new ArrayList<String>();
 							
 							for(ClassObject clsObj : drObj.getRange())
 							{
-								if(!type.equals(DomainRangeObject.typedLiteral))
+								if(type.equals(DomainRangeObject.typedLiteral))
+								{
+									datatype.add(clsObj.getUri());
+								}
+								else if(type.equals(DomainRangeObject.resource))
+								{
+									datatype.add(clsObj.getUri());
+								}
+								else
 								{
 									list.add(clsObj.getLabel());
 								}
 							}
 						}
 
-						//check value or values
 						if(list!=null && list.size()>0)
 						{
 							values = Convert.makeListBoxSingleValueWithSelectedValue(list, oldValue.getValue());
@@ -522,8 +533,16 @@ public class ConceptProperty extends ConceptTemplate{
 							table.setWidget(1, 0, new HTML(constants.conceptValue()));
 							table.setWidget(1, 1, value);
 
-							// check language
-							if(!type.equals(DomainRangeObject.typedLiteral) && oldValue.getLanguage()!=null && !oldValue.getLanguage().equals("null") && !oldValue.getLanguage().equals(""))
+							if(oldValue.getType()!=null && !oldValue.getType().equals("null") && !oldValue.getType().equals(""))
+							{
+								dataTypes = new TextBox();
+								dataTypes.setWidth("100%");
+								dataTypes.setText(oldValue.getType());
+								dataTypes.setEnabled(false);
+								table.setWidget(2, 0, new HTML(constants.termType()));
+								table.setWidget(2, 1, dataTypes);
+							}
+							if(oldValue.getLanguage()!=null && !oldValue.getLanguage().equals("null") && !oldValue.getLanguage().equals(""))
 							{
 								language = new ListBox();
 								language = Convert.makeSelectedLanguageListBox((ArrayList<String[]>)MainApp.getLanguage(),oldValue.getLanguage());
@@ -552,7 +571,6 @@ public class ConceptProperty extends ConceptTemplate{
 			}
 			else
 			{
-				//check value or values
 				if(list!=null && list.size()>0)
 				{
 					if(values.getValue(values.getSelectedIndex()).equals("--None--") || values.getValue(values.getSelectedIndex()).equals(""))
@@ -566,14 +584,6 @@ public class ConceptProperty extends ConceptTemplate{
 					{
 						return false;
 					}
-					// check language
-					if(!type.equals(DomainRangeObject.typedLiteral) && oldValue.getLanguage()!=null && !oldValue.getLanguage().equals("null") && !oldValue.getLanguage().equals(""))
-					{
-						if(language.getValue(language.getSelectedIndex()).equals("--None--") || language.getValue(language.getSelectedIndex()).equals(""))
-						{
-							return false;
-						}
-					}
 				}
 
 			}
@@ -583,8 +593,8 @@ public class ConceptProperty extends ConceptTemplate{
 			sayLoading();
 
 			NonFuncObject nonFuncObj = new NonFuncObject();
-			//check value or values
 			nonFuncObj.setType(oldValue.getType());
+			nonFuncObj.setLanguage(oldValue.getLanguage());
 			if(list!=null && list.size()>0)
 			{
 				nonFuncObj.setValue(values.getValue(values.getSelectedIndex()));
@@ -592,11 +602,6 @@ public class ConceptProperty extends ConceptTemplate{
 			else
 			{
 				nonFuncObj.setValue(value.getText());
-				// check language
-				if(!type.equals(DomainRangeObject.typedLiteral) && oldValue.getLanguage()!=null && !oldValue.getLanguage().equals("null") && !oldValue.getLanguage().equals(""))
-				{
-					nonFuncObj.setLanguage(language.getValue(language.getSelectedIndex()));
-				}
 			}
 
 			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback = new AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>>(){
@@ -745,8 +750,565 @@ public class ConceptProperty extends ConceptTemplate{
 		}
 
 	}
-
+	
 	public class AddValue extends FormDialogBox implements ClickHandler{
+		
+		private FlexTable table;
+		private TextArea value;
+		private ValidatorWidgetAOS typedValue;
+		private ListBox language;
+		private OlistBox values;
+		private ListBox dataTypes;
+		private ListBox box;
+		private Widget relationship;
+		private Image browse ;
+		private String imgPath = "images/browseButton3-grey.gif";
+		private TextBox destConcept;
+
+		private DomainRangeObject drObj = new DomainRangeObject();
+		private String relURI = "";
+		private ArrayList<ClassObject> list = null;
+		private String type = "";
+		private ArrayList<String> datatype = null;
+		private HorizontalPanel leftBottomWidget = new HorizontalPanel();
+		private HorizontalPanel showAllPanel = new HorizontalPanel();
+		private CheckBox chkBox = new CheckBox(constants.relShowAllDatatypeProperties());
+		private HorizontalPanel mainPanel = new HorizontalPanel();
+		
+		public AddValue(){
+			super(constants.buttonCreate(), constants.buttonCancel());
+			setWidth("400px");
+		}
+		
+		public void show(String label)
+		{
+			this.setText(label);
+			if(property.equals(ConceptProperty.CONCEPTATTRIBUTE)){
+	            leftBottomWidget.add(addShowAllWidget());
+	    		setLeftBottomWidget(leftBottomWidget);
+			}
+			load();
+			show();
+			addWidget(mainPanel);
+		}
+		
+		public Widget addShowAllWidget()
+		{
+			chkBox.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					load();
+				}
+			});
+			
+			showAllPanel.add(chkBox);
+			showAllPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+			showAllPanel.setCellVerticalAlignment(chkBox, HasVerticalAlignment.ALIGN_MIDDLE);
+			return showAllPanel;
+		}
+		
+		public void initLayout(Object obj) {
+			
+			table = new FlexTable();
+			table.setWidth("100%");
+			table.getColumnFormatter().setWidth(1, "80%");
+			table.setWidget(0, 0, new HTML(constants.conceptProperty()));
+			if(obj instanceof HashMap)
+			{
+				@SuppressWarnings("unchecked")
+				HashMap<String, String> result = (HashMap<String, String>) obj;
+				table.setWidget(0, 1, getPropertyListWidget(result));
+			}
+			else if(obj instanceof PropertyTreeObject)
+			{
+				PropertyTreeObject result = (PropertyTreeObject) obj;
+				table.setWidget(0, 1, getPropertyBrowseWidget(result));
+			}
+			
+			mainPanel.clear();
+			mainPanel.setWidth("100%");
+			mainPanel.add(GridStyle.setTableConceptDetailStyleleft(table, "gslRow1", "gslCol1", "gslPanel1"));
+		}
+		
+		private void loadTable()
+		{
+			value = new TextArea();
+			value.setVisibleLines(3);
+			value.setWidth("100%");
+			
+			typedValue = new ValidatorWidgetAOS();
+			typedValue.setWidth("100%");
+			
+			language = new ListBox();
+			language = Convert.makeListWithEmptyDefaultValueUserLanguages(MainApp.languageDict, MainApp.getUserLanguagePermissionList());
+			language.setWidth("100%");
+			
+			values = new OlistBox();
+			values.setWidth("100%");
+			
+			while(table.getRowCount()>1)
+			{
+				table.removeRow(table.getRowCount()-1);
+			}
+			datatype = null;
+			type = "";
+			list = null;
+
+			relURI = getSelectedProperty();
+			if(relURI!=null && !relURI.equals(""))
+			{
+				AsyncCallback<DomainRangeObject> callback = new AsyncCallback<DomainRangeObject>(){
+					public void onSuccess(DomainRangeObject results){
+						if(results!=null)
+						{
+							drObj = results;
+							type = drObj.getRangeType();
+							datatype = new ArrayList<String>();
+							list = new ArrayList<ClassObject>();
+							
+							for(ClassObject clsObj : drObj.getRange())
+							{
+								if(type.equals(DomainRangeObject.typedLiteral))
+								{
+									datatype.add(clsObj.getUri());
+								}
+								else if(type.equals(DomainRangeObject.resource))
+								{
+									datatype.add(clsObj.getUri());
+								}
+								else 
+								{
+									list.add(clsObj);
+								}
+							}
+						}
+
+						//check value or values
+						if(list!=null && list.size()>0)
+						{
+							values = Convert.makeOListBoxWithClassObjectValue(list);
+							table.setWidget(1, 0, new HTML(constants.conceptValue()));
+							table.setWidget(1, 1, values);
+						}
+						else if(type.equals(DomainRangeObject.resource))
+						{
+							table.setWidget(1, 0, new HTML(constants.conceptResource()));
+							table.setWidget(1, 1, getConceptBrowseButton());
+							dataTypes = Convert.makeListBoxSingleValueWithValueEmptyDefaultValue(datatype);
+							table.setWidget(2, 0, new HTML(constants.termType()));
+							table.setWidget(2, 1, dataTypes);
+						}
+						else if(type.equals(DomainRangeObject.typedLiteral))
+						{
+							dataTypes = Convert.makeListBoxSingleValueWithValueEmptyDefaultValue(datatype);
+							dataTypes.setSize("100%", "100%");
+							dataTypes.addChangeHandler(new ChangeHandler() {
+								@Override
+								public void onChange(ChangeEvent event) {
+									typedValue.load(dataTypes.getValue(dataTypes.getSelectedIndex()));
+								}
+							});
+							table.setWidget(2, 0, new HTML(constants.termType()));
+							table.setWidget(2, 1, dataTypes);
+							table.setWidget(1, 0, new HTML(constants.conceptValue()));
+							table.setWidget(1, 1, typedValue);
+						}
+						else if(type.equals(DomainRangeObject.plainliteral))
+						{
+							table.setWidget(1, 0, new HTML(constants.conceptValue()));
+							table.setWidget(1, 1, value);
+							table.setWidget(2, 0, new HTML(constants.conceptLanguage()));
+							table.setWidget(2, 1, language);
+						}
+						else if(type.equals(DomainRangeObject.literal) || type.equals(DomainRangeObject.undetermined))
+						{
+							box = new ListBox();
+							box.setSize("100%", "100%");
+							box.addItem("Select", "");
+							box.addItem(DomainRangeObject.plainliteral);
+							box.addItem(DomainRangeObject.typedLiteral);
+							if(type.equals(DomainRangeObject.undetermined))
+								box.addItem(DomainRangeObject.resource);
+
+							table.setWidget(1, 0, new HTML(constants.termDatatype()));
+							table.setWidget(1, 1, box);
+							
+							box.addChangeHandler(new ChangeHandler() {
+								
+								public void onChange(ChangeEvent event) {
+									String rngType = box.getValue(box.getSelectedIndex());
+									if(rngType.equals(DomainRangeObject.plainliteral))
+									{
+										table.setWidget(1, 0, new HTML(constants.conceptValue()));
+										table.setWidget(1, 1, value);
+										table.setWidget(2, 0, new HTML(constants.conceptLanguage()));
+										table.setWidget(2, 1, language);
+										type = DomainRangeObject.plainliteral;
+									}
+									else if(rngType.equals(DomainRangeObject.typedLiteral))
+									{
+										HashMap<String, String> hMap = initData.getDataTypes();
+										hMap.putAll(MainApp.customDatatype);
+										dataTypes = Convert.makeListBoxWithValueEmptyDefaultValue(hMap);
+										dataTypes.setSize("100%", "100%");
+										dataTypes.addChangeHandler(new ChangeHandler() {
+											@Override
+											public void onChange(ChangeEvent event) {
+												typedValue.load(dataTypes.getValue(dataTypes.getSelectedIndex()));
+											}
+										});
+										table.setWidget(1, 0, new HTML(constants.conceptValue()));
+										table.setWidget(1, 1, typedValue);
+										table.setWidget(2, 0, new HTML(constants.termType()));
+										table.setWidget(2, 1, dataTypes);
+										type = DomainRangeObject.typedLiteral;
+									}
+									else if(rngType.equals(DomainRangeObject.resource))
+									{
+										table.setWidget(1, 0, new HTML(constants.conceptResource()));
+										table.setWidget(1, 1, getConceptBrowseButton());
+										table.removeRow(2);
+										type = DomainRangeObject.resource;
+									}
+									GridStyle.updateTableConceptDetailStyleleft(table, "gslRow1", "gslCol1", "gslPanel1");
+								}
+							});
+						}
+						GridStyle.updateTableConceptDetailStyleleft(table, "gslRow1", "gslCol1", "gslPanel1");
+						
+						
+					}
+					public void onFailure(Throwable caught){
+						ExceptionManager.showException(caught, constants.conceptAddValueFail());
+					}
+				};
+				Service.conceptService.getPropertyRange(relURI, MainApp.userOntology, callback);
+			}
+		}
+		
+		private void load()
+		{
+			if(property.equals(ConceptProperty.CONCEPTNOTE)){
+				AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>(){
+					public void onSuccess(HashMap<String, String> results){
+						initLayout(results);
+					}
+					public void onFailure(Throwable caught){
+						Window.alert(constants.conceptAttributeFail());
+					}
+				};
+				Service.conceptService.getConceptNotes(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
+			}
+			else if(property.equals(ConceptProperty.CONCEPTATTRIBUTE)){
+				if(chkBox.getValue())
+				{
+					AsyncCallback<PropertyTreeObject> callback = new AsyncCallback<PropertyTreeObject>(){
+						public void onSuccess(PropertyTreeObject results){
+							initLayout(results);
+						}
+						public void onFailure(Throwable caught){
+							ExceptionManager.showException(caught, constants.conceptAttributeFail());
+						}
+					};
+					Service.relationshipService.getDatatypePropertiesTree(MainApp.userOntology, callback);
+				}
+				else
+				{
+					AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>(){
+						public void onSuccess(HashMap<String, String> results){
+							initLayout(results);
+						}
+						public void onFailure(Throwable caught){
+							ExceptionManager.showException(caught, constants.conceptAttributeFail());
+						}
+					};
+					Service.conceptService.getConceptAttributes(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
+				}
+			}
+			else if(property.equals(ConceptProperty.CONCEPTNOTATION)){
+				AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>(){
+					public void onSuccess(HashMap<String, String> results){
+						initLayout(results);
+					}
+					public void onFailure(Throwable caught){
+						ExceptionManager.showException(caught, constants.conceptAttributeFail());
+					}
+				};
+				Service.conceptService.getConceptNotation(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
+			}
+			else if(property.equals(ConceptProperty.CONCEPTANNOTATION)){
+				AsyncCallback<PropertyTreeObject> callback = new AsyncCallback<PropertyTreeObject>(){
+					public void onSuccess(PropertyTreeObject results){
+						initLayout(results);
+					}
+					public void onFailure(Throwable caught){
+						ExceptionManager.showException(caught, constants.conceptAttributeFail());
+					}
+				};
+				Service.conceptService.getConceptAnnotation(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
+			}
+			else if(property.equals(ConceptProperty.CONCEPTOTHER)){
+				AsyncCallback<PropertyTreeObject> callback = new AsyncCallback<PropertyTreeObject>(){
+					public void onSuccess(PropertyTreeObject results){
+						initLayout(results);
+					}
+					public void onFailure(Throwable caught){
+						ExceptionManager.showException(caught, constants.conceptAttributeFail());
+					}
+				};
+				Service.conceptService.getConceptOther(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
+			}
+		}
+		
+		private HorizontalPanel getPropertyListWidget(HashMap<String, String> results)
+		{
+			OlistBox relationshipList = new OlistBox();//Convert.makeOListBoxWithValue(propList);
+			relationship = relationshipList;
+			relationshipList.setWidth("100%");
+			
+			relationshipList.addItem("--None--", "");
+			for(String uri : results.keySet())
+			{
+				relationshipList.addItem(results.get(uri), uri);
+			}
+			
+			relationshipList.addChangeHandler(new ChangeHandler()
+			{
+				public void onChange(ChangeEvent event) {
+					loadTable();
+				}
+
+			});
+
+			HorizontalPanel hp = new HorizontalPanel();
+			hp.add(relationshipList);
+			hp.setWidth("100%");
+			hp.setCellHorizontalAlignment(relationshipList, HasHorizontalAlignment.ALIGN_LEFT);
+			
+			return hp;
+		}
+		
+		private HorizontalPanel getPropertyBrowseWidget(final PropertyTreeObject result){
+			final LabelAOS relationshipLabel = new LabelAOS("--None--",null);
+			relationship = relationshipLabel;
+			Image relationshipBrowse = new Image(imgPath);
+			relationshipBrowse.addClickHandler(this);
+			relationshipBrowse.setStyleName(Style.Link);
+			
+			relationshipBrowse.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					relationshipLabel.setText("--None--");
+					final PropertyBrowser rb =((MainApp) RootPanel.get().getWidget(0)).propertyBrowser; 
+					rb.showBrowser(result, RelationshipObject.DATATYPE);
+					rb.addSubmitClickHandler(new ClickHandler()
+					{
+						public void onClick(ClickEvent event) {
+							if(rb.getSelectedItem()!=null)
+								relationshipLabel.setValue(rb.getSelectedItem(),rb.getPropertyObject());
+								loadTable();
+						}					
+					});	
+				}
+			});
+
+			HorizontalPanel hp = new HorizontalPanel();
+			hp.add(relationshipLabel);
+			hp.add(relationshipBrowse);
+			hp.setWidth("100%");
+			hp.setCellHorizontalAlignment(relationshipLabel, HasHorizontalAlignment.ALIGN_LEFT);
+			hp.setCellHorizontalAlignment(relationshipBrowse, HasHorizontalAlignment.ALIGN_RIGHT);
+			
+			return hp;
+		}
+		
+		private HorizontalPanel getConceptBrowseButton()
+		{
+			destConcept = new TextBox();
+			destConcept.setWidth("100%");
+			browse = new Image(imgPath);
+			browse.setStyleName(Style.Link);
+			browse.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					final ConceptBrowser cb =((MainApp) RootPanel.get().getWidget(0)).conceptBrowser; 
+					cb.showBrowser();
+					cb.addSubmitClickHandler(new ClickHandler()
+					{
+						public void onClick(ClickEvent event) {
+							if(cb.getSelectedItem()!=null)
+								destConcept.setValue(cb.getTreeObject().getUri());
+						}					
+					});						
+				}
+			});
+
+			HorizontalPanel hp = new HorizontalPanel();
+			hp.add(destConcept);
+			hp.add(browse);
+			hp.setWidth("100%");
+			hp.setCellWidth(destConcept, "100%");
+			hp.setCellHorizontalAlignment(destConcept, HasHorizontalAlignment.ALIGN_LEFT);
+			hp.setCellHorizontalAlignment(browse, HasHorizontalAlignment.ALIGN_RIGHT);
+			
+			return hp;
+		}
+		
+		private String getSelectedProperty()
+		{
+			if(relationship instanceof LabelAOS)
+				return ((PropertyObject)((LabelAOS) relationship).getValue()).getUri();
+			else if(relationship instanceof OlistBox)
+			{
+				OlistBox list = (OlistBox)relationship;
+				return list.getValue(list.getSelectedIndex());
+			}
+			else 
+				return "";
+		}
+		
+		public boolean passCheckInput() {
+			if(getSelectedProperty().equals("--None--")	|| getSelectedProperty().equals(""))
+			{
+				return false;
+			}
+			else
+			{
+				if(list!=null && list.size()>0)
+				{
+					if(values.getObject(values.getSelectedIndex())==null || ((ClassObject)values.getObject(values.getSelectedIndex())).getUri().equals(""))
+					{
+						return false;
+					}
+				}
+				else if(type.equals(DomainRangeObject.resource))
+				{
+					if(destConcept.getValue().length()==0)
+					{
+						return false;
+					}
+				}
+				else if(type.equals(DomainRangeObject.typedLiteral))
+				{
+					if(dataTypes!=null && (dataTypes.getValue(dataTypes.getSelectedIndex()).equals("--None--") || dataTypes.getValue(dataTypes.getSelectedIndex()).equals("")))
+					{
+						return false;
+					}
+					if(typedValue.getText().length()==0)
+					{
+						return false;
+					}
+				}
+				else if(type.equals(DomainRangeObject.plainliteral))
+				{
+					if(value.getText().length()==0)
+					{
+						return false;
+					}
+					if(language.getValue(language.getSelectedIndex()).equals("--None--") || language.getValue(language.getSelectedIndex()).equals(""))
+					{
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		
+		public void onSubmit() {
+			sayLoading();
+
+			NonFuncObject nonFuncObj = new NonFuncObject();
+			if(list!=null && list.size()>0)
+			{
+				ClassObject clsObj = (ClassObject) values.getObject(values.getSelectedIndex());
+				nonFuncObj.setValue(clsObj.getLabel());
+				nonFuncObj.setType(clsObj.getUri());
+			}
+			else if(type.equals(DomainRangeObject.resource))
+			{
+				nonFuncObj.setValue(destConcept.getValue());
+			}
+			else if(type.equals(DomainRangeObject.typedLiteral))
+			{
+				nonFuncObj.setValue(typedValue.getText());
+				if(dataTypes!=null)
+					nonFuncObj.setType(dataTypes.getValue(dataTypes.getSelectedIndex()));
+			}
+			else if(type.equals(DomainRangeObject.plainliteral))
+			{
+				nonFuncObj.setValue(value.getText());
+				nonFuncObj.setLanguage(language.getValue(language.getSelectedIndex()));
+			}
+
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback = new AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>>(){
+				public void onSuccess(HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> results){
+					if(property.equals(ConceptProperty.CONCEPTNOTE))
+					{
+						cDetailObj.setNoteObject(results);
+					}
+					else if(property.equals(ConceptProperty.CONCEPTATTRIBUTE))
+					{
+						cDetailObj.setAttributeObject(results);
+					}
+					else if(property.equals(ConceptProperty.CONCEPTNOTATION))
+					{
+						cDetailObj.setNotationObject(results);
+					}
+					else if(property.equals(ConceptProperty.CONCEPTANNOTATION))
+					{
+						cDetailObj.setAnnotationObject(results);
+					}
+					else if(property.equals(ConceptProperty.CONCEPTOTHER))
+					{
+						cDetailObj.setOtherObject(results);
+					}
+
+					ConceptProperty.this.initData();
+					ModuleManager.resetValidation();
+				}
+				public void onFailure(Throwable caught){
+					ExceptionManager.showException(caught, constants.conceptAddValueFail());
+				}
+			};
+
+			OwlStatus status = null;
+			int actionId = 0 ;
+
+			if(property.equals(ConceptProperty.CONCEPTNOTE))
+			{
+				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditNoteCreate);
+				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditNoteCreate));
+				Service.conceptService.addConceptNoteValue(MainApp.userOntology,actionId, status, MainApp.userId, nonFuncObj, relURI, drObj, conceptObject, MainApp.isExplicit, callback);
+			}
+			else if(property.equals(ConceptProperty.CONCEPTATTRIBUTE))
+			{
+				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeCreate);
+				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeCreate));
+				Service.conceptService.addConceptAttributeValue(MainApp.userOntology,actionId, status, MainApp.userId, nonFuncObj, relURI, drObj, conceptObject, MainApp.isExplicit, callback);
+			}
+			else if(property.equals(ConceptProperty.CONCEPTNOTATION))
+			{
+				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeCreate);
+				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeCreate));
+				Service.conceptService.addConceptNotationValue(MainApp.userOntology,actionId, status, MainApp.userId, nonFuncObj, relURI, drObj, conceptObject, MainApp.isExplicit, callback);
+			}
+			else if(property.equals(ConceptProperty.CONCEPTANNOTATION))
+			{
+				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeCreate);
+				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeCreate));
+				Service.conceptService.addConceptAnnotationValue(MainApp.userOntology,actionId, status, MainApp.userId, nonFuncObj, relURI, drObj, conceptObject, MainApp.isExplicit, callback);
+			}
+			else if(property.equals(ConceptProperty.CONCEPTOTHER))
+			{
+				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeCreate);
+				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeCreate));
+				Service.conceptService.addConceptOtherValue(MainApp.userOntology,actionId, status, MainApp.userId, nonFuncObj, relURI, drObj, conceptObject, MainApp.isExplicit, callback);
+			}
+		}
+	}
+
+/*	public class AddValue extends FormDialogBox implements ClickHandler{
 		private TextArea value;
 		private ListBox language;
 		private OlistBox relationship;
@@ -811,11 +1373,11 @@ public class ConceptProperty extends ConceptTemplate{
 			relationship.addItem("--None--", "");
 			if(chkBox.getValue())
 			{
-				AsyncCallback<RelationshipTreeObject> callback = new AsyncCallback<RelationshipTreeObject>(){
-					public void onSuccess(RelationshipTreeObject results){
-						HashMap<String,RelationshipObject> relationshipList = results.getRelationshipList();
-						for(String uri : relationshipList.keySet()){
-							relationship.addItem(relationshipList.get(uri).getName(), uri);
+				AsyncCallback<PropertyTreeObject> callback = new AsyncCallback<PropertyTreeObject>(){
+					public void onSuccess(PropertyTreeObject results){
+						HashMap<String,PropertyObject> propertyList = results.getPropertyList();
+						for(String uri : propertyList.keySet()){
+							relationship.addItem(propertyList.get(uri).getName(), uri);
 						}
 					}
 					public void onFailure(Throwable caught){
@@ -888,11 +1450,11 @@ public class ConceptProperty extends ConceptTemplate{
 				Service.conceptService.getConceptNotation(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
 			}
 			else if(property.equals(ConceptProperty.CONCEPTANNOTATION)){
-				AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>(){
-					public void onSuccess(HashMap<String, String> results){
+				AsyncCallback<PropertyTreeObject> callback = new AsyncCallback<PropertyTreeObject>(){
+					public void onSuccess(PropertyTreeObject results){
 						relationship.addItem("--None--", "");
-						for(String uri : results.keySet()){
-							relationship.addItem(results.get(uri), uri);
+						for(String uri : results.getPropertyList().keySet()){
+							relationship.addItem(results.getPropertyList().get(uri).getName(), uri);
 						}
 					}
 					public void onFailure(Throwable caught){
@@ -920,7 +1482,7 @@ public class ConceptProperty extends ConceptTemplate{
 			final FlexTable table = new FlexTable();
 			table.setWidth("100%");
 			table.getColumnFormatter().setWidth(1, "80%");
-			table.setWidget(0, 0, new HTML(constants.conceptRelationship()));
+			table.setWidget(0, 0, new HTML(constants.conceptProperty()));
 			table.setWidget(0, 1, relationship);
 
 			relationship.addChangeHandler(new ChangeHandler()
@@ -1134,13 +1696,13 @@ public class ConceptProperty extends ConceptTemplate{
 						return false;
 					}
 					// check language
-					/*if(!type.equals(DomainRangeObject.typedLiteral))
+					if(!type.equals(DomainRangeObject.typedLiteral))
 					{
 						if(language.getValue(language.getSelectedIndex()).equals("--None--") || language.getValue(language.getSelectedIndex()).equals(""))
 						{
 							return false;
 						}
-					}*/
+					}
 				}
 			}
 			return true;
@@ -1239,5 +1801,5 @@ public class ConceptProperty extends ConceptTemplate{
 				Service.conceptService.addConceptOtherValue(MainApp.userOntology,actionId, status, MainApp.userId, nonFuncObj, relURI, drObj, conceptObject, MainApp.isExplicit, callback);
 			}
 		}
-	}
+	}*/
 }

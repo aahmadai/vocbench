@@ -1106,7 +1106,7 @@ public class ConceptTree extends Composite{
 		}
 		public void initLayout() {
 			Grid table = new Grid(1,2);
-			table.setWidget(0, 0,new HTML(constants.conceptNewChild()));
+			table.setWidget(0, 0,new HTML(constants.conceptNewParent()));
 			table.setWidget(0, 1, getConceptBrowse());
 			table.setWidth("100%");
 			table.getColumnFormatter().setWidth(1,"80%");
@@ -1171,7 +1171,7 @@ public class ConceptTree extends Composite{
 				OwlStatus status = (OwlStatus)initData.getActionStatus().get(ConceptActionKey.conceptEditLinkConcept);
 				int actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditLinkConcept));	
 				
-				Service.conceptService.copyConcept(MainApp.userOntology, MainApp.schemeUri, MainApp.schemeUri, childConcept.getUri(), conceptObject.getUri(), status, actionId, MainApp.userId, callback);
+				Service.conceptService.copyConcept(MainApp.userOntology, MainApp.schemeUri, MainApp.schemeUri, conceptObject.getUri(), childConcept.getUri(), status, actionId, MainApp.userId, callback);
 			}
 		}
 	}

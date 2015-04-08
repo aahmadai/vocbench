@@ -994,6 +994,7 @@ public interface LocaleConstants extends Constants{
 	public String conceptOthers();
 	public String conceptAlignment();
 	public String conceptAlignments();
+	public String conceptProperty();
 	public String conceptRelationship();
 	public String conceptRelationships();
 	public String conceptImage();

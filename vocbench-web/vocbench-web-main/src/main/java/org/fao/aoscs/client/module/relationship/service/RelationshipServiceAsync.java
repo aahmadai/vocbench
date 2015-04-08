@@ -8,6 +8,7 @@ import org.fao.aoscs.domain.DomainRangeObject;
 import org.fao.aoscs.domain.InitializeRelationshipData;
 import org.fao.aoscs.domain.LabelObject;
 import org.fao.aoscs.domain.OntologyInfo;
+import org.fao.aoscs.domain.PropertyTreeObject;
 import org.fao.aoscs.domain.RelationshipObject;
 import org.fao.aoscs.domain.RelationshipTreeObject;
 import org.fao.aoscs.domain.TreeObject;
@@ -50,5 +51,5 @@ public interface RelationshipServiceAsync<T> {
 	public void editRangeValues(RelationshipObject rObj, String uri, HashMap<String, String> oldValues, HashMap<String, String> newValues, int actionId, int userId, OntologyInfo ontoInfo, AsyncCallback<DomainRangeObject> callback);
 	public void deleteRangeValue(RelationshipObject rObj, String dataRange, String value , int actionId, int userId, OntologyInfo ontoInfo, AsyncCallback<ArrayList<ClassObject>> callback);
 	void getDatatypePropertiesTree(OntologyInfo ontoInfo,
-			AsyncCallback<RelationshipTreeObject> callback);
+			AsyncCallback<PropertyTreeObject> callback);
 }

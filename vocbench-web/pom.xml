@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fao.aoscs</groupId>
 	<artifactId>vocbench-web</artifactId>
-	<version>2.3-SNAPSHOT</version>
+	<version>2.3</version>
 	<packaging>pom</packaging>
 	<name>VocBench</name>
 	<url>http://aims.fao.org/tools/vocbench-2</url>

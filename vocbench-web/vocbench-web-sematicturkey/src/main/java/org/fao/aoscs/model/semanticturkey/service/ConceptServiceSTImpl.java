@@ -29,6 +29,7 @@ import org.fao.aoscs.domain.LinkingConceptObject;
 import org.fao.aoscs.domain.NonFuncObject;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlStatus;
+import org.fao.aoscs.domain.PropertyTreeObject;
 import org.fao.aoscs.domain.RecentChanges;
 import org.fao.aoscs.domain.RecentChangesInitObject;
 import org.fao.aoscs.domain.RelationObject;
@@ -1981,7 +1982,7 @@ public class ConceptServiceSTImpl {
 	 * @param ontoInfo
 	 * @return
 	 */
-	public HashMap<String, String> getConceptAnnotation(String resourceURI, boolean isExplicit, OntologyInfo ontoInfo){
+	public PropertyTreeObject getConceptAnnotation(String resourceURI, boolean isExplicit, OntologyInfo ontoInfo){
 		ArrayList<String> excludedProps = new ArrayList<String>();
 		excludedProps.add(SKOS.NOTE);
 		excludedProps.add(RDFS.LABEL);
@@ -1995,12 +1996,13 @@ public class ConceptServiceSTImpl {
 	 * @param ontoInfo
 	 * @return
 	 */
-	public HashMap<String, String> getConceptOther(String resourceURI, boolean isExplicit, OntologyInfo ontoInfo){
+	public PropertyTreeObject getConceptOther(String resourceURI, boolean isExplicit, OntologyInfo ontoInfo){
 		ArrayList<String> excludedProps = new ArrayList<String>();
 		excludedProps.add(SESAME.DIRECTTYPE);
 		excludedProps.add(RDF.TYPE);
 		
-		return PropertyManager.getPlainRDFProperties(ontoInfo, excludedProps, isExplicit);
+		//return PropertyManager.getPlainRDFProperties(ontoInfo, excludedProps, isExplicit);
+		return PropertyManager.getPlainRDFPropertiesTree(ontoInfo, excludedProps, isExplicit);
 	}
 	
 	public HashMap<String, String> getConceptAlignment(OntologyInfo ontoInfo){

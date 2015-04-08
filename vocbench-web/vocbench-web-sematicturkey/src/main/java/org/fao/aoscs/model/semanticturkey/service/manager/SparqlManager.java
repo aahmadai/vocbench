@@ -82,7 +82,6 @@ public class SparqlManager extends ResponseManager {
 							}
 							for(String header: headrow)
 							{
-								System.out.println("header: "+header+" :: "+rowMap.get(header));
 								row.add(rowMap.get(header));
 							}
 							list.add(row);

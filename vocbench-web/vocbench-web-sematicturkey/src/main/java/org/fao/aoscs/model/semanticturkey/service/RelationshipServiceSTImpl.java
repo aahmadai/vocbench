@@ -19,6 +19,7 @@ import org.fao.aoscs.domain.DomainRangeObject;
 import org.fao.aoscs.domain.InitializeRelationshipData;
 import org.fao.aoscs.domain.LabelObject;
 import org.fao.aoscs.domain.OntologyInfo;
+import org.fao.aoscs.domain.PropertyTreeObject;
 import org.fao.aoscs.domain.RecentChangeData;
 import org.fao.aoscs.domain.RelationshipObject;
 import org.fao.aoscs.domain.RelationshipTreeObject;
@@ -29,6 +30,7 @@ import org.fao.aoscs.model.semanticturkey.service.manager.ClsManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.DeleteManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.ObjectManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.PropertyManager;
+import org.fao.aoscs.model.semanticturkey.service.manager.response.PropertyResponseManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.VocbenchResponseManager;
 import org.fao.aoscs.model.semanticturkey.util.STUtility;
 import org.fao.aoscs.model.semanticturkey.util.STXMLUtility;
@@ -1556,26 +1558,13 @@ public class RelationshipServiceSTImpl {
 	 * @param excludedProps
 	 * @return
 	 */
-	public RelationshipTreeObject getDatatypePropertiesTree(OntologyInfo ontoInfo)
+	public PropertyTreeObject getDatatypePropertiesTree(OntologyInfo ontoInfo)
 	{
-		RelationshipTreeObject rtObj = new RelationshipTreeObject();
-		
 		ArrayList<String> excludedProps = new ArrayList<String>();
 		excludedProps.add(SKOSXL.LITERALFORM);
 		excludedProps.add(SKOS.NOTATION);
 		
-		XMLResponseREPLY reply = PropertyManager.getDatatypePropertiesTree(ontoInfo, STUtility.convertArrayToString(excludedProps, STXMLUtility.ST_SEPARATOR));
-		if(reply!=null)
-		{
-			Element dataElement = reply.getDataElement();
-			for(Element propElement : STXMLUtility.getChildElementByTagName(dataElement, "Property"))
-			{
-				rtObj = getPropertyDetail(ontoInfo, rtObj, propElement.getAttribute("name"), propElement.getAttribute("uri"), null, true, RelationshipObject.DATATYPE);
-				rtObj = getChildProperty(ontoInfo, propElement, rtObj, RelationshipObject.DATATYPE);
-			}
-		}
-	    
-		return rtObj;
+		return PropertyManager.getDatatypePropertiesTree(ontoInfo, STUtility.convertArrayToString(excludedProps, STXMLUtility.ST_SEPARATOR));
 	}
 	
 	

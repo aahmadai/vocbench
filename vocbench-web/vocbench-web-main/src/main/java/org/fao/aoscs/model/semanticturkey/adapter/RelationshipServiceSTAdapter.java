@@ -9,6 +9,7 @@ import org.fao.aoscs.domain.DomainRangeObject;
 import org.fao.aoscs.domain.InitializeRelationshipData;
 import org.fao.aoscs.domain.LabelObject;
 import org.fao.aoscs.domain.OntologyInfo;
+import org.fao.aoscs.domain.PropertyTreeObject;
 import org.fao.aoscs.domain.RelationshipObject;
 import org.fao.aoscs.domain.RelationshipTreeObject;
 import org.fao.aoscs.domain.TreeObject;
@@ -263,7 +264,7 @@ public class RelationshipServiceSTAdapter  implements RelationshipService{
 	}
 
 	@Override
-	public RelationshipTreeObject getDatatypePropertiesTree(
+	public PropertyTreeObject getDatatypePropertiesTree(
 			OntologyInfo ontoInfo) throws Exception {
 		return relationshipService.getDatatypePropertiesTree(ontoInfo);
 	}

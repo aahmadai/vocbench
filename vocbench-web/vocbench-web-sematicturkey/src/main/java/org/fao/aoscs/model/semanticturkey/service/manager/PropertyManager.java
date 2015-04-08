@@ -14,6 +14,7 @@ import java.util.HashMap;
 import org.fao.aoscs.domain.ClassObject;
 import org.fao.aoscs.domain.DomainRangeObject;
 import org.fao.aoscs.domain.OntologyInfo;
+import org.fao.aoscs.domain.PropertyTreeObject;
 import org.fao.aoscs.domain.RelationshipObject;
 import org.fao.aoscs.model.semanticturkey.STModelConstants;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.PropertyResponseManager;
@@ -21,6 +22,7 @@ import org.fao.aoscs.model.semanticturkey.service.manager.response.ResourceRespo
 import org.fao.aoscs.model.semanticturkey.service.manager.response.ResponseManager;
 import org.fao.aoscs.model.semanticturkey.util.STLiteral;
 import org.fao.aoscs.model.semanticturkey.util.STResource;
+import org.fao.aoscs.model.semanticturkey.util.STUtility;
 import org.fao.aoscs.model.semanticturkey.util.STXMLUtility;
 import org.w3c.dom.Element;
 
@@ -181,9 +183,28 @@ public class PropertyManager extends ResponseManager {
 	 * @param excludedProps
 	 * @return
 	 */
-	public static XMLResponseREPLY getDatatypePropertiesTree(OntologyInfo ontoInfo, String excludedProps)
+	public static PropertyTreeObject getDatatypePropertiesTree(OntologyInfo ontoInfo, String excludedProps)
 	{
-		return PropertyResponseManager.getDatatypePropertiesTreeRequest(ontoInfo, excludedProps);
+		
+		PropertyTreeObject tree = new PropertyTreeObject();
+		XMLResponseREPLY reply = PropertyResponseManager.getDatatypePropertiesTreeRequest(ontoInfo, excludedProps);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(Element propElement : STXMLUtility.getChildElementByTagName(dataElement, "Property"))
+			{
+				tree = STUtility.createPropertyTreeObject(tree, 
+						propElement.getAttribute("name"), 
+						propElement.getAttribute("uri"), 
+						"", 
+						true,
+						propElement.getAttribute("type"),
+						propElement.getAttribute("deleteForbidden").equals("true")?true:false
+						);
+				tree = getSubPropertyTreeObject(propElement, tree, propElement.getAttribute("uri"));
+			}
+		}
+		return tree;
 	}
 	
 	
@@ -766,20 +787,27 @@ public class PropertyManager extends ResponseManager {
 	 * @param explicit
 	 * @return
 	 */
-	public static HashMap<String, String> getAnnotationPropertiesTree(OntologyInfo ontoInfo, ArrayList<String> excludedProps, boolean explicit)
+	public static PropertyTreeObject getAnnotationPropertiesTree(OntologyInfo ontoInfo, ArrayList<String> excludedProps, boolean explicit)
 	{
-		HashMap<String, String> list = new HashMap<String, String>();
+		PropertyTreeObject tree = new PropertyTreeObject();
 		XMLResponseREPLY reply = PropertyResponseManager.getAnnotationPropertiesTreeRequest(ontoInfo, excludedProps);
 		if(reply!=null)
 		{
 			Element dataElement = reply.getDataElement();
 			for(Element propElement : STXMLUtility.getChildElementByTagName(dataElement, "Property"))
 			{
-				list.put(propElement.getAttribute("uri"), propElement.getAttribute("name"));
-				list = getChildProperty(ontoInfo, propElement, list);
+				tree = STUtility.createPropertyTreeObject(tree, 
+						propElement.getAttribute("name"), 
+						propElement.getAttribute("uri"), 
+						"", 
+						true,
+						propElement.getAttribute("type"),
+						propElement.getAttribute("deleteForbidden").equals("true")?true:false
+						);
+				tree = getSubPropertyTreeObject(propElement, tree, propElement.getAttribute("uri"));
 			}
 		}
-		return list;
+		return tree;
 	}
 	
 	/**
@@ -820,6 +848,50 @@ public class PropertyManager extends ResponseManager {
 			}
 		}
 		return list;
+	}
+	
+	private static PropertyTreeObject getSubPropertyTreeObject(Element dataElement, PropertyTreeObject rtObj, String parentURI)
+	{
+		for(Element subpropElement : STXMLUtility.getChildElementByTagName(dataElement, "SubProperties"))
+		{
+			for(Element propElement : STXMLUtility.getChildElementByTagName(subpropElement, "Property"))
+			{
+				rtObj = STUtility.createPropertyTreeObject(rtObj, 
+						propElement.getAttribute("name"), 
+						propElement.getAttribute("uri"), 
+						parentURI, 
+						false,
+						propElement.getAttribute("type"),
+						propElement.getAttribute("deleteForbidden").equals("true")?true:false
+						);
+				rtObj = getSubPropertyTreeObject(propElement, rtObj, propElement.getAttribute("uri"));
+			}
+		}
+		return rtObj;
+	}
+	
+	
+	public static PropertyTreeObject getPlainRDFPropertiesTree(OntologyInfo ontoInfo, ArrayList<String> excludedProps, boolean explicit)
+	{
+		PropertyTreeObject tree = new PropertyTreeObject();
+		XMLResponseREPLY reply = PropertyResponseManager.getPlainRDFPropertiesRequest(ontoInfo, excludedProps);
+		if(reply!=null)
+		{
+			Element dataElement = reply.getDataElement();
+			for(Element propElement : STXMLUtility.getChildElementByTagName(dataElement, "Property"))
+			{
+				tree = STUtility.createPropertyTreeObject(tree, 
+						propElement.getAttribute("name"), 
+						propElement.getAttribute("uri"), 
+						"", 
+						true,
+						propElement.getAttribute("type"),
+						propElement.getAttribute("deleteForbidden").equals("true")?true:false
+						);
+				tree = getSubPropertyTreeObject(propElement, tree, propElement.getAttribute("uri"));
+			}
+		}
+		return tree;
 	}
 	
 		/**

@@ -31,6 +31,8 @@ import org.fao.aoscs.domain.DomainRangeObject;
 import org.fao.aoscs.domain.IDObject;
 import org.fao.aoscs.domain.LabelObject;
 import org.fao.aoscs.domain.OntologyInfo;
+import org.fao.aoscs.domain.PropertyObject;
+import org.fao.aoscs.domain.PropertyTreeObject;
 import org.fao.aoscs.domain.RelationshipObject;
 import org.fao.aoscs.domain.TermObject;
 import org.fao.aoscs.domain.TranslationObject;
@@ -168,6 +170,32 @@ public class STUtility {
 		labelObj.setLabel(label);
 		labelObj.setLanguage(lang);
 		return labelObj;
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param rtObj
+	 * @param propertyName
+	 * @param propertyURI
+	 * @param parentPropertyURI
+	 * @param rootItem
+	 * @param type
+	 * @param deleteForbidden
+	 * @return
+	 */
+	public static PropertyTreeObject createPropertyTreeObject(PropertyTreeObject rtObj, String propertyName, String propertyURI, String parentPropertyURI, boolean rootItem, String type, boolean deleteForbidden)
+	{
+		PropertyObject rObj = new PropertyObject();
+		rObj.setUri(propertyURI);
+		rObj.setName(propertyName);
+		rObj.setType(type);
+		rObj.setRootItem(rootItem);
+		rObj.setParent(parentPropertyURI);
+		rObj.setDeleteForbidden(deleteForbidden);
+		
+		rtObj.addPropertyList(rObj);
+		rtObj.addParentChild(parentPropertyURI, rObj);
+		return rtObj;
 	}
 	
 	/**
