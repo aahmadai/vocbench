@@ -262,7 +262,7 @@ public class ConceptServiceSTImpl {
 		{
 			conceptObject.setUri(null);
 		}
-		conceptObject.setScheme(schemeURI);
+		conceptObject.addScheme(schemeURI);
 		
 		// ADD CONCEPT
 		String[] uris = SKOSXLManager.createConcept(ontoInfo, conceptObject.getUri(), parentConceptURI, schemeURI, termObject.getLabel(), termObject.getLang());

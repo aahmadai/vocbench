@@ -1,5 +1,6 @@
 package org.fao.aoscs.client.utility;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.fao.aoscs.client.MainApp;
@@ -30,7 +31,17 @@ public class ModuleManager {
 	public static int MODULE_CONCEPT_ALIGNMENT_BROWSER = 8;
 	
 	/**Use to select any specific item in concept tree from any module of this project*/
-	public static void gotoItem(final String treeItem, final String schemeURI, final boolean isAddAction, final int infoTab, final int belongsToModule, final int type){
+	public static void gotoItem(final String treeItem, ArrayList<String> schemeURIs, final boolean isAddAction, final int infoTab, final int belongsToModule, final int type){
+		String tempschemeURI = "";
+		for(String scheme : schemeURIs)
+		{
+			tempschemeURI = scheme;
+			if(scheme.equals(MainApp.schemeUri))
+			{
+				break;
+			}
+		}
+		final String schemeURI = tempschemeURI;
 		if(schemeURI==null || schemeURI.equals(""))
 		{
 			Window.alert(constants.conceptSchemeNotBelong());

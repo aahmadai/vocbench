@@ -1,5 +1,6 @@
 package org.fao.aoscs.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -31,7 +32,7 @@ public class ConceptObject extends LightEntity {
 	
 	//private String nameSpace;
 	
-	private String scheme;
+	private ArrayList<String> scheme = new ArrayList<String>();;
 	
 	//private String parentInstance;
 	
@@ -141,12 +142,16 @@ public class ConceptObject extends LightEntity {
 		this.nameSpace = nameSpace;
 	}*/
 
-	public String getScheme() {
+	public ArrayList<String> getScheme() {
 		return scheme;
 	}
 
-	public void setScheme(String scheme) {
+	public void setScheme(ArrayList<String> scheme) {
 		this.scheme = scheme;
+	}
+	
+	public void addScheme(String scheme) {
+		this.scheme.add(scheme);
 	}
 
 	public HashMap<String, TermObject> getTerm() {

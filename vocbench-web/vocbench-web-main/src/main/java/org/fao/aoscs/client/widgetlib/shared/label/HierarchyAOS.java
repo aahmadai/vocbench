@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class HierarchyAOS extends Composite{
 	
+	@SuppressWarnings("unused")
 	private ConceptObject conceptObject = new ConceptObject();
 	VerticalPanel mainPanel = new VerticalPanel();
 	HierarchyObject hObj =  new HierarchyObject();
@@ -138,7 +139,7 @@ public class HierarchyAOS extends Composite{
 		label.addClickHandler(new ClickHandler()
 		{
 			public void onClick(ClickEvent event) {
-				ModuleManager.selectModule(tObj.getUri(), conceptObject.getScheme(), true, ConceptTab.HIERARCHY.getTabIndex(), conceptObject.getBelongsToModule());
+				ModuleManager.gotoConceptItem(tObj.getUri(), true, ConceptTab.HIERARCHY.getTabIndex());
 			}
 			
 		});

@@ -115,7 +115,7 @@ public class Validator extends ValidationTemplate {
 		});
 		return label;
 	}
-	public static Widget getImagePanel(final int type, final String conceptURI, final String link, final String schemeURI, String style, final boolean isAddAction, final int tab, final int belongsToModule)
+	public static Widget getImagePanel(final int type, final String conceptURI, final String link, final ArrayList<String> schemeURI, String style, final boolean isAddAction, final int tab, final int belongsToModule)
 	{
 		String imgURL = "images/spacer.gif";
 		if(type==1)
@@ -155,7 +155,7 @@ public class Validator extends ValidationTemplate {
 		}
 		return image;
 	}
-	public static Widget getLabelPanel(final int type, String text, String title, final String link, final String schemeURI, String style, final boolean isAddAction, final int tab, final int belongsToModule)
+	public static Widget getLabelPanel(final int type, String text, String title, final String link, final ArrayList<String> schemeURI, String style, final boolean isAddAction, final int tab, final int belongsToModule)
 	{
 		if(text != null && !text.equals(""))
 		{
@@ -200,7 +200,7 @@ public class Validator extends ValidationTemplate {
 	{
 
 		HashMap<String, TermObject> tObjList = new HashMap<String, TermObject>();
-		String schemeURI = "";
+		ArrayList<String> schemeURI = new ArrayList<String>();
 		int belongsToModule = 0;
 		if(cObj!=null)
 		{
@@ -245,7 +245,7 @@ public class Validator extends ValidationTemplate {
 			panel.add(new HTML("&nbsp;"));
 		return panel;
 	}
-	public static HorizontalFlowPanel makeTermLabel(ConceptObject cObj, TermObject tObjList, String schemeURI, String style, final boolean isAddAction, final int tab, final int objectType)
+	public static HorizontalFlowPanel makeTermLabel(ConceptObject cObj, TermObject tObjList, ArrayList<String> schemeURI, String style, final boolean isAddAction, final int tab, final int objectType)
 	{
 		int belongsToModule = 0;
 		if(cObj!=null)
@@ -271,7 +271,7 @@ public class Validator extends ValidationTemplate {
 			panel.add(new HTML("&nbsp;"));
 		return panel;
 	}
-	public static HorizontalFlowPanel makeLabel(String text, String title, String link , String schemeURI, String style, final boolean isAddAction, final int tab, final int objectType, int belongsToModule)
+	public static HorizontalFlowPanel makeLabel(String text, String title, String link , ArrayList<String> schemeURI, String style, final boolean isAddAction, final int tab, final int objectType, int belongsToModule)
 	{
 		HorizontalFlowPanel panel = new HorizontalFlowPanel();
 		panel.add(getImagePanel(objectType, title, link, schemeURI, style, isAddAction, tab, belongsToModule));
@@ -279,7 +279,7 @@ public class Validator extends ValidationTemplate {
 		panel.add(getLabelPanel(objectType, text ,title, link, schemeURI, style, isAddAction, tab, belongsToModule));
 		return panel;
 	}
-	public static HorizontalFlowPanel makeLabelOnly(String text, String title, String link , String schemeURI, String style, final boolean isAddAction, final int tab, final int objectType, boolean isSource, int belongsToModule)
+	public static HorizontalFlowPanel makeLabelOnly(String text, String title, String link , ArrayList<String> schemeURI, String style, final boolean isAddAction, final int tab, final int objectType, boolean isSource, int belongsToModule)
 	{
 		HorizontalFlowPanel panel = new HorizontalFlowPanel();
 		if(isSource)
@@ -357,7 +357,9 @@ public class Validator extends ValidationTemplate {
 			else if(obj instanceof SchemeObject)
 			{
 				SchemeObject sObj = (SchemeObject) obj;
-				hp.add(makeLabel(sObj.getSchemeLabel()+checkNullValueInParenthesis("en"), sObj.getDescription(), sObj.getSchemeInstance(), sObj.getSchemeInstance(), style, isAddAction, tab, objectType,  belongsToModule));
+				ArrayList<String> schemes = new ArrayList<String>();
+				schemes.add(sObj.getSchemeInstance());
+				hp.add(makeLabel(sObj.getSchemeLabel()+checkNullValueInParenthesis("en"), sObj.getDescription(), sObj.getSchemeInstance(), schemes, style, isAddAction, tab, objectType,  belongsToModule));
 			}
 			else if(obj instanceof AttributesObject)
 			{

@@ -545,7 +545,7 @@ public class SearchCellTable {
 		return labelTab;
 	}
 
-	 public  Widget getLabelPanel(final int type, String text, String title, final String link, final String schemeURI, String style, final boolean isAddAction, final int tab, final int belongsToModule)
+	 public  Widget getLabelPanel(final int type, String text, String title, final String link, final ArrayList<String> schemeURI, String style, final boolean isAddAction, final int tab, final int belongsToModule)
 		{
 			if(!text.equals(""))
 			{
@@ -576,8 +576,8 @@ public class SearchCellTable {
 		return panel;
 	}
 		
-	public void onLabelClicked(String link, String schemeURI, boolean isAddAction,int tab, int belongsToModule, int type){
-		ModuleManager.gotoItem(link, MainApp.schemeUri/*schemeURI*/, isAddAction, tab, belongsToModule, type);
+	public void onLabelClicked(String link, ArrayList<String> schemeURI, boolean isAddAction,int tab, int belongsToModule, int type){
+		ModuleManager.gotoItem(link, schemeURI, isAddAction, tab, belongsToModule, type);
 	}
 	  
 	public static Widget wrapFlow(Widget w)

@@ -616,7 +616,7 @@ public class ObjectManager extends ResponseManager {
 	{
 		String conceptURI = "";
 		String conceptShow = "";
-		String scheme = "";
+		ArrayList<String> scheme = new ArrayList<String>();
 		String status = "";
 		int statusID = 0;
 		Date dateCreate = null;
@@ -625,8 +625,6 @@ public class ObjectManager extends ResponseManager {
 		HashMap<String,TermObject> term= new HashMap<String,TermObject>();
 		boolean rootItem = false;
 		boolean hasChild = false;
-		
-		
 			
 			for(Element conceptElement : STXMLUtility.getChildElementByTagName(conceptInfoElement, "concept"))
 			{
@@ -634,13 +632,22 @@ public class ObjectManager extends ResponseManager {
 				{
 					conceptURI = uriElement.getTextContent();
 					conceptShow = uriElement.getAttribute("show");
-					scheme = uriElement.getAttribute("scheme");
 					status = uriElement.getAttribute("status");
 					dateCreate = DateParser.parseW3CDateTime(uriElement.getAttribute("createdDate"));
 					dateModified = DateParser.parseW3CDateTime(uriElement.getAttribute("lastUpdate"));
 					statusID = OWLStatusConstants.getOWLStatusID(status);
 					rootItem = uriElement.getAttribute("isTopConcept").equals("1")?true:false;
 					hasChild = uriElement.getAttribute("more").equals("1")?true:false;
+				}
+			}
+			for(Element schemesElement : STXMLUtility.getChildElementByTagName(conceptInfoElement, "schemes"))
+			{
+				for(Element collectionElement : STXMLUtility.getChildElementByTagName(schemesElement, "collection"))
+				{
+					for(Element uriElement : STXMLUtility.getChildElementByTagName(collectionElement, "uri"))
+					{
+						scheme.add(uriElement.getTextContent());
+					}
 				}
 			}
 			for(Element SuperTypesElement : STXMLUtility.getChildElementByTagName(conceptInfoElement, "SuperTypes"))

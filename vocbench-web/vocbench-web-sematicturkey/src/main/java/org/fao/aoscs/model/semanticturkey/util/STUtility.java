@@ -77,7 +77,7 @@ public class STUtility {
 	 * @param belongsToModule
 	 * @return
 	 */
-	public static ConceptObject createConceptObject(String uri, String scheme, String status, int statusID, Date dateCreate, Date dateModified, String parentURI,  HashMap<String,TermObject> term, boolean rootItem, boolean hasChild)
+	public static ConceptObject createConceptObject(String uri, ArrayList<String> scheme, String status, int statusID, Date dateCreate, Date dateModified, String parentURI,  HashMap<String,TermObject> term, boolean rootItem, boolean hasChild)
 	{
 		ConceptObject cObj = new ConceptObject();
 		cObj.setUri(uri);
