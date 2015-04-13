@@ -5578,7 +5578,7 @@ public class VOCBENCH extends SKOSXL {
 		}
 		
 		URIGenerator uriGen = new URIGenerator(skosxlModel, graphs, projectName);
-		return uriGen.generateURI(entityPrefix+"$rand()", null);
+		return uriGen.generateURI(entityPrefix+"${rand()}", null);
 	}
 	
 	//moved to SKOSXL.java
@@ -5630,7 +5630,7 @@ public class VOCBENCH extends SKOSXL {
 		}
 		
 		URIGenerator uriGen = new URIGenerator(skosxlModel, graphs, projectName);
-		return uriGen.generateURI(entityPrefix+"$rand()", null);
+		return uriGen.generateURI(entityPrefix+"${rand()}", null);
 	}
 	
 	protected ARTURIResAndRandomString generateDefURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
@@ -5648,7 +5648,7 @@ public class VOCBENCH extends SKOSXL {
 			entityPrefix = DEFAULT_VALUE;
 		}
 		URIGenerator uriGen = new URIGenerator(skosxlModel, graphs, projectName);
-		return uriGen.generateURI(entityPrefix+"$rand()", null);
+		return uriGen.generateURI(entityPrefix+"${rand()}", null);
 	}
 	
 	//moved to SKOS.java
