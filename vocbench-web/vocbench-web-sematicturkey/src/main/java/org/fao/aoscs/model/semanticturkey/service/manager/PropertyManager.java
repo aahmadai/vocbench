@@ -164,6 +164,8 @@ public class PropertyManager extends ResponseManager {
 			propertyRequest = Property.Req.getAnnotationPropertiesTreeRequest;
 		else if(type.equals(RelationshipObject.ONTOLOGY))
 			propertyRequest = Property.Req.getOntologyPropertiesTreeRequest;
+		else if(type.equals(RelationshipObject.RDF))
+			propertyRequest = Property.Req.getPlainRDFPropertiesRequest;
 		
 		return PropertyResponseManager.getPropertiesTreeRequest(ontoInfo, propertyRequest);
 	}

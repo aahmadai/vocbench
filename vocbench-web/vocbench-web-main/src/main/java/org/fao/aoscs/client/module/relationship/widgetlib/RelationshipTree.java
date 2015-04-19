@@ -66,7 +66,6 @@ public class RelationshipTree extends Composite{
 	private VerticalPanel panel = new VerticalPanel();
 	public InitializeRelationshipData initData;
 	private ListBox relationshipTypeListbox;
-	//private RelationshipObject selectedRelationshipObject;
 	private DeckPanel treePanel;
 	private Header head;
 	
@@ -74,16 +73,19 @@ public class RelationshipTree extends Composite{
 	private ScrollPanel scData = new ScrollPanel();
 	private ScrollPanel scAnn = new ScrollPanel();
 	private ScrollPanel scOnt = new ScrollPanel();
+	private ScrollPanel scRdf = new ScrollPanel();
 	
 	private CellTreeAOS objectTree;
 	private CellTreeAOS dataTypeTree;
 	private CellTreeAOS annotationTree;
 	private CellTreeAOS ontologyTree;
+	private CellTreeAOS rdfTree;
 	
 	private RelationshipTreeObject objectRTObject = null;
 	private RelationshipTreeObject datatypeRTObject = null;
 	private RelationshipTreeObject annotationRTObject = null;
 	private RelationshipTreeObject ontologyRTObject = null;
+	private RelationshipTreeObject rdfRTObject = null;
 	
 	private RelationshipDetailTab detailTab;
 	public  PermissionObject permissionTable;
@@ -97,7 +99,7 @@ public class RelationshipTree extends Composite{
 		this.permissionTable = permissionTable;
 		detailTab = new RelationshipDetailTab(RelationshipTree.this, permissionTable, initData);
 		
-		initLayout(true, true, true, true);
+		initLayout(true, true, true, true, true);
         
 		hSplit.ensureDebugId("cwHorizontalSplitPanel");
         hSplit.setSplitPosition("100%");
@@ -142,14 +144,11 @@ public class RelationshipTree extends Composite{
 	public void setDisplayLanguage(ArrayList<String> language){
 		if(relationshipTypeListbox.getItemCount()>0)
 		{
-			/*DisplayLanguage.executeRelation(objectTree, language, objectRTObject);
-			DisplayLanguage.executeRelation(dataTypeTree, language, datatypeRTObject);
-			DisplayLanguage.executeRelation(annotationTree, language, annotationRTObject);
-			DisplayLanguage.executeRelation(ontologyTree, language, ontologyRTObject);*/
 			objectRTObject = null;
 			datatypeRTObject = null;
 			annotationRTObject = null;
 			ontologyRTObject = null;
+			rdfRTObject = null;
 			reload(null);
 		}
 	}
@@ -169,11 +168,6 @@ public class RelationshipTree extends Composite{
 		panel.setCellWidth(sayLoading, "100%");
 	}
 	
-	/*public TreeItemAOS getSelectedItem(){
-		ScrollPanel sc = (ScrollPanel) treePanel.getWidget(relationshipTypeListbox.getSelectedIndex());
-		FastTree tree=(FastTree) sc.getWidget();
-		return (TreeItemAOS) tree.getSelectedItem();
-	}*/
 	private class Header extends Composite{
 		private VerticalPanel panel = new VerticalPanel();
 		private HorizontalPanel btnHp = new HorizontalPanel();
@@ -196,40 +190,6 @@ public class RelationshipTree extends Composite{
 		public ImageAOS getDelete() {
 			return delete;
 		}
-
-		/*private TreeItemAOS getSelectedItem(ListBox relationshipListbox,DeckPanel treePanel){
-			ScrollPanel sc = (ScrollPanel) treePanel.getWidget(relationshipListbox.getSelectedIndex());
-			FastTree tree = (FastTree) sc.getWidget();
-			return (TreeItemAOS) tree.getSelectedItem();
-		}*/
-		
-		/*private RelationshipObject getParentOfSelectedItem(ListBox relationshipListbox,DeckPanel treePanel){
-			TreeItemAOS item = getSelectedItem(relationshipListbox, treePanel);
-			if(item != null ){
-				TreeItemAOS parentItem = (TreeItemAOS) item.getParentItem();
-				if(parentItem !=null){
-					RelationshipObject parent = (RelationshipObject) parentItem.getValue();
-					return parent;
-				}else{
-					RelationshipObject parent = new RelationshipObject();
-					if(relationshipListbox.getSelectedIndex()==0){
-						parent.setUri(ModelConstants.COMMONBASENAMESPACE+ModelConstants.RWBOBJECTPROPERTY);
-						parent.addLabel(ModelConstants.RWBOBJECTPROPERTY, "en");
-						parent.setType(RelationshipObject.OBJECT);
-						parent.setName(ModelConstants.RWBOBJECTPROPERTY);
-					}else{
-						parent.setUri(ModelConstants.COMMONBASENAMESPACE+ModelConstants.RWBDATATYPEPROPERTY);
-						parent.addLabel(ModelConstants.RWBDATATYPEPROPERTY, "en");
-						parent.setType(RelationshipObject.DATATYPE);
-						parent.setName(ModelConstants.RWBDATATYPEPROPERTY);
-					}
-					//parent.setParent("");
-					return parent;
-				}
-			}else{
-				return null;
-			}
-		}*/
 
 		private HorizontalPanel makeTopLayer(final ListBox relationshipListbox,final DeckPanel treePanel,HorizontalPanel btnHp,final CheckBox showURI){
 
@@ -402,75 +362,7 @@ public class RelationshipTree extends Composite{
 		
 	}
 	
-	/*private void setObjScrollPanelSize()
-	{
-		DOM.setStyleAttribute(scObj.getElement(), "backgroundColor","#FFFFFF");
-		Scheduler.get().scheduleDeferred(new Command(){
-
-			public void execute() {
-				scObj.setHeight(hSplit.getOffsetHeight()-head.getOffsetHeight() +"px");
-				Window.addResizeHandler(new ResizeHandler(){
-					public void onResize(ResizeEvent event) {
-						scObj.setHeight(hSplit.getOffsetHeight()-head.getOffsetHeight()+"px");
-					}
-				});
-			}
-	    	
-	    });
-	}
-	
-	private void setDataScrollPanelSize()
-	{
-		DOM.setStyleAttribute(scData.getElement(), "backgroundColor","#FFFFFF");
-		Scheduler.get().scheduleDeferred(new Command(){
-
-			public void execute() {
-				scData.setHeight(hSplit.getOffsetHeight()-head.getOffsetHeight()+"px");
-				Window.addResizeHandler(new ResizeHandler(){
-					public void onResize(ResizeEvent event) {
-						scData.setHeight(hSplit.getOffsetHeight()-head.getOffsetHeight()+"px");
-					}
-				});
-			}
-	    	
-	    });
-	}
-	
-	private void setAnnScrollPanelSize()
-	{
-		DOM.setStyleAttribute(scAnn.getElement(), "backgroundColor","#FFFFFF");
-		Scheduler.get().scheduleDeferred(new Command(){
-
-			public void execute() {
-				scAnn.setHeight(hSplit.getOffsetHeight()-head.getOffsetHeight() +"px");
-				Window.addResizeHandler(new ResizeHandler(){
-					public void onResize(ResizeEvent event) {
-						scAnn.setHeight(hSplit.getOffsetHeight()-head.getOffsetHeight()+"px");
-					}
-				});
-			}
-	    	
-	    });
-	}
-	
-	private void setOntScrollPanelSize()
-	{
-		DOM.setStyleAttribute(scOnt.getElement(), "backgroundColor","#FFFFFF");
-		Scheduler.get().scheduleDeferred(new Command(){
-
-			public void execute() {
-				scOnt.setHeight(hSplit.getOffsetHeight()-head.getOffsetHeight() +"px");
-				Window.addResizeHandler(new ResizeHandler(){
-					public void onResize(ResizeEvent event) {
-						scOnt.setHeight(hSplit.getOffsetHeight()-head.getOffsetHeight()+"px");
-					}
-				});
-			}
-	    	
-	    });
-	}*/
-	
-	private void initLayout(final boolean object, final boolean datatype, final boolean annotation, final boolean ontology){
+	private void initLayout(final boolean object, final boolean datatype, final boolean annotation, final boolean ontology, final boolean rdf){
 		
         detailTab.setVisible(false);
         hSplit.setSplitPosition("100%");
@@ -490,41 +382,12 @@ public class RelationshipTree extends Composite{
 			initListBox(constants.relAnnotationProperties(), RelationshipObject.ANNOTATION);
 		if(ontology)
 			initListBox(constants.relOntologyProperties(), RelationshipObject.ONTOLOGY);
+		if(rdf)
+			initListBox(constants.relRDFProperties(), RelationshipObject.RDF);
 		
 		relationshipTypeListbox.setSelectedIndex(0);
 		
 		load(getSelectedRelationshipObjectType(), null);
-		
-		/*
-		relationshipTypeListbox.addItem(constants.relObjectProperties(), RelationshipObject.OBJECT);
-		objectTree = new TreeAOS(TreeAOS.TYPE_RELATIONSHIP);
-		objectTree.setSize("100%", "100%");
-		scObj = new ScrollPanel();
-		scObj.add(objectTree);
-		treePanel.add(scObj);
-		
-		relationshipTypeListbox.addItem(constants.relDatatypeProperties(), RelationshipObject.DATATYPE);
-		dataTypeTree = new TreeAOS(TreeAOS.TYPE_RELATIONSHIP);
-		dataTypeTree.setSize("100%", "100%");
-		scData = new ScrollPanel();
-		scData.add(dataTypeTree);
-		treePanel.add(scData);
-
-		relationshipTypeListbox.addItem(constants.relAnnotationProperties(), RelationshipObject.ANNOTATION);
-		annotationTree = new TreeAOS(TreeAOS.TYPE_RELATIONSHIP);
-		annotationTree.setSize("100%", "100%");
-		scAnn = new ScrollPanel();
-		scAnn.add(annotationTree);
-		treePanel.add(scAnn);
-
-		relationshipTypeListbox.addItem(constants.relOntologyProperties(), RelationshipObject.ONTOLOGY);
-		ontologyTree = new TreeAOS(TreeAOS.TYPE_RELATIONSHIP);
-		ontologyTree.setSize("100%", "100%");
-		scOnt = new ScrollPanel();
-		scOnt.add(ontologyTree);
-		treePanel.add(scOnt);
-		
-		*/
 		
 	}
 	
@@ -534,29 +397,6 @@ public class RelationshipTree extends Composite{
 		treePanel.add(getSCObject(type));
 		
 	}
-	
-	/*private void loadObjRelationshipTree(ArrayList<TreeObject> list, final String targetItemURI, final int index)
-	{
-		LazyLoadingTree.addTreeItems(objectTree, list);
-		Scheduler.get().scheduleDeferred(new Command(){
-		    public void execute() {				
-				setObjScrollPanelSize();
-				gotoItem(targetItemURI, index);
-		    }
-		});
-	}
-	
-	private void loadDataRelationshipTree(ArrayList<TreeObject> list, final String targetItemURI, final int index)
-	{
-		LazyLoadingTree.addTreeItems(dataTypeTree, list);
-		Scheduler.get().scheduleDeferred(new Command(){
-			public void execute() {				
-				setObjScrollPanelSize();
-				gotoItem(targetItemURI, index);
-			}
-	    });
-	}*/
-	
 	
 	private void loadRelationshipTree(final RelationshipTreeObject rtObj, final String type, final String targetItemURI)
 	{
@@ -582,134 +422,6 @@ public class RelationshipTree extends Composite{
 		    }
 		});
 	}
-	
-	/*private void loadObjRelationshipTree(final RelationshipTreeObject rtObj, final String targetItemURI, final int index)
-	{
-		LazyLoadingTree.addTreeItems(objectTree, rtObj.getRootItem(), rtObj);
-		Scheduler.get().scheduleDeferred(new Command(){
-		    public void execute() {				
-		    	setScrollPanelSize(RelationshipObject.OBJECT);
-				gotoItem(targetItemURI, index);
-		    }
-		});
-	}
-	
-	private void loadDataRelationshipTree(final RelationshipTreeObject rtObj, final String targetItemURI, final int index)
-	{
-		LazyLoadingTree.addTreeItems(dataTypeTree, rtObj.getRootItem(), rtObj);
-		Scheduler.get().scheduleDeferred(new Command(){
-			public void execute() {				
-				setScrollPanelSize(RelationshipObject.DATATYPE);
-				gotoItem(targetItemURI, index);
-			}
-	    });
-	}
-	
-	private void loadAnnRelationshipTree(final RelationshipTreeObject rtObj, final String targetItemURI, final int index)
-	{
-		LazyLoadingTree.addTreeItems(annotationTree, rtObj.getRootItem(), rtObj);
-		Scheduler.get().scheduleDeferred(new Command(){
-			public void execute() {				
-				setScrollPanelSize(RelationshipObject.ANNOTATION);
-				gotoItem(targetItemURI, index);
-			}
-	    });
-	}
-	
-	private void loadOntRelationshipTree(final RelationshipTreeObject rtObj, final String targetItemURI, final int index)
-	{
-		LazyLoadingTree.addTreeItems(ontologyTree, rtObj.getRootItem(), rtObj);
-		Scheduler.get().scheduleDeferred(new Command(){
-			public void execute() {				
-				setScrollPanelSize(RelationshipObject.ONTOLOGY);
-				gotoItem(targetItemURI, index);
-			}
-	    });
-	}*/
-	
-	/*public void onTreeSelection(TreeItemAOS vItem)
-    {
-        if(vItem == null)
-        {
-            hSplit.setSplitPosition("100%");
-            detailTab.setVisible(false);
-            getURIPanel.setVisible(false);
-            uriTb.setText("");
-        }
-        else
-        {
-            if(!detailTab.isVisible())  
-                hSplit.setSplitPosition("42%");
-            setScrollPanelSize();
-            detailTab.setVisible(true);
-            detailTab.reload();
-	        head.showFunctionalPanel(true);
-	        
-	        getRTObject().setRelationshipSelected(true);
-           
-            selectedRelationshipObject = (RelationshipObject) vItem.getValue();
-            if(vItem.getParentItem()!=null){
-                TreeItemAOS parentItem = (TreeItemAOS) vItem.getParentItem();                
-                selectedRelationshipObject.setParent(((RelationshipObject) parentItem.getValue()).getUri());
-            }
-            vItem.getTree().ensureSelectedItemVisible();
-            uriTb.setText(selectedRelationshipObject.getUri());
-            getURIPanel.setVisible(showURI.getValue());
-            
-            head.getDelete().setEnable(selectedRelationshipObject.getUri().startsWith(ModelConstants.COMMONBASENAMESPACE));
-            
-            AsyncCallback<RelationshipObject> callback = new AsyncCallback<RelationshipObject>()
-    		{
-    			public void onSuccess(RelationshipObject result)
-    			{
-    				result.setType(selectedRelationshipObject.getType());
-    				detailTab.setURI(result);
-    				
-    			}
-    			public void onFailure(Throwable caught){
-    				ExceptionManager.showException(caught, constants.conceptLoadFail());
-    			}
-    		};
-            Service.relationshipService.getRelationshipObject(MainApp.userOntology, selectedRelationshipObject.getUri(), callback);
-            
-            String html = vItem.getHTML();               
-            HTML allText = new HTML();
-            allText.setHTML(html);              
-            allText.addStyleName("cursor-hand");
-            allText.addClickHandler(new ClickHandler() {
-                public void onClick(ClickEvent event) {
-                    allConceptText.hide();                      
-            }});            
-            allConceptText.clear();
-            allConceptText.add(allText);
-            
-            HTML title = new HTML();                
-            title.setWidth("100%");
-            title.setHTML(html);
-            title.setTitle(constants.relShowEntireText());
-            title.addStyleName("cursor-hand");
-            title.addClickHandler(new ClickHandler() {
-                public void onClick(ClickEvent event) {
-                    Widget sender = (Widget) event.getSource();
-                    allConceptText.setPopupPosition(sender.getAbsoluteLeft(), sender.getAbsoluteTop());
-                    allConceptText.show();
-                }});                    
-            detailTab.selectedConceptPanel.clear();
-            detailTab.selectedConceptPanel.add(title);
-                                            
-            DOM.setStyleAttribute(title.getElement(), "height", "18px");
-            DOM.setStyleAttribute(title.getElement(), "overflow", "hidden");
-            
-            detailTab.reload();
-            if(relationshipTypeListbox.getSelectedIndex() == 0){
-            	detailTab.showInverseProperty(true);
-            }else{
-            	detailTab.showInverseProperty(false);
-            }
-            
-                      
-        }
-    }*/
 	
 	public void onTreeSelection(final RelationshipObject rObj)
     {
@@ -1080,6 +792,10 @@ public class RelationshipTree extends Composite{
 		{
 			return ontologyTree;
 		}
+		else if(type.equals(RelationshipObject.RDF))
+		{
+			return rdfTree;
+		}
 		else
 			return null;
 	}
@@ -1102,6 +818,10 @@ public class RelationshipTree extends Composite{
 		else if(type.equals(RelationshipObject.ONTOLOGY))
 		{
 			ontologyTree = tree;
+		}
+		else if(type.equals(RelationshipObject.RDF))
+		{
+			rdfTree = tree;
 		}
 	}
 	
@@ -1126,6 +846,10 @@ public class RelationshipTree extends Composite{
 		{
 			return ontologyRTObject;
 		}
+		else if(type.equals(RelationshipObject.RDF))
+		{
+			return rdfRTObject;
+		}
 		else
 			return null;
 	}
@@ -1148,6 +872,10 @@ public class RelationshipTree extends Composite{
 		{
 			ontologyRTObject = result;
 		}
+		else if(type.equals(RelationshipObject.RDF))
+		{
+			rdfRTObject = result;
+		}
 	}
 
 	private ScrollPanel getSCObject(String type)
@@ -1168,38 +896,18 @@ public class RelationshipTree extends Composite{
 		{
 			return scOnt;
 		}
+		else if(type.equals(RelationshipObject.RDF))
+		{
+			return scRdf;
+		}
 		else
 			return null;
 	}
-	
-	/*private void setSCObject(String type, ScrollPanel sc)
-	{
-		if(type.equals(RelationshipObject.OBJECT))
-		{
-			scObj = sc;
-		}
-		else if(type.equals(RelationshipObject.DATATYPE))
-		{
-			scData = sc;
-		}
-		else if(type.equals(RelationshipObject.ANNOTATION))
-		{
-			scAnn = sc;
-		}
-		else if(type.equals(RelationshipObject.ONTOLOGY))
-		{
-			scOnt = sc;
-		}
-	}*/
 	
 	private String getSelectedRelationshipObjectType(){
 		String type = relationshipTypeListbox.getValue(relationshipTypeListbox.getSelectedIndex());
 		return type;
 	}
-	
-	/*private String getSelectedItem(){
-		return Convert.getRelationshipLabel(getSelectedRelationshipObject());
-	}*/
 	
 	private RelationshipObject getSelectedRelationshipObject(){
 		if(getViewModel()!=null)

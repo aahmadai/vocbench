@@ -2,6 +2,7 @@ package org.fao.aoscs.model.semanticturkey.service.manager;
 
 import it.uniroma2.art.owlart.model.impl.ARTNodeFactoryImpl;
 import it.uniroma2.art.owlart.vocabulary.OWL;
+import it.uniroma2.art.owlart.vocabulary.RDF;
 import it.uniroma2.art.owlart.vocabulary.RDFTypesEnum;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 import it.uniroma2.art.semanticturkey.servlet.main.SKOS;
@@ -148,6 +149,8 @@ public class ObjectManager extends ResponseManager {
 									rObj.setType(RelationshipObject.ANNOTATION);
 								else if(typeUri.equals(OWL.ONTOLOGYPROPERTY))
 									rObj.setType(RelationshipObject.ONTOLOGY);
+								else if(typeUri.equals(RDF.PROPERTY))
+									rObj.setType(RelationshipObject.RDF);
 								else if(typeUri.equals(OWL.FUNCTIONALPROPERTY))
 								{
 									rObj.setFunctional(true);
@@ -329,6 +332,8 @@ public class ObjectManager extends ResponseManager {
 									rObj.setType(RelationshipObject.ANNOTATION);
 								else if(typeUri.equals(OWL.ONTOLOGYPROPERTY))
 									rObj.setType(RelationshipObject.ONTOLOGY);
+								else if(typeUri.equals(RDF.PROPERTY))
+									rObj.setType(RelationshipObject.RDF);
 								else if(typeUri.equals(OWL.FUNCTIONALPROPERTY))
 								{
 									rObj.setFunctional(true);

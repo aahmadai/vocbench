@@ -738,10 +738,13 @@ public class Convert {
 			label = "<img align='top' src='images/relationship-datatype-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		if(rObj.getType().equals(RelationshipObject.ANNOTATION)){
-			label = "<img align='top' src='images/relationship-object-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='images/relationship-annotation-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		else if(rObj.getType().equals(RelationshipObject.ONTOLOGY)){
-			label = "<img align='top' src='images/relationship-datatype-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='images/relationship-ontology-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+		}
+		else if(rObj.getType().equals(RelationshipObject.RDF)){
+			label = "<img align='top' src='images/relationship-rdf-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		return label;
 	}
@@ -759,10 +762,13 @@ public class Convert {
 			label = "<img align='top' src='images/relationship-datatype-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		if(type.equals(RelationshipObject.ANNOTATION)){
-			label = "<img align='top' src='images/relationship-object-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='images/relationship-annotation-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		else if(type.equals(RelationshipObject.ONTOLOGY)){
-			label = "<img align='top' src='images/relationship-datatype-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='images/relationship-ontology-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+		}
+		else if(type.equals(RelationshipObject.RDF)){
+			label = "<img align='top' src='images/relationship-rdf-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		return label;
 	}

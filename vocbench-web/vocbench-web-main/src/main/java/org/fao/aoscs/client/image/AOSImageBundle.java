@@ -28,6 +28,9 @@ public interface AOSImageBundle extends ClientBundle {
 	@Source("org/fao/aoscs/client/image/icons/relationship-ontology-logo.gif")
 	public ImageResource relationshipOntologyIcon();
 	
+	@Source("org/fao/aoscs/client/image/icons/relationship-rdf-logo.gif")
+	public ImageResource relationshipRDFIcon();
+	
 	@Source("org/fao/aoscs/client/image/icons/add-grey.gif")
 	public ImageResource addIcon();
 	

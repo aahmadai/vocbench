@@ -93,6 +93,7 @@ public class LegendBar extends AbsolutePanel{
 		moreLegend.add( getMoreLegendItem("images/relationship-datatype-logo.gif" , constants.legendRelationshipDataType()) );
 		moreLegend.add( getMoreLegendItem("images/relationship-annotation-logo.gif" , constants.legendRelationshipAnnotation()) );
 		moreLegend.add( getMoreLegendItem("images/relationship-ontology-logo.gif" , constants.legendRelationshipOntology()) );
+		moreLegend.add( getMoreLegendItem("images/relationship-rdf-logo.gif" , constants.legendRelationshipRDF()) );
 		//moreLegend.add( getMoreLegendItem("images/category_logo.gif" , constants.legendCategory()) );
 		//moreLegend.add( getMoreLegendItem("images/scheme-object-logo.gif" , constants.legendClassification()) );
 		moreLegend.setCellWidth(txtlegend, "40px");

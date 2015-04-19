@@ -30,7 +30,6 @@ import org.fao.aoscs.model.semanticturkey.service.manager.ClsManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.DeleteManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.ObjectManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.PropertyManager;
-import org.fao.aoscs.model.semanticturkey.service.manager.response.PropertyResponseManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.VocbenchResponseManager;
 import org.fao.aoscs.model.semanticturkey.util.STUtility;
 import org.fao.aoscs.model.semanticturkey.util.STXMLUtility;
@@ -100,7 +99,7 @@ public class RelationshipServiceSTImpl {
 		String propertyUri = namespace+propertyName;
 
 		// Add Property
-		if(superPropertyUri==null || superPropertyUri.equals(OWL.OBJECTPROPERTY) || superPropertyUri.equals(OWL.DATATYPEPROPERTY) || superPropertyUri.equals(OWL.ANNOTATIONPROPERTY) || superPropertyUri.equals(OWL.ONTOLOGYPROPERTY))
+		if(superPropertyUri==null || superPropertyUri.equals(OWL.OBJECTPROPERTY) || superPropertyUri.equals(OWL.DATATYPEPROPERTY) || superPropertyUri.equals(OWL.ANNOTATIONPROPERTY)|| superPropertyUri.equals(OWL.ONTOLOGYPROPERTY) || superPropertyUri.equals(RDF.PROPERTY) )
 			PropertyManager.addTopProperty(ontoInfo, propertyUri, type);
 		else
 			PropertyManager.addProperty(ontoInfo, propertyUri, type, superPropertyUri);

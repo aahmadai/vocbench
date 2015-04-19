@@ -58,6 +58,9 @@ public class RelationshipObjectCell extends IconCellDecorator<RelationshipObject
 			return MainApp.aosImageBundle.relationshipAnnotationIcon();
 		else if(type.equals(RelationshipObject.ONTOLOGY))
 			return MainApp.aosImageBundle.relationshipOntologyIcon();
+		else if(type.equals(RelationshipObject.RDF))
+			return MainApp.aosImageBundle.relationshipRDFIcon();
+			
 		return null;
 	}
 }

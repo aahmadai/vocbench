@@ -1225,6 +1225,7 @@ public interface LocaleConstants extends Constants{
 	public String relDatatypeProperties();
 	public String relAnnotationProperties();
 	public String relOntologyProperties();
+	public String relRDFProperties();
 	public String relShowAllObjectProperties();
 	public String relShowAllDatatypeProperties();
 	public String relShowEntireText();
@@ -1430,6 +1431,7 @@ public interface LocaleConstants extends Constants{
 	public String legendRelationshipDataType();
 	public String legendRelationshipAnnotation();
 	public String legendRelationshipOntology();
+	public String legendRelationshipRDF();
 	public String legendCategory();
 	public String legendClassification();
 
