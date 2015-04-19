@@ -216,6 +216,8 @@ public class MainApp extends Composite { // Application container
                 groupName = userLoginObj.getGroupname();
                 userPreference = userLoginObj.getUsersPreference();
                 
+                keyword.setOntoInfo(userOntology);
+                
                	isExplicit = !userPreference.isShowInferredAndExplicit();
                 
                 userPermissionLanguage = userLoginObj.getUserSelectedLanguage();
