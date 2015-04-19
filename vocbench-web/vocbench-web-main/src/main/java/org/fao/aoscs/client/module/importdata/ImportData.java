@@ -208,7 +208,7 @@ public class ImportData extends Composite{
 	
 	private ListBox getRDFFormat(HashMap<String, String> list){
 		format = new ListBox();
-		format.addItem("--Select--","--None--");
+		format.addItem("--Select--","");
 		for(String item : list.keySet()) {
 			format.addItem(item, list.get(item));
 		}
