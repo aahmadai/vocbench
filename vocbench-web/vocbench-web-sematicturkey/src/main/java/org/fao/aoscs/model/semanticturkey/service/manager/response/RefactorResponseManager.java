@@ -24,7 +24,7 @@ public class RefactorResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY changeResourceNameRequest(OntologyInfo ontoInfo, String oldResource, String newResource)
 	{
-		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("changeResourceName", 
+		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("renameResource", 
 				STModel.par("oldResource", oldResource),
 				STModel.par("newResource", newResource),
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
