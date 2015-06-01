@@ -2,7 +2,9 @@
 
 In order to build VocBench and run VocBench, follow instructions on:
 
-[http://vocbench.uniroma2.it/documentation/developers.jsf#building_vocbench](http://vocbench.uniroma2.it/documentation/developers.jsf#building_vocbench)
+http://vocbench.uniroma2.it/documentation/developers.jsf#building_vocbench
+
+or follow the instructions below
 
 * a copy of Semantic Turkey (you may check the version of Semantic Turkey exploited
   by VocBench by inspecting the vocbench-web/vocbench-web-sematicturkey/pom.xml).
