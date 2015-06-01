@@ -957,7 +957,7 @@ public class VOCBENCH extends SKOSXL {
 				//newNode = newNodeAndRandomValue.getArtURIResource();
 				//randomValue = newNodeAndRandomValue.getRandomValue();
 				
-				newNode = generateURI("xDefintion", Collections.<String,String>emptyMap());
+				newNode = generateURI("xDefinition", Collections.<String,String>emptyMap());
 			}
 			
 			ARTURIResource defValueURI = skosxlModel.createURIResource(VALUE); 
