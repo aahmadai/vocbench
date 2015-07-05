@@ -20,6 +20,7 @@ public interface UsersPreferenceServiceAsync<T> {
 	public void updateUsersPreference(UsersPreference UsersPreference, AsyncCallback<UsersPreference> callback);
 	
 	public void getNonAssignedAndPendingGroup(int userID, AsyncCallback<ArrayList<String[]>> callback);
+	public void getNonAssignedUsers(int ontologyID, AsyncCallback<ArrayList<Users>> callback);
 	
 	public void getUsersLanguage(int userID, AsyncCallback<ArrayList<UsersLanguage>> callback);
 	public void getPendingLanguage(int userID, AsyncCallback<ArrayList<String[]>> callback);
@@ -37,4 +38,6 @@ public interface UsersPreferenceServiceAsync<T> {
 	public void deleteUsersOntology(int userID, ArrayList<String> list, AsyncCallback<ArrayList<String[]>> callback);
 	public void deleteUsersPendingOntology(int userID, ArrayList<String> langlist,
 			AsyncCallback<ArrayList<String[]>> callback);
+	void getPendingLanguage(AsyncCallback<ArrayList<String[]>> callback);
+	void getPendingOntology(AsyncCallback<ArrayList<String[]>> callback);
 }

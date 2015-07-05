@@ -682,13 +682,13 @@ public class Convert {
 		{
 			label = getColorForTreeItem(tObj.getStatus(),label).getHTML();
 		}
-		label = "<img align='top' src='"+AOSImageManager.getConceptImageURL(tObj.getUri())+"'>&nbsp;<span align='middle'>" + label+"</span>";
+		label = "<img align='top' src='"+AOSImageManager.getConceptImageURL()+"'>&nbsp;<span align='middle'>" + label+"</span>";
 		return label;
 	}
 	
 	public static Widget convert2Widget(ConceptObject cObj, String label){
 		HorizontalPanel hp = new HorizontalPanel();
-		hp.add(new Image(AOSImageManager.getConceptImageResource(cObj.getUri())));
+		hp.add(new Image(MainApp.aosImageBundle.conceptIcon()));
 		hp.setSpacing(2);
 				
 		if(label.startsWith("###EMPTY###"))
@@ -704,47 +704,25 @@ public class Convert {
 	}
 	
 	public static String convert2Widget(RelationshipObject rObj, String label){
-		/*HorizontalPanel hp = new HorizontalPanel();
-
-		if(rObj.getType().equals(RelationshipObject.OBJECT)){
-			hp.add(new Image("images/relationship-object-logo.gif"));
-		}else{
-			hp.add(new Image("images/relationship-datatype-logo.gif"));
-		}
-		
-		hp.setSpacing(2);
-		
-		if(label.length()==0){
-			hp.add(MainApp.aosImageBundle.labelNotFound().createImage());
-		}else{
-			if(label.length()>7)
-			{
-				if(label.substring(label.length()-7).equals(";&nbsp;"))
-					label = label.substring(0,label.length()-7);
-			}
-			hp.add(new HTML(label));	
-		}
-		return hp;*/
-		
 		if(label.startsWith("###EMPTY###"))
 			label = "";
 		if(label.length()==0){
 			label = "<img align='top' src='images/label-not-found.gif'>";
 		}
 		if(rObj.getType().equals(RelationshipObject.OBJECT)){
-			label = "<img align='top' src='images/relationship-object-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='"+AOSImageManager.getPropObjectImageURL()+"'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		else if(rObj.getType().equals(RelationshipObject.DATATYPE)){
-			label = "<img align='top' src='images/relationship-datatype-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='"+AOSImageManager.getPropDatatypeImageURL()+"'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		if(rObj.getType().equals(RelationshipObject.ANNOTATION)){
-			label = "<img align='top' src='images/relationship-annotation-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='"+AOSImageManager.getPropAnnotationImageURL()+"'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		else if(rObj.getType().equals(RelationshipObject.ONTOLOGY)){
-			label = "<img align='top' src='images/relationship-ontology-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='"+AOSImageManager.getPropOntologyImageURL()+"'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		else if(rObj.getType().equals(RelationshipObject.RDF)){
-			label = "<img align='top' src='images/relationship-rdf-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='"+AOSImageManager.getPropRDFImageURL()+"'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		return label;
 	}
@@ -756,19 +734,19 @@ public class Convert {
 			label = "<img align='top' src='images/label-not-found.gif'>";
 		}
 		if(type.equals(RelationshipObject.OBJECT)){
-			label = "<img align='top' src='images/relationship-object-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='"+AOSImageManager.getPropObjectImageURL()+"'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		else if(type.equals(RelationshipObject.DATATYPE)){
-			label = "<img align='top' src='images/relationship-datatype-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='"+AOSImageManager.getPropDatatypeImageURL()+"'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		if(type.equals(RelationshipObject.ANNOTATION)){
-			label = "<img align='top' src='images/relationship-annotation-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='"+AOSImageManager.getPropAnnotationImageURL()+"'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		else if(type.equals(RelationshipObject.ONTOLOGY)){
-			label = "<img align='top' src='images/relationship-ontology-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='"+AOSImageManager.getPropOntologyImageURL()+"'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		else if(type.equals(RelationshipObject.RDF)){
-			label = "<img align='top' src='images/relationship-rdf-logo.gif'>&nbsp;<span align='middle'>" + label+"</span>";
+			label = "<img align='top' src='"+AOSImageManager.getPropRDFImageURL()+"'>&nbsp;<span align='middle'>" + label+"</span>";
 		}
 		return label;
 	}

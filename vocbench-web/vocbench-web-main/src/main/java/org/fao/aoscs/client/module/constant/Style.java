@@ -56,5 +56,6 @@ public class Style {
 	public static String filter_scroll_background= "filter-scroll-background";
 	
 	public static String label_color_gray= "label-gray";
+	public static String label_line_height_20= "label_line_height_20";
 	
 }

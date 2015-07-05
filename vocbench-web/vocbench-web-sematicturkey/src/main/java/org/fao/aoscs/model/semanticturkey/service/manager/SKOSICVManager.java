@@ -25,17 +25,19 @@ public class SKOSICVManager extends ResponseManager {
 	 * @param resourceURI
 	 * @return
 	 */
-	public static ArrayList<DanglingConceptObject> listDanglingConcepts(OntologyInfo ontoInfo)
+	public static ArrayList<DanglingConceptObject> listDanglingConcepts(OntologyInfo ontoInfo, String limit)
 	{
 		ArrayList<DanglingConceptObject> danglingConceptObjList = new ArrayList<DanglingConceptObject>();
-		XMLResponseREPLY reply = SKOSICVResponseManager.listDanglingConceptsRequest(ontoInfo);
+		XMLResponseREPLY reply = SKOSICVResponseManager.listDanglingConceptsRequest(ontoInfo, limit);
 		if(reply!=null)
 		{
 			Element dataElement = reply.getDataElement();
-			
-			for(Element colElem : STXMLUtility.getChildElementByTagName(dataElement, "pair"))
+			for(Element colElem : STXMLUtility.getChildElementByTagName(dataElement, "collection"))
 			{
-				danglingConceptObjList.add(STUtility.createDanglingConcept(colElem.getAttribute("concept"), colElem.getAttribute("scheme")));
+				for(Element recordElem : STXMLUtility.getChildElementByTagName(colElem, "record"))
+				{
+					danglingConceptObjList.add(STUtility.createDanglingConcept(recordElem.getAttribute("concept"), recordElem.getAttribute("scheme")));
+				}
 			}
 		}
 		return danglingConceptObjList;

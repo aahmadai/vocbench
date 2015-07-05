@@ -73,7 +73,13 @@ public class ProjectServiceSTImpl {
 				ProjectManager.closeProject(ontoInfo);
 			}
 		}*/
-		ProjectManager.disconnectFromProject(ontoInfo);
+		try
+		{
+			ProjectManager.disconnectFromProject(ontoInfo);
+		}
+		catch(Exception e)
+		{
+		}
 		return ProjectManager.deleteProject(ontoInfo, projectName);
 	}
 	

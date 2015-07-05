@@ -328,19 +328,27 @@ public class SearchOption extends Composite{
 			}
 		});
 		
+		Button clearBtn = this.getClearButton();
+		
 		HorizontalPanel searchByUriPanel = new HorizontalPanel();
-		searchByUriPanel.setSize("100%", "100%");
+		searchByUriPanel.setSize("800px", "100%");
 		searchByUriPanel.setSpacing(5);
 		searchByUriPanel.add(lblConceptURI);
 		searchByUriPanel.add(txtConceptURI);	
 		searchByUriPanel.add(btnSearchConceptURI);
-		searchByUriPanel.add(this.getClearButton());
+		searchByUriPanel.add(clearBtn);
 		searchByUriPanel.setCellWidth(txtConceptURI, "100%");
 		searchByUriPanel.setCellVerticalAlignment(lblConceptURI, HasVerticalAlignment.ALIGN_MIDDLE);
 		searchByUriPanel.setCellHorizontalAlignment(txtConceptURI, HasHorizontalAlignment.ALIGN_LEFT);
 		searchByUriPanel.setCellHorizontalAlignment(btnSearchConceptURI, HasHorizontalAlignment.ALIGN_LEFT);
-		DOM.setStyleAttribute(searchByUriPanel.getElement(), "border", "1px solid #F59131");
-
+		searchByUriPanel.setCellHorizontalAlignment(clearBtn, HasHorizontalAlignment.ALIGN_LEFT);
+		
+		HorizontalPanel searchByUriMainPanel = new HorizontalPanel();
+		searchByUriMainPanel.setSize("100%", "100%");
+		searchByUriMainPanel.add(searchByUriPanel);
+		searchByUriMainPanel.setCellVerticalAlignment(searchByUriPanel, HasVerticalAlignment.ALIGN_MIDDLE);
+		searchByUriMainPanel.setCellHorizontalAlignment(searchByUriPanel, HasHorizontalAlignment.ALIGN_CENTER);
+		DOM.setStyleAttribute(searchByUriMainPanel.getElement(), "border", "1px solid #F59131");
 		
 		HorizontalPanel infoTitle = new HorizontalPanel();
 		infoTitle.add(new HTML(constants.searchSearchByConceptURI()));
@@ -351,7 +359,7 @@ public class SearchOption extends Composite{
 		panel.setSpacing(10);
 		panel.setVisible(true);
 		panel.add(infoTitle);
-		panel.add(searchByUriPanel);
+		panel.add(searchByUriMainPanel);
 		panel.setCellHorizontalAlignment(infoTitle, HasHorizontalAlignment.ALIGN_CENTER);
 		panel.setCellHorizontalAlignment(searchByUriPanel, HasHorizontalAlignment.ALIGN_CENTER);
 		panel.setCellVerticalAlignment(infoTitle, HasVerticalAlignment.ALIGN_TOP);

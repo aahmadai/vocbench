@@ -90,6 +90,11 @@ public interface SystemService extends RemoteService {
 	public Boolean addSTServer(OntologyInfo ontoInfo, StInstances stInstances);
 	public Boolean deleteSTServer(OntologyInfo ontoInfo, StInstances stInstances);
 	
+	public ArrayList<OntologyInfo> getOntologyList() throws Exception;
+	public ArrayList<String[]> getUserAssignedtoOntology(String ontologyId) throws Exception;
+	public void addUsersToOntology(String ontologyId, ArrayList<String> users) throws Exception;
+	public void deleteUsersFromOntology(String ontologyId, String userId) throws Exception;
+	
 	public static class SystemServiceUtil{
 		private static SystemServiceAsync<?> instance;
 		public static SystemServiceAsync<?> getInstance(){

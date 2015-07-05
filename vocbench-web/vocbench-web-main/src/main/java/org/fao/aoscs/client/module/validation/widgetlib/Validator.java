@@ -120,38 +120,28 @@ public class Validator extends ValidationTemplate {
 		String imgURL = "images/spacer.gif";
 		if(type==1)
 		{
-			if(conceptURI!=null)
-			{
-				imgURL = AOSImageManager.getConceptImageURL(conceptURI);
-			}
-			else
-			{
-				imgURL = "images/concept_logo.gif";
-			}
+			imgURL = AOSImageManager.getConceptImageURL();
 		}
 		else if(type==2){
-			imgURL = "images/term-logo.gif";
+			imgURL = AOSImageManager.getTermImageURL();
 		}
 		else if(type==3){
-			imgURL = "images/relationship-object-logo.gif";
+			imgURL = AOSImageManager.getPropObjectImageURL();
 		}
 		else if(type==4){
-			imgURL = "images/scheme-object-logo.gif";
+			imgURL = AOSImageManager.getSkosSchemeImageURL();
 		}
 		else
 			imgURL = "images/spacer.gif";
 		Image image = new Image(imgURL);
 		if(link!= null)
 		{
-			//if(!link.equals(ModelConstants.COMMONBASENAMESPACE+ModelConstants.CDOMAINCONCEPT) && !link.equals(ModelConstants.CDOMAINCONCEPT) && !link.equals(ModelConstants.COMMONBASENAMESPACE+ModelConstants.CCATEGORY) && !link.equals(ModelConstants.CCATEGORY))
-			{
-				image.setStyleName(style);
-				image.addClickHandler(new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						ModuleManager.gotoItem(link, schemeURI, isAddAction, tab, belongsToModule, type);
-					}
-				});
-			}
+			image.setStyleName(style);
+			image.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					ModuleManager.gotoItem(link, schemeURI, isAddAction, tab, belongsToModule, type);
+				}
+			});
 		}
 		return image;
 	}
@@ -162,16 +152,13 @@ public class Validator extends ValidationTemplate {
 			HTML label = new HTML(" "+text, true);
 			if(link!=null)
 			{
-				//if(!link.equals(ModelConstants.COMMONBASENAMESPACE+ModelConstants.CDOMAINCONCEPT) && !link.equals(ModelConstants.CDOMAINCONCEPT) && !link.equals(ModelConstants.COMMONBASENAMESPACE+ModelConstants.CCATEGORY) && !link.equals(ModelConstants.CCATEGORY))
-				{
-					label.setStyleName(style);
-					label.setTitle(title);
-					label.addClickHandler(new ClickHandler() {
-						public void onClick(ClickEvent event) {
-							ModuleManager.gotoItem(link, schemeURI, isAddAction, tab, belongsToModule, type);
-						}
-					});
-				}
+				label.setStyleName(style);
+				label.setTitle(title);
+				label.addClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent event) {
+						ModuleManager.gotoItem(link, schemeURI, isAddAction, tab, belongsToModule, type);
+					}
+				});
 			}
 			return label;
 		}

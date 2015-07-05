@@ -469,6 +469,11 @@ table.quick-link:hover{
 	color:  #AAA;
 }
 
+.label_line_height_20{
+	line-height: 20px;
+	vertical-align: top;
+}
+
 /* Styles used in org.fao.aoscs.client.utility.GridStyle */
 /* Grid with unique style in first row only*/
 .gstPanel1{

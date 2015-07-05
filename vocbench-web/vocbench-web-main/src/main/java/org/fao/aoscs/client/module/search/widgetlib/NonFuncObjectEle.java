@@ -1,5 +1,6 @@
 package org.fao.aoscs.client.module.search.widgetlib;
 
+import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.widgetlib.shared.label.LinkLabel;
 import org.fao.aoscs.domain.NonFuncObject;
 
@@ -20,7 +21,7 @@ public class NonFuncObjectEle extends HorizontalPanel {
         this.setSpacing(5);
         if(obj!=null)
         {
-	        this.add(new Image("images/relationship-datatype-logo.gif"));
+	        this.add(new Image(MainApp.aosImageBundle.relationshipDatatypeIcon()));
 	        this.add(new HTML(rel+"<b>:</b>"));
 	        this.add(new HTML(obj.getValue()));
 	        if(obj.getLanguage()!=null && !obj.getLanguage().equals("") && !obj.getLanguage().equals("null"))

@@ -96,5 +96,12 @@ public interface SystemServiceAsync<T> {
 	void deleteSTServer(OntologyInfo ontoInfo, StInstances stInstances,
 			AsyncCallback<Boolean> callback);
 	void getOntology(AsyncCallback<ArrayList<OntologyInfo>> callback);
+	void addUsersToOntology(String ontologyId, ArrayList<String> users,
+			AsyncCallback<Void> callback);
+	void getUserAssignedtoOntology(String ontologyId,
+			AsyncCallback<ArrayList<String[]>> callback);
+	void getOntologyList(AsyncCallback<ArrayList<OntologyInfo>> callback);
+	void deleteUsersFromOntology(String ontologyId, String userId,
+			AsyncCallback<Void> callback);
 	
 }

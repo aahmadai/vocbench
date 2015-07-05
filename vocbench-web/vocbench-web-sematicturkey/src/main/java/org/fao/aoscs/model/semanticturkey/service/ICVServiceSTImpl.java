@@ -22,7 +22,7 @@ public class ICVServiceSTImpl {
 	
 	public ArrayList<DanglingConceptObject> listDanglingConcepts(
 			OntologyInfo ontoInfo) throws Exception {
-		return SKOSICVManager.listDanglingConcepts(ontoInfo);
+		return SKOSICVManager.listDanglingConcepts(ontoInfo, "");
 	}
 	
 	public void manageDanglingConcepts(OntologyInfo ontoInfo,

@@ -24,8 +24,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -47,9 +51,16 @@ public class OntologyAssignment extends Composite implements NSMappingDialogBoxO
 
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 
+	private boolean isBind = true;
+	private String oldBaseURI;
+	private String oldDefaultNS;
+	
 	private VerticalPanel panel = new VerticalPanel();
 	private FlexTable nsMappingDataTable = new FlexTable();
 	private FlexTable importDataTable = new FlexTable();
+	
+	private VerticalPanel defaultConfigurationPanel = new VerticalPanel();
+	private VerticalPanel defaultConfigurationDataPanel = new VerticalPanel();	
 	
 	private VerticalPanel nsMappingPanel = new VerticalPanel();
 	private VerticalPanel nsMappingDataPanel = new VerticalPanel();
@@ -91,6 +102,22 @@ public class OntologyAssignment extends Composite implements NSMappingDialogBoxO
 		txtBaseURI.setWidth(txtWidth);
 		txtDefaultNS.setWidth(txtWidth);
 		
+		txtBaseURI.addKeyUpHandler(new KeyUpHandler() {
+			
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				manageBind("base", txtBaseURI);
+			}
+		});
+		
+		txtDefaultNS.addKeyUpHandler(new KeyUpHandler() {
+			
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				manageBind("ns", txtDefaultNS);
+			}
+		});
+		
 		FlexTable fxtMail = new FlexTable();
 		fxtMail.setWidth("100%");
 		fxtMail.setCellSpacing(5);
@@ -105,11 +132,150 @@ public class OntologyAssignment extends Composite implements NSMappingDialogBoxO
 		fxtMail.setWidget(0, 1, txtBaseURI);
 		fxtMail.setWidget(1, 1, txtDefaultNS);
 		
-		final VerticalPanel vpanel = new VerticalPanel();	
-		vpanel.setWidth("100%");
-		vpanel.add(GridStyle.setTableRowStyle(fxtMail, "#F4F4F4", "#E8E8E8", 3));
-		vpanel.add(new Spacer("100%", "1px"));	
-		vpanel.setCellHorizontalAlignment(fxtMail, HasHorizontalAlignment.ALIGN_CENTER);
+		final Button btnBind = new Button(constants.buttonBind());
+		Button btnUpdate = new Button(constants.buttonUpdate());
+		
+		btnBind.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				if (isBind) {
+					btnBind.setText(constants.buttonUnbind());
+					isBind = false;
+				} else {
+					btnBind.setText(constants.buttonBind());
+					isBind = true;
+				}
+			}
+		});
+		
+		btnUpdate.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				final String valBase = txtBaseURI.getValue();
+				String valNs = txtDefaultNS.getValue();
+				
+				if(valBase.endsWith("#") && valBase.length()>0){
+					txtBaseURI.setText(valBase.substring(0, valBase.length()-1));
+				} 
+				
+				if(valNs.endsWith("#") || valNs.endsWith("/")){
+				}
+				else
+				{
+					valNs = valNs +"#";
+					txtDefaultNS.setValue(valNs);
+				}
+				
+				boolean both = false;
+				boolean base = false;
+				boolean ns = false;
+				
+				if(isBind) 
+				{
+					both = Window.confirm(constants.ontologyChangeBaseURINS());
+				}
+				else
+				{
+					if(!valBase.equals(oldBaseURI) && !valNs.equals(oldDefaultNS))
+					{
+						both = Window.confirm(constants.ontologyChangeBaseURINS());
+					}
+					else if(!valBase.equals(oldBaseURI))
+					{
+						base = Window.confirm(constants.ontologyChangeBaseURI());
+					}
+					else if(!valNs.equals(oldDefaultNS))
+					{
+						ns = Window.confirm(constants.ontologyChangeNS());
+					}
+				}
+				
+				if(both || base || ns)
+				{
+					tableLoading(defaultConfigurationPanel);
+					
+					if(both && Window.confirm(constants.ontologyConfirmRefactor()))
+					{
+						AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>(){
+							public void onSuccess(Boolean result){
+								if(result)
+								{
+									Window.alert(constants.ontologyChangeBaseURINSCompleted());
+								}
+								else
+									Window.alert(constants.ontologyChangeBaseURINSFailed());
+								defaultConfigurationPanel.clear();
+								defaultConfigurationPanel.add(defaultConfigurationDataPanel);
+								loadBaseuri();
+								loadDefaultNamespace();
+								loadNSMapping();
+								
+							}
+							public void onFailure(Throwable caught){
+								ExceptionManager.showException(caught, constants.refactorActionFailed());
+							}
+						};
+						Service.ontologyService.setBaseURIandDefaultNamespace(MainApp.userOntology, valBase, valNs, callback);
+					}
+					else if(ns)
+					{
+						AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>(){
+							public void onSuccess(Boolean result){
+								if(result)
+								{
+									Window.alert(constants.ontologyChangeNSCompleted());
+								}
+								else
+									Window.alert(constants.ontologyChangeNSFailed());
+								defaultConfigurationPanel.clear();
+								defaultConfigurationPanel.add(defaultConfigurationDataPanel);
+								loadDefaultNamespace();
+								loadNSMapping();
+							}
+							public void onFailure(Throwable caught){
+								ExceptionManager.showException(caught, constants.refactorActionFailed());
+							}
+						};
+						Service.ontologyService.setDefaultNamespace(MainApp.userOntology, valNs, callback);
+					}
+					else if(base && Window.confirm(constants.ontologyConfirmRefactor()))
+					{
+						AsyncCallback<Boolean> callback1 = new AsyncCallback<Boolean>(){
+							public void onSuccess(Boolean result){
+								if(result)
+								{
+									Window.alert(constants.ontologyChangeBaseURICompleted());
+								}
+								else
+									Window.alert(constants.ontologyChangeBaseURIFailed());
+								defaultConfigurationPanel.clear();
+								defaultConfigurationPanel.add(defaultConfigurationDataPanel);
+								loadBaseuri();
+							}
+							public void onFailure(Throwable caught){
+								ExceptionManager.showException(caught, constants.refactorActionFailed());
+							}
+						};
+						Service.refactorService.replaceBaseURI(MainApp.userOntology, null, valBase, null, callback1);
+						
+					}
+				} 		
+			}
+		});
+		
+
+		fxtMail.setWidget(0, 2, btnBind);
+		fxtMail.setWidget(1, 2, btnUpdate);
+		
+		
+		defaultConfigurationDataPanel.setWidth("100%");
+		defaultConfigurationDataPanel.add(GridStyle.setTableRowStyle(fxtMail, "#F4F4F4", "#E8E8E8", 3));
+		defaultConfigurationDataPanel.add(new Spacer("100%", "1px"));	
+		defaultConfigurationDataPanel.setCellHorizontalAlignment(fxtMail, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		Image reload = new Image("images/reload-grey.gif");
 		reload.setTitle(constants.buttonReload());
@@ -135,8 +301,47 @@ public class OntologyAssignment extends Composite implements NSMappingDialogBoxO
 	    HorizontalPanel hp = new HorizontalPanel();
 	    hp.add(reload);
 	    hp.add(edit);
+	    
+	    defaultConfigurationPanel.add(defaultConfigurationDataPanel);
 		
-		return makeWidget(constants.ontologyDefaultConfigurationManagement(), vpanel, hp);
+		return makeWidget(constants.ontologyDefaultConfigurationManagement(), defaultConfigurationPanel, hp);
+	}
+	
+	private native boolean isUrl(String url) /*-{
+	    var pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+	    return pattern.test(url);
+	}-*/;
+	
+	private void manageBind(String type, TextBox txtBox)
+	{
+		/*if (isUrl(txtBox.getValue())) {
+			DOM.setStyleAttribute(txtBox.getElement(), "color", "blue");
+		} else {
+			DOM.setStyleAttribute(txtBox.getElement(), "color", "red");
+		}*/
+		
+		if (isBind)
+		{
+			String value = txtBox.getText();
+			
+			if (type == "ns") {
+				String newBaseValue;
+				if(value.endsWith("#") && value.length()>0){
+					newBaseValue = txtBox.getText().substring(0, value.length()-1);
+				} else{
+					newBaseValue = value;
+				}
+				txtBaseURI.setText(newBaseValue);
+			} else { // type == "base"
+				String newNsValue;
+				if(value.endsWith("#") || value.endsWith("/")){
+					newNsValue = value;
+				} else{
+					newNsValue = value + "#";
+				}
+				txtDefaultNS.setText(newNsValue);
+			}
+		}
 	}
 	
 	/**
@@ -299,6 +504,7 @@ public class OntologyAssignment extends Composite implements NSMappingDialogBoxO
 		final AsyncCallback<String> callback = new AsyncCallback<String>() {
 			public void onSuccess(String result) {
 				txtBaseURI.setText(result);
+				oldBaseURI = result;
 			}
 			public void onFailure(Throwable caught) {
 				ExceptionManager.showException(caught, constants.ontologyDefaultConfigurationLoadFail());
@@ -314,6 +520,7 @@ public class OntologyAssignment extends Composite implements NSMappingDialogBoxO
 		final AsyncCallback<String> callback = new AsyncCallback<String>() {
 			public void onSuccess(String result) {
 				txtDefaultNS.setText(result);
+				oldDefaultNS = result;
 			}
 			public void onFailure(Throwable caught) {
 				ExceptionManager.showException(caught, constants.ontologyDefaultConfigurationLoadFail());

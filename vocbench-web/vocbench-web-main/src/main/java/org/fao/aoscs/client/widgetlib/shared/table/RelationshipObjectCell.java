@@ -48,8 +48,8 @@ public class RelationshipObjectCell extends IconCellDecorator<RelationshipObject
   	});
   }
   
-  private static ImageResource getRelationshipIcon(String type)
-	{
+  public static ImageResource getRelationshipIcon(String type)
+  {
 		if(type.equals(RelationshipObject.OBJECT))
 			return MainApp.aosImageBundle.relationshipObjectIcon();
 		else if(type.equals(RelationshipObject.DATATYPE))

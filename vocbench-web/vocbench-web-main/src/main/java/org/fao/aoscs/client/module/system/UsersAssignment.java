@@ -11,6 +11,7 @@ import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
+import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.module.preferences.service.UsersPreferenceService.UserPreferenceServiceUtil;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
@@ -114,7 +115,8 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 	private String dbActiveStatus = "0";
 
 	private UserAssignDialogBox newUserDialog;
-
+	private ManagePendingRequests managePendingRequests;
+	
 	public UsersAssignment() {					 
 		// USER LIST
 		lstusers.addChangeHandler(this);
@@ -383,8 +385,22 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
             }
         });	
 		
+		HorizontalPanel topRightPanel = new HorizontalPanel();
+		HTML lblPendingRequests = new HTML("View Pending Requests", false);
+		lblPendingRequests.setStyleName(Style.Link);
+		lblPendingRequests.addStyleName(Style.colorBlack);
+		lblPendingRequests.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(managePendingRequests == null || !managePendingRequests.isLoaded )
+					managePendingRequests = new ManagePendingRequests();
+				managePendingRequests.show();
+				}
+			});
+		topRightPanel.setSpacing(5);
+		topRightPanel.add(lblPendingRequests);
 		
-		BodyPanel mainPanel = new BodyPanel(constants.userManagement() , userInfoPanel , null);
+		
+		BodyPanel mainPanel = new BodyPanel(constants.userManagement() , userInfoPanel , topRightPanel);
 		panel.clear();
 		panel.add(mainPanel);	      
 		panel.setCellHorizontalAlignment(mainPanel,  HasHorizontalAlignment.ALIGN_CENTER);
@@ -392,7 +408,7 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 
 		initWidget(panel);
 		enableobject(false);  
-		initUserList();	 
+		initUserList("");	 
 	}
 
 	String sqlStr ;
@@ -466,14 +482,18 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 	    var ok = (null != rex.exec(txtemail)); 
 	    return ok; 
 	   }-*/;
-
+	
 	public void generateListData(final Widget sender,String querystr,final String errmsg){
+		generateListData(sender, querystr, errmsg, "");
+	}
+
+	public void generateListData(final Widget sender,String querystr,final String errmsg, final String selvalue){
 
 		AsyncCallback<ArrayList<String[]>>cbklist = new AsyncCallback<ArrayList<String[]>>() {
 			public void onSuccess(ArrayList<String[]> tmp) {
 
 				int selindex = 0;
-
+				
 				if(((ListBox) sender).getItemCount() > 0 ){
 					selindex = ((ListBox) sender).getSelectedIndex();  		
 				}
@@ -487,8 +507,11 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 						if(item[2].equals("0"))	itemstring="(n/a)";
 						if(item[2].equals("1"))	itemstring="(a)";
 						if(item[2].equals("2"))	itemstring="(new)";
-					}				    	
-					((ListBox) sender).addItem(item[0]+itemstring,item[1]);				    						    		
+					}		
+					
+					((ListBox) sender).addItem(item[0]+itemstring,item[1]);	
+					if(item[0].equals(selvalue))
+						selindex = i;
 				}
 
 				if(sender==lstusers){
@@ -554,7 +577,7 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 		Service.queryService.execHibernateSQLQuery(querystr, cbklist);			
 	}
 	
-	private void initUserList(){
+	private void initUserList(final String username){
 		AsyncCallback<UserLogin> cbksession = new AsyncCallback<UserLogin>() {
 			public void onSuccess(UserLogin userLoginObj) {
 				if(userLoginObj!=null){
@@ -579,7 +602,7 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 				if(criteria.equals("")){ criteria = " WHERE status = 'x'"; }// clear value
 				sqlStr = "SELECT username,user_id,status FROM users "+ criteria ; //WHERE username <> '" + loginname + "'";
 
-				generateListData(lstusers, sqlStr, constants.userListUserFail());
+				generateListData(lstusers, sqlStr, constants.userListUserFail(), username);
 
 			}
 			public void onFailure(Throwable caught) {
@@ -865,6 +888,10 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 					lstchat.setSelectedIndex(0);
 					txtcomment.setText("");		  
 					chkactive.setValue(true);
+					lstusers.setSelectedIndex(-1);
+					lstusergroups.clear();
+					lstuserlangs.clear();
+					lstuserontology.clear();
 
 				} catch (Throwable e) 
 				{
@@ -888,7 +915,7 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 						if(!chk){
 							String activestatus = ""; 
 							if(chkactive.getValue()) { activestatus = "1"; }else{ activestatus = "0"; }
-							Users u = new Users();
+							final Users u = new Users();
 							u.setUsername(txtusername.getText());
 							u.setPassword(txtpassword.getText());
 							u.setFirstName(txtfname.getText());
@@ -917,7 +944,7 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 									else{
 										txthstatus.setText("SAVE");
 										enableobject(false);
-										initUserList();
+										initUserList(u.getUsername());
 									}
 								}
 								public void onFailure(Throwable caught){
@@ -944,7 +971,7 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 
 				if(chkactive.getValue()) { activestatus = "1"; }else{ activestatus = "0"; }
 
-				Users u = new Users();
+				final Users u = new Users();
 				u.setUserId(Integer.parseInt(lstusers.getValue(lstusers.getSelectedIndex())));
 				u.setUsername(txtusername.getText());
 				u.setFirstName(txtfname.getText());
@@ -970,7 +997,7 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 						}
 						txthstatus.setText("SAVE");
 						enableobject(false);
-						initUserList();
+						initUserList(u.getUsername());
 					}
 					public void onFailure(Throwable caught) {
 						ExceptionManager.showException(caught, constants.userUpdateFail());
@@ -1012,15 +1039,15 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 		}
 		else if(sender == chksactive)
 		{		
-			initUserList();
+			initUserList("");
 		}
 		else if(sender == chksinactive)
 		{
-			initUserList();
+			initUserList("");
 		}
 		else if(sender == chksnew)
 		{
-			initUserList();
+			initUserList("");
 		}
 	}
 
@@ -1366,21 +1393,24 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 
 	public void loadSelectedUser(String userID)
 	{
-		for(int i=0;i<lstusers.getItemCount();i++)
+		if(!userID.equals(""))
 		{
-			String user = lstusers.getValue(i);
-			if(user.equals(userID))
+			for(int i=0;i<lstusers.getItemCount();i++)
 			{
-				lstusers.setItemSelected(i, true);
-				lstusers.setSelectedIndex(i);
-				String lbl=lstusers.getItemText(i);
-				lblusers.setText(lbl);
+				String user = lstusers.getValue(i);
+				if(user.equals(userID))
+				{
+					lstusers.setItemSelected(i, true);
+					lstusers.setSelectedIndex(i);
+					String lbl=lstusers.getItemText(i);
+					lblusers.setText(lbl);
+				}
 			}
+			initGroupList(userID);
+			initUserLang(userID);
+			initUserOntology(userID);
+			showUserDetail(userID);
 		}
-		initGroupList(userID);
-		initUserLang(userID);
-		initUserOntology(userID);
-		showUserDetail(userID);
 	}
 
 	public void loadUser(final String userID)

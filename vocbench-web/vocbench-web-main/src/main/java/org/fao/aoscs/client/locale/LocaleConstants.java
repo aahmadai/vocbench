@@ -75,6 +75,7 @@ public interface LocaleConstants extends Constants{
 	public String menuWebServices();
 	public String menuUsers();
 	public String menuOntology();
+	public String menuProjects();
 	public String menuRefactor();
 	public String menuConfiguration();
 	public String menuGroups();
@@ -675,9 +676,8 @@ public interface LocaleConstants extends Constants{
 	public String userChat();
 	public String userComment();
 	public String userShowOnlyRequested();
+	public String userManagePendingRequest();
 	
-
-
 	//Users>messages
 	public String userNoLogin();
 	public String userNoFirstName();
@@ -773,7 +773,15 @@ public interface LocaleConstants extends Constants{
 	public String groupConfirmRemovePermission();
 	public String groupConfirmRemoveAction();
 
-
+	//Projects
+	public String projectManagement();
+	public String projectProjects();
+	public String projectUserRemoveFail();
+	public String projectListProjectFail();
+	public String projectConfirmRemoveUser();
+	public String projectNoProject();
+	public String projectAddUserProjectFail();
+	
 	//Configuration
 	public String configImportConfigurationFile();
 	public String configConfigurationFile();
@@ -882,6 +890,15 @@ public interface LocaleConstants extends Constants{
 	public String ontologyOldBaseURI();
 	public String ontologyNewBaseURI();
 	public String ontologyConfirmRefactor();
+	public String ontologyChangeBaseURINS();
+	public String ontologyChangeBaseURI();
+	public String ontologyChangeNS();
+	public String ontologyChangeBaseURINSCompleted();
+	public String ontologyChangeBaseURINSFailed();
+	public String ontologyChangeNSCompleted();
+	public String ontologyChangeNSFailed();
+	public String ontologyChangeBaseURICompleted();
+	public String ontologyChangeBaseURIFailed();
 	
 	//Refactor
 	public String refactorSelectActions();
@@ -1469,6 +1486,8 @@ public interface LocaleConstants extends Constants{
 	public String buttonSaveAndDownload();
 	public String buttonDownload();
 	public String buttonManage();
+	public String buttonBind();
+	public String buttonUnbind();
 	
 	//Projects
 	public String projectProjectName();
@@ -1486,6 +1505,16 @@ public interface LocaleConstants extends Constants{
 	public String projectManageServiceFail();
 	public String projectSTServiceFail();
 	public String projectProjectLoadFail();
+	
+	public String projectProjectNameEmpty();
+	public String projectProjectDescEmpty();
+	public String projectProjectTypeEmpty();
+	public String projectBaseURIInvalid();
+	public String projectSTEmpty();
+	public String projectSTInvalid();
+	public String projectTripleStoreEmpty();
+	public String projectTripleStoreModeEmpty();
+	public String projectTripleStoreModeConfigurationParameterInvalid();
 	
 	public String projectRemoteAccess();
 	public String projectRepositoryID();

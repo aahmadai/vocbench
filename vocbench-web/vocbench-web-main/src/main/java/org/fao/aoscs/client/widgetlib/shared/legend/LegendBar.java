@@ -1,5 +1,6 @@
 package org.fao.aoscs.client.widgetlib.shared.legend;
 
+import org.fao.aoscs.client.image.AOSImageManager;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.module.classification.Classification;
 import org.fao.aoscs.client.module.concept.Concept;
@@ -87,15 +88,14 @@ public class LegendBar extends AbsolutePanel{
 		HorizontalPanel moreLegend = new HorizontalPanel();
 		moreLegend.setSpacing(10);
 		moreLegend.add(txtlegend);
-		moreLegend.add( getMoreLegendItem("images/concept_logo.gif" , constants.legendConcept()) );
-		moreLegend.add( getMoreLegendItem("images/term-logo.gif" , constants.legendTerm()) );
-		moreLegend.add( getMoreLegendItem("images/relationship-object-logo.gif" , constants.legendRelationshipObjectType()) );
-		moreLegend.add( getMoreLegendItem("images/relationship-datatype-logo.gif" , constants.legendRelationshipDataType()) );
-		moreLegend.add( getMoreLegendItem("images/relationship-annotation-logo.gif" , constants.legendRelationshipAnnotation()) );
-		moreLegend.add( getMoreLegendItem("images/relationship-ontology-logo.gif" , constants.legendRelationshipOntology()) );
-		moreLegend.add( getMoreLegendItem("images/relationship-rdf-logo.gif" , constants.legendRelationshipRDF()) );
-		//moreLegend.add( getMoreLegendItem("images/category_logo.gif" , constants.legendCategory()) );
-		//moreLegend.add( getMoreLegendItem("images/scheme-object-logo.gif" , constants.legendClassification()) );
+		moreLegend.add( getMoreLegendItem(AOSImageManager.getConceptImageURL() , constants.legendConcept()) );
+		moreLegend.add( getMoreLegendItem(AOSImageManager.getTermImageURL() , constants.legendTerm()) );
+		moreLegend.add( getMoreLegendItem(AOSImageManager.getPropObjectImageURL() , constants.legendRelationshipObjectType()) );
+		moreLegend.add( getMoreLegendItem(AOSImageManager.getPropDatatypeImageURL() , constants.legendRelationshipDataType()) );
+		moreLegend.add( getMoreLegendItem(AOSImageManager.getPropAnnotationImageURL() , constants.legendRelationshipAnnotation()) );
+		moreLegend.add( getMoreLegendItem(AOSImageManager.getPropOntologyImageURL() , constants.legendRelationshipOntology()) );
+		moreLegend.add( getMoreLegendItem(AOSImageManager.getPropRDFImageURL() , constants.legendRelationshipRDF()) );
+		//moreLegend.add( getMoreLegendItem(AOSImageManager.getSkosSchemeImageURL() , constants.legendClassification()) );
 		moreLegend.setCellWidth(txtlegend, "40px");
 
 		HorizontalPanel bottom = new HorizontalPanel();

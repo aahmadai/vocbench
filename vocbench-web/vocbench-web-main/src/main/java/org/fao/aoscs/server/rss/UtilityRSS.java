@@ -250,14 +250,14 @@ public class UtilityRSS {
 						contributor =  (user.getFirstName()==null?"":user.getFirstName())+(user.getLastName()==null?"":" "+user.getLastName())+(user.getUsername()==null?"":"("+user.getUsername()+")");
 					}
 					
-					String conceptImg = "<img src='"+baseURL+"/images/concept_logo.gif' border='0'>";
+					String conceptImg = "<img src='"+baseURL+"/"+AOSImageManager.getConceptImageURL()+"' border='0'>";
 					String conceptLabel = "";
 					HashMap<String, TermObject> tObjList = null;
 					if(val.getConceptObject()!=null)
 					{
 						if(val.getConceptObject().getUri()!=null)
 						{
-							conceptImg = "<img src='"+baseURL+"/"+AOSImageManager.getConceptImageURL(val.getConceptObject().getUri())+"' border='0'>";
+							conceptImg = "<img src='"+baseURL+"/"+AOSImageManager.getConceptImageURL()+"' border='0'>";
 						}
 						tObjList = (HashMap<String, TermObject>) val.getConceptObject().getTerm();
 					}

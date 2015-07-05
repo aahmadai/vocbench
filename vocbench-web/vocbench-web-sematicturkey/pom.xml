@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.fao.aoscs</groupId>
 		<artifactId>vocbench-web</artifactId>
-		<version>2.3</version>
+		<version>2.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>vocbench-web-semanticturkey</artifactId>
 	<name>VocBench Semantic Turkey Model</name>
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>org.fao.aoscs</groupId>
 			<artifactId>vocbench-web-shared</artifactId>
-			<version>2.3</version>
+			<version>2.4-SNAPSHOT</version>
 		</dependency>
 
 		<!-- ROME, RSS and Atom Utilities for Java -->

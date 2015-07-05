@@ -16,10 +16,11 @@ public class SKOSICVResponseManager extends ResponseManager {
 	
 	protected static Logger logger = LoggerFactory.getLogger(SKOSICVResponseManager.class);
 	
-	public static XMLResponseREPLY listDanglingConceptsRequest(OntologyInfo ontoInfo)
+	public static XMLResponseREPLY listDanglingConceptsRequest(OntologyInfo ontoInfo, String limit)
 	{
 		
 		Response resp = getSTModel(ontoInfo).icvService.makeNewRequest("listDanglingConcepts", 
+				STModel.par("limit", limit),
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}

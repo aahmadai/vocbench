@@ -13,6 +13,10 @@ import org.slf4j.LoggerFactory;
  * @author rajbhandari
  *
  */
+/**
+ * @author Sachit
+ *
+ */
 public class MetadataResponseManager extends ResponseManager {
 	
 	protected static Logger logger = LoggerFactory.getLogger(MetadataResponseManager.class);
@@ -226,4 +230,18 @@ public class MetadataResponseManager extends ResponseManager {
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param defaultNS
+	 * @return
+	 */
+	public static XMLResponseREPLY setDefaultNamespaceRequest(OntologyInfo ontoInfo, String defaultNS)
+	{
+		Response resp = getSTModel(ontoInfo).metadataService.makeRequest(Metadata.setDefaultNamespaceRequest,
+				STModel.par(Metadata.namespacePar, defaultNS),
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
 }

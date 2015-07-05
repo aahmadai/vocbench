@@ -459,5 +459,29 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	public Boolean deleteSTServer(OntologyInfo ontoInfo, StInstances stInstances) {
 		return systemServiceSystemImpl.deleteSTServer(ontoInfo, stInstances);
 	}
+
+	@Override
+	public void addUsersToOntology(String ontologyId, ArrayList<String> users)
+			throws Exception {
+		systemServiceSystemImpl.addUsersToOntology(ontologyId, users);
+	}
+
+	@Override
+	public ArrayList<String[]> getUserAssignedtoOntology(String ontologyId)
+			throws Exception {
+		return systemServiceSystemImpl.getUserAssignedtoOntology(ontologyId);
+	}
+
+	@Override
+	public ArrayList<OntologyInfo> getOntologyList() throws Exception {
+		return systemServiceSystemImpl.getOntologyList();
+	}
+
+	@Override
+	public void deleteUsersFromOntology(String ontologyId, String userId)
+			throws Exception {
+		systemServiceSystemImpl.deleteUsersFromOntology(ontologyId, userId);
+		
+	}
 }
 

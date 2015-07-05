@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
 
+import org.fao.aoscs.client.image.AOSImageManager;
 import org.fao.aoscs.client.module.constant.RecentChangesConstants;
+import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.widgetlib.shared.panel.HorizontalFlowPanel;
 import org.fao.aoscs.domain.ExportParameterObject;
@@ -405,7 +407,7 @@ public class LabelFactory {
 			imgURL = "images/New-users.gif";
 			break;
 		case RecentChangesConstants.RELATIONSHIP_TYPE:
-			imgURL = "images/relationship-object-logo.gif";
+			imgURL = AOSImageManager.getPropObjectImageURL();
 			break;
 		case RecentChangesConstants.GROUP_TYPE:
 			imgURL = "images/usericon.gif";
@@ -416,6 +418,7 @@ public class LabelFactory {
 		}
 						
 		HTML txt = new HTML(" "+label);
+		txt.addStyleName(Style.label_line_height_20);
 		HorizontalFlowPanel panel = new HorizontalFlowPanel();
 		panel.add(new Image(imgURL));
 		panel.add(new HTML("&nbsp;&nbsp;"));

@@ -8,6 +8,7 @@ import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OntologyMirror;
 import org.fao.aoscs.model.semanticturkey.service.manager.AdministrationManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.MetadataManager;
+import org.fao.aoscs.model.semanticturkey.service.manager.RefactorManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -132,5 +133,24 @@ public class OntologyServiceSTImpl {
 	 */
 	public ArrayList<OntologyMirror> getOntologyMirror(OntologyInfo ontoInfo) {
 		return AdministrationManager.getOntologyMirror(ontoInfo);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param defaultNS
+	 * @return
+	 */
+	public Boolean setDefaultNamespace(OntologyInfo ontoInfo, String defaultNS) {
+		return MetadataManager.setDefaultNamespace(ontoInfo, defaultNS);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param baseURI
+	 * @param defaultNS
+	 * @return
+	 */
+	public Boolean setBaseURIandDefaultNamespace(OntologyInfo ontoInfo, String baseURI, String defaultNS) {
+		return RefactorManager.replaceBaseURI(ontoInfo, null, baseURI, null) && MetadataManager.setDefaultNamespace(ontoInfo, defaultNS);
 	}
 }

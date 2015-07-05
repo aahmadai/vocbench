@@ -8,6 +8,7 @@ import java.util.Iterator;
 
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
+import org.fao.aoscs.client.image.AOSImageManager;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.module.consistency.ConsistencyTemplate;
@@ -167,18 +168,18 @@ public class ConsistencyCheck extends ConsistencyTemplate {
 	public HorizontalPanel makeLabel(final Consistency c, String style, final boolean isAddAction, final int tab, final int type, int imgType,  boolean dest, boolean imgOnEachItem, boolean langFilter)
 	{
 		String link = null;
-		String imageURI = "images/concept_logo.gif";
+		String imageURI = AOSImageManager.getConceptImageURL();
 		if(1 == imgType)
 		{
-			imageURI = "images/concept_logo.gif";
+			imageURI = AOSImageManager.getConceptImageURL();
 		}
 		else if(2 == imgType)
 		{
-			imageURI = "images/term-logo.gif";
+			imageURI = AOSImageManager.getTermImageURL();
 		}
 		else if(3 == imgType)
 		{
-			imageURI = "images/relationship-object-logo.gif";
+			imageURI = AOSImageManager.getPropObjectImageURL();
 		}
 		
 		Image image = new Image(imageURI);

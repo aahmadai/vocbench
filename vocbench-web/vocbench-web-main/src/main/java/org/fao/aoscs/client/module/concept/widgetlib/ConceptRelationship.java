@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
-import org.fao.aoscs.client.image.AOSImageManager;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.classification.widgetlib.ClassificationDetailTab;
@@ -76,7 +75,7 @@ class ConceptRelationship extends ConceptTemplate{
 	
 	private HorizontalPanel convert2ConceptItem(final ConceptObject cObj, String showValue, boolean isExplicit){
 		HorizontalPanel hp = new HorizontalPanel();
-		hp.add(new Image(AOSImageManager.getConceptImageResource(cObj.getUri())));
+		hp.add(new Image(MainApp.aosImageBundle.conceptIcon()));
 		hp.setSpacing(2);
 		String labelstr = "";
 		if(!cObj.getTerm().isEmpty())

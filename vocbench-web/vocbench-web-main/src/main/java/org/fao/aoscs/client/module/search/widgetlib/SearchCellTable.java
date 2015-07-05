@@ -570,7 +570,7 @@ public class SearchCellTable {
 	public Widget getRelationshipColumn(RelationshipObject rObj)
 	{
 		HorizontalPanel panel = new HorizontalPanel();
-		panel.add(new Image("images/relationship-object-logo.gif"));
+		panel.add(new Image(MainApp.aosImageBundle.relationshipObjectIcon()));
 		panel.add(new Spacer("15", "15"));
 		panel.add(getRelationshipLabelPanel(rObj));
 		return panel;

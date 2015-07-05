@@ -18,6 +18,7 @@ import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
 import org.fao.aoscs.client.widgetlib.shared.dialog.RelationshipBrowser;
 import org.fao.aoscs.client.widgetlib.shared.label.LabelAOS;
 import org.fao.aoscs.client.widgetlib.shared.label.LinkLabelAOS;
+import org.fao.aoscs.client.widgetlib.shared.table.RelationshipObjectCell;
 import org.fao.aoscs.domain.InitializeRelationshipData;
 import org.fao.aoscs.domain.LabelObject;
 import org.fao.aoscs.domain.PermissionObject;
@@ -65,9 +66,9 @@ public class RelationshipInverseProperty extends RelationshipTemplate {
 		if(insRObj.getType()!=null)
 		{
 			if(insRObj.getType().equals(RelationshipObject.OBJECT)){
-				hp.add(new Image("images/relationship-object-logo.gif"));
+				hp.add(new Image(MainApp.aosImageBundle.relationshipObjectIcon()));
 			}else if(insRObj.getType().equals(RelationshipObject.DATATYPE)){
-				hp.add(new Image("images/relationship-datatype-logo.gif"));
+				hp.add(new Image(MainApp.aosImageBundle.relationshipDatatypeIcon()));
 			}
 		}
 		
@@ -240,12 +241,7 @@ public class RelationshipInverseProperty extends RelationshipTemplate {
 	}
 	private HorizontalPanel makeRelationshipIcon(RelationshipObject insRObj, LabelAOS lab){
 		HorizontalPanel hp = new HorizontalPanel();
-		if(insRObj.getType().equals(RelationshipObject.OBJECT)){
-			hp.add(new Image("images/relationship-object-logo.gif"));
-		}else{
-			hp.add(new Image("images/relationship-datatype-logo.gif"));
-		}
-		
+		hp.add(new Image(RelationshipObjectCell.getRelationshipIcon(insRObj.getType())));
 		
 		ArrayList<LabelObject> list = insRObj.getLabelList();
 		Iterator<LabelObject> iter = list.iterator();

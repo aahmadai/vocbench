@@ -490,7 +490,8 @@ public class SystemServiceSystemImpl {
 	public ArrayList<OntologyInfo> getOntology()
 	{
 		try {
-			String sqlStr = "SELECT * FROM ontology_info WHERE version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1' AND ontology_id IN ( SELECT ontology_id FROM users_ontology WHERE status = 1) order by ontology_name";
+			String sqlStr = "SELECT * FROM ontology_info WHERE version ='"+ ConfigConstants.VERSION 
+					+"' AND ontology_show='1' AND ontology_id IN ( SELECT ontology_id FROM users_ontology WHERE status = 1) order by ontology_name";
 			
 			Session s = HibernateUtilities.currentSession();
 			ArrayList<OntologyInfo> list = (ArrayList<OntologyInfo>) s.createSQLQuery(sqlStr).addEntity(OntologyInfo.class).list();
@@ -1763,6 +1764,64 @@ public class SystemServiceSystemImpl {
 		DatabaseUtil.delete(stInstances);
 		return true;
 	}
+	
+	public void addUsersToOntology(String ontologyId, ArrayList<String> users)
+			throws Exception {
+		for(String userId : users){
+			String sql = "SELECT count(user_id) from users_ontology WHERE user_id= "+userId+" AND ontology_id="+ontologyId;
+			ArrayList<String[]> ret = QueryFactory.getHibernateSQLQuery(sql);
+			
+			if(ret.size() > 0){
+				String[] countArray = (ret.get(0));
+				if(countArray.length > 0){
+					try{
+						int count = Integer.parseInt(countArray[0]);
+						if(count > 0){
+							sql = "UPDATE users_ontology SET status = 1 WHERE user_id="+userId+" AND ontology_id="+ontologyId;
+							
+						}else{
+							sql = "INSERT INTO users_ontology VALUES ("+userId+","+ontologyId+", 1)";
+						}
+						QueryFactory.hibernateExecuteSQLUpdate(sql);
+							
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}			
+		}
+	}
+	
+	public ArrayList<String[]> getUserAssignedtoOntology(String ontologyId) throws Exception {
+		String sqlStr = "SELECT username,user_id FROM users  WHERE status = '1' " +
+				"AND user_id IN ( SELECT user_id FROM users_ontology WHERE ontology_id =  '"+ontologyId +"' and status=1) order by username";
+		return QueryFactory.getHibernateSQLQuery(sqlStr);
+	}
+	
+	public void deleteUsersFromOntology(String ontologyId, String userId) throws Exception {
+		String sql = "DELETE FROM users_ontology " +
+				"WHERE ontology_id='"+ontologyId+"'" +
+				"AND user_id ='"+userId+"'";
+		QueryFactory.hibernateExecuteSQLUpdate(sql);
+	}
+	
+	public ArrayList<OntologyInfo> getOntologyList() throws Exception {
+		try {
+			String sqlStr = "SELECT * FROM ontology_info WHERE version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1' order by ontology_name";
+			
+			Session s = HibernateUtilities.currentSession();
+			@SuppressWarnings("unchecked")
+			ArrayList<OntologyInfo> list = (ArrayList<OntologyInfo>) s.createSQLQuery(sqlStr).addEntity(OntologyInfo.class).list();
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<OntologyInfo>();
+		} finally {
+			HibernateUtilities.closeSession();
+		}
+	}
+	
 	 
 }
 

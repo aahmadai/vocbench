@@ -13,6 +13,7 @@ import org.fao.aoscs.hibernate.DatabaseUtil;
 import org.fao.aoscs.hibernate.HibernateUtilities;
 import org.fao.aoscs.hibernate.QueryFactory;
 import org.fao.aoscs.server.utility.Encrypt;
+import org.hibernate.Session;
 
 public class UsersPreferenceServiceSystemImpl {
 	
@@ -94,6 +95,17 @@ public class UsersPreferenceServiceSystemImpl {
 		return QueryFactory.getHibernateSQLQuery(query);
 	}
 	
+	public ArrayList<String[]> getPendingLanguage()
+	{
+		String query = "SELECT language_code.language_code, language_code.language_note, users.user_id, users.username, users.first_name, users.last_name, users.email "
+				+ "FROM language_code, users, users_language "
+				+ "WHERE users.user_id=users_language.user_id "
+				+ "AND language_code.language_code=users_language.language_code "
+				+ "AND users_language.status=0 "
+				+ "ORDER BY users.username";
+		return QueryFactory.getHibernateSQLQuery(query);
+	}
+	
 	public ArrayList<String> getNonAssignedLanguage(int userID)
 	{
 		String query = "SELECT language_code FROM language_code WHERE language_code NOT IN(SELECT language_code FROM users_language WHERE user_id='"+userID+"')"; 
@@ -116,17 +128,8 @@ public class UsersPreferenceServiceSystemImpl {
 	public ArrayList<String[]> getNonAssignedOntology(int userID)
 	{
 		String query = "";
-		
-		// if VISITOR then load read only ontology
-		//if(ConfigConstants.ISVISITOR){
-		//	query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2' ";
-		//}
-		//else{
-			query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1' ";
-		//}
-		
+		query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1' ";
 		query += " AND ontology_id NOT IN(SELECT ontology_id FROM users_ontology WHERE user_id='"+userID+"')"; 
-		
 		query = "SELECT ontology_name,ontology_id FROM ontology_info WHERE " + query;
 		
 		
@@ -137,18 +140,8 @@ public class UsersPreferenceServiceSystemImpl {
 	public ArrayList<String[]> getNonAssignedAndPendingOntology(int userID)
 	{
 		String query = "";
-		
-		// if VISITOR then load read only ontology
-		//if(ConfigConstants.ISVISITOR){
-		//	query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
-		//}
-		//else{
-			query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1'";
-		//}
-	
-		query += "AND ontology_id NOT IN(" +
-		"SELECT ontology_id FROM users_ontology WHERE user_id='"+userID+"' AND status=1)"; 
-	
+		query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1'";
+		query += "AND ontology_id NOT IN(" + "SELECT ontology_id FROM users_ontology WHERE user_id='"+userID+"' AND status=1)"; 
 		query = "SELECT ontology_name,ontology_id FROM ontology_info WHERE "+query;
 		
 		return QueryFactory.getHibernateSQLQuery(query);
@@ -157,18 +150,24 @@ public class UsersPreferenceServiceSystemImpl {
 	public ArrayList<String[]> getPendingOntology(int userID)
 	{
 		String query = "";
-		
-		// if VISITOR then load read only ontology
-		//if(ConfigConstants.ISVISITOR){
-		//	query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
-		//}
-		//else{
-			query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1'";
-		//}
-		
+		query = " version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1'";
 		query += " AND ontology_id IN(SELECT ontology_id FROM users_ontology WHERE user_id='"+userID+"' AND status=0)"; 
-		
 		query = "SELECT ontology_name,ontology_id FROM ontology_info WHERE "+query;
+		
+		return QueryFactory.getHibernateSQLQuery(query);
+		
+	}
+	
+	public ArrayList<String[]> getPendingOntology()
+	{
+		String query = "SELECT ontology_info.ontology_id, ontology_info.ontology_name, users.user_id, users.username, users.first_name, users.last_name, users.email "
+				+ "FROM ontology_info, users, users_ontology "
+				+ "WHERE users.user_id=users_ontology.user_id "
+				+ "AND ontology_info.ontology_id=users_ontology.ontology_id "
+				+ "AND ontology_info.version ='"+ ConfigConstants.VERSION +"' "
+				+ "AND ontology_info.ontology_show='1' "
+				+ "AND users_ontology.status=0 "
+				+ "ORDER BY users.username";
 		
 		return QueryFactory.getHibernateSQLQuery(query);
 		
@@ -177,19 +176,9 @@ public class UsersPreferenceServiceSystemImpl {
 	public ArrayList<String[]> getUserOntology(int userID)
 	{
 		String query = "";
-		
-		// if VISITOR then load read only ontology
-		//if(ConfigConstants.ISVISITOR){
-		//	query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='2'";
-		//}
-		//else{
-			query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1'";
-		//}
-
+		query = "version ='"+ ConfigConstants.VERSION +"' AND ontology_show='1'";
 		query += "AND ontology_id IN ( SELECT ontology_id FROM users_ontology WHERE user_id =  '"+userID +"' and status=1)"; 
-
 		query = "SELECT ontology_name, ontology_id FROM ontology_info WHERE "+ query +" order by ontology_name";
-		
 		
 		return QueryFactory.getHibernateSQLQuery(query);
 		
@@ -371,5 +360,12 @@ public class UsersPreferenceServiceSystemImpl {
 			return null;
 		}
 	}
-
+	
+	public ArrayList<Users> getNonAssignedUsers(int ontologyID) {
+		String sqlStr = "SELECT * FROM users WHERE user_id NOT IN(SELECT user_id FROM users_ontology WHERE ontology_id =  '"+ontologyID +"' and status=1)"; 
+		Session s = HibernateUtilities.currentSession();
+		@SuppressWarnings("unchecked")
+		ArrayList<Users> list = (ArrayList<Users>) s.createSQLQuery(sqlStr).addEntity(Users.class).list();
+		return list;
+	}
 }

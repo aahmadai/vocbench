@@ -153,4 +153,16 @@ public class OntologyServiceImpl extends PersistentRemoteService implements Onto
 		return ontologyService.getOntologyMirror(ontoInfo);
 	}
 
+	@Override
+	public Boolean setDefaultNamespace(OntologyInfo ontoInfo, String defaultNS)
+			throws Exception {
+		return ontologyService.setDefaultNamespace(ontoInfo, defaultNS);
+	}
+
+	@Override
+	public Boolean setBaseURIandDefaultNamespace(OntologyInfo ontoInfo,
+			String baseURI, String defaultNS) throws Exception {
+		return ontologyService.setBaseURIandDefaultNamespace(ontoInfo, baseURI, defaultNS);
+	}
+
 }

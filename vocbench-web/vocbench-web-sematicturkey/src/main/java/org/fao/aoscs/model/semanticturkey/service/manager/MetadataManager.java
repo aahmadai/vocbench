@@ -255,4 +255,15 @@ public class MetadataManager extends ResponseManager {
 		return resp.isAffirmative();
 	}
 	
+	/**
+	 * @param ontoInfo
+	 * @param defaultNS
+	 * @return
+	 */
+	public static boolean setDefaultNamespace(OntologyInfo ontoInfo, String defaultNS)
+	{
+		XMLResponseREPLY resp = MetadataResponseManager.setDefaultNamespaceRequest(ontoInfo, defaultNS);
+		return resp.isAffirmative();
+	}
+	
 }

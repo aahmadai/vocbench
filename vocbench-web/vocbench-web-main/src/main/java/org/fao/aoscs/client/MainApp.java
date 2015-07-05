@@ -39,6 +39,7 @@ import org.fao.aoscs.client.module.sheet2rdf.Sheet2RDF;
 import org.fao.aoscs.client.module.statistic.Statistic;
 import org.fao.aoscs.client.module.system.ConfigurationAssignment;
 import org.fao.aoscs.client.module.system.GroupsAssignment;
+import org.fao.aoscs.client.module.system.ProjectsAssignment;
 import org.fao.aoscs.client.module.system.UsersAssignment;
 import org.fao.aoscs.client.module.validation.Validation;
 import org.fao.aoscs.client.utility.ExceptionManager;
@@ -142,6 +143,7 @@ public class MainApp extends Composite { // Application container
     public UsersAssignment usersmanage = null;
     public GroupsAssignment groupsmanage = null;
     public ConfigurationAssignment configurationAssignment = null;
+    public ProjectsAssignment projectsAssignment = null;
     public OntologyAssignment ontologyAssignment = null;
     public Validation validation = null;
     public ImportData importData = null;
@@ -730,6 +732,15 @@ public class MainApp extends Composite { // Application container
                 modulePanel.add(configurationAssignment);
             }
             modulePanel.showWidget(modulePanel.getWidgetIndex(configurationAssignment));
+        }
+        else if (name.equals("Projects"))
+        {
+            if (modulePanel.getWidgetIndex(projectsAssignment) == -1 || projectsAssignment == null)
+            {
+            	projectsAssignment = new ProjectsAssignment();
+                modulePanel.add(projectsAssignment);
+            }
+            modulePanel.showWidget(modulePanel.getWidgetIndex(projectsAssignment));
         }
         else if (name.equals("Ontology"))
         {
@@ -1335,7 +1346,7 @@ public class MainApp extends Composite { // Application container
     	LinkedHashMap<String, String> user = new LinkedHashMap<String, String>();
         user.put("Users", constants.menuUsers());
         user.put("Groups", constants.menuGroups());
-        //user.put("Ontology", constants.menuOntology());
+        user.put("Projects", constants.menuProjects());
         user.put("Configuration", constants.menuConfiguration());
         //user.put("Comments", constants.menuComments());
         //user.put("Logs", constants.menuLogViewer());

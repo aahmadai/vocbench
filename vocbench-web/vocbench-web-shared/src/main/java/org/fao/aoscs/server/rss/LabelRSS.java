@@ -421,7 +421,7 @@ public class LabelRSS {
 			imgURL = "<img src='"+baseURL+"/images/New-users.gif' border='0'>";
 			break;
 		case RecentChangesConstants.RELATIONSHIP_TYPE:
-			imgURL = "<img src='"+baseURL+"/images/relationship-object-logo.gif' border='0'>";
+			imgURL = "<img src='"+baseURL+"/images/st/prop.png' border='0'>";
 			break;
 		case RecentChangesConstants.GROUP_TYPE:
 			imgURL = "<img src='"+baseURL+"/images/usericon.gif' border='0'>";

@@ -35,6 +35,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 		public Boolean addFromOntologyMirror(OntologyInfo ontoInfo, String baseuri, String mirrorFile) throws Exception;
 		public Boolean removeImport(OntologyInfo ontoInfo, String baseuri) throws Exception;
 		public Boolean mirrorOntology(OntologyInfo ontoInfo, String baseuri, String mirrorFile) throws Exception;
+		public Boolean setDefaultNamespace(OntologyInfo ontoInfo, String defaultNS)throws Exception;
+		public Boolean setBaseURIandDefaultNamespace(OntologyInfo ontoInfo, String baseURI, String defaultNS)throws Exception;
 				
 		public ArrayList<OntologyMirror> getOntologyMirror(OntologyInfo ontoInfo) throws Exception;
 		

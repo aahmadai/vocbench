@@ -9,7 +9,7 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 public class ConceptObject extends LightEntity {
 
 	private static final long serialVersionUID = 7851152314158181535L;
-
+ 
 	public static final int CONCEPTMODULE = 0;
 	
 	public static final int CLASSIFICATIONMODULE = 1;
@@ -32,7 +32,8 @@ public class ConceptObject extends LightEntity {
 	
 	//private String nameSpace;
 	
-	private ArrayList<String> scheme = new ArrayList<String>();;
+	private ArrayList<String> scheme = new ArrayList<String>();
+	//private Object scheme = new Object();
 	
 	//private String parentInstance;
 	
@@ -141,7 +142,7 @@ public class ConceptObject extends LightEntity {
 	public void setNameSpace(String nameSpace) {
 		this.nameSpace = nameSpace;
 	}*/
-
+	
 	public ArrayList<String> getScheme() {
 		return scheme;
 	}
@@ -150,9 +151,39 @@ public class ConceptObject extends LightEntity {
 		this.scheme = scheme;
 	}
 	
-	public void addScheme(String scheme) {
-		this.scheme.add(scheme);
+	/*
+	public ArrayList<String> getScheme() {
+		ArrayList<String> list = new ArrayList<String>();
+		for(String str : scheme.split(","))
+			list.add(str);
+		return list;
 	}
+
+	public void setScheme(ArrayList<String> scheme) {
+		this.scheme = scheme.toString();
+	}
+	
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<String> getScheme() {
+		ArrayList<String> list= new ArrayList<String>();
+		if(scheme instanceof String)
+			list.add(""+scheme);
+		else if(scheme instanceof ArrayList)
+			list = (ArrayList<String>) scheme;
+		return list;
+	}
+
+	public void setScheme(Object scheme) {
+		this.scheme = scheme;
+	}*/
+	/*public void addScheme(String scheme) {
+		if(scheme instanceof ArrayList)
+			list = (ArrayList<String>) scheme;
+		this.scheme.add(scheme);
+	}*/
 
 	public HashMap<String, TermObject> getTerm() {
 		return term;

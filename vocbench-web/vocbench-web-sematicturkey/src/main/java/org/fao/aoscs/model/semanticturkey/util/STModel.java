@@ -115,7 +115,7 @@ public class STModel {
 		projectsService = new ServiceHttpWrapper("Projects", stURL);
 		resourceService = new ServiceHttpWrapper("resource", stURL);
 		resourceViewService = new ServiceHttpWrapper("ResourceView", stURL);
-		icvService = new ServiceHttpWrapper("SKOS_ICV", stURL);
+		icvService = new ServiceHttpWrapper("ICV", stURL);
 		refactorService = new ServiceHttpWrapper("Refactor", stURL);
 		searchOntologyService = new ServiceHttpWrapper("ontologySearch", stURL);
 		synonymsService = new ServiceHttpWrapper("synonyms", stURL);

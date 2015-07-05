@@ -26,11 +26,26 @@ public class ProjectManager extends ResponseManager {
 	public static boolean accessProject(OntologyInfo ontoInfo)
 	{
 		boolean chk = false;
-		XMLResponseREPLY reply = ProjectResponseManager.accessProjectRequest(ontoInfo);
-		if(reply!=null)
+		Response resp = ProjectResponseManager.accessProjectRequest(ontoInfo);
+		if(resp!=null)
 		{
-			chk = (reply.getReplyStatus() == RepliesStatus.ok); 
+			if(resp instanceof XMLResponseEXCEPTION)
+			{
+				if(((XMLResponseEXCEPTION) resp).getMessage().equals("Project:  does not exist"))
+					chk = true;
+			}
+			else
+			{
+				XMLResponseREPLY reply = getXMLResponseREPLY(resp);
+				if(reply!=null)
+				{
+					chk = (reply.getReplyStatus() == RepliesStatus.ok); 
+				}
+			}
 		}
+		
+		
+		
 		return chk;
 	}
 	

@@ -207,7 +207,7 @@ public class HierarchyAOS extends Composite{
 		{
 			label = getColorForTreeItem(tObj.getStatus(),label).getHTML();
 		}
-		label = "<img align='top' src='"+AOSImageManager.getConceptImageURL(tObj.getUri())+"'>&nbsp;<span align='middle'>" + label;
+		label = "<img align='top' src='"+AOSImageManager.getConceptImageURL()+"'>&nbsp;<span align='middle'>" + label;
 		
 		return label;
 	}

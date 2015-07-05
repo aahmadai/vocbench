@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author rajbhandari
@@ -72,8 +73,8 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 	
 	private int action = -1;
 	
-	private int widthTable = 500;  
-	private int widthCol1 = 250;  
+	private int widthTable = 700;  
+	private int widthCol1 = 450;  
 	private int widthCol2 = 275;
 	private int widthCol3 = 25;
 	private int widthWidget = 275;
@@ -128,8 +129,7 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		stURL.setWidth("100%");
 		stURL.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
-				if(!stURL.getValue(stURL.getSelectedIndex()).equals(""))
-					connect();
+				connect();
 			}
 		});
 		listSTServerInstances();
@@ -194,7 +194,7 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 					{
 						OntologyConfigurationParameters ontConfigurationParameters = ontConfigurationManager.getParameters().get(i);
 						ontConfigurationParametersMap.put(ontConfigurationParameters.getName(), ontConfigurationParameters);
-						bottomTable.setWidget(i, 0, new HTML(ontConfigurationParameters.getName()));
+						bottomTable.setWidget(i, 0, new HTML(ontConfigurationParameters.getName()+(ontConfigurationParameters.isRequired()?"*":"")));
 						TextBox txtBox = new TextBox();
 						txtBox.setName(ontConfigurationParameters.getName());
 						txtBox.setWidth(widthWidget-widthCol3-5+"px");
@@ -218,7 +218,7 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		topTable.setWidth(widthTable+"px");
 		topTable.getColumnFormatter().setWidth(0, widthCol1+"px");
 		topTable.getColumnFormatter().setWidth(1, widthCol2+"px");
-		topTable.setWidget(0, 0, new HTML(constants.projectProjectName()));			
+		topTable.setWidget(0, 0, new HTML(constants.projectProjectName(), true));			
 		topTable.setWidget(0, 1, projectName);
 		
 		
@@ -226,7 +226,7 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		tripleTable.setWidth(widthTable+"px");
 		tripleTable.getColumnFormatter().setWidth(0, widthCol1+"px");
 		tripleTable.getColumnFormatter().setWidth(1, widthCol2+"px");
-		tripleTable.setWidget(0, 0, new HTML(constants.projectTripleStore()));			
+		tripleTable.setWidget(0, 0, new HTML(constants.projectTripleStore(), true));			
 		tripleTable.setWidget(0, 1, tripleStore);
 		triplePanel.add(GridStyle.setTableConceptDetailStyleleft(tripleTable, "gslRow1", "gslCol1", "gslPanel1"));
 		
@@ -234,7 +234,7 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		middleTable.setWidth(widthTable+"px");
 		middleTable.getColumnFormatter().setWidth(0, widthCol1+"px");
 		middleTable.getColumnFormatter().setWidth(1, widthCol2+"px");
-		middleTable.setWidget(0, 0, new HTML(constants.projectTripleMode()));			
+		middleTable.setWidget(0, 0, new HTML(constants.projectTripleMode(), true));			
 		middleTable.setWidget(0, 1, mode);
 		middlePanel.add(GridStyle.setTableConceptDetailStyleleft(middleTable, "gslRow1", "gslCol1", "gslPanel1"));
 		
@@ -251,13 +251,13 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 			case 0:
 				title = constants.projectAddProject();
 				buttonText = constants.buttonAdd();
-				topTable.setWidget(1, 0, new HTML(constants.projectProjectDesc()));			
+				topTable.setWidget(1, 0, new HTML(constants.projectProjectDesc(), true));			
 				topTable.setWidget(1, 1, projectDesc);
-				topTable.setWidget(2, 0, new HTML(constants.projectProjectType()));			
+				topTable.setWidget(2, 0, new HTML(constants.projectProjectType(), true));			
 				topTable.setWidget(2, 1, projectType);
-				topTable.setWidget(3, 0, new HTML(constants.projectBaseURI()));			
+				topTable.setWidget(3, 0, new HTML(constants.projectBaseURI(), true));			
 				topTable.setWidget(3, 1, baseURI);
-				topTable.setWidget(4, 0, new HTML(constants.projectSTServerInstance()));			
+				topTable.setWidget(4, 0, new HTML(constants.projectSTServerInstance(), true));			
 				topTable.setWidget(4, 1, stPanel);
 				break;
 			case 1:
@@ -293,35 +293,110 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		middlePanel.setVisible(false);
 		bottomPanel.setVisible(false);
 		
-		if(!projectName.getText().equals("") && !projectDesc.getText().equals("") && projectType.getValue(projectType.getSelectedIndex()).length()!=0 && !stURL.getValue(stURL.getSelectedIndex()).equals("") && Convert.isValidURL(baseURI.getText()) && Convert.isValidURL(stURL.getValue(stURL.getSelectedIndex())))
+		
+		if(!stURL.getValue(stURL.getSelectedIndex()).equals(""))
 		{
-			ontoInfo = new OntologyInfo();
-			ontoInfo.setOntologyName(projectName.getText());
-			ontoInfo.setDbTableName(projectName.getText());
-			ontoInfo.setOntologyDescription(projectDesc.getText());
-			ontoInfo.setDbDriver(stURL.getValue(stURL.getSelectedIndex()));
-			ontoInfo.setDbUrl("");
-			ontoInfo.setDbUsername("");
-			ontoInfo.setDbPassword("");
+			String errMsg = getPreCheckErrMsg();
 			
-			AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
-				public void onSuccess(Boolean val) {
-					if(val)
-						listTripleStores();
-					else
-						Window.alert(constants.projectSTServiceFail());
-				}
-				public void onFailure(Throwable caught) {
-					ExceptionManager.showException(caught, constants.projectSTServiceFail());
-				}
-			};
-			ProjectServiceUtil.getInstance().isSTServerStarted(ontoInfo, callback);
+			if(errMsg.equals(""))
+			{
+				ontoInfo = new OntologyInfo();
+				ontoInfo.setOntologyName(projectName.getText());
+				ontoInfo.setDbTableName(projectName.getText());
+				ontoInfo.setOntologyDescription(projectDesc.getText());
+				ontoInfo.setDbDriver(stURL.getValue(stURL.getSelectedIndex()));
+				ontoInfo.setDbUrl("");
+				ontoInfo.setDbUsername("");
+				ontoInfo.setDbPassword("");
+				
+				AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+					public void onSuccess(Boolean val) {
+						if(val)
+							listTripleStores();
+						else
+						{
+							stURL.setSelectedIndex(0);
+							Window.alert(constants.projectSTServiceFail());
+						}
+					}
+					public void onFailure(Throwable caught) {
+						stURL.setSelectedIndex(0);
+						ExceptionManager.showException(caught, constants.projectSTServiceFail());
+					}
+				};
+				ProjectServiceUtil.getInstance().isSTServerStarted(ontoInfo, callback);
+			}
+			else
+			{
+				stURL.setSelectedIndex(0);
+				Window.alert(constants.conceptCompleteInfo()+errMsg);
+			}
+		}
+	}
+	
+	private String getPreCheckErrMsg()
+	{
+		if(projectName.getText().equals(""))
+		{
+			return " - "+constants.projectProjectNameEmpty();
+		}
+		else if(projectDesc.getText().equals(""))
+		{
+			return " - "+constants.projectProjectDescEmpty();
+		}
+		else if(projectType.getValue(projectType.getSelectedIndex()).length()==0)
+		{
+			return " - "+constants.projectProjectTypeEmpty();
+		}
+		else if(!Convert.isValidURL(baseURI.getText()))
+		{
+			return " - "+constants.projectBaseURIInvalid();
+		}
+		else if(stURL.getValue(stURL.getSelectedIndex()).equals(""))
+		{
+			return " - "+constants.projectSTEmpty();
+		}
+		else if(!Convert.isValidURL(stURL.getValue(stURL.getSelectedIndex())))
+		{
+			return " - "+constants.projectSTInvalid();
+		}
+		return "";
+	}
+	
+	private String getPostCheckErrMsg()
+	{
+		if(triplePanel.isVisible() && tripleStore.getValue(tripleStore.getSelectedIndex()).length()==0)
+		{
+			return " - "+constants.projectTripleStoreEmpty();
+		}
+		else if(middlePanel.isVisible() && mode.getValue(mode.getSelectedIndex()).length()==0)
+		{
+			return " - "+constants.projectTripleStoreModeEmpty();
 		}
 		else
 		{
-			Window.alert(constants.conceptCompleteInfo());
-			stURL.setSelectedIndex(0);
+			boolean chk = false;
+			for(int i=0;i<bottomTable.getRowCount();i++)
+			{
+				TextBox txtBox = (TextBox) bottomTable.getWidget(i, 1);
+				if(ontConfigurationParametersMap!=null)
+				{
+					OntologyConfigurationParameters ontConfigurationParameters = ontConfigurationParametersMap.get(txtBox.getName());
+					if(ontConfigurationParameters!=null  && ontConfigurationParameters.isRequired())
+					{
+						chk = (txtBox.getText().equals(""));
+						if(chk)
+							break;
+					}
+				}
+				
+			}
+			
+			if(chk)
+				return " - "+constants.projectTripleStoreModeConfigurationParameterInvalid();
 		}
+		
+		return "";
 	}
 	
 	public void listSTServerInstances()
@@ -396,22 +471,26 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 	
 	public boolean passCheckInput() {
 		boolean pass = false;
+		String errMsg = constants.conceptCompleteInfo();
 		switch(action)
 		{
 			case 0:
-				pass = (!projectName.getText().equals("") && 
+				/*pass = (!projectName.getText().equals("") && 
 						!projectDesc.getText().equals("") && 
 						projectType.getValue(projectType.getSelectedIndex()).length()!=0 &&
 						!stURL.getValue(stURL.getSelectedIndex()).equals("") && 
 						Convert.isValidURL(baseURI.getText()) && Convert.isValidURL(stURL.getValue(stURL.getSelectedIndex())));
+				
 				if(triplePanel.isVisible())
 					pass = pass &&	tripleStore.getValue(tripleStore.getSelectedIndex()).length()!=0;
 				else
 					pass = false;
+				
 				if(middlePanel.isVisible())
 					pass = pass && mode.getValue(mode.getSelectedIndex()).length()!=0;
 				else
 					pass = false;
+				
 				boolean chk = true;
 				for(int i=0;i<bottomTable.getRowCount();i++)
 				{
@@ -428,7 +507,31 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 					}
 					
 				}
+				
 				pass = pass && chk;
+				
+				*/
+				
+				String tmpErrMsg = getPreCheckErrMsg();
+				if(tmpErrMsg.equals(""))
+				{
+					String tmpErrMsg2 = getPostCheckErrMsg();
+					if(tmpErrMsg2.equals(""))
+					{
+						pass = true;
+					}
+					else 
+					{
+						errMsg += tmpErrMsg2;
+						break;
+					}
+				}
+				else 
+				{
+					errMsg += tmpErrMsg;
+					break;
+				}
+				
 				break;
 			case 1:
 				pass = projectName.getText().length()!=0;
@@ -436,7 +539,30 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 			default:
 				break;
 		}
+		
+		if(!pass)
+			Window.alert(errMsg);
 		return pass;
+	}
+	
+	public void onClick(ClickEvent event) 
+	{
+		Widget sender = (Widget) event.getSource();
+		if(sender.equals(submit))
+		{
+			if(passCheckInput())
+			{
+				if(passCheckHide())
+					this.hide();
+				submit.setEnabled(false);
+				onSubmit();
+			}
+		}
+		else if(sender.equals(cancel))
+		{
+			this.onCancel();			
+		}
+		onButtonClicked(sender);
 	}
 	
 	public void show(ProjectDialogBoxOpener opener)

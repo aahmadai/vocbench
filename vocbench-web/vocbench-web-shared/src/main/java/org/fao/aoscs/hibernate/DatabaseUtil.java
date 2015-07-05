@@ -279,9 +279,8 @@ public class DatabaseUtil {
     	{
     		 if(bytes!=null)
              {
-    			 ByteArrayInputStream bytesInput = new ByteArrayInputStream(bytes);
-	            ObjectInputStream objInput;
-	            objInput = new ObjectInputStream(bytesInput);
+    			ByteArrayInputStream bytesInput = new ByteArrayInputStream(bytes);
+	            ObjectInputStream objInput = new ObjectInputStream(bytesInput);
 	            Object obj = objInput.readObject();
 	            ArrayList list = new ArrayList();
 	            list.add(obj);
@@ -292,10 +291,9 @@ public class DatabaseUtil {
     	}
     	catch(Exception e)
     	{
+    		e.printStackTrace();
     		return new ArrayList();
     	}
     }
-    
-	
 
 }

@@ -30,4 +30,8 @@ public interface OntologyServiceAsync<T> {
 	void removeImport(OntologyInfo ontoInfo, String baseuri, AsyncCallback<Boolean> callback);
 	void mirrorOntology(OntologyInfo ontoInfo, String baseuri, String mirrorFile, AsyncCallback<Boolean> callback);
 	void getOntologyMirror(OntologyInfo ontoInfo, AsyncCallback<ArrayList<OntologyMirror>> callback);
+	void setDefaultNamespace(OntologyInfo ontoInfo, String defaultNS,
+			AsyncCallback<Boolean> callback);
+	void setBaseURIandDefaultNamespace(OntologyInfo ontoInfo, String baseURI,
+			String defaultNS, AsyncCallback<Boolean> callback);
 }

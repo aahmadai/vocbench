@@ -10,25 +10,25 @@ public interface AOSImageBundle extends ClientBundle {
 	@Source("org/fao/aoscs/client/image/icons/label_not_found.gif")
 	public ImageResource labelNotFound();
 	  
-	@Source("org/fao/aoscs/client/image/icons/concept_logo.gif")
+	@Source("org/fao/aoscs/client/image/icons/st/skosConcept.png")
 	public ImageResource conceptIcon();
 
-	@Source("org/fao/aoscs/client/image/icons/category_logo.gif")
-	public ImageResource categoryIcon();
+	//@Source("org/fao/aoscs/client/image/icons/category_logo.gif")
+	//public ImageResource categoryIcon();
 
-	@Source("org/fao/aoscs/client/image/icons/relationship-object-logo.gif")
+	@Source("org/fao/aoscs/client/image/icons/st/propObject.png")
 	public ImageResource relationshipObjectIcon();
 	
-	@Source("org/fao/aoscs/client/image/icons/relationship-datatype-logo.gif")
+	@Source("org/fao/aoscs/client/image/icons/st/propDatatype.png")
 	public ImageResource relationshipDatatypeIcon();
 	
-	@Source("org/fao/aoscs/client/image/icons/relationship-annotation-logo.gif")
+	@Source("org/fao/aoscs/client/image/icons/st/propAnnotation.png")
 	public ImageResource relationshipAnnotationIcon();
 	
-	@Source("org/fao/aoscs/client/image/icons/relationship-ontology-logo.gif")
+	@Source("org/fao/aoscs/client/image/icons/st/propOntology.png")
 	public ImageResource relationshipOntologyIcon();
 	
-	@Source("org/fao/aoscs/client/image/icons/relationship-rdf-logo.gif")
+	@Source("org/fao/aoscs/client/image/icons/st/prop.png")
 	public ImageResource relationshipRDFIcon();
 	
 	@Source("org/fao/aoscs/client/image/icons/add-grey.gif")

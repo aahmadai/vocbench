@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.fao.aoscs.client.image.AOSImageManager;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.module.concept.widgetlib.ConceptTab;
 import org.fao.aoscs.client.utility.Convert;
@@ -214,7 +213,7 @@ public class ConceptNavigationHistory extends DialogBoxAOS implements ClickHandl
 	private Widget convert2Widget(final ConceptObject cObj, String label){
 		final HorizontalPanel hp = new HorizontalPanel();
 		hp.setSpacing(5);
-		hp.add(new Image(AOSImageManager.getConceptImageResource(cObj.getUri())));
+		hp.add(new Image(MainApp.aosImageBundle.conceptIcon()));
 		hp.setSpacing(2);
 				
 		if(label.startsWith("###EMPTY###"))
