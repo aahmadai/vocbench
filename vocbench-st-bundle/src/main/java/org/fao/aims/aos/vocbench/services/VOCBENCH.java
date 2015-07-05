@@ -32,7 +32,6 @@ import it.uniroma2.art.owlart.query.Update;
 import it.uniroma2.art.owlart.utilities.RDFIterators;
 import it.uniroma2.art.owlart.vocabulary.RDFResourceRolesEnum;
 import it.uniroma2.art.semanticturkey.data.id.ARTURIResAndRandomString;
-import it.uniroma2.art.semanticturkey.data.id.URIGenerator;
 import it.uniroma2.art.semanticturkey.exceptions.HTTPParameterUnspecifiedException;
 import it.uniroma2.art.semanticturkey.exceptions.InvalidProjectNameException;
 import it.uniroma2.art.semanticturkey.exceptions.NonExistingRDFResourceException;
@@ -43,6 +42,7 @@ import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFNode;
 import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFNodeFactory;
 import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFResource;
 import it.uniroma2.art.semanticturkey.ontology.utilities.STRDFURI;
+import it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerationException;
 import it.uniroma2.art.semanticturkey.project.Project;
 import it.uniroma2.art.semanticturkey.project.ProjectManager;
 import it.uniroma2.art.semanticturkey.servlet.Response;
@@ -63,6 +63,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -935,19 +936,28 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource type = skosxlModel.createURIResource(TYPE);
 			
 			ARTURIResource newNode ;
-			String randomValue;
+			//String randomValue;
 			if(isImage){
 				//newNode = skosxlModel.createURIResource(skosxlModel.getDefaultNamespace() +"i_img_"+ 
 				//		UUID.randomUUID().toString());
-				ARTURIResAndRandomString newNodeAndRandomValue = generateImgURI(skosxlModel, getUserNamedGraphs());
-				newNode = newNodeAndRandomValue.getArtURIResource();
-				randomValue = newNodeAndRandomValue.getRandomValue();
+				
+				//OLD
+				//ARTURIResAndRandomString newNodeAndRandomValue = generateImgURI(skosxlModel, getUserNamedGraphs());
+				//newNode = newNodeAndRandomValue.getArtURIResource();
+				//randomValue = newNodeAndRandomValue.getRandomValue();
+				
+				newNode = generateURI("img", Collections.<String,String>emptyMap());
+				
 			} else {
 				//newNode = skosxlModel.createURIResource(skosxlModel.getDefaultNamespace() +"i_def_"+ 
 				//		UUID.randomUUID().toString());
-				ARTURIResAndRandomString newNodeAndRandomValue = generateDefURI(skosxlModel, getUserNamedGraphs());
-				newNode = newNodeAndRandomValue.getArtURIResource();
-				randomValue = newNodeAndRandomValue.getRandomValue();
+				
+				//OLD
+				//ARTURIResAndRandomString newNodeAndRandomValue = generateDefURI(skosxlModel, getUserNamedGraphs());
+				//newNode = newNodeAndRandomValue.getArtURIResource();
+				//randomValue = newNodeAndRandomValue.getRandomValue();
+				
+				newNode = generateURI("xDefinition", Collections.<String,String>emptyMap());
 			}
 			
 			ARTURIResource defValueURI = skosxlModel.createURIResource(VALUE); 
@@ -994,10 +1004,10 @@ public class VOCBENCH extends SKOSXL {
 			defElem.setAttribute("concept", conceptURI.getURI());
 			if(isImage){
 				defElem.setAttribute("imageURI", newNode.getURI());
-				XMLHelp.newElement(response.getDataElement(), "randomForImage", randomValue);
+				//XMLHelp.newElement(response.getDataElement(), "randomForImage", randomValue);
 			} else {
 				defElem.setAttribute("definitionURI", newNode.getURI());
-				XMLHelp.newElement(response.getDataElement(), "randomForDefinition", randomValue);
+				//XMLHelp.newElement(response.getDataElement(), "randomForDefinition", randomValue);
 			}
 			defElem.setAttribute("label", translation);
 			defElem.setAttribute("lang", lang);
@@ -1015,6 +1025,8 @@ public class VOCBENCH extends SKOSXL {
 		} catch (ModelUpdateException e) {
 			return logAndSendException(e);
 		} catch (NonExistingRDFResourceException e) {
+			return logAndSendException(e);
+		} catch (URIGenerationException e) {
 			return logAndSendException(e);
 		} 
 		return response;
@@ -5563,7 +5575,7 @@ public class VOCBENCH extends SKOSXL {
 	//functions to generate URI. These function will be moved inside ST in a future release
 	
 	//moved to SKOS.java
-	protected ARTURIResAndRandomString generateConceptURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+	/*protected ARTURIResAndRandomString generateConceptURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
 			throws ModelAccessException {
 		final String DEFAULT_VALUE = "c_";
 		String projectName = serviceContext.getProject().getName();
@@ -5579,7 +5591,7 @@ public class VOCBENCH extends SKOSXL {
 		
 		URIGenerator uriGen = new URIGenerator(skosxlModel, graphs, projectName);
 		return uriGen.generateURI(entityPrefix+"${rand()}", null);
-	}
+	}*/
 	
 	//moved to SKOSXL.java
 	/*protected ARTURIResAndRandomString generateXLabelURI(SKOSXLModel skosxlModel, String lang,
@@ -5614,7 +5626,7 @@ public class VOCBENCH extends SKOSXL {
 		return new ARTURIResAndRandomString(randomValue, newConcept);
 	}*/
 	
-	protected ARTURIResAndRandomString generateImgURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+	/*protected ARTURIResAndRandomString generateImgURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
 			throws ModelAccessException {
 		final String DEFAULT_VALUE = "img_";
 		String projectName = serviceContext.getProject().getName();
@@ -5631,9 +5643,9 @@ public class VOCBENCH extends SKOSXL {
 		
 		URIGenerator uriGen = new URIGenerator(skosxlModel, graphs, projectName);
 		return uriGen.generateURI(entityPrefix+"${rand()}", null);
-	}
+	}*/
 	
-	protected ARTURIResAndRandomString generateDefURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
+	/*protected ARTURIResAndRandomString generateDefURI(SKOSXLModel skosxlModel, ARTResource[] graphs) 
 			throws ModelAccessException {
 		final String DEFAULT_VALUE = "def_";
 		String projectName = serviceContext.getProject().getName();
@@ -5649,7 +5661,7 @@ public class VOCBENCH extends SKOSXL {
 		}
 		URIGenerator uriGen = new URIGenerator(skosxlModel, graphs, projectName);
 		return uriGen.generateURI(entityPrefix+"${rand()}", null);
-	}
+	}*/
 	
 	//moved to SKOS.java
 	/*protected String randomGenerator(){

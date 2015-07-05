@@ -1,0 +1,95 @@
+VB2.3
+	• Introduced support for Alignment (in a dedicated tab). Alignments can be set either by:
+		o Manually specifying the URI of the aligned concept 
+		o Browsing other thesauri hosted in the same VB instance, and searching the concepts to match. Free-text search is initially powered by the labels of the concept to be mapped, though may be freely edited by the user.
+	• Extended support for all RDF properties
+		o Added more tabs for: Alignment, Annotation (all annotation properties not covered by other tabs), Other (plain RDF properties)
+		o Extended relationship tab: it now covers all OWL object properties; the add-value form now suggests only subproperties of skos:related, but an option allows to select all owl:ObjectProperties
+		o Extended datatype tab: it now covers all OWL datatype properties; the add-value form now suggests only properties with domain skos:Concept, but an option allows to select all owl:DatatypeProperties
+		o Added Plain-RDF properties tree view
+		o Rearranged tab-ordering based on most important/mostly used tabs
+		o Added an option for filtering the tabs which are being shown
+	• Added dedicated forms for all XmlSchema Definition datatypes (xsd:date, xsd:datetime, xsd:duration etc…)
+	• Refactoring
+		o Added URI-renaming
+		o Added global baseuri/namespace refactoring (beware: recent changes and validation are not refactored as well, so perform it with a clean validation table!)
+	• Menu revision
+		o Added a "Global Data Management" menu, containing data management functionalities working at project-scale
+		o Moved existing project-scale data management functionalities from the blue-stripe-header menu and from the Administrator menu to the new "Global Data Management"
+	• Data-lifting (Global Data Management\Refactor)
+		o Added mass data-refactoring from SKOS to SKOS-XL (useful after loading a SKOS thesaurus)
+		o Added mass data-refactoring for reifying skos:definitions (from plain literals to RDF resources, as normally managed in VB)
+	• Integrity Constraint Validation (ICV)
+		o Added one single ICV for checking dangling concepts (more to come in VB2.4)
+	• Import-Export
+		o Enabled export in all notable RDF serialization formats
+		o Enabled forced selection of file format when importing vocabularies. If not specified, it is guessed from the file extension/MIME type as usual
+		o Enabled export to plain SKOS (skos core labels) and with plain skos:definitions. Options allow to retain the original reified labels/definitions together with the plain ones, or to remove them from the export
+	• Enabled search-by-URI
+	• Per-Project reconfigurable ID generators (from ST 0.11, see: http://vocbench.uniroma2.it/documentation/adv_users.jsf)
+	• Scheme Management: the selected scheme is now local to each user, and must be defined at each session. The administrator may define, per project, the scheme which will be selected by default at the start of each session.
+	• Minor Improvements
+		o Minor terminological Improvements to the UI
+		o Allow users to cancel a language request
+		o Display number of entries per page in the recent changes page
+		o after checking "Show inferred and explicit" on the concept description area, the shown tab is not switched to the "Terms" tab but remains on the currently selected one
+	• Bug Fixes
+		o SPARQL results were sometimes (in case of null values) not properly aligned with the column headers: fixed
+		o "Add and repeat" button in concept creation now properly allows to create another concept, instead of a new term for the same concept
+
+VB2.2.1
+	• Improvement:
+		o includes updated sesame2 OntologyManager compatible with triple stores which do not copy triples from all named graphs into the inferred defaultgraph (e.g. OWLIM/GraphDB)
+	• BugFixes
+		○ pointer error when adding a concept as topconcept of another scheme
+		○ the notation tab improperly returns 0 notations
+		○ presence of flat (non reified) skos:definitions caused an exception
+	
+VB2.2
+	• An important change in ST: moved to the karaf OSGi container. Just run it through the bin/st_server_run batch/bash file. The new ST is totally compatible with the same data folder (SemanticTurkeyData) of the previous Semantic Turkey , so no need to update/change the existing data.
+	• ST Instance Manager: no more need to pass an ST connection URL (which was rather annoying to be copied and pasted from the installation instructions). The static part of the connection URL is hardcoded in the system and  is always paired (and updated) with the ST version being used by the current VB, while the dynamic part can be defined only in terms of port and host. Also, through the ST instance manger, users can define multiple ST installations in terms of the sole baseURL and port and then just invoke them when defining a new project. A default ST configuration is already stored in the system, and corresponds to the default settings of ST (localhost, 1979).
+	• Running more projects on the same ST instance: from ST 0.10 (paired with VB2.2), it is now possible to manage more projects in parallel with the same ST instance (technical details on the ST site: http://semanticturkey.uniroma2.it). Through the ST instance manager, it is possible to associate and host different projects on ST instances, though this is no more necessary.
+	• User experience: New features/improvements:
+		○ A much requested feature: user-customizable entity id-generator (e.g. the way the name of concepts, xlabels etc.. is generated can be customized)
+		○ Validation for move/link/unlink actions
+		○ downloadable SPARQL results
+		○ scheme management: now possible to edit lexicalizations for schemes as well
+		○ Interface for checking and repairing dangling concepts
+	• bug fix:
+		○ Fixed locking of visitor only mode. In visitor mode, user can login as Adminstrator to get out of visitor mode.
+		○ In ST: no more projects deleted due to a lost connection to a remote repository
+		○ RDF Export not working
+		○ Removed the user/grojup management capability from the Publisher. Note this is not removed from existing installation
+	• New experimental resource view. To test it: login as administrator, you will see new button on top of concept tree. Select any concept and click "<s-p-o>" button near the visualization button. It will popup the resource view.
+	• Developers only: Context injectable services: now services address objects injected through an extensible "context": the context currently includes the: read and write graph(s) and the project to be considered (following the multi-project management enabled in this version) 
+
+VB2.1
+	• A completely rebuilt installation mechanism for an headache-free installation experience!
+		○ Self-installing DB, with auto-updating scripts
+		○ Wizard-driven system configuration, with import/export of configuration profiles
+	• SPARQL module: query/update content directly through the SPARQL query language for RDF; syntax completion & highlight 
+	• Multi scheme management: now concepts can be shared among different schemes
+	• RSS feeds for all editing actions
+	• Search Engine: switch between standard sparql based search and OWLIM enhanced full text search
+
+VB2.0
+	• A Completely re-engineered RDF backend, based on RDF Management platform Semantic  Turkey
+		○ Support for different triple stores
+		○ Extension mechanism based on OSGi
+	• Multi scheme management. Several skos:ConceptSchemes can be developed for the same dataset, providing different views on the data
+	• Statistics module: a module providing resuming information about the loaded data.
+	• Export module: for exporting all or part of the content of a project according to several existing RDF serialization standards
+	• Load data module: for loading bulk data serialized in some RDF serialization standard
+	• Ontology Import Management (Administration-->Ontologies): to owl:import ontologies to be used as property vocabularies for the modeled thesauri
+	• New tabs under the concept view for covering extensively the SKOSXL standard (note, notations)
+
+VB1.x
+	• Validation&Publication Workflow (propose, validate, publish, revise, deprecate…)
+	• Fine grained user management
+		○ both users and functionalities may be associated in groups
+		○ Functionalities (or groups of) may be assigned to different users (or groups of)
+	• Full editing history (not only concepts, but most of the actions can be subject to validation too)
+	• RSS Feeds
+	• Fine-grained metadata and editorial notes: SKOS-XL and reified definitions allow for timestamped status and rich editorial notes
+	• Strong support for multi-lingual thesauri management
+	• Application itself is also multilingual (currently support for english, dutch, spanish, more languages coming)
