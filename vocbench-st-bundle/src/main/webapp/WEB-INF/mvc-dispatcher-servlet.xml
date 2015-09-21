@@ -13,6 +13,14 @@
 	<osgi:reference id="conversionService"
 		interface="org.springframework.core.convert.ConversionService" />
 
+	<!-- Imports the custom range provider from the service registry -->
+	<osgi:reference id="customRangeProvider"
+		interface="it.uniroma2.art.semanticturkey.customrange.CustomRangeProvider" />
+
+	<!-- Imports the CODA-core provider from the service registry -->
+	<osgi:reference id="CODACoreProvider"
+		interface="it.uniroma2.art.semanticturkey.customrange.CODACoreProvider" />
+
 	<!-- A ValidatorFactory whose products (Validators) support dependency injection 
 		on constraint validators, through the use of SpringConstraintValidatorFactory 
 		for instantiating them. (See: http://stackoverflow.com/a/13361762) -->

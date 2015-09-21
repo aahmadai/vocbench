@@ -86,6 +86,7 @@
 							it.uniroma2.art.owlart.models,
 							it.uniroma2.art.owlart.navigation,
 							it.uniroma2.art.owlart.vocabulary,
+							it.uniroma2.art.semanticturkey.customrange,
 							it.uniroma2.art.semanticturkey.exceptions,
 							it.uniroma2.art.semanticturkey.mvc,
 							it.uniroma2.art.semanticturkey.ontology.utilities,
