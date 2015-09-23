@@ -15,6 +15,8 @@ public class UserLogin extends LightEntity {
 	
 	private String  userid;
 	
+	private String  userEmail;
+	
 	private String  groupid;
 	
 	private String  groupname;
@@ -38,6 +40,20 @@ public class UserLogin extends LightEntity {
 	 */
 	public String getUserid() {
 		return userid;
+	}
+
+	/**
+	 * @return the userEmail
+	 */
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	/**
+	 * @param userEmail the userEmail to set
+	 */
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
 	/**

@@ -724,7 +724,7 @@ public interface LocaleConstants extends Constants{
 	public String userCancelAddData();
 	public String userCancelEditData();
 	public String userActivateAdditionalInfo();
-
+	public String userLoadPermissionFail();
 
 	//Groups
 	public String groupManagment();
@@ -781,6 +781,9 @@ public interface LocaleConstants extends Constants{
 	public String projectConfirmRemoveUser();
 	public String projectNoProject();
 	public String projectAddUserProjectFail();
+	public String projectAddUser();
+	public String projectRemoveUser();
+	public String projectPendingRequests();
 	
 	//Configuration
 	public String configImportConfigurationFile();

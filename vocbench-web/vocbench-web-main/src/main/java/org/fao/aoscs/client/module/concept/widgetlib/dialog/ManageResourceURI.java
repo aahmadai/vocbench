@@ -128,7 +128,7 @@ public class ManageResourceURI extends FormDialogBox implements ClickHandler{
 				ExceptionManager.showException(caught, constants.refactorActionFailed());
 			}
 		};
-		Service.refactorService.changeResourceName(MainApp.userOntology, oldURI.getValue(), newURI.getValue(), callback);
+		Service.refactorService.renameResource(MainApp.userOntology, oldURI.getValue(), newURI.getValue(), callback);
 		
 	}
 	

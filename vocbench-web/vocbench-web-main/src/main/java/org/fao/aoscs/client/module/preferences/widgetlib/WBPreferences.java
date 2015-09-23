@@ -23,13 +23,13 @@ import org.fao.aoscs.client.widgetlib.shared.panel.TitleBodyWidget;
 import org.fao.aoscs.domain.InitializeUsersPreferenceData;
 import org.fao.aoscs.domain.LanguageCode;
 import org.fao.aoscs.domain.LanguageInterface;
-import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.Users;
 import org.fao.aoscs.domain.UsersLanguage;
 import org.fao.aoscs.domain.UsersLanguageId;
 import org.fao.aoscs.domain.UsersOntology;
 import org.fao.aoscs.domain.UsersOntologyId;
 import org.fao.aoscs.domain.UsersPreference;
+import org.fao.aoscs.domain.UsersPreferenceId;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -51,6 +51,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -67,7 +68,11 @@ public class WBPreferences extends Composite implements ClickHandler{
 	private TextBox newuseremail = new TextBox();
 	private TextBox confirmuseremail = new TextBox();
 	private OlistBox langlistCS = new OlistBox(true);
+	private OlistBox grouplistCS = new OlistBox(true);
 	private OlistBox langlistCSPending = new OlistBox(true);
+	
+	private Image btnaddgroup = new Image("images/add-grey.gif");
+	private Image btnremovegroup = new Image("images/delete-grey.gif");
 	
 	private Image btnaddlang = new Image("images/add-grey.gif");
 	private Image btnremovelang = new Image("images/delete-grey.gif");
@@ -81,7 +86,7 @@ public class WBPreferences extends Composite implements ClickHandler{
 	private ListBox langlistInterface = new ListBox();
 	private OlistBox ontologylist = new OlistBox(true);
 	private OlistBox ontologylistPending = new OlistBox(true);
-	private ListBox ontology = new ListBox();
+	//private ListBox ontology = new ListBox();
 	private CheckBox showURICheck = new CheckBox();
 	private CheckBox showAlsoNonPreferredCheck = new CheckBox();
 	private CheckBox showOnlySelectedLanguages = new CheckBox();
@@ -92,7 +97,9 @@ public class WBPreferences extends Composite implements ClickHandler{
 	private Button clearpref = new Button();
 	private Users user = new Users();
 	private LanguageDataDialog newlangDialog;
+	private GroupDataDialog newgroupDialog;
 	private OntologyPendingDialog newontoDialog;
+	private UsersPreference userPreference;
 	
 	public WBPreferences()
 	{
@@ -116,7 +123,7 @@ public class WBPreferences extends Composite implements ClickHandler{
 				ExceptionManager.showException(caught, constants.prefNotLoad());
 			}
 		};
-		Service.userPreferenceService.getInitData(MainApp.userId, callback);		
+		Service.userPreferenceService.getInitData(MainApp.userId, -1, callback);		
 	    initWidget(panel);		  
 	}
 	
@@ -155,18 +162,18 @@ public class WBPreferences extends Composite implements ClickHandler{
 	    confirmuseremail.setWidth("100%");
 	    
 	    // Ontology
-	    detailPanel.setWidget(6,0, new HTML(constants.prefOntology()));
-	    detailPanel.setWidget(6,1, ontology);
-		ontology.setWidth("100%");		
+	    //detailPanel.setWidget(6,0, new HTML(constants.prefOntology()));
+	   // detailPanel.setWidget(6,1, ontology);
+		//ontology.setWidth("100%");		
 		
 		// Initial screen preferences
-		detailPanel.setWidget(7, 0, new HTML(constants.prefInitialScreen()));
-		detailPanel.setWidget(7, 1, initialScreen);
+		detailPanel.setWidget(6, 0, new HTML(constants.prefInitialScreen()));
+		detailPanel.setWidget(6, 1, initialScreen);
 		initialScreen.setWidth("100%");
 		
 		// Initial screen preferences
-		detailPanel.setWidget(8, 0, new HTML(constants.prefLanguageInterface()));
-		detailPanel.setWidget(8, 1, langlistInterface);
+		detailPanel.setWidget(7, 0, new HTML(constants.prefLanguageInterface()));
+		detailPanel.setWidget(7, 1, langlistInterface);
 		langlistInterface.setWidth("100%");
 		
 		// FILTER OPTION CHECK BOXES
@@ -212,7 +219,7 @@ public class WBPreferences extends Composite implements ClickHandler{
 		vPanel.setCellHorizontalAlignment(panel_row3,  HasHorizontalAlignment.ALIGN_CENTER);
 		vPanel.setCellHeight(panel_row3, "100%");
 		
-		TitleBodyWidget vpPanel = new TitleBodyWidget(constants.prefDetails(), vPanel, null, ((MainApp.getBodyPanelWidth()-120)/2) + "px", "100%");
+		TitleBodyWidget vpPanel = new TitleBodyWidget(constants.prefDetails(), vPanel, null, ((MainApp.getBodyPanelWidth()-130)/2) + "px", "100%");
 		
 		
 		ArrayList<String> userMenu = (ArrayList<String>) MainApp.userMenu;
@@ -222,11 +229,24 @@ public class WBPreferences extends Composite implements ClickHandler{
     	}
 		initialScreen.setSelectedIndex(1);
       
+		//GROUP LIST
+		
+		btnaddgroup.setTitle(constants.buttonAdd());
+		btnaddgroup.addClickHandler(this);
+		
+		btnremovegroup.setTitle(constants.buttonRemove());
+		btnremovegroup.addClickHandler(this);
+		
+		HorizontalPanel hpnbtngroup = new HorizontalPanel();
+		hpnbtngroup.add(btnaddgroup);
+		hpnbtngroup.add(btnremovegroup);
+		
+		TitleBodyWidget vpGroup = new TitleBodyWidget(constants.userGroup(), grouplistCS, hpnbtngroup, ((MainApp.getBodyPanelWidth()-130)/4)  + "px", "100%");
+		
+		
 		// LANGUAGE LIST
 		//langlistCS.setVisibleItemCount(25);
 		
-		
-
 		btnaddlang.setTitle(constants.buttonAdd());
 		btnaddlang.addClickHandler(this);
 		
@@ -239,21 +259,22 @@ public class WBPreferences extends Composite implements ClickHandler{
 		btnremovependingonto.setTitle(constants.buttonRemove());
 		btnremovependingonto.addClickHandler(this);
 		
-		HorizontalPanel hpnbtngroup = new HorizontalPanel();
-		hpnbtngroup.add(btnaddlang);
-		hpnbtngroup.add(btnremovelang);
+		HorizontalPanel hpnbtnlang = new HorizontalPanel();
+		hpnbtnlang.add(btnaddlang);
+		hpnbtnlang.add(btnremovelang);
 		
-		TitleBodyWidget vpLang = new TitleBodyWidget(constants.prefUserLanguage(), langlistCS, hpnbtngroup, ((MainApp.getBodyPanelWidth()-120)/4)  + "px", "100%");
+		TitleBodyWidget vpLang = new TitleBodyWidget(constants.prefUserLanguage(), langlistCS, hpnbtnlang, ((MainApp.getBodyPanelWidth()-130)/4)  + "px", "100%");
 		
 		HorizontalPanel hpnbtnpendinglang = new HorizontalPanel();
 		hpnbtnpendinglang.add(btnremovependinglang);
 		
-		TitleBodyWidget vpLang_pending = new TitleBodyWidget(constants.prefUserPendingLanguage(), langlistCSPending, hpnbtnpendinglang, ((MainApp.getBodyPanelWidth()-120)/4)  + "px", "100%");
+		//TitleBodyWidget vpLang_pending = new TitleBodyWidget(constants.prefUserPendingLanguage(), langlistCSPending, hpnbtnpendinglang, ((MainApp.getBodyPanelWidth()-130)/4)  + "px", "100%");
 		
 		VerticalPanel lang_panel = new VerticalPanel();
 		lang_panel.setSpacing(1);
 		lang_panel.add(vpLang);
-		lang_panel.add(vpLang_pending);
+		lang_panel.add(vpGroup);
+		//lang_panel.add(vpLang_pending);
 		
 		//ontologylistPending.setVisibleItemCount(28);
 		
@@ -266,12 +287,12 @@ public class WBPreferences extends Composite implements ClickHandler{
 		hpnbtnonto.add(btnaddonto);
 		hpnbtnonto.add(btnremoveonto);
 		
-		TitleBodyWidget ontology_ft = new TitleBodyWidget(constants.prefUserOntology(), ontologylist, hpnbtnonto, ((MainApp.getBodyPanelWidth()-120)/4)  + "px", "100%");
+		TitleBodyWidget ontology_ft = new TitleBodyWidget(constants.prefUserOntology(), ontologylist, hpnbtnonto, ((MainApp.getBodyPanelWidth()-130)/4)  + "px", "100%");
 		
 		HorizontalPanel hpnbtnpendingonto = new HorizontalPanel();
 		hpnbtnpendingonto.add(btnremovependingonto);
 		
-		TitleBodyWidget ontology_ft_pending = new TitleBodyWidget(constants.prefUserPendingOntology(), ontologylistPending, hpnbtnpendingonto, ((MainApp.getBodyPanelWidth()-120)/4)  + "px", "100%");
+		TitleBodyWidget ontology_ft_pending = new TitleBodyWidget(constants.prefUserPendingOntology(), ontologylistPending, hpnbtnpendingonto, ((MainApp.getBodyPanelWidth()-130)/4)  + "px", "100%");
 		
 		VerticalPanel ontology_panel = new VerticalPanel();
 		ontology_panel.setSpacing(1);
@@ -296,6 +317,7 @@ public class WBPreferences extends Composite implements ClickHandler{
             {  
             	int offset = 16;
             	langlistCS.setHeight(((vPanel.getOffsetHeight()/2)-offset)+"px");
+            	grouplistCS.setHeight(((vPanel.getOffsetHeight()/2)-offset)+"px");
             	langlistCSPending.setHeight(((vPanel.getOffsetHeight()/2)-offset)+"px");
             	ontologylist.setHeight(((vPanel.getOffsetHeight()/2)-offset)+"px");
             	ontologylistPending.setHeight(((vPanel.getOffsetHeight()/2)-offset)+"px");
@@ -319,6 +341,9 @@ public class WBPreferences extends Composite implements ClickHandler{
 		ft_panel.setSpacing(5);
 		
 		
+		// Set group for the CS
+		loadGrouplistCS();
+		
 		// Set languages for the CS
 		loadLanglistCS();
 		
@@ -336,22 +361,30 @@ public class WBPreferences extends Composite implements ClickHandler{
 		}
 		
 		// Fill the ontology
-    	for (Iterator<OntologyInfo> iter = initUserPreference.getOntology().iterator(); iter.hasNext();) {
+    	/*for (Iterator<OntologyInfo> iter = initUserPreference.getOntology().iterator(); iter.hasNext();) {
 				
     		OntologyInfo ontoInfo = (OntologyInfo) iter.next();
     		ontology.addItem(ontoInfo.getOntologyName(), ""+ontoInfo.getOntologyId());
     	}
-		
+		*/
     	loadUser(initUserPreference.getUsersInfo());
-    	MainApp.userPreference = initUserPreference.getUsersPreference();
+    	userPreference = initUserPreference.getUsersPreference();
     	loadUserPref();
+    	
+    	WBProjectPreferences wbProjPref = new WBProjectPreferences();
+    	
+    	TabPanel tbPanel = new TabPanel();
+		tbPanel.add(ft_panel, "Default preferences");
+		tbPanel.add(wbProjPref, "Project preferences");
+		tbPanel.selectTab(0);
 		
 		VerticalPanel bodyPanel = new VerticalPanel();
+		bodyPanel.setSpacing(10);
 	    bodyPanel.setSize("100%", "100%");
-		bodyPanel.add(ft_panel);
-		bodyPanel.setCellHorizontalAlignment(ft_panel,  HasHorizontalAlignment.ALIGN_CENTER);
-		bodyPanel.setCellVerticalAlignment(ft_panel,  HasVerticalAlignment.ALIGN_TOP);
-				
+		bodyPanel.add(tbPanel);
+		bodyPanel.setCellHorizontalAlignment(tbPanel,  HasHorizontalAlignment.ALIGN_CENTER);
+		bodyPanel.setCellVerticalAlignment(tbPanel,  HasVerticalAlignment.ALIGN_TOP);
+		
 		BodyPanel mainPanel = new BodyPanel(constants.preferences() , bodyPanel , null);
 		panel.clear();
 		panel.setSize("100%", "100%");
@@ -380,10 +413,9 @@ public class WBPreferences extends Composite implements ClickHandler{
 	public void loadUserPref()
 	{
 		// Set user preference
-		UsersPreference userPreference = (UsersPreference) MainApp.userPreference;
-		if(userPreference.getUserId()!=0)
+		if(userPreference.getId() != null && userPreference.getId().getUserId()!=0)
 		{
-			ontology.setSelectedIndex(getIndex(ontology, ""+userPreference.getOntologyId()));
+			//ontology.setSelectedIndex(getIndex(ontology, ""+userPreference.getOntologyId()));
 			initialScreen.setSelectedIndex(getIndex(initialScreen, ""+userPreference.getInitialPage()));
 			langlistInterface.setSelectedIndex(getIndex(langlistInterface, ""+userPreference.getLanguageCodeInterface()));
 			showURICheck.setValue(!userPreference.isHideUri());
@@ -440,6 +472,25 @@ public class WBPreferences extends Composite implements ClickHandler{
 		UserPreferenceServiceUtil.getInstance().getUserOntology(MainApp.userId, callbackpref);
 	}
 	
+	private void loadGrouplistCS()
+	{
+		AsyncCallback<ArrayList<String[]>> callbackpref = new AsyncCallback<ArrayList<String[]>>() {
+			public void onSuccess(ArrayList<String[]> result) {
+				grouplistCS.clear();
+				for(String[] st: result){
+					grouplistCS.addItem(st[0], st[1]);
+				}
+			}
+			
+			public void onFailure(Throwable caught) {
+				ExceptionManager.showException(caught, constants.userListGroupFail());
+			}
+		};
+		UserPreferenceServiceUtil.getInstance().getUsersGroup(MainApp.userId, callbackpref);
+		
+		
+	}
+	
 	private void loadLanglistCS()
 	{
 		AsyncCallback<ArrayList<UsersLanguage>> callbackpref = new AsyncCallback<ArrayList<UsersLanguage>>() {
@@ -465,11 +516,11 @@ public class WBPreferences extends Composite implements ClickHandler{
 		};
 		UserPreferenceServiceUtil.getInstance().getUsersLanguage(MainApp.userId, callbackpref);
 		
-		loadPendingLanglistCS();
+		//loadPendingLanglistCS();
 		
 	}
 	
-	private void loadPendingLanglistCS()
+	/*private void loadPendingLanglistCS()
 	{
 		
 		AsyncCallback<ArrayList<String[]>> callbackpref = new AsyncCallback<ArrayList<String[]>>() {
@@ -495,9 +546,9 @@ public class WBPreferences extends Composite implements ClickHandler{
 		    	ExceptionManager.showException(caught, constants.userListOntologyFail());
 		    }
 		};
-		UserPreferenceServiceUtil.getInstance().getPendingLanguage(MainApp.userId, callbackpref);
+		UserPreferenceServiceUtil.getInstance().getPendingLanguage(MainApp.userId, MainApp.userOntology.getOntologyId(), callbackpref);
 		
-	}
+	}*/
 	
 	public int getIndex(ListBox list, String value)
 	{
@@ -578,7 +629,31 @@ public class WBPreferences extends Composite implements ClickHandler{
 	
 	public void onClick(ClickEvent event) {
 		Widget sender = (Widget) event.getSource();
-		if (sender==btnaddlang){
+		if (sender == btnaddgroup) {
+			if(newgroupDialog == null || !newgroupDialog.isLoaded)
+				newgroupDialog = new GroupDataDialog();
+			newgroupDialog.show();
+		} else if (sender == btnremovegroup) {
+			if ((Window.confirm(constants.registerRemoveGroup())) == false) {
+				return;
+			}
+			if (grouplistCS.getSelectedIndex() == -1) {
+				Window.alert(constants.registerNoGroupSelect());
+				return;
+			}
+			//grouplistCS.removeItem(grouplistCS.getSelectedIndex());
+			
+			ArrayList<String> deleteList = new ArrayList<String>();
+			for(int i = grouplistCS.getItemCount() -1;i>=0; i--){
+				if( grouplistCS.isItemSelected(i))
+				{
+					deleteList.add(grouplistCS.getValue(i));
+				}
+			}
+			deleteUsersGroups(deleteList);
+			
+			
+		} else if (sender==btnaddlang){
 			if(newlangDialog == null || !newlangDialog.isLoaded)
 				newlangDialog = new LanguageDataDialog();				
 			newlangDialog.show();
@@ -752,6 +827,19 @@ public class WBPreferences extends Composite implements ClickHandler{
 		UserPreferenceServiceUtil.getInstance().updateUsers(user, isPasswordChange ,callbackuser);
 	}
 	
+	private void deleteUsersGroups(final ArrayList<String> list)
+	{
+		AsyncCallback<ArrayList<String[]>> callbackpref = new AsyncCallback<ArrayList<String[]>>() {
+			public void onSuccess(ArrayList<String[]> result) {
+				loadGrouplistCS();
+			}
+			public void onFailure(Throwable caught) {
+				ExceptionManager.showException(caught, constants.prefLanguageSaveFail());
+			}
+		};
+		UserPreferenceServiceUtil.getInstance().deleteUsersGroups(MainApp.userId, list, callbackpref);
+	}
+	
 	private void deleteUsersLanguage(final ArrayList<String> langlist)
 	{
 		AsyncCallback<ArrayList<UsersLanguage>> callbackpref = new AsyncCallback<ArrayList<UsersLanguage>>() {
@@ -837,7 +925,7 @@ public class WBPreferences extends Composite implements ClickHandler{
 	{
 		AsyncCallback<UsersPreference> callbackpref = new AsyncCallback<UsersPreference>() {
 		    public void onSuccess(UsersPreference result) {
-		    	MainApp.userPreference = (UsersPreference) result;
+		    	userPreference = (UsersPreference) result;
 		    	loadUserPref();
 		    	
 		    	Window.alert(constants.prefSaved());
@@ -847,8 +935,9 @@ public class WBPreferences extends Composite implements ClickHandler{
 		    }
 		};
 		
+		
 		UsersPreference userPref = new UsersPreference();
-		userPref.setOntologyId(Integer.parseInt(ontology.getValue(ontology.getSelectedIndex())));
+		//userPref.setOntologyId(Integer.parseInt(ontology.getValue(ontology.getSelectedIndex())));
 		userPref.setFrequency("Daily");		
 		userPref.setInitialPage(initialScreen.getValue(initialScreen.getSelectedIndex()));
 		userPref.setLanguageCodeInterface(langlistInterface.getValue(langlistInterface.getSelectedIndex()));
@@ -858,14 +947,19 @@ public class WBPreferences extends Composite implements ClickHandler{
 		userPref.setHideDeprecated(hideDeprecatedCheck.getValue());
 		userPref.setShowInferredAndExplicit(showInferredAndExplicit.getValue());
 		
-		if(MainApp.userPreference.getUserId()==0)
+		UsersPreferenceId userPrefId = new UsersPreferenceId();
+		userPrefId.setOntologyId(-1);
+		
+		if(userPreference.getId() == null || userPreference.getId().getUserId()==0 || userPreference.getId().getOntologyId()==0)
 		{
-			userPref.setUserId(MainApp.userId);
+			userPrefId.setUserId(MainApp.userId);
+			userPref.setId(userPrefId);
 			UserPreferenceServiceUtil.getInstance().addUsersPreference(userPref, callbackpref);
 		}
 		else
 		{
-			userPref.setUserId(MainApp.userPreference.getUserId());
+			userPrefId.setUserId(userPreference.getId().getUserId());
+			userPref.setId(userPrefId);
 			UserPreferenceServiceUtil.getInstance().updateUsersPreference(userPref, callbackpref);
 		}
 
@@ -885,6 +979,111 @@ public class WBPreferences extends Composite implements ClickHandler{
         {
             updatePref();               
         }
+	}
+	
+	private class GroupDataDialog extends DialogBoxAOS implements ClickHandler{
+		private VerticalPanel userpanel = new VerticalPanel();
+		private Button btnAdd = new Button(constants.buttonAdd());
+		private Button btnCancel = new Button(constants.buttonCancel());
+		private OlistBox lstdata = new OlistBox(true);
+
+		public GroupDataDialog() {
+			this.setText(constants.registerSelectGroup());				
+			final FlexTable table = new FlexTable();
+			table.setBorderWidth(0);
+			table.setCellPadding(0);
+			table.setCellSpacing(1);
+			table.setWidth("100%");
+			table.setWidget(0, 0, new HTML(""));
+			table.setWidget(1,0,lstdata);
+		    lstdata.setVisibleItemCount(20);
+			lstdata.setSize("250px", "200px");
+
+			table.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+			table.getFlexCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
+			
+			// Popup element
+			HorizontalPanel tableHP = new HorizontalPanel();
+			tableHP.setSpacing(10);
+			tableHP.add(table);
+			userpanel.add(tableHP);
+			HorizontalPanel hp = new HorizontalPanel();
+			hp.add(btnAdd);				
+			btnAdd.addClickHandler(new ClickHandler()
+			{
+				public void onClick(ClickEvent event) {
+					if(lstdata.getSelectedIndex()==-1)
+					{
+						Window.alert(constants.registerSelectGroup());
+						return;
+					}					
+					final ArrayList<String> groupList = new ArrayList<String>();
+					for(int i=0;i<lstdata.getItemCount();i++)
+					{						
+						if(lstdata.isItemSelected(i)){
+							groupList.add(lstdata.getValue(i));
+						}
+					}
+					hide();	
+					AsyncCallback<Void> callbackpref = new AsyncCallback<Void>() {
+					    public void onSuccess(Void result) {
+					    	loadGrouplistCS();
+				    	 }
+					    public void onFailure(Throwable caught) {
+					    	ExceptionManager.showException(caught, constants.userAddUserGroupFail());
+					    }
+					};
+					UserPreferenceServiceUtil.getInstance().addUsersGroup(MainApp.userId, groupList, callbackpref);
+				}
+				
+			});
+			hp.add(btnCancel);
+			hp.setSpacing(5);
+			
+			VerticalPanel hpVP = new VerticalPanel();			
+			hpVP.setStyleName("bottombar");
+			hpVP.setWidth("100%");
+			hpVP.add(hp);
+			hpVP.setCellHorizontalAlignment(hp, HasHorizontalAlignment.ALIGN_RIGHT);
+			
+			btnCancel.addClickHandler(new ClickHandler()
+			{
+				public void onClick(ClickEvent event) {
+					hide();
+				}
+				
+			});
+			userpanel.add(hpVP);
+			
+			userpanel.setCellHorizontalAlignment(hp,HasHorizontalAlignment.ALIGN_CENTER);
+			setWidget(userpanel);
+		}
+		
+		public void initData()
+		{
+			lstdata.clear();
+			
+			AsyncCallback<ArrayList<String[]>> callbackpref = new AsyncCallback<ArrayList<String[]>>() {
+			    public void onSuccess(ArrayList<String[]> list) {
+			    		
+		    		for(String[] str : list)
+		    		{
+		    			lstdata.addItem(str[0], str[1]);
+		    		}
+		    	}
+
+			    public void onFailure(Throwable caught) {
+			    	ExceptionManager.showException(caught, constants.userListGroupFail());
+			    }
+			};
+			UserPreferenceServiceUtil.getInstance().getNonAssignedGroup(MainApp.userId, callbackpref);
+		}
+		
+		public void show()
+		{
+			initData();
+			super.show();
+		}
 	}
 	
 	private class LanguageDataDialog extends DialogBoxAOS implements ClickHandler{

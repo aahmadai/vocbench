@@ -46,7 +46,7 @@ public class ExportSKOSXLWidget extends Composite{
 	private LoadingDialog loadingDialog = new LoadingDialog(constants.exportLoading());
 	private InitializeExportData  initData = new InitializeExportData();
 	private Image conceptBrowse; 
-	private LabelAOS conceptLabel = new LabelAOS("--None--","");
+	private LabelAOS conceptLabel = new LabelAOS("--None--", null);
 	private Image conceptClear;
 	private CheckBox conceptChildren;
 	private CheckBox includeLabelsOfRelatedConcepts;
@@ -285,7 +285,7 @@ public class ExportSKOSXLWidget extends Composite{
 		{
 			public void onClick(ClickEvent event) 
 			{
-				conceptLabel.setText("");
+				conceptLabel.setValue("--None--", null);
 				exp.setConceptURI(null);
 			}
 		});

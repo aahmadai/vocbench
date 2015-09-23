@@ -7,7 +7,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface RefactorServiceAsync<T> {
 
-	void changeResourceName(OntologyInfo ontoInfo, String oldResource,
+	void renameResource(OntologyInfo ontoInfo, String oldResource,
 			String newResource, AsyncCallback<Boolean> callback);
 
 	void replaceBaseURI(OntologyInfo ontoInfo, String sourceBaseURI,
@@ -17,17 +17,22 @@ public interface RefactorServiceAsync<T> {
 	void convertLabelsToSKOSXL(OntologyInfo ontoInfo,
 			AsyncCallback<Boolean> callback);
 
-	void exportWithSKOSLabels(OntologyInfo ontoInfo,
-			AsyncCallback<String> callback);
 
 	void reifySKOSDefinitions(OntologyInfo ontoInfo,
 			AsyncCallback<Boolean> callback);
 
+	void exportByFlattening(OntologyInfo ontoInfo, String format,
+			String ext, boolean toSKOS, boolean keepSKOSXLabels,
+			boolean toFlatDefinitions, boolean keepReifiedDefinition,
+			AsyncCallback<String> callback);
+	
+	void exportWithSKOSLabels(OntologyInfo ontoInfo,
+			AsyncCallback<String> callback);
+	
 	void exportWithFlatSKOSDefinitions(OntologyInfo ontoInfo,
 			AsyncCallback<String> callback);
-
+	
 	void exportWithTransformations(OntologyInfo ontoInfo,
 			boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition,
 			AsyncCallback<String> callback);
-	
 }

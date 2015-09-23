@@ -4,34 +4,39 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 
 public class UsersPreference extends LightEntity {
 
-	private static final long serialVersionUID = -8108116808910595189L;
-
-	private int userId;
-	private int ontologyId;
+	private static final long serialVersionUID = -7198795744809931006L;
+	
+	private UsersPreferenceId id;
 	private String frequency;
 	private String initialPage;
-	private boolean hideUri = true;
-	private boolean hideNonpreferred = true;
-	private boolean hideDeprecated;
+	private boolean hideUri;
+	private boolean hideNonpreferred;
 	private boolean hideNonselectedlanguages;
-	private boolean showInferredAndExplicit;
-	
+	private boolean hideDeprecated;
 	private String languageCodeInterface;
+	private boolean showInferredAndExplicit;
 
-	public int getUserId() {
-		return this.userId;
+	public UsersPreference() {
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public UsersPreference(UsersPreferenceId id, String frequency, String initialPage, boolean hideUri, boolean hideNonpreferred, boolean hideNonselectedlanguages, boolean hideDeprecated, String languageCodeInterface, boolean showInferredAndExplicit) {
+		this.id = id;
+		this.frequency = frequency;
+		this.initialPage = initialPage;
+		this.hideUri = hideUri;
+		this.hideNonpreferred = hideNonpreferred;
+		this.hideNonselectedlanguages = hideNonselectedlanguages;
+		this.hideDeprecated = hideDeprecated;
+		this.languageCodeInterface = languageCodeInterface;
+		this.showInferredAndExplicit = showInferredAndExplicit;
 	}
 
-	public int getOntologyId() {
-		return this.ontologyId;
+	public UsersPreferenceId getId() {
+		return this.id;
 	}
 
-	public void setOntologyId(int ontologyId) {
-		this.ontologyId = ontologyId;
+	public void setId(UsersPreferenceId id) {
+		this.id = id;
 	}
 
 	public String getFrequency() {
@@ -58,6 +63,22 @@ public class UsersPreference extends LightEntity {
 		this.hideUri = hideUri;
 	}
 
+	public boolean isHideNonpreferred() {
+		return this.hideNonpreferred;
+	}
+
+	public void setHideNonpreferred(boolean hideNonpreferred) {
+		this.hideNonpreferred = hideNonpreferred;
+	}
+
+	public boolean isHideNonselectedlanguages() {
+		return this.hideNonselectedlanguages;
+	}
+
+	public void setHideNonselectedlanguages(boolean hideNonselectedlanguages) {
+		this.hideNonselectedlanguages = hideNonselectedlanguages;
+	}
+
 	public boolean isHideDeprecated() {
 		return this.hideDeprecated;
 	}
@@ -74,24 +95,8 @@ public class UsersPreference extends LightEntity {
 		this.languageCodeInterface = languageCodeInterface;
 	}
 
-	public void setHideNonpreferred(boolean hideNonpreferred) {
-		this.hideNonpreferred = hideNonpreferred;
-	}
-
-	public boolean isHideNonpreferred() {
-		return hideNonpreferred;
-	}
-
-	public void setHideNonselectedlanguages(boolean hideNonselectedlanguages) {
-		this.hideNonselectedlanguages = hideNonselectedlanguages;
-	}
-
-	public boolean isHideNonselectedlanguages() {
-		return hideNonselectedlanguages;
-	}
-
 	public boolean isShowInferredAndExplicit() {
-		return showInferredAndExplicit;
+		return this.showInferredAndExplicit;
 	}
 
 	public void setShowInferredAndExplicit(boolean showInferredAndExplicit) {

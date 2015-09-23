@@ -1,15 +1,17 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Jan 9, 2009 3:53:19 PM by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 19/07/2015 1:04:10 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="org.fao.aoscs.domain.UsersPreference" table="users_preference">
-        <id name="userId" type="int">
-            <column name="user_id" />
-        </id>
-        <property name="ontologyId" type="int">
-            <column name="ontology_id" not-null="true" />
-        </property>
+        <composite-id name="id" class="org.fao.aoscs.domain.UsersPreferenceId">
+            <key-property name="userId" type="int">
+                <column name="user_id" />
+            </key-property>
+            <key-property name="ontologyId" type="int">
+                <column name="ontology_id" />
+            </key-property>
+        </composite-id>
         <property name="frequency" type="string">
             <column name="frequency" length="45" not-null="true" />
         </property>
@@ -22,11 +24,11 @@
         <property name="hideNonpreferred" type="boolean">
             <column name="hide_nonpreferred" not-null="true" />
         </property>
-        <property name="hideDeprecated" type="boolean">
-            <column name="hide_deprecated" not-null="true" />
-        </property>
         <property name="hideNonselectedlanguages" type="boolean">
             <column name="hide_nonselectedlanguages" not-null="true" />
+        </property>
+        <property name="hideDeprecated" type="boolean">
+            <column name="hide_deprecated" not-null="true" />
         </property>
         <property name="languageCodeInterface" type="string">
             <column name="language_code_interface" length="3" not-null="true" />

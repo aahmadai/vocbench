@@ -11,17 +11,19 @@ import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
-import org.fao.aoscs.client.module.constant.Style;
+import org.fao.aoscs.client.module.constant.OWLActionConstants;
 import org.fao.aoscs.client.module.preferences.service.UsersPreferenceService.UserPreferenceServiceUtil;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
 import org.fao.aoscs.client.utility.ModuleManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.DialogBoxAOS;
+import org.fao.aoscs.client.widgetlib.shared.label.ImageAOS;
 import org.fao.aoscs.client.widgetlib.shared.panel.BodyPanel;
 import org.fao.aoscs.client.widgetlib.shared.panel.ButtonbarWidget;
 import org.fao.aoscs.client.widgetlib.shared.panel.Spacer;
 import org.fao.aoscs.client.widgetlib.shared.panel.TitleBodyWidget;
+import org.fao.aoscs.domain.PermissionObject;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
 
@@ -115,9 +117,24 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 	private String dbActiveStatus = "0";
 
 	private UserAssignDialogBox newUserDialog;
-	private ManagePendingRequests managePendingRequests;
 	
-	public UsersAssignment() {					 
+	public UsersAssignment() {	
+		
+		initWidget(panel);
+		AsyncCallback<PermissionObject>callback = new AsyncCallback<PermissionObject>() {
+			public void onSuccess(PermissionObject permissionTable) {
+				init(permissionTable);
+			}
+
+			public void onFailure(Throwable caught) {
+				ExceptionManager.showException(caught, constants.userLoadPermissionFail());
+			}
+		};
+		Service.systemService.getPermisions(""+MainApp.groupId, callback);
+	}
+	
+	public void init(PermissionObject permissionTable)
+	{
 		// USER LIST
 		lstusers.addChangeHandler(this);
 		lstusers.setVisibleItemCount(28);
@@ -148,11 +165,14 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 
 		lstusergroups.addChangeHandler(this);
 		//lstusergroups.setVisibleItemCount(7);
-
-		btnaddgroup.setTitle(constants.buttonAdd());
+		
+		btnaddgroup = new ImageAOS(constants.buttonAdd(), "images/add-grey.gif", "images/add-grey-disabled.gif", permissionTable.contains(OWLActionConstants.USERCREATE, -1), this);
+		btnremovegroup = new ImageAOS(constants.buttonRemove(), "images/delete-grey.gif", "images/delete-grey-disabled.gif", permissionTable.contains(OWLActionConstants.USERDELETE, -1), this);
+		
+		/*btnaddgroup.setTitle(constants.buttonAdd());
 		btnremovegroup.setTitle(constants.buttonRemove());
 		btnaddgroup.addClickHandler(this);
-		btnremovegroup.addClickHandler(this);
+		btnremovegroup.addClickHandler(this);*/
 
 		HorizontalPanel hpnbtngroup = new HorizontalPanel();
 		hpnbtngroup.add(btnaddgroup);
@@ -169,15 +189,18 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 		lstuserlangs.addChangeHandler(this);
 		//lstuserlangs.setVisibleItemCount(7);
 
+		btnaddlang = new ImageAOS(constants.buttonAdd(), "images/add-grey.gif", "images/add-grey-disabled.gif", permissionTable.contains(OWLActionConstants.USERCREATE, -1), this);
+		btnremovelang = new ImageAOS(constants.buttonRemove(), "images/delete-grey.gif", "images/delete-grey-disabled.gif", permissionTable.contains(OWLActionConstants.USERDELETE, -1), this);
+		
+		/*btnaddlang.setTitle(constants.buttonAdd());
+		btnremovelang.setTitle(constants.buttonRemove());
+		btnaddlang.addClickHandler(this);
+		btnremovelang.addClickHandler(this);*/
+		
 		HorizontalPanel hpnbtnlang = new HorizontalPanel();
 		hpnbtnlang.add(btnaddlang);
 		hpnbtnlang.add(btnremovelang);  
-
-		btnaddlang.setTitle(constants.buttonAdd());
-		btnremovelang.setTitle(constants.buttonRemove());
-		btnaddlang.addClickHandler(this);
-		btnremovelang.addClickHandler(this);
-
+		
 		TitleBodyWidget wLang = new TitleBodyWidget(constants.userLang(), lstuserlangs, hpnbtnlang, ((MainApp.getBodyPanelWidth()-80) * 0.15)  + "px", "100%");
 
 		listInfoPanel.add(wLang);
@@ -187,15 +210,18 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 
 		lstuserontology.addChangeHandler(this);
 		//lstuserontology.setVisibleItemCount(7);
+		
+		btnaddontology = new ImageAOS(constants.buttonAdd(), "images/add-grey.gif", "images/add-grey-disabled.gif", permissionTable.contains(OWLActionConstants.USERCREATE, -1), this);
+		btnremoveontology = new ImageAOS(constants.buttonRemove(), "images/delete-grey.gif", "images/delete-grey-disabled.gif", permissionTable.contains(OWLActionConstants.USERDELETE, -1), this);
+		
+		/*btnaddontology.setTitle(constants.buttonAdd());
+		btnremoveontology.setTitle(constants.buttonRemove());
+		btnaddontology.addClickHandler(this);
+		btnremoveontology.addClickHandler(this);*/
 
 		HorizontalPanel hpnbtnontology = new HorizontalPanel();
 		hpnbtnontology.add(btnaddontology);
 		hpnbtnontology.add(btnremoveontology);  
-
-		btnaddontology.setTitle(constants.buttonAdd());
-		btnremoveontology.setTitle(constants.buttonRemove());
-		btnaddontology.addClickHandler(this);
-		btnremoveontology.addClickHandler(this);
 
 		TitleBodyWidget wOntology = new TitleBodyWidget(constants.userOntology(), lstuserontology, hpnbtnontology, ((MainApp.getBodyPanelWidth()-80) * 0.15)  + "px", "100%");
 
@@ -323,23 +349,29 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 		txtcomment.setCharacterWidth(250);
 		txtcomment.setWidth("250px");
 		txtcomment.setVisibleLines(2);
+		
+		btnadduser = new ImageAOS(constants.buttonAdd(), "images/add-grey.gif", "images/add-grey-disabled.gif", permissionTable.contains(OWLActionConstants.USERCREATE, -1), this);
+		btnedituser = new ImageAOS(constants.buttonEdit(), "images/edit-grey.gif", "images/edit-grey-disabled.gif", permissionTable.contains(OWLActionConstants.USEREDIT, -1), this);
+		btndeluser = new ImageAOS(constants.buttonRemove(), "images/delete-grey.gif", "images/delete-grey-disabled.gif", permissionTable.contains(OWLActionConstants.USERDELETE, -1), this);
+		
+		/*btnadduser.setTitle(constants.buttonAdd());
+		btnedituser.setTitle(constants.buttonEdit());
+		btndeluser.setTitle(constants.buttonDelete());
+		btnadduser.addClickHandler(this);
+		btnedituser.addClickHandler(this);
+		btndeluser.addClickHandler(this);*/
+		
+		btnsave.addClickHandler(this);
+		btncancel.addClickHandler(this);
+		
 		fxtbutton.add(btnadduser);
 		fxtbutton.add(btnedituser);
 		fxtbutton.add(btndeluser);	      
 		//fxtbutton.add(btnsave);	
 		//fxtbutton.add(btncancel);
-
 		fxtbutton.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		fxtbutton.setSpacing(5);
-		btnadduser.setTitle(constants.buttonAdd());
-		btnedituser.setTitle(constants.buttonEdit());
-		btndeluser.setTitle(constants.buttonDelete());
-		btnadduser.addClickHandler(this);
-		btnedituser.addClickHandler(this);
-		btndeluser.addClickHandler(this);
-
-		btnsave.addClickHandler(this);
-		btncancel.addClickHandler(this);
+		
 
 		HorizontalPanel hpnbtnlangcontainer = new HorizontalPanel();
 		hpnbtnlangcontainer.setWidth("100%");
@@ -359,7 +391,7 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 		vpanel.add(buttonBarPanel);
 		vpanel.setCellWidth(buttonBarPanel, "100%");
 
-		TitleBodyWidget wUserDetail = new TitleBodyWidget(constants.userDetails(), vpanel, fxtbutton,  "100%", "100%");
+		TitleBodyWidget wUserDetail = new TitleBodyWidget(constants.userDetails(), vpanel, fxtbutton,  ((MainApp.getBodyPanelWidth()-50) * 0.55)  +"px", "100%");
 
 		VerticalPanel userDetailPanel = new VerticalPanel();
 		userDetailPanel.setWidth("100%");
@@ -385,28 +417,12 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
             }
         });	
 		
-		HorizontalPanel topRightPanel = new HorizontalPanel();
-		HTML lblPendingRequests = new HTML("View Pending Requests", false);
-		lblPendingRequests.setStyleName(Style.Link);
-		lblPendingRequests.addStyleName(Style.colorBlack);
-		lblPendingRequests.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				if(managePendingRequests == null || !managePendingRequests.isLoaded )
-					managePendingRequests = new ManagePendingRequests();
-				managePendingRequests.show();
-				}
-			});
-		topRightPanel.setSpacing(5);
-		topRightPanel.add(lblPendingRequests);
-		
-		
-		BodyPanel mainPanel = new BodyPanel(constants.userManagement() , userInfoPanel , topRightPanel);
+		BodyPanel mainPanel = new BodyPanel(constants.userManagement() , userInfoPanel , null);
 		panel.clear();
 		panel.add(mainPanel);	      
 		panel.setCellHorizontalAlignment(mainPanel,  HasHorizontalAlignment.ALIGN_CENTER);
 		panel.setCellVerticalAlignment(mainPanel,  HasVerticalAlignment.ALIGN_TOP);
 
-		initWidget(panel);
 		enableobject(false);  
 		initUserList("");	 
 	}
@@ -1146,7 +1162,8 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 					break;
 				case 2 : // Add user language
 					this.setText(constants.userSelectLang());
-					showAll.setVisible(true);
+					//showAll.setVisible(true);
+					showAll.setVisible(false);
 					if(isAll)
 					{
 						UserPreferenceServiceUtil.getInstance().getPendingLanguage(selecteduserid, callbackpref);
@@ -1158,7 +1175,8 @@ public class UsersAssignment extends Composite implements ClickHandler, ChangeHa
 					break;
 				case 3 : // Add user ontology
 					this.setText(constants.userSelectOntology());
-					showAll.setVisible(true);
+					//showAll.setVisible(true);
+					showAll.setVisible(false);
 					if(isAll)
 					{
 						UserPreferenceServiceUtil.getInstance().getPendingOntology(selecteduserid, callbackpref);

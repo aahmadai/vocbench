@@ -32,8 +32,9 @@ public class ResourceViewManager extends ResponseManager {
 	 * @param resourceURI
 	 * @return
 	 */
-	public static ResourceViewObject getResourceView(OntologyInfo ontoInfo, String resourceURI, boolean showOnlyExplicit)
+	public static ResourceViewObject getResourceView(OntologyInfo ontoInfo, String resourceURI, boolean showOnlyExplicit1)
 	{
+		boolean showOnlyExplicit = false;
 		ResourceViewObject resourceView = new ResourceViewObject();
 		XMLResponseREPLY reply = ResourceViewResponseManager.getResourceViewRequest(ontoInfo, resourceURI);
 		if(reply!=null)
@@ -59,6 +60,9 @@ public class ResourceViewManager extends ResponseManager {
 						ArrayList<PredicateObjects> predObjList = new ArrayList<PredicateObjects>();
 						for(Element colElem : STXMLUtility.getChildElementByTagName(childElem, "collection"))
 						{
+							
+							
+							
 							for(Element predObjsElem : STXMLUtility.getChildElementByTagName(colElem, "predicateObjects"))
 							{
 								PredicateObjects predObjs = new PredicateObjects();
@@ -108,7 +112,37 @@ public class ResourceViewManager extends ResponseManager {
 								predObjs.setObjects(objects);
 								predObjList.add(predObjs);
 							}
+						
+						
+							PredicateObjects otherObjs = new PredicateObjects();
+							ArrayList<ARTNodeObject> otherObjects = new ArrayList<ARTNodeObject>();
+							for(STResource uriElem : STXMLUtility.getURIResource(colElem, showOnlyExplicit))
+							{
+								otherObjects.add(STUtility.createARTURIResourceObject(uriElem));
+							}
+							for(STLiteral plainElem : STXMLUtility.getPlainLiteral(colElem, showOnlyExplicit))
+							{
+								otherObjects.add(STUtility.createARTLiteralObject(plainElem, false));
+							}
+							for(STLiteral typedElem : STXMLUtility.getTypedLiteral(colElem, showOnlyExplicit))
+							{
+								otherObjects.add(STUtility.createARTLiteralObject(typedElem, true));
+							}
+							try
+							{
+								for(STResource bNodeElem : STXMLUtility.getBlankNode(colElem, showOnlyExplicit))
+								{
+									otherObjects.add(STUtility.createARTBNodeObject(bNodeElem));
+								}
+							}
+							catch(Exception e)
+							{
+								e.printStackTrace();
+							}
+							otherObjs.setObjects(otherObjects);
+							predObjList.add(otherObjs);
 						}
+						
 						resourceList.put(childElem.getNodeName(), predObjList);
 					}
 				}

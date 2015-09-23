@@ -14,13 +14,13 @@ import org.fao.aoscs.client.module.system.service.SystemService;
 import org.fao.aoscs.domain.ConfigObject;
 import org.fao.aoscs.domain.DBMigrationObject;
 import org.fao.aoscs.domain.InitializeSystemData;
-import org.fao.aoscs.domain.InitializeUsersPreferenceData;
 import org.fao.aoscs.domain.LanguageCode;
 import org.fao.aoscs.domain.LanguageInterface;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlAction;
 import org.fao.aoscs.domain.OwlStatus;
 import org.fao.aoscs.domain.PermissionFunctionalityMap;
+import org.fao.aoscs.domain.PermissionObject;
 import org.fao.aoscs.domain.StInstances;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
@@ -62,13 +62,6 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	 */
 	public InitializeSystemData initData(UserLogin userloginObject){
 		return systemServiceSystemImpl.initData(userloginObject);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.system.service.SystemService#initSelectPreferenceData(int)
-	 */
-	public  InitializeUsersPreferenceData initSelectPreferenceData(int userID){
-		return systemServiceSystemImpl.initSelectPreferenceData(userID);
 	}
 	
 	/* (non-Javadoc)
@@ -155,6 +148,13 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	public void SendMail(String to, String subject,String body){
 		systemServiceSystemImpl.SendMail(to, subject, body);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.system.service.SystemService#SendMail(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	public void SendMail(String to, String cc, String subject,String body){
+		systemServiceSystemImpl.SendMail(to, cc, subject, body);
+	}
 
 	/*public HashMap<String, ArrayList<String[]>> getGroupStatusAssignment(){
 		return systemServiceSystemImpl.getGroupStatusAssignment();
@@ -166,10 +166,10 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	
 	
 	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.system.service.SystemService#getUserSelectedLanguageCode(int)
+	 * @see org.fao.aoscs.client.module.system.service.SystemService#getUserSelectedLanguageCode(int, int)
 	 */
-	public ArrayList<String> getUserSelectedLanguageCode(int user_id){ 
-		return systemServiceSystemImpl.getUserSelectedLanguageCode(user_id);
+	public ArrayList<String> getUserSelectedLanguageCode(int user_id, int project_id){ 
+		return systemServiceSystemImpl.getUserSelectedLanguageCode(user_id, project_id);
 	}
 	
 	/* (non-Javadoc)
@@ -276,6 +276,13 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	 */
 	public void addGroupsToUser(String userId, ArrayList<String> groupIds){
 		systemServiceSystemImpl.addGroupsToUser(userId, groupIds);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.system.service.SystemService#addGroupsToUser(java.lang.String, java.lang.String, java.util.ArrayList)
+	 */
+	public void addGroupsToUser(String userId, String projectId, ArrayList<String> groupIds){
+		systemServiceSystemImpl.addGroupsToUser(userId, projectId, groupIds);
 	}
 	
 	/* (non-Javadoc)
@@ -482,6 +489,28 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 			throws Exception {
 		systemServiceSystemImpl.deleteUsersFromOntology(ontologyId, userId);
 		
+	}
+
+	@Override
+	public Users getUser(String userId) throws Exception {
+		return systemServiceSystemImpl.getUser(userId);
+	}
+
+	@Override
+	public void addLanguagesToUser(String userId, String projectId,
+			ArrayList<String> languages) throws Exception {
+		systemServiceSystemImpl.addLanguagesToUser(userId, projectId, languages);
+	}
+
+	@Override
+	public ArrayList<UsersGroups> getUserGroup(int userid, int projectid)
+			throws Exception {
+		return systemServiceSystemImpl.getUserGroup(userid, projectid);
+	}
+
+	@Override
+	public PermissionObject getPermisions(String groupId) throws Exception {
+		return systemServiceSystemImpl.getPermissions(groupId);
 	}
 }
 

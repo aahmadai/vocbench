@@ -12,14 +12,16 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface UsersPreferenceServiceAsync<T> {
 	
-	public void getInitData(int userID, AsyncCallback<InitializeUsersPreferenceData> callback);
+	void getInitData(int userID, int projectID,
+			AsyncCallback<InitializeUsersPreferenceData> callback);
 	public void getUser(int userID, AsyncCallback<Users> callback);
 	public void updateUsers(Users users, boolean isPasswordChange, AsyncCallback<Users> callback);
 	public void getUsersPreference(int userID, AsyncCallback<UsersPreference> callback);
 	public void addUsersPreference(UsersPreference UsersPreference, AsyncCallback<UsersPreference> callback);
 	public void updateUsersPreference(UsersPreference UsersPreference, AsyncCallback<UsersPreference> callback);
 	
-	public void getNonAssignedAndPendingGroup(int userID, AsyncCallback<ArrayList<String[]>> callback);
+	void getNonAssignedAndPendingGroup(int userID, AsyncCallback<ArrayList<String[]>> callback);
+	void getNonAssignedAndPendingGroup(int userID, int projectID, AsyncCallback<ArrayList<String[]>> callback);
 	public void getNonAssignedUsers(int ontologyID, AsyncCallback<ArrayList<Users>> callback);
 	
 	public void getUsersLanguage(int userID, AsyncCallback<ArrayList<UsersLanguage>> callback);
@@ -40,4 +42,21 @@ public interface UsersPreferenceServiceAsync<T> {
 			AsyncCallback<ArrayList<String[]>> callback);
 	void getPendingLanguage(AsyncCallback<ArrayList<String[]>> callback);
 	void getPendingOntology(AsyncCallback<ArrayList<String[]>> callback);
+	void getPendingGroup(int userID, int projectID,
+			AsyncCallback<ArrayList<String[]>> callback);
+	void getPendingLanguage(int userID, int projectID,
+			AsyncCallback<ArrayList<String[]>> callback);
+	void getNonAssignedAndPendingLanguage(int userID, int projectID,
+			AsyncCallback<ArrayList<String[]>> callback);
+	void getUsersPreference(int userID, int projectID,
+			AsyncCallback<UsersPreference> callback);
+	void getPendingUsers(int ontologyID,
+			AsyncCallback<ArrayList<Users>> callback);
+	void getUsersGroup(int userID, AsyncCallback<ArrayList<String[]>> callback);
+	void deleteUsersGroups(int userID, ArrayList<String> list,
+			AsyncCallback<ArrayList<String[]>> callback);
+	void getNonAssignedGroup(int userID,
+			AsyncCallback<ArrayList<String[]>> callback);
+	void addUsersGroup(int userID, ArrayList<String> grouplist,
+			AsyncCallback<Void> callback);
 }

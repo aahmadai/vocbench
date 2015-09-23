@@ -6,6 +6,7 @@ import org.fao.aoscs.client.ManageProject.ProjectDialogBoxOpener;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.logging.LogManager;
+import org.fao.aoscs.client.module.preferences.service.UsersPreferenceService.UserPreferenceServiceUtil;
 import org.fao.aoscs.client.module.project.service.ProjectService.ProjectServiceUtil;
 import org.fao.aoscs.client.module.system.service.SystemService.SystemServiceUtil;
 import org.fao.aoscs.client.utility.ExceptionManager;
@@ -13,17 +14,18 @@ import org.fao.aoscs.client.widgetlib.shared.dialog.DialogBoxAOS;
 import org.fao.aoscs.client.widgetlib.shared.label.ImageAOS;
 import org.fao.aoscs.client.widgetlib.shared.misc.OlistBox;
 import org.fao.aoscs.client.widgetlib.shared.panel.TitleBodyWidget;
-import org.fao.aoscs.domain.InitializeUsersPreferenceData;
-import org.fao.aoscs.domain.LanguageInterface;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.UsersGroups;
+import org.fao.aoscs.domain.UsersPreference;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
@@ -67,7 +69,7 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 	public SelectPreferenceDlg(final UserLogin  userLoginObj) {				
 		this.userLoginObj = userLoginObj;
 		//load initial data
-		load();
+		checkAdmin(userLoginObj.getUserid());
 	}
 	
 	public void initPanels(){
@@ -132,15 +134,19 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 	    TitleBodyWidget tbwidgetlang = new TitleBodyWidget(constants.selPrefLanguage(), lstlang, null, txtlang, "200px", "100%");
 	    TitleBodyWidget tbwidgetontology = new TitleBodyWidget(constants.selPrefOntology(), lstontology, projectButtonPanel, txtontology, "200px", "100%");
 	    
+	    panelontology.add(tbwidgetontology);
 		panelgroups.add(tbwidgetgroup);
 		panellang.add(tbwidgetlang);
-		panelontology.add(tbwidgetontology);
 
 		FlexTable flexpanel = new FlexTable();  		  	 
 		flexpanel.setCellSpacing(5);
 		flexpanel.setCellPadding(5);
 		flexpanel.setWidth("95%");
 		int colCount = 0; 
+		if(panelontology.isVisible()){
+			flexpanel.setWidget(0,colCount,panelontology);
+			colCount++;
+		}
 		if(panelgroups.isVisible()){
 			flexpanel.setWidget(0,colCount,panelgroups);
 			colCount++;
@@ -149,10 +155,6 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 			flexpanel.setWidget(0,colCount,panellang);
 			colCount++;
 		}*/
-		if(panelontology.isVisible()){
-			flexpanel.setWidget(0,colCount,panelontology);
-			colCount++;
-		}
 		
 		for(int i=0; i<colCount; i++){
 			int width =  100/colCount;
@@ -199,6 +201,9 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 				
 				if(lstontology.getItemCount()<1)
 					Window.alert(constants.conceptCompleteInfo());
+				else if(lstgroups.getItemCount()<1) {
+		    			Window.alert(constants.loginNoAssignGroup());
+				}
 				else
 				{
 				
@@ -208,58 +213,69 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 							if(val)
 							{
 								hide(); 
-								userLoginObj.setOntology(selectedOntoInfo);
-					    		//userLoginObj.setLanguage(((LanguageInterface) lstlang.getObject(lstlang.getSelectedIndex())).getLanguageCode());
-								userLoginObj.setLanguage(constants.mainLocale());
-								if(userLoginObj.getGroupid() == null){
-									userLoginObj.setGroupid(""+((UsersGroups) lstgroups.getObject(lstgroups.getSelectedIndex())).getUsersGroupsId());
-									userLoginObj.setGroupname(""+((UsersGroups) lstgroups.getObject(lstgroups.getSelectedIndex())).getUsersGroupsName());
-								}
-					    		AsyncCallback<UserLogin> cbkauthorize = new AsyncCallback<UserLogin>() {
-					    			public void onSuccess(UserLogin result) {	   				
-					    				if(result==null){
-						    				try {
-												Window.alert(constants.selPrefNoMatch());
-											} catch (Exception e) {
-												e.printStackTrace();
-											}
-					    				} else {
-					    					try {	    						
-					    						// Create session User data from session for feed to profile query 
-					    						AsyncCallback<UserLogin> callback1 = new AsyncCallback<UserLogin>() {
-					    						    public void onSuccess(UserLogin userLoginObj) {
-					    						    	String currentLocale = LocaleInfo.getCurrentLocale().getLocaleName();
-								    					String userLocale = "";
-								    					if(userLoginObj.getUsersPreference()!=null && userLoginObj.getUsersPreference().getLanguageCodeInterface()!=null)
-								    						userLocale = userLoginObj.getUsersPreference().getLanguageCodeInterface().toLowerCase();
-								    					if(!userLocale.equals("") && !currentLocale.equalsIgnoreCase(userLocale))
-								    					{
-								    						Window.Location.replace(MainApp.getLocaleURL("locale", userLocale));
-								    					}
-								    					else
-								    					{
-						    						    	MainApp mainApp = new MainApp(userLoginObj);
-						    						    	new LogManager().startLog(""+userLoginObj.getUserid());
-						    						    	mainApp.setWidth("100%");
-															Main.replaceRootPanel(mainApp); 
-								    					}
-					    						    }
-					    						    public void onFailure(Throwable caught) {
-					    						    	ExceptionManager.showException(caught, constants.selPrefFail());
-					    						    }
-					    						 };
-					    						Service.systemService.checkSession(MainApp.USERLOGINOBJECT_SESSIONNAME, callback1); // Get userlogin from session		    						
-											} catch (Exception e) {
-												e.printStackTrace();
-											}
-								        }
+								AsyncCallback<ArrayList<String>> callback1 = new AsyncCallback<ArrayList<String>>() {
+					    			public void onSuccess(ArrayList<String> userSelectedLanguage) {	   				
+					    				userLoginObj.setOntology(selectedOntoInfo);
+					    				userLoginObj.setUserSelectedLanguage(userSelectedLanguage);
+					    				//userLoginObj.setLanguage(((LanguageInterface) lstlang.getObject(lstlang.getSelectedIndex())).getLanguageCode());
+										userLoginObj.setLanguage(constants.mainLocale());
+										if(userLoginObj.getGroupid() == null){
+											userLoginObj.setGroupid(""+((UsersGroups) lstgroups.getObject(lstgroups.getSelectedIndex())).getUsersGroupsId());
+											userLoginObj.setGroupname(""+((UsersGroups) lstgroups.getObject(lstgroups.getSelectedIndex())).getUsersGroupsName());
+										}
+							    		AsyncCallback<UserLogin> cbkauthorize = new AsyncCallback<UserLogin>() {
+							    			public void onSuccess(UserLogin result) {	   				
+							    				if(result==null){
+								    				try {
+														Window.alert(constants.selPrefNoMatch());
+													} catch (Exception e) {
+														e.printStackTrace();
+													}
+							    				} else {
+							    					try {	    						
+							    						// Create session User data from session for feed to profile query 
+							    						AsyncCallback<UserLogin> callback1 = new AsyncCallback<UserLogin>() {
+							    						    public void onSuccess(UserLogin userLoginObj) {
+							    						    	String currentLocale = LocaleInfo.getCurrentLocale().getLocaleName();
+										    					String userLocale = "";
+										    					if(userLoginObj.getUsersPreference()!=null && userLoginObj.getUsersPreference().getLanguageCodeInterface()!=null)
+										    						userLocale = userLoginObj.getUsersPreference().getLanguageCodeInterface().toLowerCase();
+										    					if(!userLocale.equals("") && !currentLocale.equalsIgnoreCase(userLocale))
+										    					{
+										    						Window.Location.replace(MainApp.getLocaleURL("locale", userLocale));
+										    					}
+										    					else
+										    					{
+								    						    	MainApp mainApp = new MainApp(userLoginObj);
+								    						    	new LogManager().startLog(""+userLoginObj.getUserid());
+								    						    	mainApp.setWidth("100%");
+																	Main.replaceRootPanel(mainApp); 
+										    					}
+							    						    }
+							    						    public void onFailure(Throwable caught) {
+							    						    	ExceptionManager.showException(caught, constants.selPrefFail());
+							    						    }
+							    						 };
+							    						Service.systemService.checkSession(MainApp.USERLOGINOBJECT_SESSIONNAME, callback1); // Get userlogin from session		    						
+													} catch (Exception e) {
+														e.printStackTrace();
+													}
+										        }
+							    			}
+										    public void onFailure(Throwable caught) {
+										    	ExceptionManager.showException(caught, constants.selPrefFail());
+										    }
+							    		};		
+							    		
+										Service.systemService.getAuthorization(MainApp.USERLOGINOBJECT_SESSIONNAME, userLoginObj,cbkauthorize);	
+					    				
 					    			}
 								    public void onFailure(Throwable caught) {
 								    	ExceptionManager.showException(caught, constants.selPrefFail());
 								    }
 					    		};		
 					    		
-								Service.systemService.getAuthorization(MainApp.USERLOGINOBJECT_SESSIONNAME, userLoginObj,cbkauthorize);		
+								Service.systemService.getUserSelectedLanguageCode(Integer.parseInt(userLoginObj.getUserid()), selectedOntoInfo.getOntologyId(), callback1);
 							}
 							else
 								
@@ -277,10 +293,9 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 	public void load()
 	{
 
-		final AsyncCallback<InitializeUsersPreferenceData> callback = new AsyncCallback<InitializeUsersPreferenceData>() {
-			public void onSuccess(InitializeUsersPreferenceData initUserPreference) {
-				
-				loadData(initUserPreference);
+		final AsyncCallback<ArrayList<OntologyInfo>> callback = new AsyncCallback<ArrayList<OntologyInfo>>() {
+			public void onSuccess(ArrayList<OntologyInfo> list) {
+				loadOntologyList(list, userLoginObj.getUserid(), -1);
 			    initPanels();
 			    center();
 				
@@ -289,45 +304,147 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 				ExceptionManager.showException(caught, constants.selPrefNoLoad());
 			}
 		};
+		SystemServiceUtil.getInstance().getOntology(userLoginObj.getUserid(), callback);
+/*		final AsyncCallback<InitializeUsersPreferenceData> callback = new AsyncCallback<InitializeUsersPreferenceData>() {
+			public void onSuccess(InitializeUsersPreferenceData initUserPreference) {
+				
+				loadData(initUserPreference);
+				initPanels();
+				center();
+				
+			}
+			public void onFailure(Throwable caught) {
+				ExceptionManager.showException(caught, constants.selPrefNoLoad());
+			}
+		};
 		SystemServiceUtil.getInstance().initSelectPreferenceData(Integer.parseInt(userLoginObj.getUserid()), callback);
+*/	}
+	
+	/*public void loadData(InitializeUsersPreferenceData initUserPreference)
+	{
+		//loadGroupList(initUserPreference.getUsergroups(), ""+initUserPreference.getUsersPreference().getUserId(), initUserPreference.getUsersPreference().getOntologyId());
+		//loadLangList(initUserPreference, ""+initUserPreference.getUsersPreference().getUserId(), initUserPreference.getUsersPreference().getOntologyId());
+	    //loadOntologyList(initUserPreference.getOntology(), ""+initUserPreference.getUsersPreference().getUserId(), initUserPreference.getUsersPreference().getOntologyId());
+		
+	}*/
+	
+	private void checkAdmin(String userId)
+	{
+		AsyncCallback<ArrayList<UsersGroups>> callback = new AsyncCallback<ArrayList<UsersGroups>>() {
+			public void onSuccess(ArrayList<UsersGroups> listgroups) {
+				for(int i=0;i<listgroups.size();i++){
+		    		UsersGroups userGroups = (UsersGroups) listgroups.get(i);
+		    		if(userGroups.getUsersGroupsId()==1)
+		    			isAdmin = true;
+		    	}
+				load();
+			}
+			public void onFailure(Throwable caught) {
+				ExceptionManager.showException(caught, constants.selPrefNoLoad());
+			}
+		};
+		SystemServiceUtil.getInstance().getUserGroup(Integer.parseInt(userId), 0, callback);
+		
 	}
 	
-	public void loadData(InitializeUsersPreferenceData initUserPreference)
+	public void loadOntologyList(ArrayList<OntologyInfo> ontolist, final String userId, final int selectedOntologyId)
 	{
-		userLoginObj.setUsersPreference(initUserPreference.getUsersPreference());
 		
-		//Set user groups
-		lstgroups.clear();
-		ArrayList<UsersGroups> listgroups = initUserPreference.getUsergroups();
-		for(int i=0;i<listgroups.size();i++){
-    		UsersGroups userGroups = (UsersGroups) listgroups.get(i);
-    		lstgroups.addItem(userGroups.getUsersGroupsName(),userGroups);
-    		if(userGroups.getUsersGroupsId()==1)
-    			isAdmin = true;
-    	}
-		
-    	
-    	lstgroups.setItemSelected(0, true);
-    	
-    	String descGroups = ((UsersGroups) lstgroups.getObject(lstgroups.getSelectedIndex())).getUsersGroupsDesc();
-	    lstgroups.setTitle(descGroups);
-	    txtgroups.setText(descGroups);
-	    lstgroups.addChangeHandler(new ChangeHandler(){
-			public void onChange(ChangeEvent event) {
-				String descGroups = ((UsersGroups) lstgroups.getObject(lstgroups.getSelectedIndex())).getUsersGroupsDesc();
-				lstgroups.setTitle(descGroups);
-				txtgroups.setText(descGroups);
+	    lstontology.clear();
+	    /*if(ontolist.size() < 1){
+	    	hide();
+	    	Window.alert(constants.selLoadOntologyFail());
+	    	Main.gotoLoginScreen();
+	    }*/
+	    if(ontolist.size() > 0){			
+			for(int i=0;i<ontolist.size();i++)
+			{
+	    		OntologyInfo ontoInfo = (OntologyInfo) ontolist.get(i);
+	    		lstontology.addItem(ontoInfo.getOntologyName(), ontoInfo);
+	    		if(ontoInfo.getOntologyId()==selectedOntologyId)
+	    			lstontology.setSelectedIndex(i);
 			}
-	    	
-	    });
-	    
-	    if(userLoginObj.getNoOfGroup()<2){
-			panelgroups.setVisible(false);
-		}else{
-			if(userLoginObj.getGroupid()!= null &&  userLoginObj.getGroupid().equals(ConfigConstants.VISITORGROUPID)){
-				panelgroups.setVisible(false);
+			
+			int cnt = 0;
+			if(userId.equals(""))
+			{
+				for(int i=0;i<lstontology.getItemCount();i++)
+				{
+					if(selectedOntologyId == ((OntologyInfo)lstontology.getObject(i)).getOntologyId())
+					{
+						cnt = i;
+						break;
+					}
+				}
 			}
+			//if(cnt>0)
+			if(lstontology.getItemCount()>0)
+			{
+				lstontology.setSelectedIndex(cnt);
+				lstontology.setItemSelected(cnt, true);
+				DomEvent.fireNativeEvent(Document.get().createChangeEvent(), lstontology);
+				loadUserGroup(userId);
+			}
+			
+			if(lstontology.getSelectedIndex()!=-1)
+			{
+				String descOntology = ((OntologyInfo) lstontology.getObject(lstontology.getSelectedIndex())).getOntologyDescription();
+			    lstontology.setTitle(descOntology);
+			    txtontology.setText(descOntology);
+			}
+		    lstontology.addChangeHandler(new ChangeHandler(){
+				public void onChange(ChangeEvent event) {
+					loadUserGroup(userId);
+				}
+		    });
+	    }
+	}
+	
+	public void loadUserGroup(final String userId)
+	{
+		if(lstontology.getSelectedIndex()!=-1)
+		{
+			String descOntology = ((OntologyInfo) lstontology.getObject(lstontology.getSelectedIndex())).getOntologyDescription();
+			final int ontologyId = ((OntologyInfo) lstontology.getObject(lstontology.getSelectedIndex())).getOntologyId();
+			lstontology.setTitle(descOntology);
+			txtontology.setText(descOntology);
+			AsyncCallback<ArrayList<UsersGroups>> callback = new AsyncCallback<ArrayList<UsersGroups>>() {
+				public void onSuccess(ArrayList<UsersGroups> list) {
+					loadGroupList(list, userId, ontologyId);
+					AsyncCallback<UsersPreference> callback = new AsyncCallback<UsersPreference>() {
+						public void onSuccess(UsersPreference usersPreference) {
+							if(usersPreference.getId()==null || usersPreference.getId().getUserId()==0 || usersPreference.getId().getOntologyId()==0)
+							{
+								AsyncCallback<UsersPreference> callback1 = new AsyncCallback<UsersPreference>() {
+									public void onSuccess(UsersPreference usersPreference) {
+										userLoginObj.setUsersPreference(usersPreference);
+									}
+									public void onFailure(Throwable caught) {
+										ExceptionManager.showException(caught, constants.selPrefNoLoad());
+									}
+								};
+								UserPreferenceServiceUtil.getInstance().getUsersPreference(Integer.parseInt(userId), -1, callback1);
+							}
+							else
+								userLoginObj.setUsersPreference(usersPreference);
+						}
+						public void onFailure(Throwable caught) {
+							ExceptionManager.showException(caught, constants.selPrefNoLoad());
+						}
+					};
+					UserPreferenceServiceUtil.getInstance().getUsersPreference(Integer.parseInt(userId), ontologyId, callback);
+				}
+				public void onFailure(Throwable caught) {
+					ExceptionManager.showException(caught, constants.selPrefNoLoad());
+				}
+			};
+			SystemServiceUtil.getInstance().getUserGroup(Integer.parseInt(userId), ontologyId, callback);
 		}
+	}
+	
+	/*public void loadLangList(InitializeUsersPreferenceData initUserPreference, String userId, int selectedOntologyId)
+	{
+	
 		// Set languages for the interface
 	    lstlang.clear();
 	    ArrayList<LanguageInterface> listlang = initUserPreference.getInterfaceLanguage();
@@ -362,62 +479,42 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 			}
 	    	
 	    });
-	    
-	    // Fill the ontology
-	    loadOntologyList(initUserPreference.getOntology(), ""+initUserPreference.getUsersPreference().getUserId(), initUserPreference.getUsersPreference().getOntologyId());
 		
-	}
+	}*/
 	
-	public void loadOntologyList(ArrayList<OntologyInfo> ontolist, String userId, int selectedOntologyId)
+	public void loadGroupList(ArrayList<UsersGroups> listgroups, String userId, int selectedOntologyId)
 	{
+		//Set user groups
+		lstgroups.clear();
+		for(int i=0;i<listgroups.size();i++){
+    		UsersGroups userGroups = (UsersGroups) listgroups.get(i);
+    		lstgroups.addItem(userGroups.getUsersGroupsName(),userGroups);
+    		if(userGroups.getUsersGroupsId()==1)
+    			isAdmin = true;
+    	}
 		
-	    lstontology.clear();
-	    /*if(ontolist.size() < 1){
-	    	hide();
-	    	Window.alert(constants.selLoadOntologyFail());
-	    	Main.gotoLoginScreen();
-	    }*/
-	    if(ontolist.size() > 0){			
-			for(int i=0;i<ontolist.size();i++)
-			{
-	    		OntologyInfo ontoInfo = (OntologyInfo) ontolist.get(i);
-	    		lstontology.addItem(ontoInfo.getOntologyName(), ontoInfo);
-	    		if(ontoInfo.getOntologyId()==selectedOntologyId)
-	    			lstontology.setSelectedIndex(i);
+    	
+    	lstgroups.setItemSelected(0, true);
+    	
+    	String descGroups = ((UsersGroups) lstgroups.getObject(lstgroups.getSelectedIndex())).getUsersGroupsDesc();
+	    lstgroups.setTitle(descGroups);
+	    txtgroups.setText(descGroups);
+	    lstgroups.addChangeHandler(new ChangeHandler(){
+			public void onChange(ChangeEvent event) {
+				String descGroups = ((UsersGroups) lstgroups.getObject(lstgroups.getSelectedIndex())).getUsersGroupsDesc();
+				lstgroups.setTitle(descGroups);
+				txtgroups.setText(descGroups);
 			}
-			
-			int cnt = 0;
-			if(userId.equals(""))
-			{
-				for(int i=0;i<lstontology.getItemCount();i++)
-				{
-					if(selectedOntologyId == ((OntologyInfo)lstontology.getObject(i)).getOntologyId())
-					{
-						cnt = i;
-						break;
-					}
-				}
+	    	
+	    });
+	    
+	    if(userLoginObj.getNoOfGroup()<2){
+			panelgroups.setVisible(false);
+		}else{
+			if(userLoginObj.getGroupid()!= null &&  userLoginObj.getGroupid().equals(ConfigConstants.VISITORGROUPID)){
+				panelgroups.setVisible(false);
 			}
-			if(cnt>0)
-				lstontology.setItemSelected(cnt, true);
-			
-			if(lstontology.getSelectedIndex()!=-1)
-			{
-				String descOntology = ((OntologyInfo) lstontology.getObject(lstontology.getSelectedIndex())).getOntologyDescription();
-			    lstontology.setTitle(descOntology);
-			    txtontology.setText(descOntology);
-			}
-		    lstontology.addChangeHandler(new ChangeHandler(){
-				public void onChange(ChangeEvent event) {
-					if(lstontology.getSelectedIndex()!=-1)
-					{
-						String descOntology = ((OntologyInfo) lstontology.getObject(lstontology.getSelectedIndex())).getOntologyDescription();
-						lstontology.setTitle(descOntology);
-						txtontology.setText(descOntology);
-					}
-				}
-		    });
-	    }
+		}
 	}
 
 	/* (non-Javadoc)

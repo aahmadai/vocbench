@@ -8,13 +8,13 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 import org.fao.aoscs.domain.ConfigObject;
 import org.fao.aoscs.domain.DBMigrationObject;
 import org.fao.aoscs.domain.InitializeSystemData;
-import org.fao.aoscs.domain.InitializeUsersPreferenceData;
 import org.fao.aoscs.domain.LanguageCode;
 import org.fao.aoscs.domain.LanguageInterface;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlAction;
 import org.fao.aoscs.domain.OwlStatus;
 import org.fao.aoscs.domain.PermissionFunctionalityMap;
+import org.fao.aoscs.domain.PermissionObject;
 import org.fao.aoscs.domain.StInstances;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
@@ -26,7 +26,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface SystemServiceAsync<T> {
 	void initData(UserLogin userLoginObj, AsyncCallback<InitializeSystemData> callback);
-	void initSelectPreferenceData(int userID, AsyncCallback<InitializeUsersPreferenceData> callback);
 	void getAuthorize(String loginuser,String loginpassword, AsyncCallback<UserLogin> callback);
 	void getAuthorization(String name, UserLogin  userLoginObj, AsyncCallback<UserLogin> callback);
 	void setSessionValue(String name, LightEntity obj, AsyncCallback<Boolean> callback);
@@ -38,9 +37,8 @@ public interface SystemServiceAsync<T> {
 	void checkSession(String name, AsyncCallback<UserLogin> callback);
 	void clearSession(AsyncCallback<Void> callback);
 	void SendMail(String to, String subject,String body,AsyncCallback<Void> callback);
-	//void getGroupStatusAssignment(AsyncCallback<HashMap<String,ArrayList<String[]>>> callback);
-	//void getGroupValidateStatusAssignment(AsyncCallback<HashMap<String,ArrayList<String[]>>> callback);
-	void getUserSelectedLanguageCode(int userID, AsyncCallback<ArrayList<String>> callback);
+	void getUserSelectedLanguageCode(int userID, int projectID,
+			AsyncCallback<ArrayList<String>> callback);
 	void getCountryCodes(AsyncCallback<ArrayList<String[]>> callback);
 	void addLanguage(LanguageCode languageCode, AsyncCallback<ArrayList<LanguageCode>> callback);
 	void editLanguage(LanguageCode languageCode, AsyncCallback<ArrayList<LanguageCode>> callback);
@@ -55,6 +53,7 @@ public interface SystemServiceAsync<T> {
 	void addGroupPermission(int groupId, int permitId, String groupName, String permitName, int userId, AsyncCallback<Void> callback);
 	void removeGroupPermission(int groupId, int permitId, String groupName, String permitName, int userId, AsyncCallback<Void> callback);
 	void addGroupsToUser(String userId, ArrayList<String> groupIds, AsyncCallback<Void> callback);
+	void addGroupsToUser(String userId, String projectId, ArrayList<String> groupIds, AsyncCallback<Void> callback);
 	void addLanguagesToUser(String userId, ArrayList<String> languages, AsyncCallback<Void> callback);
 	void addOntologiesToUser(String userId, ArrayList<String> ontologyIds, AsyncCallback<Void> callback);
 	void addUserToGroup(int groupId, int userId, String groupName, String userName, int modifierId, AsyncCallback<Void> callback);
@@ -103,5 +102,13 @@ public interface SystemServiceAsync<T> {
 	void getOntologyList(AsyncCallback<ArrayList<OntologyInfo>> callback);
 	void deleteUsersFromOntology(String ontologyId, String userId,
 			AsyncCallback<Void> callback);
+	void getUser(String userId, AsyncCallback<Users> callback);
+	void addLanguagesToUser(String userId, String projectId,
+			ArrayList<String> languages, AsyncCallback<Void> callback);
+	void getUserGroup(int userid, int projectid,
+			AsyncCallback<ArrayList<UsersGroups>> callback);
+	void SendMail(String to, String cc, String subject, String body,
+			AsyncCallback<Void> callback);
+	void getPermisions(String groupId, AsyncCallback<PermissionObject> callback);
 	
 }

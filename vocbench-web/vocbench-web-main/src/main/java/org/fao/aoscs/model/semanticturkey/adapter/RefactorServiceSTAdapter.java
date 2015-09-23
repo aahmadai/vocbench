@@ -16,8 +16,8 @@ public class RefactorServiceSTAdapter implements RefactorService {
 	private RefactorServiceSTImpl refactorService = new RefactorServiceSTImpl();
 
 	@Override
-	public boolean changeResourceName(OntologyInfo ontoInfo, String oldResource, String newResource) throws Exception {
-		return refactorService.changeResourceName(ontoInfo, oldResource, newResource);
+	public boolean renameResource(OntologyInfo ontoInfo, String oldResource, String newResource) throws Exception {
+		return refactorService.renameResource(ontoInfo, oldResource, newResource);
 	}
 
 	@Override
@@ -32,13 +32,12 @@ public class RefactorServiceSTAdapter implements RefactorService {
 	}
 
 	@Override
-	public String exportWithSKOSLabels(OntologyInfo ontoInfo) throws Exception {
-		return refactorService.exportWithSKOSLabels(ontoInfo);		
-	}
-
-	@Override
 	public boolean reifySKOSDefinitions(OntologyInfo ontoInfo) throws Exception {
 		return refactorService.reifySKOSDefinitions(ontoInfo);		
+	}
+	@Override
+	public String exportWithSKOSLabels(OntologyInfo ontoInfo) throws Exception {
+		return refactorService.exportWithSKOSLabels(ontoInfo);		
 	}
 
 	@Override
@@ -51,6 +50,14 @@ public class RefactorServiceSTAdapter implements RefactorService {
 			boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition)
 			throws Exception {
 		return refactorService.exportWithTransformations(ontoInfo, copyAlsoSKOSXLabels, copyAlsoReifiedDefinition);		
+	}
+
+	@Override
+	public String exportByFlattening(OntologyInfo ontoInfo, String format,
+			String ext, boolean toSKOS, boolean keepSKOSXLabels,
+			boolean toFlatDefinitions, boolean keepReifiedDefinition)
+			throws Exception {
+		return refactorService.exportByFlattening(ontoInfo, format, ext, toSKOS, keepSKOSXLabels, toFlatDefinitions, keepReifiedDefinition);
 	}
 
 }

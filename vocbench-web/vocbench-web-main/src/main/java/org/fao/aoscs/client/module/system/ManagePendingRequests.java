@@ -90,7 +90,7 @@ public class ManagePendingRequests extends DialogBoxAOS implements ClickHandler{
 		subpanel.setSize("100%", "100%");
 		subpanel.setSpacing(10);
 		subpanel.add(getOntologyTableWidget());
-		subpanel.add(getLanguageTableWidget());
+		//subpanel.add(getLanguageTableWidget());
 		return subpanel;
 	}
 	
@@ -199,6 +199,7 @@ public class ManagePendingRequests extends DialogBoxAOS implements ClickHandler{
 	    
 		return makeWidget(constants.prefUserPendingLanguage(), langaugePanel, hp);
 	}
+	
 	private void loadOntology()
 	{
 		tableLoading(ontologyPanel);

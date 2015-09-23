@@ -36,8 +36,8 @@ public class UsersPreferenceServiceImpl extends PersistentRemoteService implemen
 		
 		usersPreferenceServiceSystemImpl = new UsersPreferenceServiceSystemImpl();
 	}
-	public InitializeUsersPreferenceData getInitData(int userID) {
-		return usersPreferenceServiceSystemImpl.getInitData(userID);
+	public InitializeUsersPreferenceData getInitData(int userID, int projectID) {
+		return usersPreferenceServiceSystemImpl.getInitData(userID, projectID);
 	}
 	public Users getUser(int userID) {
 		return usersPreferenceServiceSystemImpl.getUser(userID);
@@ -110,5 +110,52 @@ public class UsersPreferenceServiceImpl extends PersistentRemoteService implemen
 	}
 	public ArrayList<Users> getNonAssignedUsers(int ontologyID) {
 		return usersPreferenceServiceSystemImpl.getNonAssignedUsers(ontologyID);	
+	}
+	@Override
+	public ArrayList<String[]> getNonAssignedAndPendingGroup(int userID,
+			int projectID) throws Exception {
+		return usersPreferenceServiceSystemImpl.getNonAssignedAndPendingGroup(userID, projectID);
+	}
+	@Override
+	public ArrayList<String[]> getPendingGroup(int userID, int projectID)
+			throws Exception {
+		return usersPreferenceServiceSystemImpl.getPendingGroup(userID, projectID);
+	}
+	@Override
+	public ArrayList<String[]> getPendingLanguage(int userID, int projectID)
+			throws Exception {
+		return usersPreferenceServiceSystemImpl.getPendingLanguage(userID, projectID);
+	}
+	@Override
+	public ArrayList<String[]> getNonAssignedAndPendingLanguage(int userID,
+			int projectID) throws Exception {
+		return usersPreferenceServiceSystemImpl.getNonAssignedAndPendingLanguage(userID, projectID);
+	}
+	@Override
+	public UsersPreference getUsersPreference(int userID, int projectID)
+			throws Exception {
+		return usersPreferenceServiceSystemImpl.getUsersPreference(userID, projectID);
+	}
+	@Override
+	public ArrayList<Users> getPendingUsers(int ontologyID) {
+		return usersPreferenceServiceSystemImpl.getPendingUsers(ontologyID);
+	}
+	@Override
+	public ArrayList<String[]> getUsersGroup(int userID) throws Exception {
+		return usersPreferenceServiceSystemImpl.getUsersGroup(userID);
+	}
+	@Override
+	public ArrayList<String[]> deleteUsersGroups(int userID,
+			ArrayList<String> list) throws Exception {
+		return usersPreferenceServiceSystemImpl.deleteUsersGroups(userID, list);
+	}
+	@Override
+	public ArrayList<String[]> getNonAssignedGroup(int userID) throws Exception {
+		return usersPreferenceServiceSystemImpl.getNonAssignedGroup(userID);
+	}
+	@Override
+	public void addUsersGroup(int userID, ArrayList<String> grouplist)
+			throws Exception {
+		usersPreferenceServiceSystemImpl.addUsersGroup(userID, grouplist);
 	}
 }

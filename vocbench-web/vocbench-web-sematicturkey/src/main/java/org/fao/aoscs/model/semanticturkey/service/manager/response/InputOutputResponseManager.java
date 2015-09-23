@@ -2,7 +2,7 @@ package org.fao.aoscs.model.semanticturkey.service.manager.response;
 
 import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
-import it.uniroma2.art.semanticturkey.servlet.main.InputOutput;
+import it.uniroma2.art.semanticturkey.servlet.main.InputOutputOld;
 
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.util.STModel;
@@ -26,10 +26,10 @@ public class InputOutputResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY loadRDFRequest(OntologyInfo ontoInfo, String inputFile, String baseURI, String fileFormat)
 	{
-		Response resp = getSTModel(ontoInfo).inputOutputService.makeRequest(InputOutput.loadRDFRequest, 
-				STModel.par(InputOutput.filePar, inputFile), 
-				STModel.par(InputOutput.baseUriPar, baseURI), 
-				STModel.par(InputOutput.formatPar, fileFormat), 
+		Response resp = getSTModel(ontoInfo).inputOutputService.makeRequest(InputOutputOld.loadRDFRequest, 
+				STModel.par(InputOutputOld.filePar, inputFile), 
+				STModel.par(InputOutputOld.baseUriPar, baseURI), 
+				STModel.par(InputOutputOld.formatPar, fileFormat), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
@@ -42,10 +42,10 @@ public class InputOutputResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY saveRDFRequest(OntologyInfo ontoInfo, String outputFile, String fileFormat, Boolean allNGsPar)
 	{
-		Response resp = getSTModel(ontoInfo).inputOutputService.makeRequest(InputOutput.saveRDFRequest, 
-				STModel.par(InputOutput.filePar, outputFile), 
-				STModel.par(InputOutput.formatPar, fileFormat), 
-				STModel.par(InputOutput.allNGsPar, allNGsPar.toString()), 
+		Response resp = getSTModel(ontoInfo).inputOutputService.makeRequest(InputOutputOld.saveRDFRequest, 
+				STModel.par(InputOutputOld.filePar, outputFile), 
+				STModel.par(InputOutputOld.formatPar, fileFormat), 
+				STModel.par(InputOutputOld.allNGsPar, allNGsPar.toString()), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}

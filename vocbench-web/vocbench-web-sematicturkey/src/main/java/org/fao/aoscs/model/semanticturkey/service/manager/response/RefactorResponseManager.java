@@ -22,7 +22,7 @@ public class RefactorResponseManager extends ResponseManager {
 	 * @param newResource
 	 * @return
 	 */
-	public static XMLResponseREPLY changeResourceNameRequest(OntologyInfo ontoInfo, String oldResource, String newResource)
+	public static XMLResponseREPLY renameResourceRequest(OntologyInfo ontoInfo, String oldResource, String newResource)
 	{
 		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("renameResource", 
 				STModel.par("oldResource", oldResource),
@@ -63,6 +63,32 @@ public class RefactorResponseManager extends ResponseManager {
 	
 	/**
 	 * @param ontoInfo
+	 * @return
+	 */
+	public static XMLResponseREPLY reifySKOSDefinitionsRequest(OntologyInfo ontoInfo)
+	{
+		
+		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("reifySKOSDefinitions", 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	public static XMLResponseREPLY exportByFlatteningRequest(OntologyInfo ontoInfo, String format, String ext, Boolean toSKOS, Boolean keepSKOSXLabels,
+			Boolean toFlatDefinitions, Boolean keepReifiedDefinition)
+	{
+		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("exportByFlattening", 
+				STModel.par("format", format),
+				STModel.par("ext", ext),
+				STModel.par("toSKOS", toSKOS.toString()),
+				STModel.par("keepSKOSXLabels", keepSKOSXLabels.toString()),
+				STModel.par("toFlatDefinitions", toFlatDefinitions.toString()),
+				STModel.par("keepReifiedDefinition", keepReifiedDefinition.toString()),
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
 	 * @param exportPackage
 	 * @return
 	 */
@@ -71,18 +97,6 @@ public class RefactorResponseManager extends ResponseManager {
 		
 		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("exportWithSKOSLabels", 
 				STModel.par("exportPackage", exportPackage),
-				STModel.par("ctx_project", ontoInfo.getDbTableName()));
-		return getXMLResponseREPLY(resp);
-	}
-	
-	/**
-	 * @param ontoInfo
-	 * @return
-	 */
-	public static XMLResponseREPLY reifySKOSDefinitionsRequest(OntologyInfo ontoInfo)
-	{
-		
-		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("reifySKOSDefinitions", 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
@@ -112,7 +126,7 @@ public class RefactorResponseManager extends ResponseManager {
 	public static XMLResponseREPLY exportWithTransformations(OntologyInfo ontoInfo, String exportPackage, Boolean copyAlsoSKOSXLabels, Boolean copyAlsoReifiedDefinition)
 	{
 		
-		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("exportWithFlatSKOSDefinitions", 
+		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("exportWithTransformations", 
 				STModel.par("exportPackage", exportPackage),
 				STModel.par("copyAlsoSKOSXLabels", copyAlsoSKOSXLabels.toString()),
 				STModel.par("copyAlsoReifiedDefinition", copyAlsoReifiedDefinition.toString()),

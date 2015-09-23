@@ -98,6 +98,8 @@ public class MainApp extends Composite { // Application container
 	public static LocaleMessages messages = (LocaleMessages) GWT.create(LocaleMessages.class);
     public static AOSImageBundle aosImageBundle = (AOSImageBundle) GWT.create(AOSImageBundle.class);
     
+    public static String AGROVOCNAMESPACE = "http://aims.fao.org/aos/agrovoc/";
+    
     public static String DEV = "DEV";
 	public static String PRO = "PRO";
 	public static String SANDBOX = "SANDBOX";
@@ -105,6 +107,7 @@ public class MainApp extends Composite { // Application container
     private VerticalPanel panel = new VerticalPanel();
     public static ArrayList<String> userMenu = new ArrayList<String>();
     public static int userId;
+    public static String userEmail;
     public static int groupId;
     public static String groupName;
     public static String userLogin = "";
@@ -214,6 +217,7 @@ public class MainApp extends Composite { // Application container
                 userOntology = userLoginObj.getOntology();
                 userMenu = userLoginObj.getMenu();
                 userId = Integer.parseInt(userLoginObj.getUserid());
+                userEmail = userLoginObj.getUserEmail();
                 groupId = Integer.parseInt(userLoginObj.getGroupid());
                 groupName = userLoginObj.getGroupname();
                 userPreference = userLoginObj.getUsersPreference();
@@ -320,7 +324,7 @@ public class MainApp extends Composite { // Application container
                 }
                 else
                 {
-                    if (userPreference.getUserId() != 0)
+                    if (userPreference.getId() != null && userPreference.getId().getUserId() != 0)
                     {
                     	initToken = userPreference.getInitialPage();
                     }   

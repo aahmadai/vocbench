@@ -3,6 +3,7 @@ package org.fao.aoscs.client.module.resourceview;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
+import org.fao.aoscs.client.module.concept.widgetlib.dialog.ManageResourceURI;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
 import org.fao.aoscs.client.widgetlib.shared.label.ImageAOS;
@@ -38,6 +39,8 @@ public class ResourceView extends Composite {
 	private static ResourceViewUiBinder uiBinder = GWT
 			.create(ResourceViewUiBinder.class);
 
+	private ManageResourceURI manageResourceURI;
+
 	interface ResourceViewUiBinder extends UiBinder<Widget, ResourceView> {
 	}
 
@@ -51,8 +54,8 @@ public class ResourceView extends Composite {
 	@UiField Button btnRenameResourceURL;
 	@UiField FlowPanel pnlResourceView;
 	
-	public ResourceView(String resourceURI) {
-		initWidget(uiBinder.createAndBindUi(this));
+	public void init(String resourceURI)
+	{
 		txtResourceURL.setText(resourceURI);
 		pnlResourceView.add(new LoadingDialog());
 		AsyncCallback<ResourceViewObject> callback = new AsyncCallback<ResourceViewObject>(){
@@ -79,18 +82,20 @@ public class ResourceView extends Composite {
 			for(PredicateObjects predObjs : resourceViewObj.getResourceList().get(key))
 			{
 				PredicateObject predObj = predObjs.getPredicate();
-				LinkLabelAOS lbl = new LinkLabelAOS("images/add-grey.gif", "images/add-grey-disabled.gif", predObj.getUri().getShow(), predObj.getUri().getShow(), true, new ClickHandler()
+				if(predObj!=null)
 				{
-					public void onClick(ClickEvent event) {
-						Window.alert(constants.conNotAvailable());
-					}
-				});
-				vp.add(lbl);
+					LinkLabelAOS lbl = new LinkLabelAOS("images/add-grey.gif", "images/add-grey-disabled.gif", predObj.getUri().getShow(), predObj.getUri().getShow(), true, new ClickHandler()
+					{
+						public void onClick(ClickEvent event) {
+							Window.alert(constants.conNotAvailable());
+						}
+					});
+					vp.add(lbl);
+				}
 				
 				for(final ARTNodeObject rdfResource : predObjs.getObjects())
 				{
 					String value = "";
-					
 					if(rdfResource instanceof ARTURIResourceObject) {
 						value = rdfResource.getShow();
 					}else if(rdfResource instanceof ARTLiteralObject){
@@ -158,7 +163,9 @@ public class ResourceView extends Composite {
 
 	@UiHandler("btnRenameResourceURL")
 	void onClick(ClickEvent e) {
-		Window.alert(txtResourceURL.getText());
+		if(manageResourceURI == null || !manageResourceURI.isLoaded )
+			manageResourceURI = new ManageResourceURI();
+		manageResourceURI.show(txtResourceURL.getText());
 	}
 
 }

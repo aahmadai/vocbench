@@ -328,7 +328,7 @@ public class AddConcept extends FlexDialogBox {
 			hideAddConcept();
 			tree.showLoading(true);
 			
-			if(!language.getValue(language.getSelectedIndex()).equals("en")){							
+			if((MainApp.defaultNamespace.equals(MainApp.AGROVOCNAMESPACE)) && !language.getValue(language.getSelectedIndex()).equals("en")){							
 	    		Window.alert(messages.conceptAddNewHint(name.getText(),language.getValue(language.getSelectedIndex())));
 	    		if(addEnglishDefinition == null || !addEnglishDefinition.isLoaded)
 	    			addEnglishDefinition = new AddNewEnglishDefinition(initData, cObj, tObj, parentConceptURI, namespaceVal);

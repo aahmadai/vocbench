@@ -8,13 +8,13 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 import org.fao.aoscs.domain.ConfigObject;
 import org.fao.aoscs.domain.DBMigrationObject;
 import org.fao.aoscs.domain.InitializeSystemData;
-import org.fao.aoscs.domain.InitializeUsersPreferenceData;
 import org.fao.aoscs.domain.LanguageCode;
 import org.fao.aoscs.domain.LanguageInterface;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.OwlAction;
 import org.fao.aoscs.domain.OwlStatus;
 import org.fao.aoscs.domain.PermissionFunctionalityMap;
+import org.fao.aoscs.domain.PermissionObject;
 import org.fao.aoscs.domain.StInstances;
 import org.fao.aoscs.domain.UserLogin;
 import org.fao.aoscs.domain.Users;
@@ -30,7 +30,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface SystemService extends RemoteService {
 
 	public InitializeSystemData initData(UserLogin userLoginObj) throws Exception;
-	public InitializeUsersPreferenceData initSelectPreferenceData(int userID) throws Exception;
 	public UserLogin getAuthorize(String loginuser,String loginpassword) throws Exception;
 	public UserLogin getAuthorization(String name, UserLogin  userLoginObj) throws Exception;	
 	public boolean setSessionValue(String name, LightEntity obj) throws Exception;
@@ -38,13 +37,15 @@ public interface SystemService extends RemoteService {
 	public boolean isUserExist(String username) throws Exception; 	
 	public ArrayList<LanguageInterface> getInterfaceLang() throws Exception;	
 	public ArrayList<UsersGroups> getUserGroup(int userid) throws Exception;
+	public ArrayList<UsersGroups> getUserGroup(int userid, int projectid) throws Exception;
 	public String getEncriptText(String password) throws Exception;
 	public UserLogin checkSession(String name) throws Exception;	
 	//public HashMap<String,ArrayList<String[]>> getGroupStatusAssignment() throws Exception;
 	//public HashMap<String,ArrayList<String[]>> getGroupValidateStatusAssignment() throws Exception;
 	public void clearSession() throws Exception;
 	public void SendMail(String to, String subject,String body) throws Exception;
-	public ArrayList<String> getUserSelectedLanguageCode(int userID) throws Exception;
+	public void SendMail(String to, String cc, String subject,String body) throws Exception;
+	public ArrayList<String> getUserSelectedLanguageCode(int userID, int projectID) throws Exception;
 	public ArrayList<String[]> getCountryCodes() throws Exception;
 	public ArrayList<LanguageCode> addLanguage(LanguageCode languageCode) throws Exception;
 	public ArrayList<LanguageCode> editLanguage(LanguageCode languageCode) throws Exception;
@@ -56,10 +57,13 @@ public interface SystemService extends RemoteService {
 	public void createGroup(String name , String description, int userId) throws Exception;
 	public void editGroup(int groupId, String name , String description, String oldDescription, int userId) throws Exception;
 	public void deleteGroup(int groupId, String name, String description, int userId) throws Exception;
+	public PermissionObject getPermisions(String groupId) throws Exception;
 	public void addGroupPermission(int groupId, int permitId, String groupName, String permitName, int userId) throws Exception;
 	public void removeGroupPermission(int groupId, int permitId, String groupName, String permitName, int userId) throws Exception;
 	public void addGroupsToUser(String userId, ArrayList<String> groupIds) throws Exception;
+	public void addGroupsToUser(String userId, String projectId, ArrayList<String> groupIds) throws Exception;
 	public void addLanguagesToUser(String userId, ArrayList<String> languages) throws Exception;
+	public void addLanguagesToUser(String userId, String projectId, ArrayList<String> languages) throws Exception;
 	public void addOntologiesToUser(String userId, ArrayList<String> ontologyIds) throws Exception;
 	public void addUserToGroup(int groupId, int userId, String groupName, String userName, int modifierId) throws Exception;
 	public void removeUserFromGroup(int groupId, ArrayList<Integer> selectedUsers, String groupName, String userName, int modifierId) throws Exception;
@@ -94,6 +98,8 @@ public interface SystemService extends RemoteService {
 	public ArrayList<String[]> getUserAssignedtoOntology(String ontologyId) throws Exception;
 	public void addUsersToOntology(String ontologyId, ArrayList<String> users) throws Exception;
 	public void deleteUsersFromOntology(String ontologyId, String userId) throws Exception;
+	
+	public Users getUser(String userId) throws Exception;
 	
 	public static class SystemServiceUtil{
 		private static SystemServiceAsync<?> instance;

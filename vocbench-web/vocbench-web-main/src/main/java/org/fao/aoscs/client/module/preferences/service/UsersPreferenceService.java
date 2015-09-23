@@ -15,23 +15,34 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("usersPreference")
 public interface UsersPreferenceService extends RemoteService{
 	
-	public InitializeUsersPreferenceData getInitData(int userID) throws Exception;
+	InitializeUsersPreferenceData getInitData(int userID, int projectID);
 	public Users getUser(int userID) throws Exception;
 	public Users updateUsers(Users users , boolean isPasswordChange) throws Exception;
 	public UsersPreference getUsersPreference(int userID) throws Exception;
+	public UsersPreference getUsersPreference(int userID, int projectID) throws Exception;
 	public UsersPreference addUsersPreference(UsersPreference UsersPreference) throws Exception;
 	public UsersPreference updateUsersPreference(UsersPreference UsersPreference) throws Exception;
 	
+	
+	public ArrayList<String[]> getUsersGroup(int userID) throws Exception;
+	public ArrayList<String[]> getNonAssignedGroup(int userID) throws Exception;
 	public ArrayList<String[]> getNonAssignedAndPendingGroup(int userID) throws Exception;
+	public ArrayList<String[]> getNonAssignedAndPendingGroup(int userID, int projectID) throws Exception;
+	public ArrayList<String[]> getPendingGroup(int userID, int projectID) throws Exception;
 	public ArrayList<Users> getNonAssignedUsers(int ontologyID);
+	public ArrayList<Users> getPendingUsers(int ontologyID);
 	public ArrayList<UsersLanguage> getUsersLanguage(int userID) throws Exception;
 	public ArrayList<String[]> getPendingLanguage(int userID) throws Exception;
+	public ArrayList<String[]> getPendingLanguage(int userID, int projectID) throws Exception;
 	public ArrayList<String[]> getPendingLanguage() throws Exception;
 	public ArrayList<String> getNonAssignedLanguage(int userID) throws Exception;
 	public ArrayList<String[]> getNonAssignedAndPendingLanguage(int userID) throws Exception;
+	public ArrayList<String[]> getNonAssignedAndPendingLanguage(int userID, int projectID) throws Exception;
 	public void addUsersLanguage(ArrayList<UsersLanguage> langlist) throws Exception;
+	public void addUsersGroup(int userID, ArrayList<String> grouplist) throws Exception;
 	public ArrayList<String[]> deleteUsersPendingLanguage(int userID, ArrayList<String> langlist) throws Exception;
 	public ArrayList<UsersLanguage> deleteUsersLanguage(int userID, ArrayList<String> langlist) throws Exception;
+	public ArrayList<String[]> deleteUsersGroups(int userID, ArrayList<String> list) throws Exception;
 	
 	public ArrayList<String[]> getUserOntology(int userID) throws Exception;
 	public ArrayList<String[]> getPendingOntology(int userID) throws Exception;

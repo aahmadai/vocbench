@@ -11,10 +11,10 @@ public class InitializeUsersPreferenceData extends LightEntity{
 	
 	private UsersPreference usersPreference = new UsersPreference();
 	private Users usersInfo = new Users();
-	private ArrayList<OntologyInfo> ontology = new ArrayList<OntologyInfo>();
+	//private ArrayList<OntologyInfo> ontology = new ArrayList<OntologyInfo>();
 	private ArrayList<LanguageInterface> interfaceLanguage = new ArrayList<LanguageInterface>();
-	private ArrayList<UsersGroups> usergroups = new ArrayList<UsersGroups>();
-	private ArrayList<UsersLanguage> userLanguage = new ArrayList<UsersLanguage>();
+	//private ArrayList<UsersGroups> usergroups = new ArrayList<UsersGroups>();
+	//private ArrayList<UsersLanguage> userLanguage = new ArrayList<UsersLanguage>();
 	
 	/**
 	 * @param usersPreference the usersPreference to set
@@ -52,20 +52,20 @@ public class InitializeUsersPreferenceData extends LightEntity{
 
 	/**
 	 * @return the ontology
-	 */
+	 *//*
 	public ArrayList<OntologyInfo> getOntology() {
 		return ontology;
 	}
 
 
 
-	/**
+	*//**
 	 * @param ontology the ontology to set
-	 */
+	 *//*
 	public void setOntology(ArrayList<OntologyInfo> ontology) {
 		this.ontology = ontology;
 	}
-
+*/
 
 
 	/**
@@ -86,31 +86,31 @@ public class InitializeUsersPreferenceData extends LightEntity{
 
 	/**
 	 * @param usergroups the usergroups to set
-	 */
+	 *//*
 	public void setUsergroups(ArrayList<UsersGroups> usergroups) {
 		this.usergroups = usergroups;
 	}
 
-	/**
+	*//**
 	 * @return the usergroups
-	 */
+	 *//*
 	public ArrayList<UsersGroups> getUsergroups() {
 		return usergroups;
 	}
 
-	/**
+	*//**
 	 * @param userLanguage the userLanguage to set
-	 */
+	 *//*
 	public void setUserLanguage(ArrayList<UsersLanguage> userLanguage) {
 		this.userLanguage = userLanguage;
 	}
 
-	/**
+	*//**
 	 * @return the userLanguage
-	 */
+	 *//*
 	public ArrayList<UsersLanguage> getUserLanguage() {
 		return userLanguage;
-	}
+	}*/
 	
 	
 	

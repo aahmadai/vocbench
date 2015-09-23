@@ -22,8 +22,8 @@ public class RefactorServiceSTImpl {
 	 * @param newResource
 	 * @throws Exception
 	 */
-	public boolean changeResourceName(OntologyInfo ontoInfo, String oldResource, String newResource) throws Exception {
-		return RefactorManager.changeResourceName(ontoInfo, oldResource, newResource);
+	public boolean renameResource(OntologyInfo ontoInfo, String oldResource, String newResource) throws Exception {
+		return RefactorManager.renameResource(ontoInfo, oldResource, newResource);
 	}
 	
 	/**
@@ -52,6 +52,25 @@ public class RefactorServiceSTImpl {
 	public String exportWithSKOSLabels(OntologyInfo ontoInfo) throws Exception {
 		return RefactorManager.exportWithSKOSLabels(ontoInfo);
 	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param format
+	 * @param ext
+	 * @param toSKOS
+	 * @param keepSKOSXLabels
+	 * @param toFlatDefinitions
+	 * @param keepReifiedDefinition
+	 * @return
+	 * @throws Exception
+	 */
+	public String exportByFlattening(OntologyInfo ontoInfo, String format,
+			String ext, boolean toSKOS, boolean keepSKOSXLabels,
+			boolean toFlatDefinitions, boolean keepReifiedDefinition)
+			throws Exception {
+		return RefactorManager.exportByFlattening(ontoInfo, format, ext, toSKOS, keepSKOSXLabels, toFlatDefinitions, keepReifiedDefinition);
+	}
+	
 	/**
 	 * @param ontoInfo
 	 * @throws Exception

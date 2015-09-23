@@ -23,9 +23,9 @@ public class RefactorManager extends ResponseManager {
 	 * @param oldResource
 	 * @param newResource
 	 */
-	public static Boolean changeResourceName(OntologyInfo ontoInfo, String oldResource, String newResource)
+	public static Boolean renameResource(OntologyInfo ontoInfo, String oldResource, String newResource)
 	{
-		XMLResponseREPLY reply = RefactorResponseManager.changeResourceNameRequest(ontoInfo, oldResource, newResource);
+		XMLResponseREPLY reply = RefactorResponseManager.renameResourceRequest(ontoInfo, oldResource, newResource);
 		return  reply.isAffirmative();
 	}
 	
@@ -55,6 +55,45 @@ public class RefactorManager extends ResponseManager {
 	/**
 	 * @param ontoInfo
 	 */
+	public static Boolean reifySKOSDefinitions(OntologyInfo ontoInfo)
+	{
+		XMLResponseREPLY reply = RefactorResponseManager.reifySKOSDefinitionsRequest(ontoInfo);
+		return reply.isAffirmative();
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param format
+	 * @param ext
+	 * @param toSKOS
+	 * @param keepSKOSXLabels
+	 * @param toFlatDefinitions
+	 * @param keepReifiedDefinition
+	 * @return
+	 */
+	public static String exportByFlattening(OntologyInfo ontoInfo, String format, String ext, Boolean toSKOS, Boolean keepSKOSXLabels,
+			Boolean toFlatDefinitions, Boolean keepReifiedDefinition)
+	{
+		String filename = "";
+		File tempfile;
+		try {
+			tempfile = STUtility.createTempFile();
+			filename = tempfile.getPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(!filename.equals(""))
+		{
+			XMLResponseREPLY reply = RefactorResponseManager.exportByFlatteningRequest(ontoInfo, format, ext, toSKOS, keepSKOSXLabels, toFlatDefinitions, keepReifiedDefinition);
+			if(reply!=null && reply.isAffirmative())
+				return filename;
+		}
+		return "";
+	}
+	
+	/**
+	 * @param ontoInfo
+	 */
 	public static String exportWithSKOSLabels(OntologyInfo ontoInfo)
 	{
 		String filename = "";
@@ -72,15 +111,6 @@ public class RefactorManager extends ResponseManager {
 				return filename;
 		}
 		return "";
-	}
-	
-	/**
-	 * @param ontoInfo
-	 */
-	public static Boolean reifySKOSDefinitions(OntologyInfo ontoInfo)
-	{
-		XMLResponseREPLY reply = RefactorResponseManager.reifySKOSDefinitionsRequest(ontoInfo);
-		return reply.isAffirmative();
 	}
 	
 	/**

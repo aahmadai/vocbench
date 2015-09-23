@@ -59,7 +59,8 @@ public class ResourceViewer extends DialogBoxAOS implements ClickHandler{
 	
 	public void show(String resourceURI)
 	{
-		ResourceView rv = new ResourceView(resourceURI);
+		ResourceView rv = new ResourceView();
+		rv.init(resourceURI);
 		resourcePanel.setWidget(rv);
 		super.show();
 	}

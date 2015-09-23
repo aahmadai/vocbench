@@ -17,6 +17,7 @@ import org.fao.aoscs.client.module.constant.ConceptActionKey;
 import org.fao.aoscs.client.module.constant.OWLActionConstants;
 import org.fao.aoscs.client.module.constant.OWLStatusConstants;
 import org.fao.aoscs.client.module.constant.Style;
+import org.fao.aoscs.client.module.resourceview.ResourceView;
 import org.fao.aoscs.client.module.resourceview.ResourceViewer;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
@@ -86,6 +87,8 @@ public class ConceptTree extends Composite{
 	private LabelAOS URI = new LabelAOS();
 	public InitializeConceptData initData;
 	private ConceptDetailTabPanel detailPanel;
+	private VerticalPanel resViewPanel = new VerticalPanel();
+	private ResourceView resView = new ResourceView();
 	private ConceptObject selectedConceptObject;
 	//private ConceptTab selectedTab = ConceptTab.TERM; 
 	private ConceptDetailObject cDetailObj;
@@ -114,6 +117,7 @@ public class ConceptTree extends Composite{
     
     private ImageAOS resourceView;
     private ResourceViewer resourceViewer;
+    private boolean isResourceView = false;
     
     //private String VgraphURL = "";
     private FormPanel form = new FormPanel("_wbgraph");
@@ -126,20 +130,24 @@ public class ConceptTree extends Composite{
     //private SetRootConcept setRootConcept;
     public ConceptObject rootConceptObject;
     
+    
     public ConceptTree(PermissionObject permissionTable, InitializeConceptData initData){
-		this.initData = initData;
-		this.detailPanel = new ConceptDetailTabPanel(permissionTable,initData);
-		this.detailPanel.setVisible(false);
-		this.permissionTable = permissionTable;
-		init(null, 0);
+		load(null, initData, permissionTable, 0);
 	}
 
 	public ConceptTree(String initURI, InitializeConceptData initData, PermissionObject permissionTable, int initTab){
+		load(initURI, initData, permissionTable, initTab);
+	}
+	
+	private void load(String initURI, InitializeConceptData initData, PermissionObject permissionTable, int initTab){
 		this.initData = initData;
 		this.detailPanel = new ConceptDetailTabPanel(permissionTable, initData);
 		this.detailPanel.setVisible(false);
 		detailPanel.setSelectedTab(initTab);
 		this.permissionTable = permissionTable;
+		resViewPanel.setSize("100%", "100%");
+		resViewPanel.add(resView);
+		resViewPanel.setSpacing(10);
 		init(initURI, initTab);
 	}
 	
@@ -151,7 +159,10 @@ public class ConceptTree extends Composite{
 		hSplit.ensureDebugId("cwHorizontalSplitPanel");
 	    hSplit.setSplitPosition("100%");
 	    hSplit.setLeftWidget(panel);
-	    hSplit.setRightWidget(detailPanel);
+	    if(isResourceView)
+	    	hSplit.setRightWidget(resViewPanel);
+	    else
+	    	hSplit.setRightWidget(detailPanel);
 	    
 	    setScrollPanelSize();
 	    loadTreePanel(initURI,initTab);
@@ -562,11 +573,14 @@ public class ConceptTree extends Composite{
 					Window.alert(constants.conceptSelectConcept());
 				else
 				{
-					if(resourceViewer == null || !resourceViewer.isLoaded)
+					isResourceView = !isResourceView;
+					onTreeSelection(treePanel.getSelectedTreeObject());
+					
+					/*if(resourceViewer == null || !resourceViewer.isLoaded)
 					{
 						resourceViewer = new ResourceViewer();
 					}
-					resourceViewer.show(selectedConceptObject.getUri());
+					resourceViewer.show(selectedConceptObject.getUri());*/
 				}
 			}
 		});
@@ -827,6 +841,46 @@ public class ConceptTree extends Composite{
 		resourceView.setEnable(false);
 
 		URI.setText(conceptURI);
+		String parentURI = tObj.getParentURI();
+		if(isResourceView)
+		{
+			resView.init(conceptURI);
+			postTreeSelection(cDetailObj.getConceptObject(), parentURI);
+			hSplit.setRightWidget(resViewPanel);
+		}
+		else
+		{
+			showDetailTab(conceptURI, parentURI, Convert.convert2Widget(tObj));
+			hSplit.setRightWidget(detailPanel);
+		}
+	}
+	
+	private void postTreeSelection(ConceptObject cObj, String parentURI)
+	{
+		selectedConceptObject = cObj;
+		selectedConceptObject.setParentURI(parentURI);
+
+		String status = selectedConceptObject.getStatus();
+		addConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTCREATE, OWLStatusConstants.getOWLStatusID(status)));
+		deleteConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTDELETE, OWLStatusConstants.getOWLStatusID(status)));
+		moveconcept.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTEDIT_MOVECONCEPT, OWLStatusConstants.getOWLStatusID(status)));
+		copyconcept.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTEDIT_LINKCONCEPT, OWLStatusConstants.getOWLStatusID(status)));
+		removeconcept.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTEDIT_UNLINKCONCEPT, OWLStatusConstants.getOWLStatusID(status)));
+		addConceptToSchemeButton.setEnable(true);
+		removeConceptToSchemeButton.setEnable(true);
+		visualize.setEnable(true);
+		resourceView.setEnable(true);
+		
+		//VgraphURL = GWT.getHostPageBaseURL()+"graph.jsp?concept="+selectedConceptObject.getUri()+"&language="+convertArrayList2String(MainApp.userSelectedLanguage,"_")+"&ontology="+MainApp.userOntology.getDbTableName()+"&wsurl="+MainApp.userOntology.getDbDriver();
+		formLoad(selectedConceptObject.getUri());
+		
+		URI.setText(selectedConceptObject.getUri());
+		MainApp.addToConceptNavigationHistoryList(selectedConceptObject);
+	}
+	
+	private void showDetailTab(String conceptURI, final String parentURI, String html)
+	{
+		
 		detailPanel.resetTab();
 		detailPanel.clearData();
 		
@@ -835,26 +889,10 @@ public class ConceptTree extends Composite{
 			public void onSuccess(ConceptDetailObject result)
 			{
 				cDetailObj = (ConceptDetailObject) result;
-				selectedConceptObject = cDetailObj.getConceptObject();
-				selectedConceptObject.setParentURI(tObj.getParentURI());
-
-				String status = selectedConceptObject.getStatus();
-				addConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTCREATE, OWLStatusConstants.getOWLStatusID(status)));
-				deleteConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTDELETE, OWLStatusConstants.getOWLStatusID(status)));
-				moveconcept.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTEDIT_MOVECONCEPT, OWLStatusConstants.getOWLStatusID(status)));
-				copyconcept.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTEDIT_LINKCONCEPT, OWLStatusConstants.getOWLStatusID(status)));
-				removeconcept.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTEDIT_UNLINKCONCEPT, OWLStatusConstants.getOWLStatusID(status)));
-				addConceptToSchemeButton.setEnable(true);
-				removeConceptToSchemeButton.setEnable(true);
-				visualize.setEnable(true);
-				resourceView.setEnable(true);
+				postTreeSelection(cDetailObj.getConceptObject(), parentURI);
 				
-				//VgraphURL = GWT.getHostPageBaseURL()+"graph.jsp?concept="+selectedConceptObject.getUri()+"&language="+convertArrayList2String(MainApp.userSelectedLanguage,"_")+"&ontology="+MainApp.userOntology.getDbTableName()+"&wsurl="+MainApp.userOntology.getDbDriver();
-				formLoad(selectedConceptObject.getUri());
-				
-				URI.setText(selectedConceptObject.getUri());
 				detailPanel.initData(cDetailObj);
-				MainApp.addToConceptNavigationHistoryList(selectedConceptObject);
+				
 				Scheduler.get().scheduleDeferred(new Command() {
 		            public void execute()
 		            {  
@@ -880,7 +918,6 @@ public class ConceptTree extends Composite{
 		};
 		Service.conceptService.getConceptHistoryDataSize(MainApp.userOntology.getOntologyId(), conceptURI, InformationObject.CONCEPT_TYPE, callback1);
 	
-		String html =  Convert.convert2Widget(tObj);				
 		HTML allText = new HTML();
 		allText.setHTML(html);				
 		allText.addStyleName("cursor-hand");

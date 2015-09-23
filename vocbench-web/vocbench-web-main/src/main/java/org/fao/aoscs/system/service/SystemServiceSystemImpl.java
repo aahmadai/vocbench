@@ -27,7 +27,6 @@ import org.fao.aoscs.domain.DBMigrationObject;
 import org.fao.aoscs.domain.FilterPreferences;
 import org.fao.aoscs.domain.FilterPreferencesId;
 import org.fao.aoscs.domain.InitializeSystemData;
-import org.fao.aoscs.domain.InitializeUsersPreferenceData;
 import org.fao.aoscs.domain.LanguageCode;
 import org.fao.aoscs.domain.LanguageInterface;
 import org.fao.aoscs.domain.OntologyInfo;
@@ -91,15 +90,6 @@ public class SystemServiceSystemImpl {
 			data.setConceptScheme(propValues[1]);
 		}
 		return data;
-	}
-	
-	public InitializeUsersPreferenceData initSelectPreferenceData(int userID){
-		InitializeUsersPreferenceData initUsersPreference = new InitializeUsersPreferenceData();
-		initUsersPreference.setUsersPreference(new UsersPreferenceServiceSystemImpl().getUsersPreference(userID));
-		initUsersPreference.setUsergroups(getUserGroup(userID));
-		initUsersPreference.setOntology(getOntology(""+userID));
-		initUsersPreference.setInterfaceLanguage(getInterfaceLang());
-		return initUsersPreference;
 	}
 	
 	public String[] initializeProject(OntologyInfo ontoInfo)
@@ -284,7 +274,7 @@ public class SystemServiceSystemImpl {
 		
 		UserLogin userLoginObj = null;	
 	
-		String query = "SELECT user_id,username,password " +
+		String query = "SELECT user_id,username,password,email " +
 					 "FROM users " +
 					 "WHERE username='"+QueryFactory.escapeSingleQuote(loginuser)+"' AND password='"+new EncriptFunction().encriptFunction(loginpassword)+"' AND status='1'";
 	
@@ -297,6 +287,7 @@ public class SystemServiceSystemImpl {
 			userLoginObj.setUserid(item[0]);
 			userLoginObj.setLoginname(item[1]);
 			userLoginObj.setPassword(item[2]);
+			userLoginObj.setUserEmail(item[3]);
 			userLoginObj.setNoOfGroup(getNoOfGroups(Integer.parseInt(userLoginObj.getUserid())));
 			userLoginObj.setUserSelectedLanguage(getUserSelectedLanguageCode(Integer.parseInt(userLoginObj.getUserid())));
 			userLoginObj.setAdministrator(isAdministrator(Integer.parseInt(userLoginObj.getUserid())));
@@ -339,6 +330,25 @@ public class SystemServiceSystemImpl {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public Users getUser(String userid){  
+		try {
+			String query = "SELECT * FROM users where user_id='"+ userid+ "'";
+			Session s = HibernateUtilities.currentSession();
+			List<Users> list = s.createSQLQuery(query).addEntity(Users.class).list();
+			if(list.size()>0)
+			{
+				return list.get(0);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			HibernateUtilities.closeSession();
+		}
+		return new Users();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public ArrayList<Users> getAllUser(){ // Waiting for implement with database method 
 		try {
 			String query = "SELECT * FROM users ORDER BY username;";
@@ -376,7 +386,7 @@ public class SystemServiceSystemImpl {
 		
 	}
 	
-	public ArrayList<UsersGroups> getUserGroup(int userid){ // Reuse from org.fao.aoscs.db 
+	public ArrayList<UsersGroups> getUserGroup(int userid){  
 
 		if (userid!=0)
 		{
@@ -384,6 +394,34 @@ public class SystemServiceSystemImpl {
 							" FROM users_groups_map INNER JOIN users_groups ON users_groups_map.users_group_id = users_groups.users_groups_id " +
 							" WHERE (users_groups_map.users_id)='"+ userid+ "'" +
 							" ORDER BY users_groups.users_groups_id;";
+	
+			ArrayList<String[]> list = QueryFactory.getHibernateSQLQuery(query);
+			ArrayList<UsersGroups> userGroupsList = new ArrayList<UsersGroups>();
+			for(int i=0;i<list.size();i++){
+	    		String[] item = list.get(i);
+	    		UsersGroups userGroups = new UsersGroups();
+	    		userGroups.setUsersGroupsId(Integer.parseInt(item[0]));
+	    		userGroups.setUsersGroupsName(item[1]);
+	    		userGroups.setUsersGroupsDesc(item[2]);
+	    		userGroupsList.add(userGroups);
+	    	}					
+			return userGroupsList;
+		} 
+		else{
+			 return null;
+		 }
+	}
+	
+	public ArrayList<UsersGroups> getUserGroup(int userid, int projectid){  
+
+		if (userid!=0)
+		{
+			String query =  "SELECT users_groups.users_groups_id, users_groups.users_groups_name, users_groups.users_groups_desc " +
+							" FROM users_groups_projects INNER JOIN users_groups ON users_groups_projects.users_group_id = users_groups.users_groups_id " +
+							" WHERE (users_groups_projects.users_id)='"+ userid+ "' ";
+			if(projectid > 0)
+				query += "AND (users_groups_projects.project_id)='"+ projectid+ "'" ;
+			query += " ORDER BY users_groups.users_groups_id;";
 	
 			ArrayList<String[]> list = QueryFactory.getHibernateSQLQuery(query);
 			ArrayList<UsersGroups> userGroupsList = new ArrayList<UsersGroups>();
@@ -414,6 +452,10 @@ public class SystemServiceSystemImpl {
 
 	public void SendMail(String to, String subject,String body){
 		MailUtil.sendMail(to, subject, body);
+	}
+	
+	public void SendMail(String to, String cc, String subject,String body){
+		MailUtil.sendMail(to, cc, subject, body);
 	}
 
 	/*public HashMap<String, ArrayList<String[]>> getGroupStatusAssignment(){
@@ -608,7 +650,7 @@ public class SystemServiceSystemImpl {
 	}
 	
 	public int getNoOfGroups(int user_id){ 
-		String query = "select users_group_id FROM users_groups_map WHERE users_id='"+ user_id +"'" ;
+		String query = "select users_group_id FROM users_groups_projects WHERE users_id='"+ user_id +"'" ;
 		return QueryFactory.getHibernateSQLQuery(query).size();	
 	}
 	
@@ -617,6 +659,21 @@ public class SystemServiceSystemImpl {
 		ArrayList<String> userSelectedLanguage = new ArrayList<String>();
 		
 		String sql = "SELECT language_code FROM users_language WHERE status='1' AND user_id='"+user_id+"'";
+		ArrayList<String[]> resultlist = QueryFactory.getHibernateSQLQuery(sql);
+		for(int z=0;z<resultlist.size();z++)
+		{
+			String str = resultlist.get(z)[0].toLowerCase();		
+			if(!userSelectedLanguage.contains(str))
+				userSelectedLanguage.add(str);
+		}
+		return userSelectedLanguage;
+	}
+	
+	public ArrayList<String> getUserSelectedLanguageCode(int user_id, int project_id){ 
+		
+		ArrayList<String> userSelectedLanguage = new ArrayList<String>();
+		
+		String sql = "SELECT language_code FROM users_language_projects WHERE user_id='"+user_id+"' AND project_id='"+project_id+"'";
 		ArrayList<String[]> resultlist = QueryFactory.getHibernateSQLQuery(sql);
 		for(int z=0;z<resultlist.size();z++)
 		{
@@ -745,7 +802,7 @@ public class SystemServiceSystemImpl {
 				ArrayList<String> sqls = new ArrayList<String>();											
 				for(int i=0 ; i < usersOntology.size() ; i++)
 				{
-					sqls.add("INSERT INTO users_ontology(user_id,ontology_id,status) VALUES(" + id + ",'" + usersOntology.get(i) + "', 1)");					 					
+					sqls.add("INSERT INTO users_ontology(user_id,ontology_id,status) VALUES(" + id + ",'" + usersOntology.get(i) + "', 0)");					 					
 				}
 				QueryFactory.hibernateExecuteSQLUpdate(sqls);
 			}
@@ -1001,6 +1058,19 @@ public class SystemServiceSystemImpl {
 		QueryFactory.hibernateExecuteSQLUpdate(query);
 	}
 	
+	public void addGroupsToUser(String userId, String projectId, ArrayList<String> groupIds){
+		String query = "";
+		
+		for(String groupId : groupIds){
+			if(query.length() > 0){
+				query += ", ";
+			}
+			query +=  "("+userId+","+groupId+","+projectId+")";
+		}
+		query = "INSERT INTO users_groups_projects(users_id,users_group_id,project_id) VALUES " + query + ";";
+		QueryFactory.hibernateExecuteSQLUpdate(query);
+	}
+	
 	public void addLanguagesToUser(String userId, ArrayList<String> languages){
 		
 		for(String language : languages){
@@ -1021,6 +1091,31 @@ public class SystemServiceSystemImpl {
 						}
 						QueryFactory.hibernateExecuteSQLUpdate(sql);
 							
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}	
+		}
+	}
+	
+	public void addLanguagesToUser(String userId, String projectId, ArrayList<String> languages){
+		
+		for(String language : languages){
+			
+			String sql = "SELECT count(user_id) from users_language_projects WHERE user_id= "+userId+" AND project_id= "+projectId+" AND language_code='"+language+"'";
+			ArrayList<String[]> ret = QueryFactory.getHibernateSQLQuery(sql);
+			
+			if(ret.size() > 0){
+				String[] countArray = (ret.get(0));
+				if(countArray.length > 0){
+					try{
+						int count = Integer.parseInt(countArray[0]);
+						if(count == 0){
+							sql = "INSERT INTO users_language_projects VALUES ("+userId+", '"+language+"', '"+projectId+"')";
+						}
+						QueryFactory.hibernateExecuteSQLUpdate(sql);
+						
 					}catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -1229,7 +1324,7 @@ public class SystemServiceSystemImpl {
 		}
 	}
 	
-	private PermissionObject getPermissions(String groupId)
+	public PermissionObject getPermissions(String groupId)
 	{
 		PermissionObject permissions = new PermissionObject();
 		String query = "SELECT function_id,group_id,status FROM permission_functionality_map WHERE group_id = '" + groupId + "'";
