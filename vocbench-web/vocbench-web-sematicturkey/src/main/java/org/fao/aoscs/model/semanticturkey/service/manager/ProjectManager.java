@@ -93,7 +93,7 @@ public class ProjectManager extends ResponseManager {
 	 * @param ontologyTypePar
 	 * @return
 	 */
-	public static Boolean createProject(OntologyInfo ontoInfo, String projectName, String baseuri, String ontManagerFactoryID, String modelConfigurationClass, String modelType, HashMap<String, String> modelConfigurations)
+	public static Boolean createProject(OntologyInfo ontoInfo, String projectName, String baseuri, String ontManagerFactoryID, String modelConfigurationClass, String modelType, HashMap<String, String> modelConfigurations, String uriGeneratorFactoryID, String uriGenConfigurationClass, HashMap<String, String> uriGenConfiguration)
 	{
 		String modelConfiguration = "";
 		for(String key : modelConfigurations.keySet())
@@ -104,7 +104,16 @@ public class ProjectManager extends ResponseManager {
 			modelConfiguration += key+"="+modelConfigurations.get(key);
 		}
 		
-		Response resp = ProjectResponseManager.createProjectRequest(ontoInfo, projectName, baseuri, ontManagerFactoryID, modelConfigurationClass, modelType, modelConfiguration);
+		String uriGenConfigurations = "";
+		for(String key : uriGenConfiguration.keySet())
+		{
+			if(!uriGenConfigurations.equals(""))
+				uriGenConfigurations += "\n";
+			
+			uriGenConfigurations += key+"="+uriGenConfiguration.get(key);
+		}
+		
+		Response resp = ProjectResponseManager.createProjectRequest(ontoInfo, projectName, baseuri, ontManagerFactoryID, modelConfigurationClass, modelType, modelConfiguration, uriGeneratorFactoryID, uriGenConfigurationClass, uriGenConfigurations);
 		return resp.isAffirmative();
 	}
 

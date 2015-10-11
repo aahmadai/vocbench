@@ -14,10 +14,13 @@ import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
 import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
 import org.fao.aoscs.client.widgetlib.shared.label.HelpPanel;
+import org.fao.aoscs.client.widgetlib.shared.label.ImageAOS;
 import org.fao.aoscs.client.widgetlib.shared.misc.OlistBox;
 import org.fao.aoscs.domain.OntologyConfigurationManager;
 import org.fao.aoscs.domain.OntologyConfigurationParameters;
 import org.fao.aoscs.domain.OntologyInfo;
+import org.fao.aoscs.domain.PluginConfiguration;
+import org.fao.aoscs.domain.PluginConfigurationParameter;
 import org.fao.aoscs.domain.StInstances;
 
 import com.google.gwt.core.client.GWT;
@@ -53,7 +56,9 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 	private ListBox projectType;
 	private TextBox baseURI;
 	private ListBox tripleStore;
+	private ListBox plugins;
 	private OlistBox mode;
+	private OlistBox pluginConfig;
 	private OntologyInfo ontoInfo;
 	private HashMap<String, OntologyConfigurationParameters> ontConfigurationParametersMap;
 	
@@ -61,12 +66,25 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 	private FlexTable tripleTable;
 	private FlexTable middleTable;
 	private FlexTable bottomTable;
+	private FlexTable pluginTable;
+	private FlexTable middlePluginsTable;
+	private FlexTable bottomPluginsTable;
 	
 	private VerticalPanel mainPanel;
+	
+	private VerticalPanel topMainPanel = new VerticalPanel();
+	private VerticalPanel tripleMainPanel = new VerticalPanel();
+	private VerticalPanel pluginsMainPanel = new VerticalPanel();
+	
 	private VerticalPanel topPanel;
+	
 	private VerticalPanel triplePanel;
 	private VerticalPanel middlePanel;
 	private VerticalPanel bottomPanel;
+	
+	private VerticalPanel pluginsPanel;
+	private VerticalPanel middlePluginsPanel;
+	private VerticalPanel bottomPluginsPanel;
 
 	public static int ADD = 0;
 	public static int DELETE = 1;
@@ -77,6 +95,7 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 	private int widthCol1 = 450;  
 	private int widthCol2 = 275;
 	private int widthCol3 = 25;
+	private int widthCol4 = 25;
 	private int widthWidget = 275;
 	
 	private ProjectDialogBoxOpener opener;
@@ -94,13 +113,22 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		
 		mainPanel = new VerticalPanel();
 		topPanel = new VerticalPanel();
+		
 		triplePanel = new VerticalPanel();
 		middlePanel = new VerticalPanel();
 		bottomPanel = new VerticalPanel();
 		
+		pluginsPanel = new VerticalPanel();
+		middlePluginsPanel = new VerticalPanel();
+		bottomPluginsPanel = new VerticalPanel();
+		
 		triplePanel.setVisible(false);
 		middlePanel.setVisible(false);
 		bottomPanel.setVisible(false);
+		
+		pluginsPanel.setVisible(false);
+		middlePluginsPanel.setVisible(false);
+		bottomPluginsPanel.setVisible(false);
 		
 		this.userId = userId;
 		this.ontoInfo = ontoInfo;
@@ -141,6 +169,10 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		tripleStore.setWidth(widthWidget+"px");
 		triplePanel.add(tripleStore);
 		
+		plugins = new ListBox();
+		plugins.setWidth(widthWidget+"px");
+		pluginsPanel.add(plugins);
+		
 		stManage = new Button(constants.buttonManage());
 		stManage.addClickHandler(new ClickHandler() {
 			
@@ -160,6 +192,9 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		
 		mode = new OlistBox();
 		mode.setWidth(widthWidget+"px");
+		
+		pluginConfig = new OlistBox();
+		pluginConfig.setWidth(widthWidget+"px");
 
 		tripleStore.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
@@ -170,6 +205,8 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 					mode.addItem(constants.buttonSelect(), "");
 					getOntManagerParameters(val);
 					middlePanel.setVisible(true);
+					bottomTable.removeAllRows();
+					bottomPanel.setVisible(false);
 				}
 				else
 				{
@@ -197,14 +234,18 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 						bottomTable.setWidget(i, 0, new HTML(ontConfigurationParameters.getName()+(ontConfigurationParameters.isRequired()?"*":"")));
 						TextBox txtBox = new TextBox();
 						txtBox.setName(ontConfigurationParameters.getName());
-						txtBox.setWidth(widthWidget-widthCol3-5+"px");
+						txtBox.setWidth(widthWidget-widthCol3-10+"px");
 						txtBox.setValue(ontConfigurationParameters.getValue());
 						bottomTable.setWidget(i, 1, txtBox);
 						bottomTable.setWidget(i, 2, new HelpPanel(ontConfigurationParameters.getDescription()));
 						bottomTable.getCellFormatter().setHorizontalAlignment(i, 2, HasHorizontalAlignment.ALIGN_CENTER);
 					}
+					
+					FlexTable ft = new FlexTable();
+					ft.setWidget(0, 0, GridStyle.setTableConceptDetailStyleleft(bottomTable, "gslRow1", "gslCol1", "gslPanel1"));
+					
 					bottomPanel.clear();
-					bottomPanel.add(GridStyle.setTableConceptDetailStyleleft(bottomTable, "gslRow1", "gslCol1", "gslPanel1"));
+					bottomPanel.add(GridStyle.setTableConceptDetailStyleleft(ft, "gslRow1", "gslCol1", "gslPanel1"));
 					bottomPanel.setVisible(true);
 				}
 				else
@@ -214,13 +255,42 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 			}
 		});
 		
+		plugins.addChangeHandler(new ChangeHandler() {
+			public void onChange(ChangeEvent event) {
+				String val = plugins.getValue(plugins.getSelectedIndex());
+				if(!val.equals(""))
+				{
+					pluginConfig.clear();
+					pluginConfig.addItem(constants.buttonSelect(), "");
+					getPluginConfigurations(val);
+					middlePluginsPanel.setVisible(true);
+					bottomPluginsTable.removeAllRows();
+					bottomPluginsPanel.setVisible(false);
+				}
+				else
+				{
+					plugins.setSelectedIndex(0);
+					pluginConfig.setSelectedIndex(-1);
+					middlePluginsPanel.setVisible(false);
+					bottomPluginsTable.removeAllRows();
+					bottomPluginsPanel.setVisible(false);
+				}
+					
+			}
+		});
+		
+		pluginConfig.addChangeHandler(new ChangeHandler() {
+			public void onChange(ChangeEvent event) {
+				loadpluginConfigurationList();
+			}
+		});
+		
 		topTable = new FlexTable();
 		topTable.setWidth(widthTable+"px");
 		topTable.getColumnFormatter().setWidth(0, widthCol1+"px");
 		topTable.getColumnFormatter().setWidth(1, widthCol2+"px");
 		topTable.setWidget(0, 0, new HTML(constants.projectProjectName(), true));			
 		topTable.setWidget(0, 1, projectName);
-		
 		
 		tripleTable = new FlexTable();
 		tripleTable.setWidth(widthTable+"px");
@@ -239,10 +309,35 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		middlePanel.add(GridStyle.setTableConceptDetailStyleleft(middleTable, "gslRow1", "gslCol1", "gslPanel1"));
 		
 		bottomTable = new FlexTable();
-		bottomTable.setWidth(widthTable+"px");
-		bottomTable.getColumnFormatter().setWidth(0, widthCol1+"px");
-		bottomTable.getColumnFormatter().setWidth(1, widthCol2-widthCol3+"px");
+		bottomTable.setWidth(widthTable-8+"px");
+		bottomTable.getColumnFormatter().setWidth(0, widthCol1+3+"px");
+		bottomTable.getColumnFormatter().setWidth(1, widthCol2-widthCol3-3+"px");
 		bottomTable.getColumnFormatter().setWidth(2, widthCol3+"px");
+		
+		pluginTable = new FlexTable();
+		pluginTable.setWidth(widthTable+"px");
+		pluginTable.getColumnFormatter().setWidth(0, widthCol1+"px");
+		pluginTable.getColumnFormatter().setWidth(1, widthCol2+"px");
+		pluginTable.setWidget(0, 0, new HTML("<b>"+constants.projectURIGenerator()+"</b>", true));			
+		pluginTable.getFlexCellFormatter().setColSpan(0, 0, 2);
+		pluginTable.setWidget(1, 0, new HTML(constants.projectPlugins(), true));			
+		pluginTable.setWidget(1, 1, plugins);
+		pluginsPanel.add(GridStyle.setTableConceptDetailStyleleft(pluginTable, "gslRow1", "gslCol1", "gslPanel1"));
+		
+		middlePluginsTable = new FlexTable();
+		middlePluginsTable.setWidth(widthTable+"px");
+		middlePluginsTable.getColumnFormatter().setWidth(0, widthCol1+"px");
+		middlePluginsTable.getColumnFormatter().setWidth(1, widthCol2+"px");
+		middlePluginsTable.setWidget(0, 0, new HTML(constants.projectPluginConfiguration(), true));			
+		middlePluginsTable.setWidget(0, 1, pluginConfig);
+		middlePluginsPanel.add(GridStyle.setTableConceptDetailStyleleft(middlePluginsTable, "gslRow1", "gslCol1", "gslPanel1"));
+		
+		bottomPluginsTable = new FlexTable();
+		bottomPluginsTable.setWidth(widthTable-8+"px");
+		bottomPluginsTable.getColumnFormatter().setWidth(0, widthCol1+5+"px");
+		bottomPluginsTable.getColumnFormatter().setWidth(1, widthCol2-widthCol3-widthCol4-5+"px");
+		bottomPluginsTable.getColumnFormatter().setWidth(2, widthCol3+"px");
+		bottomPluginsTable.getColumnFormatter().setWidth(3, widthCol4+"px");
 		
 		String title = "";
 		String buttonText = "";
@@ -271,15 +366,88 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		
 		topPanel.add(GridStyle.setTableConceptDetailStyleleft(topTable, "gslRow1", "gslCol1", "gslPanel1"));
 		
-		mainPanel.add(topPanel);
-		mainPanel.add(triplePanel);
-		mainPanel.add(middlePanel);
-		mainPanel.add(bottomPanel);
+		topMainPanel.add(topPanel);
+		
+		tripleMainPanel.add(triplePanel);
+		tripleMainPanel.add(middlePanel);
+		tripleMainPanel.add(bottomPanel);
+		
+		pluginsMainPanel.add(pluginsPanel);
+		pluginsMainPanel.add(middlePluginsPanel);
+		pluginsMainPanel.add(bottomPluginsPanel);
+
+		mainPanel.setSpacing(5);
+		mainPanel.add(topMainPanel);
+		mainPanel.add(tripleMainPanel);
+		mainPanel.add(pluginsMainPanel);
 		
 		addWidget(mainPanel);
 		
 		this.setText(title);
 		this.submit.setText(buttonText);
+	}
+	
+	private HorizontalPanel getPluginsButton()
+	{
+		HorizontalPanel hp = new HorizontalPanel();
+		Button addButton = new Button(constants.buttonAdd());
+		Button restoreButton = new Button(constants.buttonRestore());
+		
+		
+		final ManagePluginConfigurationParameter mpcp = new ManagePluginConfigurationParameter();
+		mpcp.addSubmitClickHandler(new ClickHandler()
+		{
+			public void onClick(ClickEvent event) {
+				int rowCnt = bottomPluginsTable.getRowCount();
+				bottomPluginsTable.setWidget(rowCnt, 0, new HTML(mpcp.getName().getValue()));
+				TextBox txtBox = new TextBox();
+				txtBox.setName(mpcp.getName().getValue());
+				txtBox.setWidth(widthWidget-widthCol3-widthCol4-10+"px");
+				bottomPluginsTable.setWidget(rowCnt, 1, txtBox);
+				bottomPluginsTable.setWidget(rowCnt, 2, new HelpPanel(mpcp.getDescription().getValue()));
+				bottomPluginsTable.setWidget(rowCnt, 3, getRemoveButton());
+				bottomPluginsTable.getCellFormatter().setHorizontalAlignment(rowCnt, 2, HasHorizontalAlignment.ALIGN_CENTER);
+				
+				bottomPluginsPanel.remove(0);
+				bottomPluginsPanel.insert(GridStyle.setTableConceptDetailStyleleft(bottomPluginsTable, "gslRow1", "gslCol1", "gslPanel1"), 0);
+			
+			}					
+		});	
+		
+		
+		addButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				mpcp.show();
+			}
+		});
+		
+		restoreButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				loadpluginConfigurationList();
+			}
+		});
+		
+		
+		hp.add(addButton);
+		hp.add(restoreButton);
+		return hp;
+	}
+	
+	private ImageAOS getRemoveButton()
+	{
+		ImageAOS deleteButton = new ImageAOS(constants.buttonDelete(), "images/delete-grey.gif", "images/delete-grey-disabled.gif", true, new ClickHandler() {
+			public void onClick(ClickEvent event) 
+			{
+				FlexTable flexTable = (FlexTable) ((ImageAOS) event.getSource()).getParent();
+				int rowIndex = flexTable.getCellForEvent(event).getRowIndex();
+		        flexTable.removeRow(rowIndex);
+			}
+		});
+		return deleteButton;
 	}
 	
 	private void connect()
@@ -288,10 +456,19 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		mode.clear();
 		bottomTable.removeAllRows();
 		
-		bottomPanel.setVisible(false);
+		tripleMainPanel.setVisible(false);
 		triplePanel.setVisible(false);
 		middlePanel.setVisible(false);
 		bottomPanel.setVisible(false);
+		
+		plugins.clear();
+		pluginConfig.clear();
+		bottomPluginsTable.removeAllRows();
+		
+		pluginsMainPanel.setVisible(false);
+		pluginsPanel.setVisible(false);
+		middlePluginsPanel.setVisible(false);
+		bottomPluginsPanel.setVisible(false);
 		
 		
 		if(!stURL.getValue(stURL.getSelectedIndex()).equals(""))
@@ -312,7 +489,10 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 				AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
 					public void onSuccess(Boolean val) {
 						if(val)
+						{
 							listTripleStores();
+							listURIGenerator();
+						}
 						else
 						{
 							stURL.setSelectedIndex(0);
@@ -435,6 +615,7 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 							label = str.substring(index+1);
 						tripleStore.addItem(label, str);
 					}
+					tripleMainPanel.setVisible(true);
 					triplePanel.setVisible(true);
 					tripleStore.setSelectedIndex(0);
 					mode.setSelectedIndex(-1);
@@ -452,7 +633,43 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		Service.projectService.listTripleStores(ontoInfo, callback);
 	}
 	
-	public void getOntManagerParameters(String ontMgrID)
+	public void listURIGenerator()
+	{
+		plugins.clear();
+		plugins.addItem(constants.buttonSelect(), "");
+		AsyncCallback<ArrayList<String>> callback = new AsyncCallback<ArrayList<String>>(){
+			public void onSuccess(ArrayList<String> result){
+				if(result!=null)
+				{
+					for(String str : result)
+					{
+						String label = str;
+						int index = -1;
+						if(str.length()>0)
+							index = str.lastIndexOf(".");
+						if(index!=-1 && str.length()>index+1)
+							label = str.substring(index+1);
+						plugins.addItem(label, str);
+					}
+					pluginsMainPanel.setVisible(true);
+					pluginsPanel.setVisible(true);
+					plugins.setSelectedIndex(0);
+					pluginConfig.setSelectedIndex(-1);
+					middlePluginsPanel.setVisible(false);
+					bottomPluginsTable.removeAllRows();
+					bottomPluginsPanel.setVisible(false);
+				}
+				else
+					Window.alert(constants.projectManageServiceFail());
+			}
+			public void onFailure(Throwable caught){
+				ExceptionManager.showException(caught, constants.projectGetAvailablePluginsFail());
+			}
+		};
+		Service.projectService.getAvailablePlugins(ontoInfo, "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator", callback);
+	}
+	
+	private void getOntManagerParameters(String ontMgrID)
 	{
 		AsyncCallback<ArrayList<OntologyConfigurationManager>> callback = new AsyncCallback<ArrayList<OntologyConfigurationManager>>(){
 			public void onSuccess(ArrayList<OntologyConfigurationManager> result){
@@ -467,7 +684,58 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 		};
 		Service.projectService.getOntManagerParameters(ontoInfo, ontMgrID, callback);
 	}
+	
+	private void getPluginConfigurations(String factoryID)
+	{
+		AsyncCallback<ArrayList<PluginConfiguration>> callback = new AsyncCallback<ArrayList<PluginConfiguration>>(){
+			public void onSuccess(ArrayList<PluginConfiguration> result){
+				for(PluginConfiguration pluginConfiguration : result)
+				{
+					pluginConfig.addItem(pluginConfiguration.getShortName(), pluginConfiguration);
+				}
+				
+			}
+			public void onFailure(Throwable caught){
+				ExceptionManager.showException(caught, constants.projectGetPluginConfigurationsFail());
+			}
+		};
+		Service.projectService.getPluginConfigurations(ontoInfo, factoryID, callback);
+	}
 
+	private void loadpluginConfigurationList()
+	{
+		bottomPluginsTable.removeAllRows();
+		PluginConfiguration pluginConfiguration = (PluginConfiguration) pluginConfig.getObject(pluginConfig.getSelectedIndex());
+		if(pluginConfiguration!=null)
+		{
+			int i=0;
+			for(PluginConfigurationParameter pluginConfigurationParameter : pluginConfiguration.getPar())
+			{
+				bottomPluginsTable.setWidget(i, 0, new HTML(pluginConfigurationParameter.getName()+(pluginConfigurationParameter.isRequired()?"*":"")));
+				TextBox txtBox = new TextBox();
+				txtBox.setName(pluginConfigurationParameter.getName());
+				txtBox.setWidth(widthWidget-widthCol3-widthCol4-10+"px");
+				txtBox.setValue(pluginConfigurationParameter.getValue());
+				bottomPluginsTable.setWidget(i, 1, txtBox);
+				bottomPluginsTable.setWidget(i, 2, new HelpPanel(pluginConfigurationParameter.getDescription()));
+				bottomPluginsTable.setWidget(i, 3, getRemoveButton());
+				bottomPluginsTable.getCellFormatter().setHorizontalAlignment(i, 2, HasHorizontalAlignment.ALIGN_CENTER);
+				i++;
+			}
+			
+			FlexTable ft = new FlexTable();
+			ft.setWidget(0, 0, GridStyle.setTableConceptDetailStyleleft(bottomPluginsTable, "gslRow1", "gslCol1", "gslPanel1"));
+			ft.setWidget(1, 0, getPluginsButton());
+			
+			bottomPluginsPanel.clear();
+			bottomPluginsPanel.add(GridStyle.setTableConceptDetailStyleleft(ft, "gslRow1", "gslCol1", "gslPanel1"));
+			bottomPluginsPanel.setVisible(true);
+		}
+		else
+		{
+			bottomPluginsPanel.setVisible(false);
+		}
+	}
 	
 	public boolean passCheckInput() {
 		boolean pass = false;
@@ -652,7 +920,31 @@ public class ManageProject extends FormDialogBox implements ClickHandler, Select
 					TextBox txtBox = (TextBox) bottomTable.getWidget(i, 1);
 					cfgPars.put(txtBox.getName(), txtBox.getText());
 				}
-				Service.projectService.createNewProject(ontoInfo, projectName.getText(), baseURI.getText(), tripleStore.getValue(tripleStore.getSelectedIndex()), ((OntologyConfigurationManager) mode.getObject(mode.getSelectedIndex())).getType(), projectType.getValue(projectType.getSelectedIndex()), cfgPars, callback);
+				
+				String uriGeneratorFactoryID = "";
+				String uriGenConfigurationClass = "";
+				
+				if(plugins.getSelectedIndex()>0)
+				{
+					uriGeneratorFactoryID = plugins.getValue(plugins.getSelectedIndex());
+				}
+				if(pluginConfig.getSelectedIndex()>0)
+				{
+					PluginConfiguration pc = (PluginConfiguration) pluginConfig.getObject(pluginConfig.getSelectedIndex());
+					if(pc!=null)
+						uriGenConfigurationClass = pc.getType();
+				}
+				
+				HashMap<String, String> pcfgPars = new HashMap<String, String>();
+				for(int i=0;i<bottomPluginsTable.getRowCount();i++)
+				{
+					TextBox txtBox = (TextBox) bottomPluginsTable.getWidget(i, 1);
+					pcfgPars.put(txtBox.getName(), txtBox.getText());
+				}
+				
+				Service.projectService.createNewProject(ontoInfo, projectName.getText(), baseURI.getText(), tripleStore.getValue(tripleStore.getSelectedIndex()), 
+						((OntologyConfigurationManager) mode.getObject(mode.getSelectedIndex())).getType(), projectType.getValue(projectType.getSelectedIndex()), cfgPars, 
+						uriGeneratorFactoryID, uriGenConfigurationClass, pcfgPars, callback);
 				break;
 			case 1:
 				Service.projectService.deleteProject(ontoInfo, projectName.getText(), callback);

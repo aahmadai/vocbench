@@ -493,8 +493,8 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
     			isAdmin = true;
     	}
 		
-    	
-    	lstgroups.setItemSelected(0, true);
+    	if(lstgroups.getItemCount()>0)
+    		lstgroups.setItemSelected(0, true);
     	
     	String descGroups = ((UsersGroups) lstgroups.getObject(lstgroups.getSelectedIndex())).getUsersGroupsDesc();
 	    lstgroups.setTitle(descGroups);

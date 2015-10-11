@@ -15,6 +15,7 @@ import net.sf.gilead.gwt.PersistentRemoteService;
 import org.fao.aoscs.client.module.project.service.ProjectService;
 import org.fao.aoscs.domain.OntologyConfigurationManager;
 import org.fao.aoscs.domain.OntologyInfo;
+import org.fao.aoscs.domain.PluginConfiguration;
 import org.fao.aoscs.hibernate.HibernateUtilities;
 import org.fao.aoscs.model.ModelManager;
 
@@ -54,8 +55,8 @@ public class ProjectServiceImpl extends PersistentRemoteService implements Proje
 	 */
 	public Boolean createNewProject(OntologyInfo ontoInfo, String projectName,
 			String baseuri, String ontomanager, String ontMgrConfiguration,
-			String ontologyType, HashMap<String, String> cfgPars) throws Exception{
-		return projectService.createNewProject(ontoInfo, projectName, baseuri, ontomanager, ontMgrConfiguration, ontologyType, cfgPars);
+			String ontologyType, HashMap<String, String> cfgPars, String uriGeneratorFactoryID, String uriGenConfigurationClass, HashMap<String, String> uriGenConfiguration) throws Exception{
+		return projectService.createNewProject(ontoInfo, projectName, baseuri, ontomanager, ontMgrConfiguration, ontologyType, cfgPars, uriGeneratorFactoryID, uriGenConfigurationClass, uriGenConfiguration);
 	}
 
 	/* (non-Javadoc)
@@ -85,5 +86,21 @@ public class ProjectServiceImpl extends PersistentRemoteService implements Proje
 	 */
 	public Boolean isSTServerStarted(OntologyInfo ontoInfo) throws Exception{
 		return projectService.isSTServerStarted(ontoInfo);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.project.service.ProjectService#getAvailablePlugins(org.fao.aoscs.domain.OntologyInfo, java.lang.String)
+	 */
+	public ArrayList<String> getAvailablePlugins(OntologyInfo ontoInfo,
+			String extensionPoint) throws Exception {
+		return projectService.getAvailablePlugins(ontoInfo, extensionPoint);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.project.service.ProjectService#getPluginConfigurations(org.fao.aoscs.domain.OntologyInfo, java.lang.String)
+	 */
+	public ArrayList<PluginConfiguration> getPluginConfigurations(OntologyInfo ontoInfo,
+			String factoryID) throws Exception {
+		return projectService.getPluginConfigurations(ontoInfo, factoryID);
 	}
 }

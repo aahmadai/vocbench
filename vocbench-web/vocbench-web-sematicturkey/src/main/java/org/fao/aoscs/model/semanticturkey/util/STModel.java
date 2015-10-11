@@ -105,11 +105,11 @@ public class STModel {
 		deleteService = new ServiceHttpWrapper("delete", stURL);
 		environmentService = new ServiceHttpWrapper("environment", stURL);
 		individualService = new ServiceHttpWrapper("individual", stURL);
-		inputOutputService = new ServiceHttpWrapper("inputOutput", stURL);
+		inputOutputService = new ServiceHttpWrapper("InputOutput", stURL);
 		metadataService = new ServiceHttpWrapper("metadata", stURL);
 		modifyNameService = new ServiceHttpWrapper("modifyName", stURL);
 		pageService = new ServiceHttpWrapper("page", stURL);
-		pluginsService = new ServiceHttpWrapper("plugins", stURL);
+		pluginsService = new ServiceHttpWrapper("Plugins", stURL);
 		propertyService = new ServiceHttpWrapper("property", stURL);
 		projectsOldService = new ServiceHttpWrapper("projects", stURL);
 		projectsService = new ServiceHttpWrapper("Projects", stURL);

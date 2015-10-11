@@ -5,6 +5,7 @@ import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.RefactorResponseManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.ResponseManager;
@@ -78,22 +79,18 @@ public class RefactorManager extends ResponseManager {
 		File tempfile;
 		try {
 			tempfile = STUtility.createTempFile();
+			String str = RefactorResponseManager.exportByFlatteningRequest(ontoInfo, format, ext, toSKOS, keepSKOSXLabels, toFlatDefinitions, keepReifiedDefinition);
+			FileUtils.writeStringToFile(tempfile, str, "UTF-8");
 			filename = tempfile.getPath();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if(!filename.equals(""))
-		{
-			XMLResponseREPLY reply = RefactorResponseManager.exportByFlatteningRequest(ontoInfo, format, ext, toSKOS, keepSKOSXLabels, toFlatDefinitions, keepReifiedDefinition);
-			if(reply!=null && reply.isAffirmative())
-				return filename;
-		}
-		return "";
+		return filename;
 	}
 	
 	/**
 	 * @param ontoInfo
-	 */
+	 *//*
 	public static String exportWithSKOSLabels(OntologyInfo ontoInfo)
 	{
 		String filename = "";
@@ -113,10 +110,10 @@ public class RefactorManager extends ResponseManager {
 		return "";
 	}
 	
-	/**
+	*//**
 	 * @param ontoInfo
 	 * @return
-	 */
+	 *//*
 	public static String exportWithFlatSKOSDefinitions(OntologyInfo ontoInfo)
 	{
 		String filename = "";
@@ -136,13 +133,13 @@ public class RefactorManager extends ResponseManager {
 		return "";
 	}
 	
-	/**
+	*//**
 	 * @param ontoInfo
 	 * @param copyAlsoSKOSXLabels
 	 * @param copyAlsoReifiedDefinition
 	 * @return
 	 * @throws Exception
-	 */
+	 *//*
 	public static String exportWithTransformations(OntologyInfo ontoInfo, boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition) throws Exception {
 		String filename = "";
 		File tempfile;
@@ -160,5 +157,5 @@ public class RefactorManager extends ResponseManager {
 		}
 		return "";
 	}
-	
+	*/
 }

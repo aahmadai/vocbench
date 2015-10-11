@@ -106,7 +106,8 @@ public class ExportSKOSWidget extends Composite{
 							ExceptionManager.showException(caught, constants.refactorActionFailed());
 						}
 					};
-					Service.refactorService.exportWithTransformations(MainApp.userOntology, chkSKOSXL.getValue(), chkDef.getValue(), callback);
+					Service.refactorService.exportByFlattening(MainApp.userOntology, "RDF/XML", "rdf", true, chkSKOSXL.getValue(), false, false, callback);
+					//Service.refactorService.exportWithTransformations(MainApp.userOntology, chkSKOSXL.getValue(), chkDef.getValue(), callback);
 			}
 		});
 	}

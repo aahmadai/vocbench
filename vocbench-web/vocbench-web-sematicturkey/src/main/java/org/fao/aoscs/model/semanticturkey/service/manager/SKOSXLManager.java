@@ -36,7 +36,7 @@ public class SKOSXLManager extends ResponseManager{
 	 */
 	public static String[] createConcept(OntologyInfo ontoInfo, String conceptURI, String broaderConceptURI, String schemeURI, String prefLabel, String prefLabelLanguage)
 	{
-		String[] uris = new String[4];
+		String[] uris = new String[2];
 		XMLResponseREPLY reply = SKOSXLResponseManager.createConceptRequest(ontoInfo, conceptURI, broaderConceptURI, schemeURI, prefLabel, prefLabelLanguage);
 		if(reply!=null)
 		{
@@ -48,14 +48,14 @@ public class SKOSXLManager extends ResponseManager{
 				if(stResource.getRole().toString().equals("xLabel"))
 					uris[1] =  stResource.getARTNode().asURIResource().getURI();
 			}
-			for(Element randomForConceptElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForConcept"))
+			/*for(Element randomForConceptElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForConcept"))
 			{
 				uris[2] = randomForConceptElement.getTextContent();
 			}
 			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForPrefXLabel"))
 			{
 				uris[3] = randomForPrefXLabelElement.getTextContent();
-			}
+			}*/
 		}
 		return uris;
 	}

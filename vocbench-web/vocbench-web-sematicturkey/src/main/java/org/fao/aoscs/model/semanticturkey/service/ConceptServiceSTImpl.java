@@ -282,8 +282,9 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, termURI);
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
-		// ADD AGROVOC CODE
-		addAGROVOCCode(ontoInfo, termURI, "", false, uris[2], typeAgrovocCode);
+		// ADD AGROVOC CODE 
+		// to be handled by agrovoc publishing routine refer https://aims-fao.atlassian.net/browse/VOCBENCH-489
+		//addAGROVOCCode(ontoInfo, termURI, "", false, uris[2], typeAgrovocCode);
 		
 		termObject.setUri(termURI);
 		termObject.setConceptUri(conceptObject.getUri());

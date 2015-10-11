@@ -35,7 +35,15 @@ public class RefactorServiceSTAdapter implements RefactorService {
 	public boolean reifySKOSDefinitions(OntologyInfo ontoInfo) throws Exception {
 		return refactorService.reifySKOSDefinitions(ontoInfo);		
 	}
+
 	@Override
+	public String exportByFlattening(OntologyInfo ontoInfo, String format,
+			String ext, boolean toSKOS, boolean keepSKOSXLabels,
+			boolean toFlatDefinitions, boolean keepReifiedDefinition)
+			throws Exception {
+		return refactorService.exportByFlattening(ontoInfo, format, ext, toSKOS, keepSKOSXLabels, toFlatDefinitions, keepReifiedDefinition);
+	}
+	/*@Override
 	public String exportWithSKOSLabels(OntologyInfo ontoInfo) throws Exception {
 		return refactorService.exportWithSKOSLabels(ontoInfo);		
 	}
@@ -50,14 +58,6 @@ public class RefactorServiceSTAdapter implements RefactorService {
 			boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition)
 			throws Exception {
 		return refactorService.exportWithTransformations(ontoInfo, copyAlsoSKOSXLabels, copyAlsoReifiedDefinition);		
-	}
-
-	@Override
-	public String exportByFlattening(OntologyInfo ontoInfo, String format,
-			String ext, boolean toSKOS, boolean keepSKOSXLabels,
-			boolean toFlatDefinitions, boolean keepReifiedDefinition)
-			throws Exception {
-		return refactorService.exportByFlattening(ontoInfo, format, ext, toSKOS, keepSKOSXLabels, toFlatDefinitions, keepReifiedDefinition);
-	}
+	}*/
 
 }

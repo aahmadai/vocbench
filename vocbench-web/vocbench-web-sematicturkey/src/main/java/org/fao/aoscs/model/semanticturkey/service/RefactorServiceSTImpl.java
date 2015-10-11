@@ -46,13 +46,11 @@ public class RefactorServiceSTImpl {
 	}
 	/**
 	 * @param ontoInfo
-	 * @param fileName
 	 * @throws Exception
 	 */
-	public String exportWithSKOSLabels(OntologyInfo ontoInfo) throws Exception {
-		return RefactorManager.exportWithSKOSLabels(ontoInfo);
+	public boolean reifySKOSDefinitions(OntologyInfo ontoInfo) throws Exception {
+		return RefactorManager.reifySKOSDefinitions(ontoInfo);
 	}
-	
 	/**
 	 * @param ontoInfo
 	 * @param format
@@ -73,30 +71,32 @@ public class RefactorServiceSTImpl {
 	
 	/**
 	 * @param ontoInfo
+	 * @param fileName
 	 * @throws Exception
-	 */
-	public boolean reifySKOSDefinitions(OntologyInfo ontoInfo) throws Exception {
-		return RefactorManager.reifySKOSDefinitions(ontoInfo);
+	 *//*
+	public String exportWithSKOSLabels(OntologyInfo ontoInfo) throws Exception {
+		return RefactorManager.exportWithSKOSLabels(ontoInfo);
 	}
 	
-	/**
+	
+	*//**
 	 * @param ontoInfo
 	 * @param fileName
 	 * @throws Exception
-	 */
+	 *//*
 	public String exportWithFlatSKOSDefinitions(OntologyInfo ontoInfo) throws Exception {
 		return RefactorManager.exportWithFlatSKOSDefinitions(ontoInfo);
 	}
 	
-	/**
+	*//**
 	 * @param ontoInfo
 	 * @param copyAlsoSKOSXLabels
 	 * @param copyAlsoReifiedDefinition
 	 * @return
 	 * @throws Exception
-	 */
+	 *//*
 	public String exportWithTransformations(OntologyInfo ontoInfo, boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition) throws Exception {
 		return RefactorManager.exportWithTransformations(ontoInfo, copyAlsoSKOSXLabels, copyAlsoReifiedDefinition);
 	}
-	
+	*/
 }

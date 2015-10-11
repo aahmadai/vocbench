@@ -121,6 +121,40 @@ public class ServletExtensionHttpWrapper {
 		}
 		return null;
 	}
+	
+	/**
+	 * @param service
+	 * @param request
+	 * @param parameterLists
+	 * @return
+	 */
+	protected String askHttpServer(String service, String request, List<NameValuePair> parameterLists) {
+		//HttpGet http = prepareGet(parameterLists);
+		//HttpPost http = preparePost(parameterLists);
+		HttpGet http = prepareNewGet(service, request, parameterLists);
+		try {
+			HttpResponse response = HttpClientFactory.getHttpClient().execute(http);
+			return handleHttpResponse(response, http.getURI().toString());  
+		} catch (ClientProtocolException e) {
+			http.abort();
+			e.printStackTrace();
+		} catch (IOException e) {
+			http.abort();
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			http.abort();
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			http.releaseConnection();
+		}
+		return null;
+	}
 
 	/**
 	 * @param parameterLists
@@ -218,6 +252,39 @@ public class ServletExtensionHttpWrapper {
 			{
 				Document doc = XMLUtil.inputStream2XML(in);
 				return ResponseParser.getResponseFromXML(doc);
+			}
+			else return null;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		finally
+		{
+			 IOUtils.closeQuietly(in);
+		}
+	}
+	
+	/**
+	 * @param response
+	 * @param query
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
+	 */
+	protected String handleHttpResponse(HttpResponse response, String query) throws IllegalStateException, IOException, SAXException, ParserConfigurationException {
+		//System.out.println("\n"+query);
+		logger.debug("\n"+query);
+		InputStream in = null;
+		try
+		{
+			in = getInputStream(response);
+			if(in!=null)
+			{
+				return IOUtils.toString(in, "UTF-8"); 
 			}
 			else return null;
 		}

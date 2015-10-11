@@ -3,6 +3,12 @@ package org.fao.aoscs.model.semanticturkey.service.manager.response;
 import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 
+import java.io.IOException;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.util.EntityUtils;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.util.STModel;
 import org.slf4j.Logger;
@@ -73,10 +79,10 @@ public class RefactorResponseManager extends ResponseManager {
 		return getXMLResponseREPLY(resp);
 	}
 	
-	public static XMLResponseREPLY exportByFlatteningRequest(OntologyInfo ontoInfo, String format, String ext, Boolean toSKOS, Boolean keepSKOSXLabels,
+	public static String exportByFlatteningRequest(OntologyInfo ontoInfo, String format, String ext, Boolean toSKOS, Boolean keepSKOSXLabels,
 			Boolean toFlatDefinitions, Boolean keepReifiedDefinition)
 	{
-		Response resp = getSTModel(ontoInfo).refactorService.makeNewRequest("exportByFlattening", 
+		String responseString = getSTModel(ontoInfo).refactorService.makeHttpRequest("exportByFlattening", 
 				STModel.par("format", format),
 				STModel.par("ext", ext),
 				STModel.par("toSKOS", toSKOS.toString()),
@@ -84,14 +90,15 @@ public class RefactorResponseManager extends ResponseManager {
 				STModel.par("toFlatDefinitions", toFlatDefinitions.toString()),
 				STModel.par("keepReifiedDefinition", keepReifiedDefinition.toString()),
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
-		return getXMLResponseREPLY(resp);
+		
+		return responseString;
 	}
 	
 	/**
 	 * @param ontoInfo
 	 * @param exportPackage
 	 * @return
-	 */
+	 *//*
 	public static XMLResponseREPLY exportWithSKOSLabelsRequest(OntologyInfo ontoInfo, String exportPackage)
 	{
 		
@@ -101,11 +108,11 @@ public class RefactorResponseManager extends ResponseManager {
 		return getXMLResponseREPLY(resp);
 	}
 	
-	/**
+	*//**
 	 * @param ontoInfo
 	 * @param exportPackage
 	 * @return
-	 */
+	 *//*
 	public static XMLResponseREPLY exportWithFlatSKOSDefinitionsRequest(OntologyInfo ontoInfo, String exportPackage)
 	{
 		
@@ -116,13 +123,13 @@ public class RefactorResponseManager extends ResponseManager {
 	}
 
 
-	/**
+	*//**
 	 * @param ontoInfo
 	 * @param exportPackage
 	 * @param copyAlsoSKOSXLabels
 	 * @param copyAlsoReifiedDefinition
 	 * @return
-	 */
+	 *//*
 	public static XMLResponseREPLY exportWithTransformations(OntologyInfo ontoInfo, String exportPackage, Boolean copyAlsoSKOSXLabels, Boolean copyAlsoReifiedDefinition)
 	{
 		
@@ -133,5 +140,5 @@ public class RefactorResponseManager extends ResponseManager {
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
-	
+	*/
 }

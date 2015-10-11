@@ -66,7 +66,7 @@ public class RefactorServiceImpl extends PersistentRemoteService implements Refa
 			throws Exception {
 		return refactorService.exportByFlattening(ontoInfo, format, ext, toSKOS, keepSKOSXLabels, toFlatDefinitions, keepReifiedDefinition);
 	}
-	@Override
+	/*@Override
 	public String exportWithSKOSLabels(OntologyInfo ontoInfo) throws Exception {
 		return refactorService.exportWithSKOSLabels(ontoInfo);		
 	}
@@ -79,7 +79,7 @@ public class RefactorServiceImpl extends PersistentRemoteService implements Refa
 			boolean copyAlsoSKOSXLabels, boolean copyAlsoReifiedDefinition)
 					throws Exception {
 		return refactorService.exportWithTransformations(ontoInfo, copyAlsoSKOSXLabels, copyAlsoReifiedDefinition);
-	}
+	}*/
 	
 	
 	

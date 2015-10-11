@@ -9,6 +9,7 @@ import java.util.HashMap;
 import org.fao.aoscs.client.module.project.service.ProjectService;
 import org.fao.aoscs.domain.OntologyConfigurationManager;
 import org.fao.aoscs.domain.OntologyInfo;
+import org.fao.aoscs.domain.PluginConfiguration;
 import org.fao.aoscs.model.semanticturkey.service.ProjectServiceSTImpl;
 
 /**
@@ -31,8 +32,8 @@ public class ProjectServiceSTAdapter implements ProjectService {
 	 */
 	public Boolean createNewProject(OntologyInfo ontoInfo, String projectName,
 			String baseuri, String ontomanager, String ontMgrConfiguration,
-			String ontologyType, HashMap<String, String> cfgPars) {
-		return projectService.createNewProject(ontoInfo, projectName, baseuri, ontomanager, ontMgrConfiguration, ontologyType, cfgPars);
+			String ontologyType, HashMap<String, String> cfgPars, String uriGeneratorFactoryID, String uriGenConfigurationClass, HashMap<String, String> uriGenConfiguration) {
+		return projectService.createNewProject(ontoInfo, projectName, baseuri, ontomanager, ontMgrConfiguration, ontologyType, cfgPars, uriGeneratorFactoryID, uriGenConfigurationClass, uriGenConfiguration);
 	}
 
 	/* (non-Javadoc)
@@ -64,6 +65,20 @@ public class ProjectServiceSTAdapter implements ProjectService {
 		return projectService.isSTServerStarted(ontoInfo);
 	}
 	
-	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.project.service.ProjectService#getAvailablePlugins(org.fao.aoscs.domain.OntologyInfo, java.lang.String)
+	 */
+	public ArrayList<String> getAvailablePlugins(OntologyInfo ontoInfo,
+			String extensionPoint) throws Exception {
+		return projectService.getAvailablePlugins(ontoInfo, extensionPoint);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.client.module.project.service.ProjectService#getPluginConfigurations(org.fao.aoscs.domain.OntologyInfo, java.lang.String)
+	 */
+	public ArrayList<PluginConfiguration> getPluginConfigurations(OntologyInfo ontoInfo,
+			String factoryID) throws Exception {
+		return projectService.getPluginConfigurations(ontoInfo, factoryID);
+	}
 
 }

@@ -5,17 +5,11 @@ import java.util.HashMap;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
-import org.fao.aoscs.client.module.concept.widgetlib.ConceptAlignment;
-import org.fao.aoscs.client.module.concept.widgetlib.dialog.AddNewEnglishDefinition.AddNewEnglishDefinitionSuccessEvent;
-import org.fao.aoscs.client.module.concept.widgetlib.dialog.AddNewEnglishDefinition.AddNewEnglishDefinitionSuccessHandler;
 import org.fao.aoscs.client.module.constant.Style;
-import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
 import org.fao.aoscs.client.widgetlib.shared.dialog.ConceptAlignmentBrowser;
 import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
 import org.fao.aoscs.client.widgetlib.shared.misc.OlistBox;
-import org.fao.aoscs.domain.ClassObject;
-import org.fao.aoscs.domain.NonFuncObject;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

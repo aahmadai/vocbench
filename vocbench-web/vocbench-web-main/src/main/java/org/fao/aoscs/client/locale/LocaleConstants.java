@@ -1491,6 +1491,7 @@ public interface LocaleConstants extends Constants{
 	public String buttonManage();
 	public String buttonBind();
 	public String buttonUnbind();
+	public String buttonRestore();
 	
 	//Projects
 	public String projectProjectName();
@@ -1502,12 +1503,20 @@ public interface LocaleConstants extends Constants{
 	public String projectTripleStore();
 	public String projectTripleMode();
 	public String projectConfigurationValue();
+	public String projectURIGenerator();
+	public String projectPlugins();
+	public String projectPluginConfiguration();
+	public String projectConfigurationNewParameterAdd();
+	public String projectConfigurationNewParameterName();
+	public String projectConfigurationNewParameterDesc();
 	public String projectAddProject();
 	public String projectDeleteProject();
 	public String projectManageProjectFail();
 	public String projectManageServiceFail();
 	public String projectSTServiceFail();
 	public String projectProjectLoadFail();
+	public String projectGetAvailablePluginsFail();
+	public String projectGetPluginConfigurationsFail();
 	
 	public String projectProjectNameEmpty();
 	public String projectProjectDescEmpty();

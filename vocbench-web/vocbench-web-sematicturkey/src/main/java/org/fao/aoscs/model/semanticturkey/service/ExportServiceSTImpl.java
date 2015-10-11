@@ -84,13 +84,10 @@ public class ExportServiceSTImpl {
 			explang = exp.getExpLanguage();
 		} 
 		
-		if(expformat.equals("SKOS-XL")) 
-		{
-			if((concepturi!=null && !concepturi.equals("")) || (scheme!=null && !scheme.equals("")))
-				filename = VocbenchManager.exportRequest(ontoInfo, concepturi, isIncludeChildren, scheme, termcode, getLabelForRelatedConcepts);
-			else
-				filename = InputOutputManager.saveRDF(ontoInfo, expfileFormat);
-		}
+		if((concepturi!=null && !concepturi.equals("")) || (scheme!=null && !scheme.equals("")))
+			filename = VocbenchManager.exportRequest(ontoInfo, concepturi, isIncludeChildren, scheme, termcode, getLabelForRelatedConcepts);
+		else
+			filename = InputOutputManager.saveRDF(ontoInfo, expfileFormat, expformat);
 			
 		return filename;
 	}

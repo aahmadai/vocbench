@@ -56,7 +56,6 @@ public class ExportSKOSXLWidget extends Composite{
 	
 	public ExportSKOSXLWidget(InitializeExportData initData){
 		this.initData = initData;
-		exp.setFormat(ExportFormat.SKOSXL);
 		initLayout();
 		initWidget(panel);
 	}
@@ -228,25 +227,51 @@ public class ExportSKOSXLWidget extends Composite{
 	
 	private ListBox getRDFFormat(){
 		format = new ListBox();
-		format.addItem("--Select--","rdf");
+		format.addItem("--Select--","");
 		HashMap<String, String> map = initData.getRDFFormat();
 		for(String item : map.keySet()) {
 			format.addItem(item, map.get(item));
 		}
 		format.setWidth("100%");
-		exp.setFileFormat(format.getValue(format.getSelectedIndex()));
+		String rdfextFormat = format.getValue(format.getSelectedIndex());
+		if(!rdfextFormat.equals("") && !rdfextFormat.equals("--None--"))
+		{
+			exp.setFileFormat(rdfextFormat);
+		}
+		else
+		{
+			exp.setFileFormat(null);
+		}
+		String rdfFormat = format.getItemText(format.getSelectedIndex());
+		if(!rdfFormat.equals("") && !rdfFormat.equals("--Select--"))
+		{
+			exp.setFormat(rdfFormat);
+		}
+		else
+		{
+			exp.setFormat(null);
+		}
 		format.addChangeHandler(new ChangeHandler()
 		{
 			public void onChange(ChangeEvent event)
 			{
-				String rdfFormat = format.getValue(format.getSelectedIndex());
-				if(!rdfFormat.equals("") && !rdfFormat.equals("--None--"))
+				String rdfextFormat = format.getValue(format.getSelectedIndex());
+				if(!rdfextFormat.equals("") && !rdfextFormat.equals("--None--"))
 				{
-					exp.setFileFormat(rdfFormat);
+					exp.setFileFormat(rdfextFormat);
 				}
 				else
 				{
 					exp.setFileFormat(null);
+				}
+				String rdfFormat = format.getItemText(format.getSelectedIndex());
+				if(!rdfFormat.equals("") && !rdfFormat.equals("--Select--"))
+				{
+					exp.setFormat(rdfFormat);
+				}
+				else
+				{
+					exp.setFormat(null);
 				}
 			}
 		});

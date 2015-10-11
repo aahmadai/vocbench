@@ -18,7 +18,6 @@ import org.fao.aoscs.client.module.constant.OWLActionConstants;
 import org.fao.aoscs.client.module.constant.OWLStatusConstants;
 import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.module.resourceview.ResourceView;
-import org.fao.aoscs.client.module.resourceview.ResourceViewer;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
@@ -116,7 +115,6 @@ public class ConceptTree extends Composite{
     private ManageResourceURI manageResourceURI;
     
     private ImageAOS resourceView;
-    private ResourceViewer resourceViewer;
     private boolean isResourceView = false;
     
     //private String VgraphURL = "";

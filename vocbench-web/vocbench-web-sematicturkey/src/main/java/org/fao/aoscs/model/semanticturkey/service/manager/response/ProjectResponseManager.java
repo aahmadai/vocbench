@@ -60,7 +60,7 @@ public class ProjectResponseManager extends ResponseManager {
 	 * @param modelConfiguration
 	 * @return
 	 */
-	public static XMLResponseREPLY createProjectRequest(OntologyInfo ontoInfo, String projectName, String baseuri, String ontManagerFactoryID, String modelConfigurationClass, String modelType, String modelConfiguration)
+	public static XMLResponseREPLY createProjectRequest(OntologyInfo ontoInfo, String projectName, String baseuri, String ontManagerFactoryID, String modelConfigurationClass, String modelType, String modelConfiguration, String uriGeneratorFactoryID, String uriGenConfigurationClass, String uriGenConfiguration)
 	{
 		Response resp = getSTModel(ontoInfo).projectsService.makeNewRequest("createProject", 
 				STModel.par("consumer", ProjectConsumer.SYSTEM.getName()), 
@@ -70,6 +70,9 @@ public class ProjectResponseManager extends ResponseManager {
 				STModel.par("ontManagerFactoryID", ontManagerFactoryID),
 				STModel.par("modelConfigurationClass", modelConfigurationClass),
 				STModel.par("modelConfiguration", modelConfiguration), 
+				STModel.par("uriGeneratorFactoryID", uriGeneratorFactoryID), 
+				STModel.par("uriGenConfigurationClass", uriGenConfigurationClass), 
+				STModel.par("uriGenConfiguration", uriGenConfiguration), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}

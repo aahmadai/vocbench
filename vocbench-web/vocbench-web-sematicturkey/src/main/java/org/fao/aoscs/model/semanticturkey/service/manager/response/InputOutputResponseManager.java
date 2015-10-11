@@ -26,6 +26,7 @@ public class InputOutputResponseManager extends ResponseManager {
 	 */
 	public static XMLResponseREPLY loadRDFRequest(OntologyInfo ontoInfo, String inputFile, String baseURI, String fileFormat)
 	{
+		
 		Response resp = getSTModel(ontoInfo).inputOutputService.makeRequest(InputOutputOld.loadRDFRequest, 
 				STModel.par(InputOutputOld.filePar, inputFile), 
 				STModel.par(InputOutputOld.baseUriPar, baseURI), 
@@ -40,13 +41,13 @@ public class InputOutputResponseManager extends ResponseManager {
 	 * @param allNGsPar
 	 * @return
 	 */
-	public static XMLResponseREPLY saveRDFRequest(OntologyInfo ontoInfo, String outputFile, String fileFormat, Boolean allNGsPar)
+	public static String saveRDFRequest(OntologyInfo ontoInfo, String ext, String fileFormat, Boolean allNGsPar)
 	{
-		Response resp = getSTModel(ontoInfo).inputOutputService.makeRequest(InputOutputOld.saveRDFRequest, 
-				STModel.par(InputOutputOld.filePar, outputFile), 
-				STModel.par(InputOutputOld.formatPar, fileFormat), 
-				STModel.par(InputOutputOld.allNGsPar, allNGsPar.toString()), 
+		String responseString = getSTModel(ontoInfo).inputOutputService.makeHttpRequest("saveRDF", 
+				STModel.par("ext", ext), 
+				STModel.par("format", fileFormat), 
+				STModel.par("allNGs", allNGsPar.toString()), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
-		return getXMLResponseREPLY(resp);
+		return responseString;
 	}
 }

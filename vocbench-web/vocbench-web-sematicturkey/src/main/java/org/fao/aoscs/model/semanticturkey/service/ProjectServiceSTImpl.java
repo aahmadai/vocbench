@@ -8,8 +8,10 @@ import java.util.HashMap;
 
 import org.fao.aoscs.domain.OntologyConfigurationManager;
 import org.fao.aoscs.domain.OntologyInfo;
+import org.fao.aoscs.domain.PluginConfiguration;
 import org.fao.aoscs.model.semanticturkey.service.manager.MetadataManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.OntManagerManager;
+import org.fao.aoscs.model.semanticturkey.service.manager.PluginsManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.ProjectManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.SystemStartManager;
 import org.fao.aoscs.model.semanticturkey.util.STModelFactory;
@@ -51,13 +53,23 @@ public class ProjectServiceSTImpl {
 		return STModelFactory.isSTServerStarted(ontoInfo);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fao.aoscs.client.module.project.service.ProjectService#createNewProject(org.fao.aoscs.domain.OntologyInfo, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
+	/**
+	 * @param ontoInfo
+	 * @param projectName
+	 * @param baseuri
+	 * @param ontomanager
+	 * @param ontMgrConfiguration
+	 * @param ontologyType
+	 * @param cfgPars
+	 * @param uriGeneratorFactoryID
+	 * @param uriGenConfigurationClass
+	 * @param uriGenConfiguration
+	 * @return
 	 */
 	public Boolean createNewProject(OntologyInfo ontoInfo, String projectName,
 			String baseuri, String ontomanager, String ontMgrConfiguration,
-			String ontologyType, HashMap<String, String> cfgPars) {
-		return ProjectManager.createProject(ontoInfo, projectName, baseuri, ontomanager, ontMgrConfiguration, ontologyType, cfgPars);
+			String ontologyType, HashMap<String, String> cfgPars, String uriGeneratorFactoryID, String uriGenConfigurationClass, HashMap<String, String> uriGenConfiguration) {
+		return ProjectManager.createProject(ontoInfo, projectName, baseuri, ontomanager, ontMgrConfiguration, ontologyType, cfgPars, uriGeneratorFactoryID, uriGenConfigurationClass, uriGenConfiguration);
 	}
 
 	/* (non-Javadoc)
@@ -96,5 +108,25 @@ public class ProjectServiceSTImpl {
 	public ArrayList<OntologyConfigurationManager> getOntManagerParameters(
 			OntologyInfo ontoInfo, String ontMgrID) {
 		return OntManagerManager.getOntManagerParameters(ontoInfo, ontMgrID);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param extensionPoint
+	 * @return
+	 */
+	public static ArrayList<String> getAvailablePlugins(OntologyInfo ontoInfo, String extensionPoint)
+	{
+		return PluginsManager.getAvailablePlugins(ontoInfo, extensionPoint);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param factoryID
+	 * @return
+	 */
+	public static ArrayList<PluginConfiguration> getPluginConfigurations(OntologyInfo ontoInfo, String factoryID)
+	{
+		return PluginsManager.getPluginConfigurations(ontoInfo, factoryID);
 	}
 }

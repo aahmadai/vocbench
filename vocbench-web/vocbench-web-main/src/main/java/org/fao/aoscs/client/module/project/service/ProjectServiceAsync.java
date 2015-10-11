@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.fao.aoscs.domain.OntologyConfigurationManager;
 import org.fao.aoscs.domain.OntologyInfo;
+import org.fao.aoscs.domain.PluginConfiguration;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -20,6 +21,8 @@ public interface ProjectServiceAsync<T> {
 	void createNewProject(OntologyInfo ontoInfo, String projectName,
 			String baseuri, String ontomanager, String ontMgrConfiguration,
 			String ontologyType, HashMap<String, String> cfgPars,
+			String uriGeneratorFactoryID, String uriGenConfigurationClass,
+			HashMap<String, String> uriGenConfiguration,
 			AsyncCallback<Boolean> callback);
 
 	void deleteProject(OntologyInfo ontoInfo, String projectName,
@@ -33,5 +36,11 @@ public interface ProjectServiceAsync<T> {
 
 	void isSTServerStarted(OntologyInfo ontoInfo,
 			AsyncCallback<Boolean> callback);
+
+	void getAvailablePlugins(OntologyInfo ontoInfo, String extensionPoint,
+			AsyncCallback<ArrayList<String>> callback);
+
+	void getPluginConfigurations(OntologyInfo ontoInfo, String factoryID,
+			AsyncCallback<ArrayList<PluginConfiguration>> callback);
 
 }

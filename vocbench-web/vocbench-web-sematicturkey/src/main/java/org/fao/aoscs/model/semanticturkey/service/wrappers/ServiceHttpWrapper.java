@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.fao.aoscs.model.semanticturkey.util.ParameterPair;
@@ -60,5 +61,23 @@ public class ServiceHttpWrapper extends ServletExtensionHttpWrapper implements S
 			}
 		}
 		return askNewServer(getId(), request, parameterLists);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fao.aoscs.model.semanticturkey.service.wrappers.ServiceWrapper#makeHttpRequest(java.lang.String, org.fao.aoscs.model.semanticturkey.util.ParameterPair[])
+	 */
+	public String makeHttpRequest(String request, ParameterPair... pars) {
+		List<NameValuePair> parameterLists = new ArrayList<NameValuePair>();
+		if (pars!=null && (pars.length>0))
+		{
+			for (ParameterPair pair : pars) {	
+				String value = pair.getParValue();
+				if(value!=null && !value.equals(""))
+				{
+					parameterLists.add(new BasicNameValuePair(pair.getParName(), value));
+				}
+			}
+		}
+		return askHttpServer(getId(), request, parameterLists);
 	}
 }

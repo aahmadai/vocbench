@@ -3,11 +3,14 @@ package org.fao.aoscs.model.semanticturkey.service.manager;
 import it.uniroma2.art.owlart.io.RDFFormat;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.commons.io.FileUtils;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.InputOutputResponseManager;
+import org.fao.aoscs.model.semanticturkey.service.manager.response.RefactorResponseManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.ResponseManager;
 import org.fao.aoscs.model.semanticturkey.util.STUtility;
 import org.slf4j.Logger;
@@ -58,15 +61,19 @@ public class InputOutputManager extends ResponseManager {
 	 * @param ontoInfo
 	 * @return
 	 */
-	public static String saveRDF(OntologyInfo ontoInfo, String fileFormat)
+	public static String saveRDF(OntologyInfo ontoInfo, String ext, String fileFormat)
 	{
-		String content = "";
+		String filename = "";
+		File tempfile;
 		try {
-			content = STUtility.createTempFile(fileFormat).getPath();
-			InputOutputResponseManager.saveRDFRequest(ontoInfo, content, fileFormat, false);
+			tempfile = STUtility.createTempFile();
+			String str = InputOutputResponseManager.saveRDFRequest(ontoInfo, ext, fileFormat, false);
+			FileUtils.writeStringToFile(tempfile, str, "UTF-8");
+			filename = tempfile.getPath();
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		return content;
+		return filename;
 	}
 	
 }
