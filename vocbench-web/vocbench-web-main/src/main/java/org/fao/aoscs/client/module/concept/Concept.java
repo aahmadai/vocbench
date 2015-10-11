@@ -45,7 +45,7 @@ public class Concept extends Composite{
 		panel.setCellVerticalAlignment(load, HasVerticalAlignment.ALIGN_MIDDLE);
 		initWidget(panel);		
 		
-		if(MainApp.schemeUri==null || MainApp.schemeUri.equals("") || MainApp.schemeUri.equals("null"))
+		/*if(MainApp.schemeUri==null || MainApp.schemeUri.equals("") || MainApp.schemeUri.equals("null"))
 		{
 			panel.clear();
 			HTML msg = new HTML(constants.conceptSchemeNotSelected());
@@ -53,7 +53,7 @@ public class Concept extends Composite{
 			panel.setCellHorizontalAlignment(msg,HasHorizontalAlignment.ALIGN_CENTER);
 			panel.setCellVerticalAlignment(msg, HasVerticalAlignment.ALIGN_MIDDLE);
 		}
-		else
+		else*/
 		{
 			//if(MainApp.schemeUri==ModuleManager.NOSCHEME)
 				//MainApp.schemeUri=null;

@@ -81,10 +81,10 @@ public class SKOSXLManager extends ResponseManager{
 					uris[0] =  stResource.getARTNode().asURIResource().getURI();
 				}
 			}
-			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForPrefXLabel"))
+			/*for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForPrefXLabel"))
 			{
 				uris[1] = randomForPrefXLabelElement.getTextContent();
-			}
+			}*/
 		}
 		return uris;
 	}
@@ -156,10 +156,10 @@ public class SKOSXLManager extends ResponseManager{
 					uris[0] =  stResource.getARTNode().asURIResource().getURI();
 				}
 			}
-			for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForAltXLabel"))
+			/*for(Element randomForPrefXLabelElement : STXMLUtility.getChildElementByTagName(dataElement, "randomForAltXLabel"))
 			{
 				uris[1] = randomForPrefXLabelElement.getTextContent();
-			}
+			}*/
 		}
 		return uris;
 	}

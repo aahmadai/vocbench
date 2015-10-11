@@ -238,7 +238,8 @@ public class ConceptBrowser extends FormDialogBox {
 	
 	public void resetBrowser()
 	{
-		conceptTree.setSelectedItem(null);
+		if(conceptTree!=null)
+			conceptTree.setSelectedItem(null);
 		searchText.setText("");
 		resultPanel = null;
 		selectWidget(true);

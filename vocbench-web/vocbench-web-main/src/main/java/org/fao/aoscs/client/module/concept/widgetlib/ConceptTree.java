@@ -701,7 +701,7 @@ public class ConceptTree extends Composite{
 			}
 		});
 		
-		addConceptButton = new ImageAOS(constants.conceptAddNew(), "images/add-grey.gif", "images/add-grey-disabled.gif", permissionTable.contains(OWLActionConstants.CONCEPTCREATE, -1), new ClickHandler() 
+		addConceptButton = new ImageAOS(constants.conceptAddNew(), "images/add-grey.gif", "images/add-grey-disabled.gif", (!isSchemeEmpty() && permissionTable.contains(OWLActionConstants.CONCEPTCREATE, -1)), new ClickHandler() 
 		{
              public void onClick(ClickEvent event) {
             	if(addNewConcept == null || !addNewConcept.isLoaded)
@@ -767,6 +767,11 @@ public class ConceptTree extends Composite{
 			treePanel = new ConceptCellTreeAOS(initData.getConceptTreeObject(), CellTreeAOS.TYPE_CONCEPT, MainApp.schemeUri, MainApp.userOntology);	
 		}
 		setTreePanelSize();
+	}
+	
+	private boolean isSchemeEmpty()
+	{
+		return (MainApp.schemeUri== null || MainApp.schemeUri.equals(""));
 	}
 	
 	private void formInit()
@@ -859,7 +864,7 @@ public class ConceptTree extends Composite{
 		selectedConceptObject.setParentURI(parentURI);
 
 		String status = selectedConceptObject.getStatus();
-		addConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTCREATE, OWLStatusConstants.getOWLStatusID(status)));
+		addConceptButton.setEnable((!isSchemeEmpty() && permissionTable.contains(OWLActionConstants.CONCEPTCREATE, OWLStatusConstants.getOWLStatusID(status))));
 		deleteConceptButton.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTDELETE, OWLStatusConstants.getOWLStatusID(status)));
 		moveconcept.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTEDIT_MOVECONCEPT, OWLStatusConstants.getOWLStatusID(status)));
 		copyconcept.setEnable(permissionTable.contains(OWLActionConstants.CONCEPTEDIT_LINKCONCEPT, OWLStatusConstants.getOWLStatusID(status)));

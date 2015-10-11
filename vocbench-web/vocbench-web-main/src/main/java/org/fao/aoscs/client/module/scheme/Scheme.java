@@ -170,15 +170,28 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener, SchemeLa
 		panel.setCellVerticalAlignment(sayLoading, HasVerticalAlignment.ALIGN_MIDDLE);
 	}
 	
-	private void selectCheckBox(final String schemeName, final String scheme)
+	private void selectCheckBox(final String schemeName, final String scheme, boolean forceChk)
 	{
 		for(int i=0;i<schemeDataTable.getRowCount();i++)
 		{
 			CheckBox chk = (CheckBox)schemeDataTable.getWidget(i, 0);
-			chk.setValue(chk.getText().equals(schemeName));
+			if(chk.getText().equals(schemeName))
+			{
+				if(forceChk)
+					chk.setValue(true);
+				else
+					chk.setValue(chk.getValue());
+				if(chk.getValue())
+				{
+					MainApp.schemeUri = scheme;
+					Window.alert(messages.conceptSchemeSelected(schemeName, scheme));
+				}
+				else
+					MainApp.schemeUri = "";
+			}
+			else
+				chk.setValue(false);
 		}
-		MainApp.schemeUri = scheme;
-		Window.alert(messages.conceptSchemeSelected(schemeName, scheme));
 		ModuleManager.resetConcept();
 	}
 	
@@ -200,7 +213,7 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener, SchemeLa
         					final CheckBox chkBox = new CheckBox(schemeName);
         					chkBox.addClickHandler(new ClickHandler() {
         						public void onClick(ClickEvent event) {
-        							selectCheckBox(chkBox.getText(), scheme);
+        							selectCheckBox(chkBox.getText(), scheme, false);
         						}
         					});
         					
@@ -243,7 +256,7 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener, SchemeLa
         								public void onSuccess(Boolean result) {
         									if(result)
         									{
-        										selectCheckBox(schemeName, scheme);
+        										selectCheckBox(schemeName, scheme, true);
         									}
         								}
         								public void onFailure(Throwable caught) {

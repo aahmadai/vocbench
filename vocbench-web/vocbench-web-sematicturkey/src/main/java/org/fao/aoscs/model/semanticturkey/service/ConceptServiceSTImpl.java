@@ -529,10 +529,10 @@ public class ConceptServiceSTImpl {
 			uris = SKOSXLManager.addAltLabel(ontoInfo, conceptObject.getUri(), termObject.getLabel(), termObject.getLang());
 		}
 		String termURI = uris[0];
-		String agrovocCode = uris[1];
+		//String agrovocCode = uris[1];
 		
 		// SET AGROVOC CODE
-		addAGROVOCCode(ontoInfo, termURI, conceptObject.getUri(), termObject.isMainLabel(), agrovocCode, typeAgrovocCode);
+		//addAGROVOCCode(ontoInfo, termURI, conceptObject.getUri(), termObject.isMainLabel(), agrovocCode, typeAgrovocCode);
 		
 		// SET STATUS
 		PropertyManager.addPlainLiteralPropValue(ontoInfo, termURI, STModelConstants.VOCBENCHNAMESPACE+STModelConstants.HASSTATUS, status.getStatus(), null);
