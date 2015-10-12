@@ -71,7 +71,8 @@ public class VocBenchResourcesURI {
 	//final static public String HASSOURCELINK = "http://aims.fao.org/aos/agrontology#hasSourceLink"; // old version
 	//final static public String HASIMAGELINK = "http://aims.fao.org/aos/agrontology#hasImageLink"; // old version
 	final static public String HASSOURCE = "http://art.uniroma2.it/ontologies/vocbench#hasSource"; // new version
-	final static public String HASLINK = "http://art.uniroma2.it/ontologies/vocbench#hasLink"; // new version
+	//final static public String HASLINK = "http://art.uniroma2.it/ontologies/vocbench#hasLink"; // old2 version
+	final static public String SOURCE = "http://purl.org/dc/terms/source";//new version from VOCBENCH-523
 	//final static public String HASSTATUS = "http://aims.fao.org/aos/agrontology#hasStatus"; // old version
 	final static public String HASSTATUS = "http://art.uniroma2.it/ontologies/vocbench#hasStatus"; // new version
 	final static public String ISPARTOFSUBVOCABULARY = "http://aims.fao.org/aos/agrontology#isPartOfSubvocabulary";
