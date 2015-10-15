@@ -526,9 +526,9 @@ public class VOCBENCH extends SKOSXL {
 			String conceptUri = setHttpPar(SKOS.Par.concept);
 			if(conceptUri != null)
 				useConcept = true;
-			String startDate = setHttpPar(ParVocBench.startDate); 
-			String endDate = setHttpPar(ParVocBench.endDate); 
-			boolean useDate = false;
+			//String startDate = setHttpPar(ParVocBench.startDate); 
+			//String endDate = setHttpPar(ParVocBench.endDate); 
+			//boolean useDate = false;
 			//if(startDate != null && endDate != null)
 			//	useDate = true;
 			boolean useScheme = false;
@@ -540,11 +540,15 @@ public class VOCBENCH extends SKOSXL {
 			if(termcode != null && !termcode.isEmpty())
 				useTermcode = true;
 			boolean getChild = setHttpBooleanPar(ParVocBench.getChild , false);
-			boolean getLabelForRelatedConcepts = setHttpBooleanPar(ParVocBench.getLabelForRelatedConcepts , 
-					true);
+			//boolean getLabelForRelatedConcepts = setHttpBooleanPar(ParVocBench.getLabelForRelatedConcepts , 
+			//		true);
 			
-			response = export(conceptUri, useConcept, startDate, endDate, useDate, scheme, useScheme, 
-					termcode, useTermcode, getChild, getLabelForRelatedConcepts);
+			response = export(conceptUri, useConcept, scheme, useScheme, 
+					termcode, useTermcode, getChild);
+			//old version
+			//response = export(conceptUri, useConcept, startDate, endDate, useDate, scheme, useScheme, 
+			//		termcode, useTermcode, getChild, getLabelForRelatedConcepts);
+			
 		}
 		
 		
@@ -4486,17 +4490,16 @@ public class VOCBENCH extends SKOSXL {
 	}
 	
 	
-	public Response export(String concept, boolean useConcept, String startDate, String endDate, 
-			boolean useDate, String scheme, boolean useScheme, String termcode,	boolean useTermcode, 
-			boolean getChild, boolean getLabelForRelatedConcepts){
+	public Response export(String concept, boolean useConcept,
+			String scheme, boolean useScheme, String termcode,	boolean useTermcode, 
+			boolean getChild){
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
 
 		try {
-			Collection <String>examinedConcepts = new ArrayList<String>();
-			ARTStatementIterator iter = prepareConceptInfoForExport(concept, useConcept, startDate,
-					endDate, useDate, scheme, useScheme, termcode, useTermcode, getChild, 
-					getLabelForRelatedConcepts, examinedConcepts);
+			//Collection <String>examinedConcepts = new ArrayList<String>();
+			ARTStatementIterator iter = prepareConceptInfoForExportNew(concept, useConcept,
+					scheme, useScheme, termcode, useTermcode, getChild); 
 			
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			Writer writer = new OutputStreamWriter(out, Charset.forName("UTF-8"));
@@ -4520,6 +4523,8 @@ public class VOCBENCH extends SKOSXL {
 		}
 	}
 	
+	
+	//OLD VERSION, not used anymore
 	private ARTStatementIterator prepareConceptInfoForExport(String concept, boolean useConcept, 
 			String startDate, String endDate, boolean useDate, String scheme, boolean useScheme, 
 			String termcode, boolean useTermcode, boolean getChild, boolean getLabelForRelatedConcepts,
@@ -4646,10 +4651,12 @@ public class VOCBENCH extends SKOSXL {
 				"\n}"+
 				"\n}";*/
 		
-		String query="CONSTRUCT{" + 
-				"\n?conceptURI ?genericProp ?genericValue ." + 
+		String query="CONSTRUCT{" +
+				"\n?conceptURI <"+TYPE+"> <"+CONCEPT_CLASS+"> ." + 
+				"\n?conceptURI ?genericProp ?genericValue ." +
+				"\n?conceptURI <"+INSCHEME+"> ?scheme ."+
 				"\n?genericValue ?propForLabel ?valueForLabel ." + 
-				"\n?relatedConcept <"+TYPE+"> <"+CONCEPT_CLASS+">." + 
+				"\n?relatedConcept <"+TYPE+"> <"+CONCEPT_CLASS+">." + // BIND (?genericValue AS ?relatedConcept) 
 				"\n?relatedConcept ?propForLinkedConcept ?xlabelForRelatedConcept ." + 
 				"\n?xlabelForRelatedConcept <"+LITERALFORM+"> ?labelForRelatedConcept ." +
 				"\n?genericValue ?propForDefinition ?valueForDefinition ."+ 
@@ -4668,9 +4675,10 @@ public class VOCBENCH extends SKOSXL {
 			retrievedConcepts.add(conceptUri);
 			query += "\nBIND (<"+conceptUri+"> AS ?conceptURI  ) . ";
 		}
-		if(useScheme)
-			query +="\nBIND (<"+scheme+"> AS ?scheme ) . " +
-					"\n?conceptURI <"+INSCHEME+"> ?scheme .";
+		if(useScheme){
+			query +="\nBIND (<"+scheme+"> AS ?scheme ) . ";
+		}
+		query += "\n?conceptURI <"+INSCHEME+"> ?scheme .";
 		if(useTermcode){
 			query +="\n?subPropNote <"+SUBPROPERTY+"> <"+NOTATION+"> ."+
 					"\n{?xlabel ?subPropNote \""+termcode+"\"^^<"+STRINGRDF+"> . }"+
@@ -4717,17 +4725,24 @@ public class VOCBENCH extends SKOSXL {
 		iterList.add(iter);
 		//iter.close();
 		
+		//check if the getChild and useConcept are bot used simultaneously, if not, 
+		if(getChild)
+		
 		if(getChild){
 			//now do a SPARQL query to obtain just the narrower concept of the selected concept, then obtain 
 			// all the relevant information regarding the narrower concepts
-			String conceptUri = null;
+			//String conceptUri = null;
+			List<String> listOfConcept = new ArrayList<String>();
 			if(useConcept){
-				conceptUri = skosxlModel.expandQName(concept);
+				//conceptUri = skosxlModel.expandQName(concept);
+				listOfConcept.add(skosxlModel.expandQName(concept));
 			} else{
 				query ="SELECT DISTINCT ?conceptURI"+
-						"\nWHERE{";
+						"\nWHERE{"+
+						"\n?conceptURI <"+TYPE+"> <"+CONCEPT_CLASS+"> ." ;
 				if(useScheme)
-					query +="\n?BIND (<"+scheme+"> AS ?scheme ) . ";
+					query +="\n?BIND (<"+scheme+"> AS ?scheme ) . "+
+							"\n?conceptURI <"+INSCHEME+"> ?scheme .";
 				if(useTermcode){
 					query +="\n?subPropNote <"+SUBPROPERTY+"> <"+NOTATION+"> ."+
 							"\n{?xlabel ?subPropNote \""+termcode+"\"^^<"+STRINGRDF+"> . }"+
@@ -4741,41 +4756,163 @@ public class VOCBENCH extends SKOSXL {
 				
 				TupleQuery tupleQueryTemp = skosxlModel.createTupleQuery(query);
 				TupleBindingsIterator it = tupleQueryTemp.evaluate(true);
-				if(it.hasNext())
+				/*if(it.hasNext())
 					conceptUri = it.getNext().getBinding("conceptURI").getBoundValue().asURIResource().
 						getURI();
-				it.close();
-			}
-			if(conceptUri != null) {
-				query = "SELECT DISTINCT ?narrowerConcept" +
-						"\nWHERE{" +
-						"{<"+conceptUri+"> <"+NARROWER+"> ?narrowerConcept}" +
-						"\nUNION"+
-						"{?narrowerConcept"+" <"+BROADER+"> <"+conceptUri+">}" +
-						"\n}";
-				TupleQuery tupleQuery = skosxlModel.createTupleQuery(query);
-				TupleBindingsIterator tupleIter = tupleQuery.evaluate(true);
-				List<String> narrowerList = new ArrayList<String>();
-				while(tupleIter.streamOpen()){
-					TupleBindings tuple = tupleIter.getNext();
-					narrowerList.add(tuple.getBinding("narrowerConcept").getBoundValue().asURIResource()
-							.getURI());
+				it.close();*/
+				while(it.hasNext()){
+					listOfConcept.add(it.getNext().getBinding("conceptURI").getBoundValue().asURIResource().
+							getURI());
 				}
-				tupleIter.close();
-				for(String narrowerConcept : narrowerList){
-					ARTStatementIterator narrowerInfoIter = prepareConceptInfoForExport(narrowerConcept, true, 
-							null, null, false, null, false, 
-							null, false, true, getLabelForRelatedConcepts, retrievedConcepts);
-					//iterList.add(removeDuplicateSTatement(narrowerInfoIter));
-					iterList.add(narrowerInfoIter);
+				it.close();
+				
+			}
+			if(!listOfConcept.isEmpty()) {
+				Iterator<String> conceptIter = listOfConcept.iterator();
+				while(conceptIter.hasNext()){
+					String conceptUri = conceptIter.next();
+					query = "SELECT DISTINCT ?narrowerConcept" +
+							"\nWHERE{" +
+							"{<"+conceptUri+"> <"+NARROWER+"> ?narrowerConcept}" +
+							"\nUNION"+
+							"{?narrowerConcept"+" <"+BROADER+"> <"+conceptUri+">}" +
+							"\n}";
+					if(useScheme){
+						query +="\n?narrowerConcept <"+INSCHEME+"> <"+scheme+"> .";
+					}
+					
+					TupleQuery tupleQuery = skosxlModel.createTupleQuery(query);
+					TupleBindingsIterator tupleIter = tupleQuery.evaluate(true);
+					List<String> narrowerList = new ArrayList<String>();
+					while(tupleIter.streamOpen()){
+						TupleBindings tuple = tupleIter.getNext();
+						narrowerList.add(tuple.getBinding("narrowerConcept").getBoundValue().asURIResource()
+								.getURI());
+					}
+					tupleIter.close();
+					for(String narrowerConcept : narrowerList){
+						ARTStatementIterator narrowerInfoIter = prepareConceptInfoForExport(narrowerConcept, true, 
+								null, null, false, scheme, useScheme, 
+								null, false, true, getLabelForRelatedConcepts, retrievedConcepts);
+						//iterList.add(removeDuplicateSTatement(narrowerInfoIter));
+						iterList.add(narrowerInfoIter);
+					}
 				}
 			}
 		}
-		logger.debug("before mergeListOfARTStatementIterator"); // da cancellare
-		
-		
 		
 		return mergeListOfARTStatementIterator(iterList);
+	}
+	
+	private ARTStatementIterator prepareConceptInfoForExportNew(String concept, boolean useConcept, 
+			String scheme, boolean useScheme, 
+			String termcode, boolean useTermcode, boolean getChild ) 
+					throws QueryEvaluationException, 
+			UnsupportedQueryLanguageException, ModelAccessException, MalformedQueryException{
+		
+		SKOSXLModel skosxlModel = getSKOSXLModel();
+		String query;
+		
+		//if the useConcept, useScheme or useTermcode are set to true then, just a portion of the thesaurus 
+		// will be exported, otherwise, all the thesaurus is exported
+		
+		if(!useConcept && !useTermcode && !useScheme){
+			//export all the triples in the repository (there is no way using a CONSTRUCT to esport the info
+			// regarding graphs)
+			query = "CONSTRUCT {" +
+					"\n?subj ?pred ?obj . "+
+					"\n}" +
+					"\nWHERE {" +
+					"\n?subj ?pred ?obj . " +
+					"\n}";
+		}
+		else{ //one of the filter is set, so proceede accordingly
+			query = "CONSTRUCT {" +
+					"\n?conceptURI <"+TYPE+"> <"+CONCEPT_CLASS+"> ." + 
+					"\n?conceptURI ?genericProp ?genericValue ." +
+					"\n?genericValue ?propForXlabel ?valueForXlabel ."+ 
+					"\n?genericValue ?propForBNode ?valueForBNode ." +
+					"\n?genericValue ?propForSubPropNote ?valeForSubPropNote ."+
+					"\n?genericValue ?propForDepiction ?valueForDepiction ." +
+					"\n}" +
+					"\nWHERE{";
+					
+			if(useConcept){
+				String conceptUri = skosxlModel.createURIResource(skosxlModel.expandQName(concept)).getURI();
+				if(getChild){ //the getChild has any sense only when specified with a specific concept
+					query += //"\n{" +
+							"\nBIND (<"+conceptUri+"> AS ?inputConceptURI  ) ." +
+							"\n?inputConceptURI (<"+NARROWER+"> | ^<"+BROADER+"> )* ?conceptURI . "; //using * it takes the concept itself
+							//"\n}" +
+							//"\nUNION" +
+							//"\n{BIND (<"+conceptUri+"> AS ?conceptURI  ) .}" ;//consider the concept itself
+				} else { //consider only that specific concept, no narrower concept
+					query+="\nBIND (<"+conceptUri+"> AS ?conceptURI  ) .";
+				}
+			} 
+			
+			//specifyin that it must be a concept, but after the check of useConcept, because of the use of 
+			// the BIND (which should always be before using thatn variable for performance reasons)
+			query+="\n?conceptURI <"+TYPE+"> <"+CONCEPT_CLASS+"> .";
+			
+			if(useTermcode){ // the term code is set
+				query+="\n?subPropNote <"+SUBPROPERTY+">* <"+NOTATION+"> ."+ // using * it consider the NOTATION itself
+						"\n{?xlabel ?subPropNote \""+termcode+"\"^^<"+STRINGRDF+"> . }"+
+						"\nUNION" +
+						"\n{?xlabel ?subPropNote \""+termcode+"\"^^<"+AGROVOCCODE+"> . }"+
+						"\n{ ?conceptURI <"+ PREFLABEL+"> ?xlabel . } "+
+						"\nUNION"+
+						"\n{ ?conceptURI <"+ALTLABEL+"> ?xlabel . }  "+
+						"\nUNION"+
+						"\n{ ?conceptURI <"+HIDDENLABEL+"> ?xlabel . }  ";
+			}
+			if(useScheme){
+				String schemeUri = skosxlModel.createURIResource(skosxlModel.expandQName(scheme)).getURI();
+				query +="\nBIND (<"+schemeUri+"> AS ?scheme ) . "+
+						"\n?conceptURI <"+INSCHEME+"> ?scheme .";
+			}
+			//get all the triple in which the desired concept (mostly a generic concept) is the subject
+			query+= "\n?conceptURI ?genericProp ?genericValue .";		
+			
+			//get all the label and the value associated with corrisponding xlabel
+			query+= "\nOPTIONAL{" +
+					"\n?genericValue <"+TYPE+"> <"+LABEL_CLASS+"> ."+
+					"\n?genericValue ?propForXlabel ?valueForXlabel ."+
+					"\n}";
+			
+			//expand the bnode
+			query+= "\nOPTIONAL{" +
+					"\nFILTER isBlank(?genericValue)" +
+					"\n?genericValue ?propForBNode ?valueForBNode ." +
+					"\n}";
+			
+			//get all the construct related to NOTE (DEFINITION is a subproperty of NOTE)
+			// Even if these property have just a single value a not a structure, it is not a problem, 
+			// since that value is take in the generic triple
+			query+= "\nOPTIONAL{" +
+					"\n?genericProp <"+SUBPROPERTY+">* <"+NOTE+"> . " + 
+					"\n?genericValue ?propForSubPropNote ?valeForSubPropNote ."+
+					"\n}";
+			
+			//get all the construct related DEPICTION
+			query+="\nOPTIONAL{" +
+					"\nFILTER(?genericProp = <"+DEPICTION+">)" +
+					"\n?genericValue ?propForDepiction ?valueForDepiction ." +
+					"\n}";
+			
+			query+="\n}";
+		}
+		
+		logger.debug("query = "+query); // DEBUG
+		
+		GraphQuery graphQuery = skosxlModel.createGraphQuery(query);
+		ARTStatementIterator iter;
+		iter = graphQuery.evaluate(false);
+		
+		logger.debug("query evaluated"); // DEBUG
+		
+		return iter;
+		
 	}
 	
 	
