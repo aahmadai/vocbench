@@ -176,6 +176,7 @@ public class VOCBENCH extends SKOSXL {
 		final public static String termProp = "termProp";
 		final public static String termPropValue = "termPropValue";
 		final public static String getLabelForRelatedConcepts = "getLabelForRelatedConcepts";
+		final public static String format = "format";
 	}
 
 	@Autowired
@@ -540,11 +541,12 @@ public class VOCBENCH extends SKOSXL {
 			if(termcode != null && !termcode.isEmpty())
 				useTermcode = true;
 			boolean getChild = setHttpBooleanPar(ParVocBench.getChild , false);
+			String format = setHttpPar(ParVocBench.format);
 			//boolean getLabelForRelatedConcepts = setHttpBooleanPar(ParVocBench.getLabelForRelatedConcepts , 
 			//		true);
 			
 			response = export(conceptUri, useConcept, scheme, useScheme, 
-					termcode, useTermcode, getChild);
+					termcode, useTermcode, getChild, format);
 			//old version
 			//response = export(conceptUri, useConcept, startDate, endDate, useDate, scheme, useScheme, 
 			//		termcode, useTermcode, getChild, getLabelForRelatedConcepts);
@@ -4492,7 +4494,7 @@ public class VOCBENCH extends SKOSXL {
 	
 	public Response export(String concept, boolean useConcept,
 			String scheme, boolean useScheme, String termcode,	boolean useTermcode, 
-			boolean getChild){
+			boolean getChild, String formatName){
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
 
@@ -4504,7 +4506,13 @@ public class VOCBENCH extends SKOSXL {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			Writer writer = new OutputStreamWriter(out, Charset.forName("UTF-8"));
 			SKOSXLModel skosxlModel = getSKOSXLModel();
-			skosxlModel.writeRDF(iter, RDFFormat.RDFXML_ABBREV, writer);
+			RDFFormat format;
+			if(formatName == null || RDFFormat.parseFormat(formatName)==null){
+				format = RDFFormat.RDFXML_ABBREV;
+			} else{
+				format = RDFFormat.parseFormat(formatName);
+			}
+			skosxlModel.writeRDF(iter, format, writer);
 			dataElement.setTextContent("<![CDATA["+out.toString("UTF-8")+"]]>");
 			return response;
 			
