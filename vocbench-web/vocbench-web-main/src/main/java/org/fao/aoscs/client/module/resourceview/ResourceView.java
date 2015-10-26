@@ -4,6 +4,7 @@ import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.module.concept.widgetlib.dialog.ManageResourceURI;
+import org.fao.aoscs.client.module.concept.widgetlib.dialog.ManageResourceURI.ManageResourceURIOpener;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
 import org.fao.aoscs.client.widgetlib.shared.label.ImageAOS;
@@ -34,7 +35,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ResourceView extends Composite {
+public class ResourceView extends Composite implements ManageResourceURIOpener {
 
 	private static ResourceViewUiBinder uiBinder = GWT
 			.create(ResourceViewUiBinder.class);
@@ -165,7 +166,11 @@ public class ResourceView extends Composite {
 	void onClick(ClickEvent e) {
 		if(manageResourceURI == null || !manageResourceURI.isLoaded )
 			manageResourceURI = new ManageResourceURI();
-		manageResourceURI.show(txtResourceURL.getText());
+		manageResourceURI.show(txtResourceURL.getText(), ResourceView.this);
+	}
+
+	@Override
+	public void manageResourceURISubmit(String newResourceURI) {
 	}
 
 }

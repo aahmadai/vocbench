@@ -499,6 +499,11 @@ table.quick-link:hover{
   background : #FFF;
   padding: 3px;
 }
+.gstR1-NoPadding{
+  color: #000;
+  background : #FFF;
+  padding: 0px;
+}
 /* Grid with unique style in first column only*/
 .gslPanel1{
   background:#D1D1D1;

@@ -8,6 +8,8 @@ import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.classification.widgetlib.ClassificationDetailTab;
 import org.fao.aoscs.client.module.concept.ConceptTemplate;
+import org.fao.aoscs.client.module.concept.widgetlib.dialog.ResourceURIPanel;
+import org.fao.aoscs.client.module.concept.widgetlib.dialog.ResourceURIPanel.ResourceURIPanelOpener;
 import org.fao.aoscs.client.module.constant.ConceptActionKey;
 import org.fao.aoscs.client.module.constant.ConfigConstants;
 import org.fao.aoscs.client.module.constant.OWLActionConstants;
@@ -31,6 +33,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -43,7 +46,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class ConceptDefinition extends ConceptTemplate{
+public class ConceptDefinition extends ConceptTemplate implements ResourceURIPanelOpener{
 
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	private LocaleMessages messages = (LocaleMessages) GWT.create(LocaleMessages.class);
@@ -57,7 +60,7 @@ public class ConceptDefinition extends ConceptTemplate{
 	private DeleteDefinitionLabel deleteDefinitionLabel;
 	private DeleteDefinition deleteDefinition;
 	private AddDefinitionLabel addDefinitionLabel;
-
+	
 	public ConceptDefinition(PermissionObject permisstionTable,InitializeConceptData initData, ConceptDetailTabPanel conceptDetailPanel, ClassificationDetailTab classificationDetailPanel){
 		super(permisstionTable,initData, conceptDetailPanel, classificationDetailPanel);
 	}
@@ -253,6 +256,67 @@ public class ConceptDefinition extends ConceptTemplate{
 			Service.conceptService.getConceptDefinition(conceptObject.getUri(), MainApp.userOntology, callback);
 		}
 	}
+	
+	/*private HorizontalPanel uriPanel(final ManageResourceURI manageResourceURI, String uri, final String conceptUri){
+		final HTML URI = new HTML();
+		URI.setText(uri);
+		URI.setWidth("100%");
+		URI.setWordWrap(true);
+		URI.addStyleName("link-label-blue");
+		URI.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(!URI.getText().equals(""))
+				MainApp.openURL(URI.getText());
+			}
+		});
+				
+		HTML label = new HTML("&nbsp;&nbsp;"+constants.conceptUri()+":&nbsp;");
+		label.setStyleName(Style.fontWeightBold);
+		
+		Image editURI = new Image("images/edit-grey.gif");
+		editURI.setTitle(constants.buttonEdit());
+		editURI.setStyleName(Style.Link);
+		editURI.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				manageResourceURI.addSubmitClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent arg0) {
+						
+						if(Window.confirm(constants.refactorRenameURIWaring()))
+						{
+							manageResourceURI.showLoading(true);
+							AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>(){
+								public void onSuccess(Boolean result){
+									manageResourceURI.showLoading(false);
+									if(result)
+									{
+										manageResourceURI.hide();
+										ModuleManager.getMainApp().reloadConceptTree(conceptUri);
+									}
+									else
+										Window.alert(constants.refactorActionFailed());
+								}
+								public void onFailure(Throwable caught){
+									ExceptionManager.showException(caught, constants.refactorActionFailed());
+								}
+							};
+							Service.refactorService.renameResource(MainApp.userOntology, manageResourceURI.getOldURI().getValue(), manageResourceURI.getNewURI().getValue(), callback);
+						}
+					}
+				});
+				manageResourceURI.show(URI.getText());
+			}
+		});
+		HorizontalPanel hp = new HorizontalPanel();
+		hp.add(label);		
+		hp.add(URI);
+		hp.add(editURI);
+		hp.setWidth("100%");
+		hp.setStyleName("showuri");
+		hp.setCellWidth(URI, "100%");
+		hp.setCellHorizontalAlignment(URI, HasHorizontalAlignment.ALIGN_LEFT);
+		hp.setCellHorizontalAlignment(editURI, HasHorizontalAlignment.ALIGN_RIGHT);
+		return hp;
+	}*/
 
 	private void initData(DefinitionObject dfObj)
 	{
@@ -267,8 +331,8 @@ public class ConceptDefinition extends ConceptTemplate{
 
 			for (int i = 0; i < dObjList.size(); i++) {
 				IDObject dObj = (IDObject) dObjList.get(i);
+				
 				VerticalPanel vp = new VerticalPanel();
-
 				HorizontalPanel func = getAddTranslationFunction(dObj);
 				vp.add(func);
 				vp.setCellHorizontalAlignment(func, HasHorizontalAlignment.ALIGN_RIGHT);
@@ -276,12 +340,21 @@ public class ConceptDefinition extends ConceptTemplate{
 				vp.add(getDateTable(i, dObj));
 				vp.setWidth("100%");
 				vp.setSpacing(5);
+				
+				ResourceURIPanel resourceURIPanel = new ResourceURIPanel(ConceptDefinition.this);
+				resourceURIPanel.setResourceURI(dObj.getIDUri());
+				
+				VerticalPanel bodyPanel = new VerticalPanel();
+				bodyPanel.setSize("100%", "100%");
+				bodyPanel.add(resourceURIPanel);
+				bodyPanel.add(vp);
+				
 				table.setWidget(i+1, 0, getDefinitionNumber(i+1, dObj));
-				table.setWidget(i+1, 1, vp);
+				table.setWidget(i+1, 1, bodyPanel);
 			}
 			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.DEFINITION.getTabIndex(), Convert.replaceSpace(dObjList.size()>1? constants.conceptDefinitions():constants.conceptDefinition())+"&nbsp;("+(dObjList.size())+")");
 			if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.DEFINITION.getTabIndex(), Convert.replaceSpace(dObjList.size()>1? constants.conceptDefinitions():constants.conceptDefinition())+"&nbsp;("+(dObjList.size())+")");
-			conceptRootPanel.add(GridStyle.setTableConceptDetailStyleTop(table,"gstFR1","gstFC1","gstR1","gstPanel1",true));
+			conceptRootPanel.add(GridStyle.setTableConceptDetailStyleTop(table,"gstFR1","gstFC1","gstR1-NoPadding","gstPanel1",true));
 		}else{
 			attachNewDefButton();
 			Label sayNo = new Label(constants.conceptNoDefinition());
@@ -853,5 +926,9 @@ public class ConceptDefinition extends ConceptTemplate{
 
 			Service.conceptService.addDefinition(MainApp.userOntology,actionId, status, MainApp.userId, transObj, ido, conceptObject, callback);
 		}
+	}
+	
+	public void resourceURIPanelSubmit(String newResourceURI) {
+		ModuleManager.getMainApp().reloadConceptTree();
 	}
 }

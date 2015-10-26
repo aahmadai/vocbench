@@ -8,12 +8,12 @@ import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
-import org.fao.aoscs.client.utility.ModuleManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
 import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -35,7 +35,13 @@ public class ManageResourceURI extends FormDialogBox implements ClickHandler{
 	
 	private VerticalPanel mainBodypanel = new VerticalPanel();
 	private LoadingDialog loadingDialog = new LoadingDialog(constants.exportLoading());
-
+	
+	private ManageResourceURIOpener opener;
+	
+	public interface ManageResourceURIOpener {
+	    void manageResourceURISubmit(String newResourceURI);
+	}
+	
 	public ManageResourceURI(){
 		super(constants.buttonSubmit(), constants.buttonCancel());
 		this.setSize("600px", "100px");
@@ -90,10 +96,18 @@ public class ManageResourceURI extends FormDialogBox implements ClickHandler{
 		}
 	}
 	
-	public void show(String resourceURI)
+	public void show(ManageResourceURIOpener opener)
 	{
+		this.opener = opener;
+		show();
+	}
+	
+	public void show(String resourceURI, ManageResourceURIOpener opener)
+	{
+		this.opener = opener;
 		oldURI.setText(resourceURI);
-		super.show();
+		newURI.setText("");
+		show();
 	}
 	
 	public boolean passCheckInput() {
@@ -111,24 +125,48 @@ public class ManageResourceURI extends FormDialogBox implements ClickHandler{
 		return false;
 	}
 	
+	/**
+	 * @return the oldURI
+	 */
+	public TextBox getOldURI() {
+		return oldURI;
+	}
+
+	/**
+	 * @return the newURI
+	 */
+	public TextBox getNewURI() {
+		return newURI;
+	}
+	
+	public HandlerRegistration addSubmitClickHandler(ClickHandler handler) {
+		return this.submit.addClickHandler(handler);
+	}
+	
 	public void onSubmit() {
-		showLoading(true);
-		AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>(){
-			public void onSuccess(Boolean result){
-				showLoading(false);
-				if(result)
-				{
-					ManageResourceURI.this.hide();
-					ModuleManager.getMainApp().reloadConceptTree(newURI.getValue());
+	 	if(Window.confirm(constants.refactorRenameURIWaring()))
+		{
+			showLoading(true);
+			AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>(){
+				public void onSuccess(Boolean result){
+					showLoading(false);
+					if(result)
+					{
+						ManageResourceURI.this.hide();
+						if(opener!=null)
+						{
+							opener.manageResourceURISubmit(newURI.getValue());
+						}
+					}
+					else
+						Window.alert(constants.refactorActionFailed());
 				}
-				else
-					Window.alert(constants.refactorActionFailed());
-			}
-			public void onFailure(Throwable caught){
-				ExceptionManager.showException(caught, constants.refactorActionFailed());
-			}
-		};
-		Service.refactorService.renameResource(MainApp.userOntology, oldURI.getValue(), newURI.getValue(), callback);
+				public void onFailure(Throwable caught){
+					ExceptionManager.showException(caught, constants.refactorActionFailed());
+				}
+			};
+			Service.refactorService.renameResource(MainApp.userOntology, oldURI.getValue(), newURI.getValue(), callback);
+		}
 		
 	}
 	

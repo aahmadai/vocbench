@@ -8,6 +8,8 @@ import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.classification.widgetlib.ClassificationDetailTab;
 import org.fao.aoscs.client.module.concept.ConceptTemplate;
+import org.fao.aoscs.client.module.concept.widgetlib.dialog.ResourceURIPanel;
+import org.fao.aoscs.client.module.concept.widgetlib.dialog.ResourceURIPanel.ResourceURIPanelOpener;
 import org.fao.aoscs.client.module.constant.ConceptActionKey;
 import org.fao.aoscs.client.module.constant.OWLActionConstants;
 import org.fao.aoscs.client.module.constant.Style;
@@ -44,7 +46,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class ConceptImage extends ConceptTemplate{
+public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpener{
 
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	private LocaleMessages messages = (LocaleMessages) GWT.create(LocaleMessages.class);
@@ -114,6 +116,7 @@ public class ConceptImage extends ConceptTemplate{
     $wnd.open(url,'_blank','');
 }-*/;
 
+	@SuppressWarnings("deprecation")
 	private Image getImageFrame(final IDObject dObj){
 		Image img = new Image();
 		img.setPixelSize(100, 100);
@@ -270,7 +273,7 @@ public class ConceptImage extends ConceptTemplate{
 			table.setWidth("100%");
 			for (int i = 0; i < iObjList.size(); i++) {
 				IDObject dObj = (IDObject) iObjList.get(i);
-
+				
 				VerticalPanel vp = new VerticalPanel();
 
 				HorizontalPanel func = getAddTranslationFunction(dObj);
@@ -281,8 +284,17 @@ public class ConceptImage extends ConceptTemplate{
 				vp.add(getDateTable(i, dObj));
 				vp.setWidth("100%");
 				vp.setSpacing(5);
-				table.setWidget(i+1, 1, vp);
+				
+				ResourceURIPanel resourceURIPanel = new ResourceURIPanel(ConceptImage.this);
+				resourceURIPanel.setResourceURI(dObj.getIDUri());
+				
+				VerticalPanel bodyPanel = new VerticalPanel();
+				bodyPanel.setSize("100%", "100%");
+				bodyPanel.add(resourceURIPanel);
+				bodyPanel.add(vp);
+				
 				table.setWidget(i+1, 0, getImageNumber(i+1, dObj));
+				table.setWidget(i+1, 1, bodyPanel);
 			}
 			if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE)
 				conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.IMAGE.getTabIndex(), Convert.replaceSpace(iObjList.size()>1?constants.conceptImages():constants.conceptImage())+"&nbsp;("+(iObjList.size())+")");
@@ -815,5 +827,9 @@ public class ConceptImage extends ConceptTemplate{
 			Service.conceptService.addImage(MainApp.userOntology,actionId, status, MainApp.userId, transObj, ido, conceptObject, callback);
 		}
 
+	}
+	
+	public void resourceURIPanelSubmit(String newResourceURI) {
+		ModuleManager.getMainApp().reloadConceptTree();
 	}
 }

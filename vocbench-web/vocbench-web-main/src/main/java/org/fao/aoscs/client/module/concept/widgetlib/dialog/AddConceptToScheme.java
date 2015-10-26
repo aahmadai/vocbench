@@ -3,7 +3,10 @@
  */
 package org.fao.aoscs.client.module.concept.widgetlib.dialog;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
@@ -71,7 +74,11 @@ public class AddConceptToScheme extends FormDialogBox {
 			public void onSuccess(HashMap<String, String> list) {
 				schemeList.clear();
 				schemeList.addItem("--Select--", "");
-				for(String schemeName : list.keySet())
+				
+				List<String> keys = new ArrayList<String>(list.keySet());
+				Collections.sort(keys);
+				
+				for(String schemeName : keys)
 				{
 					schemeList.addItem(schemeName, list.get(schemeName));
 				}
@@ -89,9 +96,8 @@ public class AddConceptToScheme extends FormDialogBox {
 			}
 		};
 		Service.conceptService.getExcludedConceptSchemes(conceptURI, MainApp.userLanguage, MainApp.isExplicit, MainApp.userOntology, callback);
-		
-		
 	};
+	
 	public boolean passCheckInput() {
 		boolean pass = false;
 		if(schemeList.getValue((schemeList.getSelectedIndex())).equals("--None--") || schemeList.getValue((schemeList.getSelectedIndex())).equals("")){

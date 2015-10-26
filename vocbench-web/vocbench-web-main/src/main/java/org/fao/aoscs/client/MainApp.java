@@ -1160,8 +1160,7 @@ public class MainApp extends Composite { // Application container
         iconContainer = new ToolBarContainer(this);
         iconContainer.setSpacing(3);
         iconContainer.setHeight("100%");
-        // Home
-        iconContainer.addMenu(constants.homeRecentChanges(), constants.homeRecentChanges(), "Home");
+        
         // Action
         if (menuMap.containsKey("Concepts"))
         {
@@ -1199,14 +1198,6 @@ public class MainApp extends Composite { // Application container
         	iconContainer.disableMenu(constants.toolbarSchemes(), constants.toolbarSchemesTitle(), "Classifications");
         }
         */
-        if (menuMap.containsKey("Validation"))
-        {
-            iconContainer.addMenu(constants.toolbarValidation(), constants.toolbarValidationTitle(), "Validation");
-        }
-        else
-        {
-        	iconContainer.disableMenu(constants.toolbarValidation(), constants.toolbarValidationTitle(), "Validation");
-        }
         /*
         if (menuMap.containsKey("Consistency"))
         {
@@ -1271,6 +1262,17 @@ public class MainApp extends Composite { // Application container
         	iconContainer.disableMenu(constants.toolbarSheet2RDF(), constants.toolbarSheet2RDFTitle(), "Sheet2RDF");
         }
 */
+        if (menuMap.containsKey("Validation"))
+        {
+            iconContainer.addMenu(constants.toolbarValidation(), constants.toolbarValidationTitle(), "Validation");
+        }
+        else
+        {
+        	iconContainer.disableMenu(constants.toolbarValidation(), constants.toolbarValidationTitle(), "Validation");
+        }
+        // Home
+        iconContainer.addMenu(constants.homeRecentChanges(), constants.homeRecentChanges(), "Home");
+        
         for (int i = 0; i < iconContainer.getWidgetCount(); i++)
         {
             iconContainer.setCellVerticalAlignment(iconContainer.getWidget(i), HasVerticalAlignment.ALIGN_MIDDLE);

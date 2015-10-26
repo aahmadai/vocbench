@@ -66,7 +66,7 @@ public class InputOutputManager extends ResponseManager {
 		String filename = "";
 		File tempfile;
 		try {
-			tempfile = STUtility.createTempFile();
+			tempfile = STUtility.createTempFile(ext);
 			String str = InputOutputResponseManager.saveRDFRequest(ontoInfo, ext, fileFormat, false);
 			FileUtils.writeStringToFile(tempfile, str, "UTF-8");
 			filename = tempfile.getPath();

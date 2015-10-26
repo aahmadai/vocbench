@@ -11,8 +11,9 @@ import org.fao.aoscs.client.locale.LocaleMessages;
 import org.fao.aoscs.client.module.concept.widgetlib.dialog.AddConcept;
 import org.fao.aoscs.client.module.concept.widgetlib.dialog.AddConceptToScheme;
 import org.fao.aoscs.client.module.concept.widgetlib.dialog.DeleteConcept;
-import org.fao.aoscs.client.module.concept.widgetlib.dialog.ManageResourceURI;
 import org.fao.aoscs.client.module.concept.widgetlib.dialog.RemoveConceptToScheme;
+import org.fao.aoscs.client.module.concept.widgetlib.dialog.ResourceURIPanel;
+import org.fao.aoscs.client.module.concept.widgetlib.dialog.ResourceURIPanel.ResourceURIPanelOpener;
 import org.fao.aoscs.client.module.constant.ConceptActionKey;
 import org.fao.aoscs.client.module.constant.OWLActionConstants;
 import org.fao.aoscs.client.module.constant.OWLStatusConstants;
@@ -21,6 +22,7 @@ import org.fao.aoscs.client.module.resourceview.ResourceView;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
+import org.fao.aoscs.client.utility.ModuleManager;
 import org.fao.aoscs.client.widgetlib.shared.dialog.ConceptBrowser;
 import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
 import org.fao.aoscs.client.widgetlib.shared.label.ImageAOS;
@@ -66,7 +68,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 @SuppressWarnings("deprecation")
-public class ConceptTree extends Composite{
+public class ConceptTree extends Composite implements ResourceURIPanelOpener{
 
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	private LocaleMessages messages = (LocaleMessages) GWT.create(LocaleMessages.class);
@@ -83,7 +85,7 @@ public class ConceptTree extends Composite{
 	//public HTML showInferredAndExplicitHTML= new HTML("&nbsp;"+constants.conceptShowInferredAndExplicit());
 	private CheckBox showURI = new CheckBox();
 	public HTML showURIHTML= new HTML(constants.conceptShowURI(), true);
-	private LabelAOS URI = new LabelAOS();
+	//private LabelAOS URI = new LabelAOS();
 	public InitializeConceptData initData;
 	private ConceptDetailTabPanel detailPanel;
 	private VerticalPanel resViewPanel = new VerticalPanel();
@@ -92,7 +94,7 @@ public class ConceptTree extends Composite{
 	//private ConceptTab selectedTab = ConceptTab.TERM; 
 	private ConceptDetailObject cDetailObj;
 	private HorizontalPanel functionPanel;
-	private HorizontalPanel getURIPanel = new HorizontalPanel();
+	private ResourceURIPanel resURIPanel;
 	private VerticalPanel header = new VerticalPanel();
     private ScrollPanel sc = new ScrollPanel();
     private DecoratedPopupPanel allConceptText = new DecoratedPopupPanel(true);
@@ -112,7 +114,6 @@ public class ConceptTree extends Composite{
     private RemoveConcept removeConcept;
     private AddConceptToScheme addConceptToScheme;
     private RemoveConceptToScheme removeConceptToScheme;
-    private ManageResourceURI manageResourceURI;
     
     private ImageAOS resourceView;
     private boolean isResourceView = false;
@@ -152,8 +153,7 @@ public class ConceptTree extends Composite{
 	public void init(String initURI, int initTab)
 	{
 		formInit();
-		
-		getURIPanel = uriPanel(); 
+		resURIPanel = new ResourceURIPanel(ConceptTree.this); 
 		hSplit.ensureDebugId("cwHorizontalSplitPanel");
 	    hSplit.setSplitPosition("100%");
 	    hSplit.setLeftWidget(panel);
@@ -254,7 +254,7 @@ public class ConceptTree extends Composite{
 		hSplit.setSplitPosition("100%");
 	    functionPanel.setVisible(false);
 	    detailPanel.setVisible(false);
-	    getURIPanel.setVisible(false);
+	    resURIPanel.setVisible(false);
 		treePanel.gotoItem(targetItem, initTab, !MainApp.userPreference.isHideNonpreferred(), MainApp.userPreference.isHideDeprecated(), MainApp.userSelectedLanguage, MainApp.schemeUri, MainApp.userOntology);
 	}
 	
@@ -284,7 +284,7 @@ public class ConceptTree extends Composite{
 	    hSplit.setSplitPosition("100%");
 	    functionPanel.setVisible(false);
 	    detailPanel.setVisible(false);
-	    getURIPanel.setVisible(false);
+	    resURIPanel.setVisible(false);
 		
 		if(currentURI != null && !currentURI.equals(""))
 		{
@@ -309,7 +309,7 @@ public class ConceptTree extends Composite{
 		}
 	}
 	
-	private HorizontalPanel uriPanel(){
+	/*private HorizontalPanel uriPanel(){
 		URI.setWidth("100%");
 		URI.setWordWrap(true);
 		URI.addStyleName("link-label-blue");
@@ -330,6 +330,28 @@ public class ConceptTree extends Composite{
 			public void onClick(ClickEvent event) {
 				if(manageResourceURI == null || !manageResourceURI.isLoaded )
 					manageResourceURI = new ManageResourceURI();
+				manageResourceURI.addSubmitClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent arg0) {
+						manageResourceURI.showLoading(true);
+						AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>(){
+							public void onSuccess(Boolean result){
+								manageResourceURI.showLoading(false);
+								if(result)
+								{
+									manageResourceURI.hide();
+									ModuleManager.getMainApp().reloadConceptTree(manageResourceURI.getNewURI().getValue());
+								}
+								else
+									Window.alert(constants.refactorActionFailed());
+							}
+							public void onFailure(Throwable caught){
+								ExceptionManager.showException(caught, constants.refactorActionFailed());
+							}
+						};
+						Service.refactorService.renameResource(MainApp.userOntology, manageResourceURI.getOldURI().getValue(), manageResourceURI.getNewURI().getValue(), callback);
+						
+					}
+				});
 				manageResourceURI.show(URI.getText());
 			}
 		});
@@ -345,9 +367,9 @@ public class ConceptTree extends Composite{
 		hp.setCellHorizontalAlignment(URI, HasHorizontalAlignment.ALIGN_LEFT);
 		hp.setCellHorizontalAlignment(editURI, HasHorizontalAlignment.ALIGN_RIGHT);
 		return hp;
-	}
+	}*/
 	
-	private HorizontalPanel getFunctionPanel(final HorizontalPanel uriPanel){
+	private HorizontalPanel getFunctionPanel(final Widget uriPanel){
 		/*showInferredAndExplicit.setValue(MainApp.isExplicit);
 		showInferredAndExplicit.addClickHandler(new ClickHandler() 
 		{
@@ -710,7 +732,7 @@ public class ConceptTree extends Composite{
             }
         });
 		
-		functionPanel =  getFunctionPanel(getURIPanel);
+		functionPanel =  getFunctionPanel(resURIPanel);
 		functionPanel.setVisible(false);
 		
 		Spacer spr = new Spacer("100%", "100%");
@@ -754,7 +776,7 @@ public class ConceptTree extends Composite{
 		
 		VerticalPanel vp = new VerticalPanel();
 		vp.add(hp);
-		vp.add(getURIPanel);
+		vp.add(resURIPanel);
 		vp.setWidth("100%");
 		
 		return  vp;
@@ -831,7 +853,7 @@ public class ConceptTree extends Composite{
 		if(!detailPanel.isVisible())
 		    hSplit.setSplitPosition("37%");
 		detailPanel.setVisible(true);
-		getURIPanel.setVisible(showURI.getValue());
+		resURIPanel.setVisible(showURI.getValue());
 				
 		addConceptButton.setEnable(false);
 		deleteConceptButton.setEnable(false);
@@ -843,7 +865,7 @@ public class ConceptTree extends Composite{
 		visualize.setEnable(false);
 		resourceView.setEnable(false);
 
-		URI.setText(conceptURI);
+		resURIPanel.setResourceURI(conceptURI);
 		String parentURI = tObj.getParentURI();
 		if(isResourceView)
 		{
@@ -877,7 +899,7 @@ public class ConceptTree extends Composite{
 		//VgraphURL = GWT.getHostPageBaseURL()+"graph.jsp?concept="+selectedConceptObject.getUri()+"&language="+convertArrayList2String(MainApp.userSelectedLanguage,"_")+"&ontology="+MainApp.userOntology.getDbTableName()+"&wsurl="+MainApp.userOntology.getDbDriver();
 		formLoad(selectedConceptObject.getUri());
 		
-		URI.setText(selectedConceptObject.getUri());
+		resURIPanel.setResourceURI(selectedConceptObject.getUri());
 		MainApp.addToConceptNavigationHistoryList(selectedConceptObject);
 	}
 	
@@ -1393,6 +1415,10 @@ public class ConceptTree extends Composite{
 	public ConceptObject getSelectedConceptObject() 
 	{
 		return selectedConceptObject;
+	}
+	
+	public void resourceURIPanelSubmit(String newResourceURI) {
+		ModuleManager.getMainApp().reloadConceptTree(newResourceURI);
 	}
 	
 }
