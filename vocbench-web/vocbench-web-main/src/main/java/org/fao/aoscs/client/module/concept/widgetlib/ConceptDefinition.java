@@ -33,7 +33,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -92,7 +91,8 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 
 		hp.setSpacing(3);
 		ArrayList<String> langs = langlist.get(number);
-		if(dObj.hasSource())
+		//if(dObj.hasSource())
+		if(dObj!=null && dObj.getIDSourceURL()!=null && !dObj.getIDSourceURL().equals(""))
 		{
 			boolean permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_EXTSOURCEEDIT, getConceptObject().getStatusID(), langs, MainApp.getPermissionCheck(langs));
 			// Source edit
@@ -116,17 +116,17 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 
 			hp.add(edit);
 			hp.add(delete);
-			if(dObj.getIDSource().equals("Book"))
+			/*if(dObj.getIDSource().equals("Book"))
 			{
 			    HTML link =  new HTML(dObj.getIDSource()+" (" + dObj.getIDSourceURL() +")");
 			    hp.add(link);
-			}else
+			}else*/
 			{
 				HTML link =  new HTML("");
 				if(dObj!=null && dObj.getIDSourceURL()!=null && !dObj.getIDSourceURL().equals(""))
-					link.setHTML("<A HREF=\""+dObj.getIDSourceURL()+"\" target=\"_blank\">"+dObj.getIDSource()+"</A>");
+					link.setHTML("<A HREF=\""+dObj.getIDSourceURL()+"\" target=\"_blank\">"+dObj.getIDSourceURL()+"</A>");
 				else
-					link.setHTML(dObj.getIDSource());
+					link.setHTML(dObj.getIDSourceURL());
 				hp.add(link);
 			}
 		}else
@@ -413,7 +413,7 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 	}
 
 	public class AddExternalSource extends FormDialogBox implements ClickHandler{
-		private ListBox source;
+		//private ListBox source;
 		private TextBox URL;
 		private IDObject ido;
 
@@ -426,24 +426,24 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 		}
 
 		public void initLayout() {
-			source = new ListBox();
-			source = Convert.makeSourceListBox((ArrayList<String[]>)initData.getSource());
-			source.setWidth("100%");
+			//source = new ListBox();
+			//source = Convert.makeSourceListBox((ArrayList<String[]>)initData.getSource());
+			//source.setWidth("100%");
 
 			URL = new TextBox();
 			URL.setWidth("100%");
 
-			final Grid table = new Grid(2,2);
-			table.setWidget(0, 0, new HTML(constants.conceptSource()));
-			table.setWidget(1, 0, new HTML(constants.conceptUrl()));
-			table.setWidget(0, 1, source);
-			table.setWidget(1, 1, URL);
+			final Grid table = new Grid(1,2);
+			table.setWidget(0, 0, new HTML(constants.conceptUrl()));
+			table.setWidget(0, 1, URL);
+			//table.setWidget(1, 0, new HTML(constants.conceptSource()));
+			//table.setWidget(1, 1, source);
 			table.setWidth("100%");
 			table.getColumnFormatter().setWidth(1, "80%");
 
 			addWidget(GridStyle.setTableConceptDetailStyleleft(table,"gslRow1", "gslCol1", "gslPanel1"));
 
-			source.addChangeHandler(new ChangeHandler()
+			/*source.addChangeHandler(new ChangeHandler()
 			{
 
 			    public void onChange(ChangeEvent arg0)
@@ -453,13 +453,13 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
                    }else{
                        ((HTML)table.getWidget(1,0)).setText(constants.conceptUrl());
                    }
-                }});
+                }});*/
 		}
 
 
 		public boolean passCheckInput() {
 			boolean pass = false;
-			if(source.getValue((source.getSelectedIndex())).equals("") || URL.getText().length()==0 ){
+			if(/*source.getValue((source.getSelectedIndex())).equals("") || */URL.getText().length()==0 ){
 				pass = false;
 			}else{
 				pass = true;
@@ -471,7 +471,7 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 		public void onSubmit() {
 			sayLoading();
 			ido.setIDSourceURL(URL.getText());
-			ido.setIDSource(source.getValue(source.getSelectedIndex()));
+			//ido.setIDSource(source.getValue(source.getSelectedIndex()));
 
 			AsyncCallback<DefinitionObject>  callback = new AsyncCallback<DefinitionObject>(){
 				public void onSuccess(DefinitionObject results){
@@ -495,7 +495,7 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 	}
 
 	public class EditExternalSource extends FormDialogBox implements ClickHandler{
-		private ListBox source ;
+		//private ListBox source ;
 		private TextBox URL;
 		private IDObject ido;
 
@@ -508,22 +508,22 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 		}
 
 		public void initLayout() {
-			source = new ListBox();
-			source =  Convert.makeSelectedSourceListBox((ArrayList<String[]>)initData.getSource(),ido.getIDSource());
-			source.setWidth("100%");
+			//source = new ListBox();
+			//source =  Convert.makeSelectedSourceListBox((ArrayList<String[]>)initData.getSource(),ido.getIDSource());
+			//source.setWidth("100%");
 
 			URL = new TextBox();
 			URL.setText(ido.getIDSourceURL());
 			URL.setWidth("100%");
 
-			final Grid table = new Grid(2,2);
-			table.setWidget(0, 0, new HTML(constants.conceptSource()));
-			table.setWidget(1, 0, new HTML(constants.conceptUrl()));
-			table.setWidget(0, 1, source);
-			table.setWidget(1, 1, URL);
+			final Grid table = new Grid(1,2);
+			table.setWidget(0, 0, new HTML(constants.conceptUrl()));
+			table.setWidget(0, 1, URL);
+			//table.setWidget(1, 0, new HTML(constants.conceptSource()));
+			//table.setWidget(1, 1, source);
 			table.setWidth("100%");
 
-			if(source.getValue(source.getSelectedIndex()).equals("Book")){
+			/*if(source.getValue(source.getSelectedIndex()).equals("Book")){
 			    ((HTML)table.getWidget(1,0)).setText(constants.conceptSourceTitle());
 			}
 			source.addChangeHandler(new ChangeHandler()
@@ -537,13 +537,13 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
                    {
                        ((HTML)table.getWidget(1,0)).setText(constants.conceptUrl());
                    }
-              }});
+              }});*/
 			addWidget(GridStyle.setTableConceptDetailStyleleft(table,"gslRow1", "gslCol1", "gslPanel1"));
 		}
 
 		public boolean passCheckInput() {
 			boolean pass = false;
-			if(source.getValue((source.getSelectedIndex())).equals("") || URL.getText().equals("") ){
+			if(/*source.getValue((source.getSelectedIndex())).equals("") || */URL.getText().equals("") ){
 				pass = false;
 			}else{
 				pass = true;
@@ -557,7 +557,7 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 			IDObject idoNew = new IDObject();
 			idoNew.setIDType(IDObject.DEFINITION);
 			idoNew.setIDUri(ido.getIDUri());
-			idoNew.setIDSource(source.getValue(source.getSelectedIndex()));
+			//idoNew.setIDSource(source.getValue(source.getSelectedIndex()));
 			idoNew.setIDSourceURL(URL.getText());
 
 			AsyncCallback<DefinitionObject>  callback = new AsyncCallback<DefinitionObject>(){
@@ -822,7 +822,7 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 	public class AddNewDefinition extends FormDialogBox {
 		public ListBox language ;
 		public TextArea def ;
-		private ListBox source;
+		//private ListBox source;
 		private TextBox URL;
 
 		public AddNewDefinition(){
@@ -841,29 +841,29 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 			def.setVisibleLines(3);
 			def.setWidth("100%");
 
-			source = new ListBox();
-			source = Convert.makeSourceListBox((ArrayList<String[]>)initData.getSource());
-			source.setWidth("100%");
+			//source = new ListBox();
+			//source = Convert.makeSourceListBox((ArrayList<String[]>)initData.getSource());
+			//source.setWidth("100%");
 
 			URL = new TextBox();
 			URL.setWidth("100%");
 
 
-			final Grid table = new Grid(4,2);
+			final Grid table = new Grid(3,2);
 			table.setWidget(0, 0, new HTML(constants.conceptDefinition()));
 			table.setWidget(1, 0, new HTML(constants.conceptLanguage()));
-			table.setWidget(2, 0, new HTML(constants.conceptSource()));
-			table.setWidget(3, 0, new HTML(constants.conceptUrl()));
+			table.setWidget(2, 0, new HTML(constants.conceptUrl()));
+			//table.setWidget(3, 0, new HTML(constants.conceptSource()));
 			table.setWidget(0, 1, def);
 			table.setWidget(1, 1, language);
-			table.setWidget(2, 1, source);
-			table.setWidget(3, 1, URL);
+			table.setWidget(2, 1, URL);
+			//table.setWidget(3, 1, source);
 			table.getColumnFormatter().setWidth(1, "80%");
 			table.setWidth("100%");
 
 			addWidget(GridStyle.setTableConceptDetailStyleleft(table,"gslRow1", "gslCol1", "gslPanel1"));
 
-			source.addChangeHandler(new ChangeHandler()
+			/*source.addChangeHandler(new ChangeHandler()
 			{
 
 			    public void onChange(ChangeEvent arg0)
@@ -874,7 +874,7 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
                        ((HTML)table.getWidget(3,0)).setText(constants.conceptUrl());
                    }
                 }
-		    });
+		    });*/
 		}
 
 		public boolean passCheckInput() {
@@ -885,7 +885,7 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 			else {
 				if(ConfigConstants.MANDATORY_DEFINITION_NAMESPACES.contains(MainApp.defaultNamespace))
 				{
-					 if(source.getValue((source.getSelectedIndex())).equals("") || URL.getText().length()==0)
+					 if(/*source.getValue((source.getSelectedIndex())).equals("") || */URL.getText().length()==0)
 						 pass = false;
 					 else
 						 pass = true;
@@ -908,7 +908,7 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 			ido.setIDType(IDObject.DEFINITION);
 			ido.addIDTranslationList(transObj);
 			ido.setIDSourceURL(URL.getText());
-			ido.setIDSource(source.getValue(source.getSelectedIndex()));
+			//ido.setIDSource(source.getValue(source.getSelectedIndex()));
 
 			AsyncCallback<DefinitionObject>  callback = new AsyncCallback<DefinitionObject>(){
 				public void onSuccess(DefinitionObject results){

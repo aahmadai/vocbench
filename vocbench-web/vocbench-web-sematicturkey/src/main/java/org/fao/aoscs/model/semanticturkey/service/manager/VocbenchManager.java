@@ -421,15 +421,15 @@ public class VocbenchManager extends ResponseManager {
 	 * @param getTermcode
 	 * @return
 	 */
-	public static String exportRequest(OntologyInfo ontoInfo, String concept, Boolean getChild, String scheme, String termcode, boolean getLabelForRelatedConcepts) {
+	public static String exportRequest(OntologyInfo ontoInfo, String concept, Boolean getChild, String scheme, String termcode, boolean getLabelForRelatedConcepts, String ext, String format) {
 		String filename = "";
-		XMLResponseREPLY reply = VocbenchResponseManager.exportRequest(ontoInfo, concept, getChild, scheme, termcode, getLabelForRelatedConcepts);
+		XMLResponseREPLY reply = VocbenchResponseManager.exportRequest(ontoInfo, concept, getChild, scheme, termcode, getLabelForRelatedConcepts, format);
 		if(reply!=null)
 		{
 			Element dataElement = reply.getDataElement();
 			File tempfile;
 			try {
-				tempfile = STUtility.createTempFile("rdf");
+				tempfile = STUtility.createTempFile(ext);
 				FileUtils.writeStringToFile(tempfile, STXMLUtility.stripCDATA(dataElement.getTextContent()), "UTF-8");
 				filename = tempfile.getPath();
 			} catch (IOException e) {

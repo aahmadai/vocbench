@@ -29,6 +29,7 @@ import org.fao.aoscs.domain.PermissionObject;
 import org.fao.aoscs.domain.TranslationObject;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
@@ -116,7 +117,6 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
     $wnd.open(url,'_blank','');
 }-*/;
 
-	@SuppressWarnings("deprecation")
 	private Image getImageFrame(final IDObject dObj){
 		Image img = new Image();
 		img.setPixelSize(100, 100);
@@ -130,7 +130,8 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 			img.setStyleName(Style.Link);
 
 		}
-		DOM.setStyleAttribute(img.getElement(), "marginRight", "3px");
+		img.getElement().getStyle().setMarginRight(3, Unit.PX);
+		//DOM.setStyleAttribute(img.getElement(), "marginRight", "3px");
 		return img;
 	}
 
@@ -167,7 +168,7 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 			hp.add(edit);
 			hp.add(delete);
 
-			HTML link =  new HTML("<A HREF=\""+dObj.getIDSourceURL()+"\" target=\"_blank\">"+dObj.getIDSource()+"</A>");
+			HTML link =  new HTML("<A HREF=\""+dObj.getIDSourceURL()+"\" target=\"_blank\">"+dObj.getIDSourceURL()+"</A>");
 			hp.add(link);
 		}else{
 			boolean permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_IMAGESOURCECREATE, getConceptObject().getStatusID());
@@ -351,7 +352,7 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 	}
 
 	public class AddExternalSource extends FormDialogBox implements ClickHandler{
-		private TextBox source;
+		//private TextBox source;
 		private TextBox URL;
 		private IDObject ido;
 
@@ -364,17 +365,17 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 		}
 		public void initLayout() {
-			source = new TextBox();
-			source.setWidth("100%");
+			//source = new TextBox();
+			//source.setWidth("100%");
 
 			URL = new TextBox();
 			URL.setWidth("100%");
 
-			Grid table = new Grid(2,2);
-			table.setWidget(0, 0, new HTML(constants.conceptSource()));
-			table.setWidget(1, 0, new HTML(constants.conceptUrl()));
-			table.setWidget(0, 1, source);
-			table.setWidget(1, 1, URL);
+			Grid table = new Grid(1,2);
+			table.setWidget(0, 0, new HTML(constants.conceptUrl()));
+			table.setWidget(0, 1, URL);
+			//table.setWidget(1, 1, source);
+			//table.setWidget(1, 0, new HTML(constants.conceptSource()));
 			table.setWidth("100%");
 			table.getColumnFormatter().setWidth(1, "80%");
 
@@ -383,7 +384,7 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 		public boolean passCheckInput() {
 			boolean pass = false;
-			if(source.getText().length()==0 || URL.getText().equals("") ){
+			if(/*source.getText().length()==0 || */URL.getText().equals("") ){
 				pass = false;
 			}else{
 				pass = true;
@@ -396,7 +397,7 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 			IDObject idoNew = new IDObject();
 			idoNew.setIDUri(ido.getIDUri());
-			idoNew.setIDSource(source.getText());
+			//idoNew.setIDSource(source.getText());
 			idoNew.setIDSourceURL(URL.getText());
 			idoNew.setIDType(IDObject.IMAGE);
 
@@ -421,7 +422,7 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 	}
 
 	public class EditExternalSource extends FormDialogBox implements ClickHandler{
-		private TextBox source;
+		//private TextBox source;
 		private TextBox URL;
 		private IDObject ido;
 
@@ -435,19 +436,19 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 		public void initLayout() {
 
-			source = new TextBox();
-			source.setText(ido.getIDSource());
-			source.setWidth("100%");
+			//source = new TextBox();
+			//source.setText(ido.getIDSource());
+			//source.setWidth("100%");
 
 			URL = new TextBox();
 			URL.setText(ido.getIDSourceURL());
 			URL.setWidth("100%");
 
-			Grid table = new Grid(2,2);
-			table.setWidget(0, 0, new HTML(constants.conceptSource()));
-			table.setWidget(1, 0, new HTML(constants.conceptUrl()));
-			table.setWidget(0, 1, source);
-			table.setWidget(1, 1, URL);
+			Grid table = new Grid(1,2);
+			table.setWidget(0, 0, new HTML(constants.conceptUrl()));
+			table.setWidget(0, 1, URL);
+			//table.setWidget(1, 0, new HTML(constants.conceptSource()));
+			//table.setWidget(1, 1, source);
 			table.setWidth("100%");
 			table.getColumnFormatter().setWidth(1, "80%");
 
@@ -456,7 +457,7 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 		public boolean passCheckInput() {
 			boolean pass = false;
-			if( source.getText().length()==0 || URL.getText().equals("") ){
+			if(/* source.getText().length()==0 || */URL.getText().equals("") ){
 				pass = false;
 			}else{
 				pass = true;
@@ -469,7 +470,7 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 			IDObject idoNew = new IDObject();
 			idoNew.setIDUri(ido.getIDUri());
-			idoNew.setIDSource(source.getText());
+			//idoNew.setIDSource(source.getText());
 			idoNew.setIDSourceURL( URL.getText());
 			idoNew.setIDType(IDObject.IMAGE);
 
@@ -739,7 +740,7 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 		private TextArea description;
 		private ListBox language;
-		private TextBox source;
+		//private TextBox source;
 		private TextBox name;
 		private TextBox url;
 
@@ -765,20 +766,20 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 			language = Convert.makeListWithUserLanguages(MainApp.languageDict, MainApp.getUserLanguagePermissionList());
 			language.setWidth("100%");
 
-			source = new TextBox();
-			source.setWidth("100%");
+			//source = new TextBox();
+			//source.setWidth("100%");
 
-			Grid table = new Grid(5,2);
+			Grid table = new Grid(4,2);
 			table.setWidget(0, 0, new HTML(constants.conceptName()));
 			table.setWidget(1, 0, new HTML(constants.conceptDescription()));
 			table.setWidget(2, 0, new HTML(constants.conceptLanguage()));
-			table.setWidget(3, 0, new HTML(constants.conceptSource()));
-			table.setWidget(4, 0, new HTML(constants.conceptUrl()));
+			table.setWidget(3, 0, new HTML(constants.conceptUrl()));
+			//table.setWidget(4, 0, new HTML(constants.conceptSource()));
 			table.setWidget(0, 1, name);
 			table.setWidget(1, 1, description);
 			table.setWidget(2, 1, language);
-			table.setWidget(3, 1, source);
-			table.setWidget(4, 1, url);
+			table.setWidget(3, 1, url);
+			//table.setWidget(4, 1, source);
 			table.getColumnFormatter().setWidth(1, "80%");
 			table.setWidth("100%");
 			addWidget(GridStyle.setTableConceptDetailStyleleft(table,"gslRow1", "gslCol1", "gslPanel1"));
@@ -786,7 +787,7 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 		}
 		public boolean passCheckInput() {
 		    boolean pass = false;
-			if(language.getValue((language.getSelectedIndex())).equals("--None--")  || language.getValue((language.getSelectedIndex())).equals("") || description.getText().equals("") || source.getText().length()==0 || url.getText().length()==0 || name.getText().length()==0){
+			if(language.getValue((language.getSelectedIndex())).equals("--None--")  || language.getValue((language.getSelectedIndex())).equals("") || description.getText().equals("") || /*source.getText().length()==0 || */url.getText().length()==0 || name.getText().length()==0){
 				pass = false;
 			}else {
 				pass = true;
@@ -805,7 +806,7 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 			IDObject ido = new IDObject();
 			ido.setIDSourceURL(url.getText());
-			ido.setIDSource(source.getText());
+			//ido.setIDSource(source.getText());
 			ido.addIDTranslationList(transObj);
 			ido.setIDType(IDObject.IMAGE);
 

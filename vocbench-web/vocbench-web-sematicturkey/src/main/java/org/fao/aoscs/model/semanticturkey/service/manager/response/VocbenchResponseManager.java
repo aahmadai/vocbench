@@ -490,7 +490,7 @@ public class VocbenchResponseManager extends ResponseManager {
 	 * @param termcode
 	 * @return
 	 */
-	public static XMLResponseREPLY exportRequest(OntologyInfo ontoInfo, String concept, Boolean getChild, String scheme, String termcode, Boolean getLabelForRelatedConcepts) {
+	public static XMLResponseREPLY exportRequest(OntologyInfo ontoInfo, String concept, Boolean getChild, String scheme, String termcode, Boolean getLabelForRelatedConcepts, String format) {
 		
 		Response resp;
 		
@@ -500,6 +500,7 @@ public class VocbenchResponseManager extends ResponseManager {
 				STModel.par(SKOS.Par.scheme, scheme), 
 				STModel.par(VOCBENCH.ParVocBench.termcode, termcode),
 				STModel.par(VOCBENCH.ParVocBench.getLabelForRelatedConcepts, getLabelForRelatedConcepts.toString()), 
+				STModel.par("format", format), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
 		}
@@ -511,6 +512,7 @@ public class VocbenchResponseManager extends ResponseManager {
 					STModel.par(SKOS.Par.scheme, scheme), 
 					STModel.par(VOCBENCH.ParVocBench.termcode, termcode),
 					STModel.par(VOCBENCH.ParVocBench.getLabelForRelatedConcepts, getLabelForRelatedConcepts.toString()), 
+					STModel.par("format", format), 
 					STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		}
 		
