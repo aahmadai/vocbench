@@ -85,7 +85,7 @@ public class ExportServiceSTImpl {
 		} 
 		
 		if((concepturi!=null && !concepturi.equals("")) || (scheme!=null && !scheme.equals("")))
-			filename = VocbenchManager.exportRequest(ontoInfo, concepturi, isIncludeChildren, scheme, termcode, getLabelForRelatedConcepts);
+			filename = VocbenchManager.exportRequest(ontoInfo, concepturi, isIncludeChildren, scheme, termcode, getLabelForRelatedConcepts, expfileFormat, expformat);
 		else
 			filename = InputOutputManager.saveRDF(ontoInfo, expfileFormat, expformat);
 			

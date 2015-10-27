@@ -3,7 +3,10 @@
  */
 package org.fao.aoscs.client.module.concept.widgetlib.dialog;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
@@ -80,7 +83,9 @@ public class RemoveConceptToScheme extends FormDialogBox {
 	public void initLayout(HashMap<String, String> list) {
 		schemeList.clear();
 		schemeList.addItem("--Select--", "");
-		for(String schemeName : list.keySet())
+		List<String> keys = new ArrayList<String>(list.keySet());
+		Collections.sort(keys);
+		for(String schemeName : keys)
 		{
 			schemeList.addItem(schemeName, list.get(schemeName));
 		}

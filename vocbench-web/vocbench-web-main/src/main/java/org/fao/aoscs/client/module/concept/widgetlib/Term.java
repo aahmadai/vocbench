@@ -18,6 +18,7 @@ import org.fao.aoscs.client.module.constant.OWLStatusConstants;
 import org.fao.aoscs.client.module.constant.Style;
 import org.fao.aoscs.client.module.constant.TreeItemColor;
 import org.fao.aoscs.client.module.term.TermDetailTabPanel;
+import org.fao.aoscs.client.module.term.TermDetailTabPanel.TermDetailTabPanelOpener;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
@@ -44,6 +45,7 @@ import org.fao.aoscs.domain.TermRelationshipObject;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -313,7 +315,7 @@ public class Term extends ConceptTemplate{
 
 
 
-	public class TermDetail extends DialogBoxAOS implements ClickHandler{
+	public class TermDetail extends DialogBoxAOS implements ClickHandler, TermDetailTabPanelOpener{
 		private VerticalPanel panel = new VerticalPanel();
 		private Button cancel = new Button(constants.buttonClose());
 
@@ -322,13 +324,12 @@ public class Term extends ConceptTemplate{
 			if(text.length()>100)
 				text = text.substring(0,70)+"...";
 			this.setHTML(constants.conceptInformationFor()+" <i>"+text+" ("+termObject.getLang()+")</i>&nbsp;["+(termObject.isMainLabel()?constants.conceptPreferredTerm():constants.conceptNonPreferredTerm())+"]");
-			TermDetailTabPanel termDetail = new TermDetailTabPanel(permissionTable, initData);
+			TermDetailTabPanel termDetail = new TermDetailTabPanel(permissionTable, initData, TermDetail.this);
 			termDetail.setURI(termObject, conceptObject);
 			
 			VerticalPanel vp = new VerticalPanel();
 			vp.setSize("100%", "100%");
 			vp.add(termDetail);
-			vp.setSpacing(5);
 
 			panel.add(vp);
 			panel.setCellHeight(vp, "100%");
@@ -358,6 +359,12 @@ public class Term extends ConceptTemplate{
 				this.hide();
 			}
 		}
+		
+		@Override
+		public void termDetailTabPanelSubmit() {
+			this.hide();
+		}
+
 
 	}
 
@@ -839,5 +846,4 @@ public class Term extends ConceptTemplate{
 		}
 
 	}
-
 }

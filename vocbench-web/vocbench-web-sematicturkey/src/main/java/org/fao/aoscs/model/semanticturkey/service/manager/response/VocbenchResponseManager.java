@@ -490,16 +490,32 @@ public class VocbenchResponseManager extends ResponseManager {
 	 * @param termcode
 	 * @return
 	 */
-	public static XMLResponseREPLY exportRequest(OntologyInfo ontoInfo, String concept, Boolean getChild, String scheme, String termcode, Boolean getLabelForRelatedConcepts) {
+	public static XMLResponseREPLY exportRequest(OntologyInfo ontoInfo, String concept, Boolean getChild, String scheme, String termcode, Boolean getLabelForRelatedConcepts, String format) {
 		
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.exportRequest,
-				STModel.par(SKOS.Par.concept, concept), 
-				STModel.par(VOCBENCH.ParVocBench.getChild, getChild.toString()),
+		Response resp;
+		
+		if(concept == null || concept.equals(""))
+		{
+			resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.exportRequest,
 				STModel.par(SKOS.Par.scheme, scheme), 
 				STModel.par(VOCBENCH.ParVocBench.termcode, termcode),
 				STModel.par(VOCBENCH.ParVocBench.getLabelForRelatedConcepts, getLabelForRelatedConcepts.toString()), 
+				STModel.par("format", format), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName())
 				);
+		}
+		else
+		{
+			resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.exportRequest,
+					STModel.par(SKOS.Par.concept, concept), 
+					STModel.par(VOCBENCH.ParVocBench.getChild, getChild.toString()),
+					STModel.par(SKOS.Par.scheme, scheme), 
+					STModel.par(VOCBENCH.ParVocBench.termcode, termcode),
+					STModel.par(VOCBENCH.ParVocBench.getLabelForRelatedConcepts, getLabelForRelatedConcepts.toString()), 
+					STModel.par("format", format), 
+					STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		}
+		
 		return getXMLResponseREPLY(resp);
 	}
 	

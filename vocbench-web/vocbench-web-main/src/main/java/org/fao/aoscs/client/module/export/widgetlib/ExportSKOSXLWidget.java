@@ -216,6 +216,7 @@ public class ExportSKOSXLWidget extends Composite{
 				if(!scheme.getValue((scheme.getSelectedIndex())).equals("") && !scheme.getValue(scheme.getSelectedIndex()).equals("--None--"))
 				{
 					exp.setSchemeURI(scheme.getValue(scheme.getSelectedIndex()));
+					selectFormat("RDF/XML");
 				}else
 				{
 					exp.setSchemeURI(null);
@@ -223,6 +224,15 @@ public class ExportSKOSXLWidget extends Composite{
 			}
 		});
 		return scheme;
+	}
+	
+	private void selectFormat(String txt)
+	{
+		for(int i=0;i<format.getItemCount();i++)
+		{
+			if(format.getItemText(i).equals(txt))
+				format.setSelectedIndex(i);
+		}
 	}
 	
 	private ListBox getRDFFormat(){
@@ -297,6 +307,7 @@ public class ExportSKOSXLWidget extends Composite{
 					{
 						conceptLabel.setValue(cb.getSelectedItem(),cb.getTreeObject());
 						exp.setConceptURI(cb.getTreeObject().getUri());
+						selectFormat("RDF/XML");
 					}					
 				});						
 			}

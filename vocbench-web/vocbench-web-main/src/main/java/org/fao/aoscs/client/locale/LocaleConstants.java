@@ -911,6 +911,7 @@ public interface LocaleConstants extends Constants{
 	public String refactorActionFailed();
 	public String refactorRemoveSKOSXLLabels();
 	public String refactorRemoveReifiedDefinitions();
+	public String refactorRenameURIWaring();
 	
 	//LoadingDialog
 	public String ldLoading();

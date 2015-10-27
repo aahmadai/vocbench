@@ -13,7 +13,7 @@
 
 	<properties>
 		<!-- Convenience property to set the GWT version -->
-		<gwtVersion>2.5.1</gwtVersion>
+		<gwtVersion>2.7.0</gwtVersion>
 		<!-- GWT needs at least java 1.5 -->
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,7 +37,7 @@
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
 			<version>${gwtVersion}</version>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
@@ -67,7 +67,7 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.2</version>
-			<scope>test</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
@@ -79,6 +79,12 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm</artifactId>
+			<version>5.0</version>
+		</dependency>
+
 		<!-- Java Mail -->
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -206,7 +212,7 @@
 										<artifactId>
 											maven-war-plugin
 										</artifactId>
-										<versionRange>[2.1,)</versionRange>
+										<versionRange>[2.6,)</versionRange>
 										<goals>
 											<goal>exploded</goal>
 										</goals>
@@ -222,7 +228,7 @@
 											gwt-maven-plugin
 										</artifactId>
 										<versionRange>
-											[2.5.1,)
+											[2.7.0,)
 										</versionRange>
 										<goals>
 											<goal>i18n</goal>

@@ -1115,7 +1115,7 @@ public class ObjectManager extends ResponseManager {
 					
 					for(Element sourceLinkElem : STXMLUtility.getChildElementByTagName(definitionElem, "sourceLink"))
 					{
-						for(Element elem : STXMLUtility.getChildElementByTagName(sourceLinkElem, RDFTypesEnum.typedLiteral.toString()))
+						for(Element elem : STXMLUtility.getChildElementByTagName(sourceLinkElem, RDFTypesEnum.uri.toString()))
 						{
 							idObj.setIDSourceURL(elem.getTextContent());
 						}
@@ -1223,7 +1223,7 @@ public class ObjectManager extends ResponseManager {
 					
 					for(Element sourceLinkElem : STXMLUtility.getChildElementByTagName(definitionElem, "sourceLink"))
 					{
-						for(Element elem : STXMLUtility.getChildElementByTagName(sourceLinkElem, RDFTypesEnum.typedLiteral.toString()))
+						for(Element elem : STXMLUtility.getChildElementByTagName(sourceLinkElem, RDFTypesEnum.uri.toString()))
 						{
 							idObj.setIDSourceURL(elem.getTextContent());
 						}

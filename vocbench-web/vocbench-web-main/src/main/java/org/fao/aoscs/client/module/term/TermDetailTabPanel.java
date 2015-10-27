@@ -3,11 +3,14 @@ package org.fao.aoscs.client.module.term;
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
 import org.fao.aoscs.client.locale.LocaleConstants;
+import org.fao.aoscs.client.module.concept.widgetlib.dialog.ResourceURIPanel;
+import org.fao.aoscs.client.module.concept.widgetlib.dialog.ResourceURIPanel.ResourceURIPanelOpener;
 import org.fao.aoscs.client.module.term.widgetlib.TermInformation;
 import org.fao.aoscs.client.module.term.widgetlib.TermProperty;
 import org.fao.aoscs.client.module.term.widgetlib.TermRelationship;
 import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
+import org.fao.aoscs.client.utility.ModuleManager;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.InformationObject;
 import org.fao.aoscs.domain.InitializeConceptData;
@@ -20,11 +23,13 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class TermDetailTabPanel extends Composite{
+public class TermDetailTabPanel extends Composite implements ResourceURIPanelOpener{
 	
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	public DecoratedTabPanel tabPanel;
@@ -41,9 +46,20 @@ public class TermDetailTabPanel extends Composite{
 	
 	public static int tabSelect = 1;
 	
-	public TermDetailTabPanel(PermissionObject permissionTable,InitializeConceptData initData)
+	//private HTML URI = new HTML();
+	
+	private ResourceURIPanel resURIPanel = new ResourceURIPanel(TermDetailTabPanel.this);
+	
+	private TermDetailTabPanelOpener opener;
+	
+	public interface TermDetailTabPanelOpener {
+	    void termDetailTabPanelSubmit();
+	}
+	
+	public TermDetailTabPanel(PermissionObject permissionTable,InitializeConceptData initData, TermDetailTabPanelOpener opener)
 	{
 		
+		this.opener = opener;
 		this.permissionTable = permissionTable;
 		
 		tabPanel = new DecoratedTabPanel();
@@ -100,7 +116,17 @@ public class TermDetailTabPanel extends Composite{
 			
 		});
 		
-		initWidget(tabPanel);
+		VerticalPanel vpTabPanel = new VerticalPanel();
+		vpTabPanel.setSize("100%", "100%");
+		vpTabPanel.add(tabPanel);
+		vpTabPanel.setSpacing(10);
+		
+		VerticalPanel vp = new VerticalPanel();
+		vp.setSize("100%", "100%");
+		vp.add(resURIPanel);
+		vp.add(vpTabPanel);
+		
+		initWidget(vp);
 	}
 	public void setURI(final TermObject termObject, final ConceptObject conceptObject){
 		tInfo.setConceptObject(conceptObject);
@@ -114,8 +140,70 @@ public class TermDetailTabPanel extends Composite{
 		loadTab(termObject);
 	}
 	
-	public void loadTab(TermObject termObject)
+	/*private HorizontalPanel uriPanel(){
+		URI.setWidth("100%");
+		URI.setWordWrap(true);
+		URI.addStyleName("link-label-blue");
+		URI.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(!URI.getText().equals(""))
+				MainApp.openURL(URI.getText());
+			}
+		});
+				
+		HTML label = new HTML("&nbsp;&nbsp;"+constants.conceptUri()+":&nbsp;");
+		label.setStyleName(Style.fontWeightBold);
+		
+		Image editURI = new Image("images/edit-grey.gif");
+		editURI.setTitle(constants.buttonEdit());
+		editURI.setStyleName(Style.Link);
+		editURI.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(manageResourceURI == null || !manageResourceURI.isLoaded )
+				{
+					manageResourceURI = new ManageResourceURI();
+				}
+				manageResourceURI.addSubmitClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent arg0) {
+						manageResourceURI.showLoading(true);
+						AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>(){
+							public void onSuccess(Boolean result){
+								manageResourceURI.showLoading(false);
+								if(result)
+								{
+									manageResourceURI.hide();
+									ModuleManager.getMainApp().reloadConceptTree(tInfo.getConceptObject().getUri());
+								}
+								else
+									Window.alert(constants.refactorActionFailed());
+							}
+							public void onFailure(Throwable caught){
+								ExceptionManager.showException(caught, constants.refactorActionFailed());
+							}
+						};
+						Service.refactorService.renameResource(MainApp.userOntology, manageResourceURI.getOldURI().getValue(), manageResourceURI.getNewURI().getValue(), callback);
+						
+					}
+				});
+				manageResourceURI.show(URI.getText());
+			}
+		});
+		
+		HorizontalPanel hp = new HorizontalPanel();
+		hp.add(label);		
+		hp.add(URI);
+		hp.add(editURI);
+		hp.setWidth("100%");
+		hp.setStyleName("showuri");
+		hp.setCellWidth(URI, "100%");
+		hp.setCellHorizontalAlignment(URI, HasHorizontalAlignment.ALIGN_LEFT);
+		hp.setCellHorizontalAlignment(editURI, HasHorizontalAlignment.ALIGN_RIGHT);
+		return hp;
+	}*/
+	
+	public void loadTab(final TermObject termObject)
 	{
+		resURIPanel.setResourceURI(termObject.getUri());
 		AsyncCallback<TermDetailObject> callback = new AsyncCallback<TermDetailObject>()
 		{
 			public void onSuccess(final TermDetailObject tDetailObj)
@@ -150,5 +238,12 @@ public class TermDetailTabPanel extends Composite{
 		};
 	 
 		Service.conceptService.getConceptHistoryDataSize(MainApp.userOntology.getOntologyId(), termObject.getUri(), InformationObject.TERM_TYPE, callback1);
+	}
+	
+	public void resourceURIPanelSubmit(String newResourceURI) {
+		ModuleManager.getMainApp().reloadConceptTree();
+		if(opener!=null)
+			opener.termDetailTabPanelSubmit();
+		Window.alert("test-termdetail");
 	}
 }
