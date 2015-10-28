@@ -1359,9 +1359,12 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource definitionOrImageURI = retrieveExistingURIResource(skosxlModel, definitionOrImage, 
 					graph);
 			
+			//check if there is already a value for the definition (check both the new SOURCE or the old HASLINK)
 			String query = "SELECT ?sourceLink"+
 						"\nWHERE{"+
-						"\n<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?sourceLink ."+
+						"\n{<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?sourceLink . }" +
+						"\nUNION" +
+						"\n{<" +definitionOrImageURI.getURI()+"> <"+HASLINK+"> ?sourceLink . }" +
 						"\n}";
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(QueryLanguage.SPARQL, query);
@@ -1448,7 +1451,9 @@ public class VOCBENCH extends SKOSXL {
 			
 			String query = "SELECT ?sourceLink ?fromSource"+
 						"\nWHERE{"+
-						"\n<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?sourceLink ."+
+						"\n{<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?sourceLink . }" +
+						"\nUNION" +
+						"\n{<" +definitionOrImageURI.getURI()+"> <"+HASLINK+"> ?sourceLink . }" +
 						"\nOPTIONAL { <" +definitionOrImageURI.getURI()+"> <"+HASSOURCE+"> ?fromSource . }"+
 						"\n}";
 			//System.out.println("query = "+query); // DEBUG
@@ -1492,19 +1497,21 @@ public class VOCBENCH extends SKOSXL {
 			model.addTriple(definitionOrImageURI, dateUpdatedURI, dateLiteral, graph);
 			
 			//delete the old link
-			ARTURIResource sourceLinkURIprop = model.createURIResource(SOURCE);
+			ARTURIResource sourceLinkURIpropNew = model.createURIResource(SOURCE);
+			ARTURIResource sourceLinkURIpropOld = model.createURIResource(HASLINK);
 			if(oldFromSourceLiteral	!= null){
 				ARTURIResource fromSourceURI = model.createURIResource(HASSOURCE);
 				model.deleteTriple(definitionOrImageURI, fromSourceURI, oldFromSourceLiteral, graph);
 			}
-			model.deleteTriple(definitionOrImageURI, sourceLinkURIprop, oldSourceLink, graph);
+			model.deleteTriple(definitionOrImageURI, sourceLinkURIpropNew, oldSourceLink, graph);
+			model.deleteTriple(definitionOrImageURI, sourceLinkURIpropOld, oldSourceLink, graph);
 			
 			// add the link and source
 			//ARTURIResource stringUri = model.createURIResource(STRINGRDF);
 			//ARTLiteral fromSourceLiteral = model.createLiteral(fromSource, stringUri); // OLD
 			//ARTLiteral sourceLinkLiteral = model.createLiteral(sourceLink, stringUri);
 			ARTURIResource sourceLinkURIvalue = model.createURIResource(sourceLink);
-			model.addTriple(definitionOrImageURI, sourceLinkURIprop, sourceLinkURIvalue, graph);
+			model.addTriple(definitionOrImageURI, sourceLinkURIpropNew, sourceLinkURIvalue, graph);
 			//model.addTriple(definitionOrImageURI, fromSourceURI, fromSourceLiteral, graph); // OLD
 			
 			if(isImage)
@@ -1549,7 +1556,9 @@ public class VOCBENCH extends SKOSXL {
 			
 			String query = "SELECT ?sourceLink ?fromSource"+
 						"\nWHERE{"+
-						"\n<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?sourceLink ."+
+						"\n{<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?sourceLink . }" +
+						"\nUNION" +
+						"\n{<" +definitionOrImageURI.getURI()+"> <"+HASLINK+"> ?sourceLink . }" +
 						"\nOPTIONAL { <" +definitionOrImageURI.getURI()+"> <"+HASSOURCE+"> ?fromSource . }"+
 						"\n}";
 			//System.out.println("query = "+query); // DEBUG
@@ -1601,8 +1610,10 @@ public class VOCBENCH extends SKOSXL {
 				ARTURIResource fromSourceURI = skosxlModel.createURIResource(HASSOURCE);
 				skosxlModel.deleteTriple(definitionOrImageURI, fromSourceURI, oldFromSourceLiteral, graph);
 			}
-			ARTURIResource sourceLinkURIprop = skosxlModel.createURIResource(SOURCE);
-			skosxlModel.deleteTriple(definitionOrImageURI, sourceLinkURIprop, oldSourceLink, graph);
+			ARTURIResource sourceLinkURIpropNew = skosxlModel.createURIResource(SOURCE);
+			ARTURIResource sourceLinkURIpropOld = skosxlModel.createURIResource(SOURCE);
+			skosxlModel.deleteTriple(definitionOrImageURI, sourceLinkURIpropNew, oldSourceLink, graph);
+			skosxlModel.deleteTriple(definitionOrImageURI, sourceLinkURIpropOld, oldSourceLink, graph);
 			
 			// add the link and source
 			
@@ -2968,7 +2979,7 @@ public class VOCBENCH extends SKOSXL {
 	}
 	
 	
-	public Response getConceptDefinitionOrImage(String conceptName, boolean isImage){
+	public Response getConceptDefinitionOrImageOld(String conceptName, boolean isImage){
 		// It is important to remember that to every concept there can be associated more than one 
 		// definition (with its relative informarmation, such as):
 		//	- Create Date
@@ -2997,6 +3008,7 @@ public class VOCBENCH extends SKOSXL {
 			query +="\nOPTIONAL{?definitionOrImageURI <"+CREATED+"> ?created . } ."+
 					"\nOPTIONAL{?definitionOrImageURI <"+MODIFIED+"> ?modified . } ."+
 					"\nOPTIONAL{?definitionOrImageURI <"+SOURCE+"> ?sourceLink . } ."+
+					"\nOPTIONAL{?definitionOrImageURI <"+HASLINK+"> ?sourceLink . } ."+
 					"\nOPTIONAL{?definitionOrImageURI <"+HASSOURCE+"> ?source . } ."+
 					"\nOPTIONAL{?definitionOrImageURI <"+VALUE+"> ?label . } ."+
 					"\nOPTIONAL{?definitionOrImageURI <"+COMMENT+"> ?comment . } ." +
@@ -3118,6 +3130,198 @@ public class VOCBENCH extends SKOSXL {
 		return response;
 	}
 	
+	public Response getConceptDefinitionOrImage(String conceptName, boolean isImage){
+		// It is important to remember that to every concept there can be associated more than one 
+		// definition (with its relative informarmation, such as):
+		//	- Create Date
+		//	- Modified date
+		//	- Labels and languages
+		//	- Source link
+		//	- Source
+		
+		SKOSXLModel skosxlModel = getSKOSXLModel();
+		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
+		Element dataElement = response.getDataElement();
+		
+		try {
+			ARTURIResource conceptURI = retrieveExistingURIResource(skosxlModel, 
+					skosxlModel.expandQName(conceptName));
+			
+			
+			//create a SPARQL construct to get all the triple associated to each definition or image given
+			// a specific concept
+			
+			String query = "CONSTRUCT { ?definitionOrImageURI ?property ?value . }"+
+					"\nWHERE{";
+			if(isImage)
+				query += "\n<"+conceptURI+"> <"+DEPICTION+"> ?definitionOrImageURI .";
+			else
+				query += "\n<"+conceptURI+"> <"+DEFINITION+"> ?definitionOrImageURI .";
+			query += "\n?definitionOrImageURI ?property ?value ." +
+					"\n}" +
+					"\nORDER BY ?definitionOrImageURI";
+			
+			
+			Element conceptElem = XMLHelp.newElement(dataElement, "concept");
+			RDFXMLHelp.addRDFNode(conceptElem, conceptURI);
+			Element definitionsElem;
+			if(isImage)
+				definitionsElem = XMLHelp.newElement(dataElement, "images");
+			else
+				definitionsElem = XMLHelp.newElement(dataElement, "definitions");
+			
+			//execute the query
+			GraphQuery graphQuery = skosxlModel.createGraphQuery(query);
+			ARTStatementIterator iter = graphQuery.evaluate(false);
+			ARTResource prevSubj = null;
+			Map<String, List<ARTNode>>propValuesMap = new HashMap<String, List<ARTNode>>();
+			while(iter.hasNext()){
+				ARTStatement artStatement = iter.getNext();
+				ARTResource subj = artStatement.getSubject();
+				ARTURIResource pred = artStatement.getPredicate();
+				ARTNode obj = artStatement.getObject();
+				
+				//check if it is a new Definition or Image (using its URI), in this case prepare the response 
+				// part regarding the previous one
+				if(prevSubj!= null && !prevSubj.equals(subj)){
+					createSingleDefOrImageElement(definitionsElem, prevSubj, propValuesMap, isImage);
+					
+					//clear the map, it should be cleared in createSingleDefOrImageElement, but just to 
+					// be extra sure
+					propValuesMap.clear();
+					prevSubj = subj;
+				}
+				
+				if(!propValuesMap.containsKey(pred.getURI())){
+					propValuesMap.put(pred.getURI(), new ArrayList<ARTNode>());
+				}
+				List<ARTNode> valueList = propValuesMap.get(pred.getURI());
+				valueList.add(obj);
+			}
+			if(prevSubj != null){
+				//check if at least one definition or image was found. If so, then remember to create 
+				// the element for the last definition or image, so outside the while
+				createSingleDefOrImageElement(definitionsElem, prevSubj, propValuesMap, isImage);
+			}
+			
+		} catch (ModelAccessException e) {
+			return logAndSendException(e);
+		} catch (UnsupportedQueryLanguageException e) {
+			return logAndSendException(e);
+		} catch (MalformedQueryException e) {
+			return logAndSendException(e);
+		} catch (QueryEvaluationException e) {
+			return logAndSendException(e);
+		} catch (NonExistingRDFResourceException e) {
+			return logAndSendException(e);
+		}
+		
+		return response;
+	}
+	
+	private void createSingleDefOrImageElement(Element definitionsElem, ARTResource prevSubj,
+			Map<String, List<ARTNode>> propValuesMap, boolean isImage) {
+		
+		List<ARTNode>valuesList = null;
+		
+		Element defElem;
+		if(isImage)
+			defElem = XMLHelp.newElement(definitionsElem, "image");
+		else 
+			defElem= XMLHelp.newElement(definitionsElem, "definition");
+		
+		Element defUriElem = XMLHelp.newElement(defElem, "uri");
+		RDFXMLHelp.addRDFNode(defUriElem, STRDFNodeFactory.createSTRDFURI(prevSubj.asURIResource(), true));
+		
+		//first of all, take form the map the values associated to particular properties:
+		// - CREATED
+		// - MODIFIED
+		// - SOURCE
+		// - VALUE
+		// - COMMENT
+		
+		//CREATED
+		valuesList  = propValuesMap.get(CREATED);
+		if(valuesList!=null){
+			Element createdElem = XMLHelp.newElement(defElem, "created");
+			for(ARTNode artNode : valuesList){
+				RDFXMLHelp.addRDFNode(createdElem, 
+						STRDFNodeFactory.createSTRDFLiteral(artNode.asLiteral(), true));
+			}
+			propValuesMap.remove(CREATED);
+		}
+		
+		//MODIFIED
+		valuesList = propValuesMap.get(MODIFIED);
+		if(valuesList!=null){
+			Element modifiedElem = XMLHelp.newElement(defElem, "modified");
+			for(ARTNode artNode : valuesList){
+				RDFXMLHelp.addRDFNode(modifiedElem, 
+						STRDFNodeFactory.createSTRDFLiteral(artNode.asLiteral(), true));
+			}
+		}
+		propValuesMap.remove(MODIFIED);
+		
+		//SOURCE
+		valuesList = propValuesMap.get(SOURCE);
+		if(valuesList!=null){
+			//in the new version of VocBench (as is it in the new version of Agrovoc) the sourceLink 
+			// (the value of the property SOURCE) is a URI, in the old one it was a literal
+			Element sourceLinkElem = XMLHelp.newElement(defElem, "sourceLink");
+			for(ARTNode artNode : valuesList){
+				if(artNode.isURIResource()){
+					RDFXMLHelp.addRDFNode(sourceLinkElem, STRDFNodeFactory.createSTRDFURI(
+							artNode.asURIResource(), true));
+				} else {//it is a literal
+					RDFXMLHelp.addRDFNode(sourceLinkElem, 
+							STRDFNodeFactory.createSTRDFLiteral(artNode.asLiteral(), true));
+				}
+			}
+			propValuesMap.remove(SOURCE);
+		}
+		
+		//VALUE
+		valuesList = propValuesMap.get(VALUE);
+		if(valuesList!=null){
+			Element labelElem = XMLHelp.newElement(defElem, "label");
+			for(ARTNode artNode : valuesList){
+				RDFXMLHelp.addRDFNode(labelElem, 
+						STRDFNodeFactory.createSTRDFLiteral(artNode.asLiteral(), true));
+			}
+			propValuesMap.remove(VALUE);
+		}
+		
+		//COMMENT
+		valuesList = propValuesMap.get(COMMENT);
+		if(valuesList!=null){
+			Element commentElem = XMLHelp.newElement(defElem, "comment");
+			for(ARTNode artNode : valuesList){
+				RDFXMLHelp.addRDFNode(commentElem, 
+						STRDFNodeFactory.createSTRDFLiteral(artNode.asLiteral(), true));
+			}
+			propValuesMap.remove(COMMENT);
+		}
+		
+		//now get all the remaining values
+		for(String prop : propValuesMap.keySet()){
+			valuesList = propValuesMap.get(prop);
+			if(valuesList!=null && !valuesList.isEmpty()){
+				Element genericPropElem = XMLHelp.newElement(defElem, prop);
+				for(ARTNode artNode : valuesList){
+					if(artNode.isURIResource()){
+						RDFXMLHelp.addRDFNode(genericPropElem, STRDFNodeFactory.createSTRDFURI(
+								artNode.asURIResource(), true));
+					}else if(artNode.isLiteral()){
+						RDFXMLHelp.addRDFNode(genericPropElem, 
+								STRDFNodeFactory.createSTRDFLiteral(artNode.asLiteral(), true));
+					} else{ // it is a BNode
+						//TODO decide what to do
+					}
+				}
+			}
+		}
+	}
+
 	private void createSinglePlainDefElement(Element definitionsElem,Collection<ARTLiteral> labelLiteralList){
 		Element defElem;
 		defElem= XMLHelp.newElement(definitionsElem, "plainDefinition");
