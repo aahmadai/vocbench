@@ -2234,6 +2234,7 @@ public class VOCBENCH extends SKOSXL {
 						"\n(COUNT (DISTINCT ?relatedForCount) AS ?relatedCount) " +
 						"\n(COUNT (DISTINCT ?notationForCount) AS ?notationCount) " +
 						"\n(COUNT (DISTINCT ?image) AS ?imageCount)" +
+						"\n(COUNT (DISTINCT ?type) AS ?typeCount)" +
 						"\n(COUNT (DISTINCT ?sameAsForCount) AS ?sameAsCount)" +
 						"\n(COUNT (DISTINCT ?mappingRelationForCount) AS ?mappingRelationCount)" +
 						"\n(COUNT (DISTINCT ?annotationForCount) AS ?annotationCount)" +
@@ -2312,6 +2313,13 @@ public class VOCBENCH extends SKOSXL {
 						"\nUNION"+
 
 						
+						//TABS TYPE
+						
+						"\n{<"+conceptUri+"> <"+TYPE+"> ?type . }"+
+
+						"\nUNION"+
+
+						
 						"\n{?subPropSameAs <"+SUBPROPERTY+">+ <"+SAMEAS+"> . "+ //owl:sameAs and its SUBPROPERTY 
 						"\n<"+conceptUri+"> ?subPropSameAs ?sameAs . "+
 						"\nBIND( CONCAT (STR(?subPropSameAs), STR(?sameAs) ) AS ?sameAsForCount ) }"+
@@ -2360,6 +2368,7 @@ public class VOCBENCH extends SKOSXL {
 			String relatedImplicitCount = "0";
 			String notationImplicitCount = "0";
 			String imageImplicitCount = "0";
+			String typeImplicitCount = "0";
 			
 			String sameAsImplicitCount = "0";
 			String mappingRelationImplicitCount = "0";
@@ -2386,6 +2395,8 @@ public class VOCBENCH extends SKOSXL {
 						notationImplicitCount = tuple.getBinding("notationCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("imageCount"))
 						imageImplicitCount = tuple.getBinding("imageCount").getBoundValue().getNominalValue();
+					if(tuple.hasBinding("typeCount"))
+						typeImplicitCount = tuple.getBinding("typeCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("sameAsCount"))
 						sameAsImplicitCount = tuple.getBinding("sameAsCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("mappingRelationCount"))
@@ -2418,6 +2429,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n(COUNT (DISTINCT ?relatedForCount) AS ?relatedCount) " +
 					"\n(COUNT (DISTINCT ?notationForCount) AS ?notationCount) " +
 					"\n(COUNT (DISTINCT ?image) AS ?imageCount)" +
+					"\n(COUNT (DISTINCT ?type) AS ?typeCount)" +
 					"\n(COUNT (DISTINCT ?sameAsForCount) AS ?sameAsCount)" +
 					"\n(COUNT (DISTINCT ?mappingRelationForCount) AS ?mappingRelationCount)" +
 					"\n(COUNT (DISTINCT ?annotationForCount) AS ?annotationCount)" +
@@ -2492,7 +2504,14 @@ public class VOCBENCH extends SKOSXL {
 					"\n{<"+conceptUri+"> <"+DEPICTION+"> ?image . }"+
 
 					"\nUNION"+
+					
+					//TABS TYPE
 
+					"\n{<"+conceptUri+"> <"+TYPE+"> ?type . }"+
+
+					"\nUNION"+
+
+					
 					"\n{?subPropSameAs <"+SUBPROPERTY+">* <"+SAMEAS+"> . "+ //owl:sameAs and its SUBPROPERTY 
 					"\n<"+conceptUri+"> ?subPropSameAs ?sameAs . "+
 					"\nBIND( CONCAT (STR(?subPropSameAs), STR(?sameAs) ) AS ?sameAsForCount ) }"+
@@ -2541,6 +2560,7 @@ public class VOCBENCH extends SKOSXL {
 			String relatedExplicitCount = "0";
 			String notationExplicitCount = "0";
 			String imageExplicitCount = "0";
+			String typeExplicitCount = "0";
 			
 			String sameAsExplicitCount = "0";
 			String mappingRelationExplicitCount = "0";
@@ -2565,6 +2585,8 @@ public class VOCBENCH extends SKOSXL {
 						attributesExplicitCount = tuple.getBinding("attributesCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("imageCount"))
 						imageExplicitCount = tuple.getBinding("imageCount").getBoundValue().getNominalValue();
+					if(tuple.hasBinding("typeCount"))
+						typeExplicitCount = tuple.getBinding("typeCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("notationCount"))
 						notationExplicitCount = tuple.getBinding("notationCount").getBoundValue().getNominalValue();
 					if(tuple.hasBinding("sameAsCount"))
@@ -2641,6 +2663,10 @@ public class VOCBENCH extends SKOSXL {
 			Element imageNumElem = XMLHelp.newElement(propCollection, "images");
 			imageNumElem.setAttribute("number", imageImplicitCount);
 			imageNumElem.setAttribute("numberExplicit", imageExplicitCount);
+			
+			Element typeNumElem = XMLHelp.newElement(propCollection, "types");
+			typeNumElem.setAttribute("number", typeImplicitCount);
+			typeNumElem.setAttribute("numberExplicit", typeExplicitCount);
 			
 			Element sameAsMappingRelation = XMLHelp.newElement(propCollection, "sameAsMappingRelation");
 			sameAsMappingRelation.setAttribute("number", sameAsAndMappingRelationImplicitCount);
