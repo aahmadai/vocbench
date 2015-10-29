@@ -3215,8 +3215,8 @@ public class VOCBENCH extends SKOSXL {
 					//clear the map, it should be cleared in createSingleDefOrImageElement, but just to 
 					// be extra sure
 					propValuesMap.clear();
-					prevSubj = subj;
 				}
+				prevSubj = subj;
 				
 				if(!propValuesMap.containsKey(pred.getURI())){
 					propValuesMap.put(pred.getURI(), new ArrayList<ARTNode>());
