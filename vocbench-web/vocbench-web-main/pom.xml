@@ -70,21 +70,8 @@
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.5.6</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.5.6</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>1.5.6</version>
-			<scope>provided</scope>
+			<version>1.7.12</version>
 		</dependency>
 
 		<!-- MySQL -->
@@ -119,7 +106,7 @@
 		<dependency>
 			<groupId>com.googlecode.gwtupload</groupId>
 			<artifactId>gwtupload</artifactId>
-			<version>0.6.5</version>
+			<version>1.0.3</version>
 		</dependency>
 
 		<!-- ROME, RSS and Atom Utilities for Java -->
