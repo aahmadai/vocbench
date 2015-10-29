@@ -317,7 +317,7 @@ public class MainApp extends Composite { // Application container
 
                 // If the application starts with no history token, start it off
                 // in the 'HOME' state.
-                String initToken = "Home";
+                String initToken = "Concepts";
                 if (History.getToken() != null && History.getToken().length() > 0)
                 {
                     initToken = History.getToken();
