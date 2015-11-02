@@ -92,21 +92,25 @@ public class VOCBENCH extends SKOSXL {
 		//public static final String changeLabelInfoRequest = "changeLabelInfo";
 		//public static final String prefToAltLabelRequest = "prefToAltLabel";
 		//public static final String altToPrefLabelRequest = "altToPrefLabel";
-		public static final String setDefinitionRequest = "setDefinition";
 		//public static final String changeDefinitionRequest = "changeDefinition";
+		
+		public static final String setDefinitionRequest = "setDefinition";
 		public static final String addTranslationForDefinitionRequest = "addTranslationForDefinition";
 		public static final String changeTranslationForDefinitionRequest = "changeTranslationForDefinition";
 		public static final String deleteTranslationForDefinitionRequest = "deleteTranslationForDefinition";
-		public static final String setImageRequest = "setImage";
+		public static final String addLinkForDefinitionRequest = "addLinkForDefefinition";
+		public static final String changeLinkForDefinitionRequest = "changeLinkForDefinition";
+		public static final String changeFromSourceForDefinitionRequest = "changeFromSourceForDefinition";
+		public static final String deleteLinkForDefinitionRequest = "deleteLinkForDefinition";
+		
 		//public static final String changeImageDefinitionRequest = "changeImageDefinition";
+		public static final String setImageRequest = "setImage";
 		public static final String addTranslationForImageRequest = "addTranslationForImage";
 		public static final String changeTranslationForImageRequest = "changeTranslationForImage";
 		public static final String deleteTranslationForImageRequest = "deleteTranslationForImage";
-		public static final String addLinkForDefinitionRequest = "addLinkForDefefinition";
-		public static final String changeLinkForDefinitionRequest = "changeLinkForDefinition";
-		public static final String deleteLinkForDefinitionRequest = "deleteLinkForDefinition";
 		public static final String addLinkForImageRequest = "addLinkForImage";
 		public static final String changeLinkForImageRequest = "changeLinkForImage";
+		public static final String changeFromSourceForImageRequest = "changeFromSourceForImage";
 		public static final String deleteLinkForImageRequest = "deleteLinkForImage";
 		
 		
@@ -148,7 +152,7 @@ public class VOCBENCH extends SKOSXL {
 		final static public String definition = "definition";
 		final static public String image = "image";
 		final static public String translation = "translation";
-		//final static public String fromSource = "fromSource"; // OLD
+		final static public String fromSource = "fromSource";
 		final static public String sourceLink = "sourceLink";
 		final static public String comment = "comment";
 		final public static String searchMode = "searchMode";
@@ -252,10 +256,10 @@ public class VOCBENCH extends SKOSXL {
 			String concept = setHttpPar(SKOS.Par.concept);
 			String translation = setHttpPar(ParVocBench.translation);
 			String lang = setHttpPar(SKOS.langTag);
-			//String fromSource = setHttpPar(ParVocBench.fromSource);
+			String fromSource = setHttpPar(ParVocBench.fromSource);
 			String sourceLink = setHttpPar(ParVocBench.sourceLink);
 			checkRequestParametersAllNotNull(SKOS.Par.concept, ParVocBench.translation, SKOS.langTag);
-			response = setDefinitionOrImage(concept, translation, lang, sourceLink, null, false);
+			response = setDefinitionOrImage(concept, translation, lang, sourceLink, fromSource, null, false);
 		} else if (request.equals(Req.changeTranslationForDefinitionRequest)){
 			String definition = setHttpPar(ParVocBench.definition);
 			String lang = setHttpPar(SKOS.langTag);
@@ -275,16 +279,20 @@ public class VOCBENCH extends SKOSXL {
 			response = deleteTranslationForDefinitionOrImage(definition, lang, false);
 		} else if (request.equals(Req.changeLinkForDefinitionRequest)){
 			String definition = setHttpPar(ParVocBench.definition);
-			//String fromSource = setHttpPar(ParVocBench.fromSource);
 			String sourceLink = setHttpPar(ParVocBench.sourceLink);
 			checkRequestParametersAllNotNull(ParVocBench.definition, ParVocBench.sourceLink);
 			response = changeLinkForDefinitionOrImage(definition, sourceLink, false);
+		} else if (request.equals(Req.changeFromSourceForDefinitionRequest)){
+			String definition = setHttpPar(ParVocBench.definition);
+			String fromSource = setHttpPar(ParVocBench.fromSource);
+			checkRequestParametersAllNotNull(ParVocBench.definition);
+			response = changeFromSourceForDefinitionOrImage(definition, fromSource, false);
 		} else if (request.equals(Req.addLinkForDefinitionRequest)){
 			String definition = setHttpPar(ParVocBench.definition);
-			//String fromSource = setHttpPar(ParVocBench.fromSource);
+			String fromSource = setHttpPar(ParVocBench.fromSource);
 			String sourceLink = setHttpPar(ParVocBench.sourceLink);
-			checkRequestParametersAllNotNull(ParVocBench.definition, ParVocBench.sourceLink);
-			response = addLinkForDefinitionOrImage(definition, sourceLink, false);
+			checkRequestParametersAllNotNull(ParVocBench.definition);
+			response = addLinkForDefinitionOrImage(definition, sourceLink, fromSource, false);
 		} else if (request.equals(Req.deleteLinkForDefinitionRequest)){
 			String definition = setHttpPar(ParVocBench.definition);
 			checkRequestParametersAllNotNull(ParVocBench.definition);
@@ -295,11 +303,11 @@ public class VOCBENCH extends SKOSXL {
 			String concept = setHttpPar(SKOS.Par.concept);
 			String translation = setHttpPar(ParVocBench.translation);
 			String lang = setHttpPar(SKOS.langTag);
-			//String fromSource = setHttpPar(ParVocBench.fromSource);
+			String fromSource = setHttpPar(ParVocBench.fromSource);
 			String sourceLink = setHttpPar(ParVocBench.sourceLink);
 			String comment = setHttpPar(ParVocBench.comment);
 			checkRequestParametersAllNotNull(SKOS.Par.concept, ParVocBench.translation, SKOS.langTag);
-			response = setDefinitionOrImage(concept, translation, lang, sourceLink, comment, true);
+			response = setDefinitionOrImage(concept, translation, lang, sourceLink, fromSource, comment, true);
 		} else if (request.equals(Req.changeTranslationForImageRequest)){
 			String image = setHttpPar(ParVocBench.image);
 			String lang = setHttpPar(SKOS.langTag);
@@ -323,16 +331,20 @@ public class VOCBENCH extends SKOSXL {
 			response = deleteTranslationForDefinitionOrImage(image, lang, true);
 		} else if (request.equals(Req.changeLinkForImageRequest)){
 			String image = setHttpPar(ParVocBench.image);
-			//String fromSource = setHttpPar(ParVocBench.fromSource);
 			String sourceLink = setHttpPar(ParVocBench.sourceLink);
-			checkRequestParametersAllNotNull(ParVocBench.image, ParVocBench.sourceLink);
+			checkRequestParametersAllNotNull(ParVocBench.image);
 			response = changeLinkForDefinitionOrImage(image, sourceLink, true);
+		} else if (request.equals(Req.changeLinkForImageRequest)){
+			String image = setHttpPar(ParVocBench.image);
+			String fromSource = setHttpPar(ParVocBench.fromSource);
+			checkRequestParametersAllNotNull(ParVocBench.image);
+			response = changeLinkForDefinitionOrImage(image, fromSource, true);
 		} else if (request.equals(Req.addLinkForImageRequest)){
 			String image = setHttpPar(ParVocBench.image);
-			//String fromSource = setHttpPar(ParVocBench.fromSource);
+			String fromSource = setHttpPar(ParVocBench.fromSource);
 			String sourceLink = setHttpPar(ParVocBench.sourceLink);
-			checkRequestParametersAllNotNull(ParVocBench.image, ParVocBench.sourceLink);
-			response = addLinkForDefinitionOrImage(image, sourceLink, true);
+			checkRequestParametersAllNotNull(ParVocBench.image);
+			response = addLinkForDefinitionOrImage(image, sourceLink, fromSource, true);
 		} else if (request.equals(Req.deleteLinkForImageRequest)){
 			String image = setHttpPar(ParVocBench.image);
 			checkRequestParametersAllNotNull(ParVocBench.image);
@@ -907,13 +919,13 @@ public class VOCBENCH extends SKOSXL {
 
 	
 	public Response setDefinitionOrImage(String conceptName, String translation, String lang, 
-			String sourceLink, String comment, boolean isImage){
+			String sourceLink, String fromSource, String comment, boolean isImage){
 		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
 		Element defElem;
 		if(isImage) {
-			defElem= XMLHelp.newElement(dataElement, ParVocBench.image);
+			defElem = XMLHelp.newElement(dataElement, ParVocBench.image);
 		} else{
 			defElem = XMLHelp.newElement(dataElement, ParVocBench.definition);
 		}
@@ -961,10 +973,10 @@ public class VOCBENCH extends SKOSXL {
 			
 			ARTURIResource defValueURI = skosxlModel.createURIResource(VALUE); 
 			ARTLiteral translationLiteral = skosxlModel.createLiteral(translation, lang);
-			//ARTURIResource stringUri = skosxlModel.createURIResource(STRINGRDF);
-			//ARTLiteral fromSourceLiteral = null;
-			//if(fromSource != null && fromSource.trim().length() > 0)
-			//	fromSourceLiteral = skosxlModel.createLiteral(fromSource, stringUri); // OLD
+			ARTURIResource stringUri = skosxlModel.createURIResource(STRINGRDF);
+			ARTLiteral fromSourceLiteral = null;
+			if(fromSource != null && fromSource.trim().length() > 0)
+				fromSourceLiteral = skosxlModel.createLiteral(fromSource, stringUri);
 			//ARTURIResource fromSourceURI = skosxlModel.createURIResource(HASSOURCE); // OLD
 			ARTURIResource sourceLinkURIvalue = null;
 			//ARTLiteral sourceLinkLiteral = 	null;
@@ -975,6 +987,8 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource sourceLinkURIprop;
 			sourceLinkURIprop = skosxlModel.createURIResource(SOURCE);
 
+			ARTURIResource fromSourceURI;
+			fromSourceURI = skosxlModel.createURIResource(HASSOURCE);
 			
 			ARTLiteral commentlLiteral = null;
 			ARTURIResource commentURI = skosxlModel.createURIResource(COMMENT);
@@ -996,8 +1010,8 @@ public class VOCBENCH extends SKOSXL {
 				skosxlModel.addTriple(newNode, type, imageClassURI, graph);
 			if(sourceLinkURIvalue != null)
 				skosxlModel.addTriple(newNode, sourceLinkURIprop, sourceLinkURIvalue, graph);
-			//if(fromSourceLiteral != null)
-			//	skosxlModel.addTriple(newNode, fromSourceURI, fromSourceLiteral, graph); // OLD
+			if(fromSourceLiteral != null)
+				skosxlModel.addTriple(newNode, fromSourceURI, fromSourceLiteral, graph);
 			skosxlModel.addTriple(newNode, dateCreatedURI, dateLiteral, graph); 
 			if(isImage)
 				skosxlModel.addTriple(newNode, commentURI, commentlLiteral, graph);
@@ -1012,8 +1026,8 @@ public class VOCBENCH extends SKOSXL {
 			}
 			defElem.setAttribute("label", translation);
 			defElem.setAttribute("lang", lang);
-			//if(fromSourceLiteral != null)
-			//	defElem.setAttribute("fromSource", fromSource); // OLD
+			if(fromSourceLiteral != null)
+				defElem.setAttribute("fromSource", fromSource); 
 			if(sourceLinkURIvalue != null)
 				defElem.setAttribute("sourceLink", sourceLinkURIvalue.getURI());
 			defElem.setAttribute("created", dateString);
@@ -1343,7 +1357,8 @@ public class VOCBENCH extends SKOSXL {
 	}
 	
 	
-	public Response addLinkForDefinitionOrImage(String definitionOrImage, String sourceLink, boolean isImage){
+	public Response addLinkForDefinitionOrImage(String definitionOrImage, String sourceLink, 
+			String fromSource, boolean isImage){
 		SKOSXLModel skosxlModel = getSKOSXLModel();
 		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
 		Element dataElement = response.getDataElement();
@@ -1360,11 +1375,17 @@ public class VOCBENCH extends SKOSXL {
 					graph);
 			
 			//check if there is already a value for the definition (check both the new SOURCE or the old HASLINK)
+			// and the HASSOURCE (we are interested that at lest one of them is present, not which one)
 			String query = "SELECT ?sourceLink"+
 						"\nWHERE{"+
-						"\n{<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?sourceLink . }" +
+						
+						"\n<" +definitionOrImageURI.getURI()+"> (<"+SOURCE+">|<"+HASLINK+">|<"+HASSOURCE+
+							">) ?value ." +
+						/*"\n{<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?value . }" +
 						"\nUNION" +
-						"\n{<" +definitionOrImageURI.getURI()+"> <"+HASLINK+"> ?sourceLink . }" +
+						"\n{<" +definitionOrImageURI.getURI()+"> <"+HASLINK+"> ?value . }" +
+						"\nUNION" +
+						"\n{<"+definitionOrImageURI.getURI()+"> <"+HASSOURCE+"> ?value .}" +*/
 						"\n}";
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(QueryLanguage.SPARQL, query);
@@ -1373,13 +1394,21 @@ public class VOCBENCH extends SKOSXL {
 			
 			if(it.hasNext()){
 				String type;
-				String changeMethod;
+				String changeLinkMethod;
+				String changeFromSourceMethod;
 
-				type = "definition";
-				changeMethod = "changeLinkForDefOrImage";
-					
-				String message = "For the "+type+" "+definitionOrImage+" there is already a link "+
-						". To change it please use the service "+changeMethod;
+				if(!isImage){
+					type = "definition";
+					changeLinkMethod = "changeLinkForDefOrImage";
+					changeFromSourceMethod = "changeFromSourceForDefinition";
+				} else{
+					type = "image";
+					changeLinkMethod = "changeLinkForDefOrImage";
+					changeFromSourceMethod = "changeFromSourceForImage";
+				}
+				String message = "For the "+type+" "+definitionOrImage+" there is already a link or a " +
+						"source. To change it please use the service "+changeLinkMethod+ "or "+
+						changeFromSourceMethod;
 				response = createReplyFAIL(message);
 				return response;
 			}
@@ -1397,23 +1426,29 @@ public class VOCBENCH extends SKOSXL {
 			//add the new modified date
 			skosxlModel.addTriple(definitionOrImageURI, dateUpdatedURI, dateLiteral, graph);
 			
-			// add the link and source
-			//ARTURIResource stringUri = skosxlModel.createURIResource(STRINGRDF);
-			//ARTLiteral fromSourceLiteral = skosxlModel.createLiteral(fromSource, stringUri); // OLD
-			//ARTURIResource fromSourceURI = skosxlModel.createURIResource(HASSOURCE); // OLD
-			//ARTLiteral sourceLinkLiteral = skosxlModel.createLiteral(sourceLink, stringUri);
-			ARTURIResource sourceLinkURIvalue = skosxlModel.createURIResource(sourceLink);
-			ARTURIResource sourceLinkURIprop = null;
-			sourceLinkURIprop = skosxlModel.createURIResource(SOURCE);
-			skosxlModel.addTriple(definitionOrImageURI, sourceLinkURIprop, sourceLinkURIvalue, graph);
-			//skosxlModel.addTriple(definitionOrImageURI, fromSourceURI, fromSourceLiteral, graph); // OLD
+			// add the link and source (check which one is present)
+			ARTURIResource stringUri = skosxlModel.createURIResource(STRINGRDF);
+			ARTURIResource fromSourceURI = skosxlModel.createURIResource(HASSOURCE); 
+			ARTURIResource sourceLinkURIprop = skosxlModel.createURIResource(SOURCE);
+			
+			if(fromSource!=null){
+				ARTLiteral fromSourceLiteral = skosxlModel.createLiteral(fromSource, stringUri);
+				skosxlModel.addTriple(definitionOrImageURI, fromSourceURI, fromSourceLiteral, graph);
+			}
+			ARTURIResource sourceLinkURIvalue = null;
+			if(sourceLink!=null){
+				sourceLinkURIvalue = skosxlModel.createURIResource(sourceLink);
+				skosxlModel.addTriple(definitionOrImageURI, sourceLinkURIprop, sourceLinkURIvalue, graph);
+			}
 			
 			if(isImage)
 				defElem.setAttribute("imageURI", definitionOrImageURI.getURI());
 			else
 				defElem.setAttribute("definitionURI", definitionOrImageURI.getURI());
-			//defElem.setAttribute("fromSource", fromSource); // OLD
-			defElem.setAttribute("sourceLink", sourceLink);
+			if(fromSource!=null)
+				defElem.setAttribute("fromSource", fromSource); 
+			if(sourceLink!=null)
+				defElem.setAttribute("sourceLink", sourceLink);
 			defElem.setAttribute("updated", dateString);
 			
 		} catch (ModelAccessException e) {
@@ -1449,37 +1484,36 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource definitionOrImageURI = retrieveExistingURIResource(model, definitionOrImage, 
 					graph);
 			
-			String query = "SELECT ?sourceLink ?fromSource"+
+			String query = "SELECT ?sourceLink "+
 						"\nWHERE{"+
 						"\n{<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?sourceLink . }" +
 						"\nUNION" +
 						"\n{<" +definitionOrImageURI.getURI()+"> <"+HASLINK+"> ?sourceLink . }" +
-						"\nOPTIONAL { <" +definitionOrImageURI.getURI()+"> <"+HASSOURCE+"> ?fromSource . }"+
 						"\n}";
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)model.createTupleQuery(QueryLanguage.SPARQL, query);
 			
 			TupleBindingsIterator it = tupleQuery.evaluate(true);
 			
-			ARTLiteral oldFromSourceLiteral = null;
 			ARTNode oldSourceLink = null;
 			if(!it.hasNext()){
 				String type;
 				String changeMethod;
 
-				type = "definition";
-				changeMethod = "addLinkForDefOrImage";
-					
+				if(!isImage){
+					type = "definition";
+					changeMethod = "addLinkForDefinition";
+				} else {
+					type = "image";
+					changeMethod = "addLinkForImage";
+				}
+				
 				String message = "For the "+type+" "+definitionOrImage+" there is no link "+
 						". To add it please use the service "+changeMethod;
 				response = createReplyFAIL(message);
 				return response;
 			} else{
 				TupleBindings tuple = it.getNext();
-				if(tuple.hasBinding("fromSource")){
-					oldFromSourceLiteral = tuple.getBinding("fromSource").getBoundValue().asLiteral();
-				}
-				//oldSourceLinkLiteral = tuple.getBinding("sourceLink").getBoundValue().asLiteral();
 				oldSourceLink = tuple.getBinding("sourceLink").getBoundValue();
 			}
 			it.close();
@@ -1496,30 +1530,113 @@ public class VOCBENCH extends SKOSXL {
 			//add the new modified date
 			model.addTriple(definitionOrImageURI, dateUpdatedURI, dateLiteral, graph);
 			
-			//delete the old link
+			//delete the old link (delete both possibilities, even if there should be just one)
 			ARTURIResource sourceLinkURIpropNew = model.createURIResource(SOURCE);
 			ARTURIResource sourceLinkURIpropOld = model.createURIResource(HASLINK);
-			if(oldFromSourceLiteral	!= null){
-				ARTURIResource fromSourceURI = model.createURIResource(HASSOURCE);
-				model.deleteTriple(definitionOrImageURI, fromSourceURI, oldFromSourceLiteral, graph);
-			}
 			model.deleteTriple(definitionOrImageURI, sourceLinkURIpropNew, oldSourceLink, graph);
 			model.deleteTriple(definitionOrImageURI, sourceLinkURIpropOld, oldSourceLink, graph);
 			
 			// add the link and source
-			//ARTURIResource stringUri = model.createURIResource(STRINGRDF);
-			//ARTLiteral fromSourceLiteral = model.createLiteral(fromSource, stringUri); // OLD
-			//ARTLiteral sourceLinkLiteral = model.createLiteral(sourceLink, stringUri);
 			ARTURIResource sourceLinkURIvalue = model.createURIResource(sourceLink);
 			model.addTriple(definitionOrImageURI, sourceLinkURIpropNew, sourceLinkURIvalue, graph);
-			//model.addTriple(definitionOrImageURI, fromSourceURI, fromSourceLiteral, graph); // OLD
 			
 			if(isImage)
 				defElem.setAttribute("imageURI", definitionOrImageURI.getURI());
 			else
 				defElem.setAttribute("definitionURI", definitionOrImageURI.getURI());
-			//defElem.setAttribute("fromSource", fromSource); // OLD
 			defElem.setAttribute("sourceLink", sourceLink);
+			defElem.setAttribute("updated", dateString);
+			
+		} catch (ModelAccessException e) {
+			return logAndSendException(e);
+		} catch (UnsupportedQueryLanguageException e) {
+			return logAndSendException(e);
+		} catch (MalformedQueryException e) {
+			return logAndSendException(e);
+		} catch (QueryEvaluationException e) {
+			return logAndSendException(e);
+		} catch (ModelUpdateException e) {
+			return logAndSendException(e);
+		} catch (NonExistingRDFResourceException e) {
+			return logAndSendException(e);
+		}
+		
+		return response;
+	}
+	
+	public Response changeFromSourceForDefinitionOrImage(String definitionOrImage, String fromSource,
+			boolean isImage){
+		SKOSXLModel model = getSKOSXLModel();
+		XMLResponseREPLY response = createReplyResponse(RepliesStatus.ok);
+		Element dataElement = response.getDataElement();
+		Element defElem;
+		if(isImage)
+			defElem = XMLHelp.newElement(dataElement, ParVocBench.image);
+		else
+			defElem = XMLHelp.newElement(dataElement, ParVocBench.definition);
+		
+		try {
+			ARTResource graph = getWorkingGraph();
+			ARTURIResource definitionOrImageURI = retrieveExistingURIResource(model, definitionOrImage, 
+					graph);
+			
+			String query = "SELECT ?fromSource"+
+						"\nWHERE{" +
+						"\n<" +definitionOrImageURI.getURI()+"> <"+HASSOURCE+"> ?fromSource ." +
+						"\n}";
+			//System.out.println("query = "+query); // DEBUG
+			TupleQuery tupleQuery = (TupleQuery)model.createTupleQuery(QueryLanguage.SPARQL, query);
+			
+			TupleBindingsIterator it = tupleQuery.evaluate(true);
+			
+			ARTNode oldFromSource = null;
+			if(!it.hasNext()){
+				String type;
+				String changeMethod;
+
+				if(!isImage){
+					type = "definition";
+					changeMethod = "addLinkForDefinition";
+				} else{
+					type = "image";
+					changeMethod = "addLinkForImage";
+				}
+				String message = "For the "+type+" "+definitionOrImage+" there is no link "+
+						". To add it please use the service "+changeMethod;
+				response = createReplyFAIL(message);
+				return response;
+			} else{
+				TupleBindings tuple = it.getNext();
+				oldFromSource = tuple.getBinding("fromSource").getBoundValue();
+			}
+			it.close();
+			
+			//get the current date
+			ARTURIResource dateTimeUri = model.createURIResource(DATETIME);
+			String dateString = getCurrentTime();
+			ARTLiteral dateLiteral = model.createLiteral(dateString, dateTimeUri);
+			ARTURIResource dateUpdatedURI = model.createURIResource(MODIFIED); 
+			
+			//delete the old modified date, if present
+			model.deleteTriple(definitionOrImageURI, dateUpdatedURI, NodeFilters.ANY, graph);
+			
+			//add the new modified date
+			model.addTriple(definitionOrImageURI, dateUpdatedURI, dateLiteral, graph);
+			
+			//delete the old link
+			ARTURIResource fromSourceURI = model.createURIResource(HASSOURCE);
+			model.deleteTriple(definitionOrImageURI, fromSourceURI, oldFromSource, graph);
+			
+			// add the link and source
+			ARTURIResource stringUri = model.createURIResource(STRINGRDF);
+			ARTLiteral fromSourceLiteral = model.createLiteral(fromSource, stringUri);
+			model.addTriple(definitionOrImageURI, fromSourceURI, fromSourceLiteral, graph);
+			
+			if(isImage)
+				defElem.setAttribute("imageURI", definitionOrImageURI.getURI());
+			else
+				defElem.setAttribute("definitionURI", definitionOrImageURI.getURI());
+			defElem.setAttribute("fromSource", fromSource);
 			defElem.setAttribute("updated", dateString);
 			
 		} catch (ModelAccessException e) {
@@ -1559,14 +1676,15 @@ public class VOCBENCH extends SKOSXL {
 						"\n{<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?sourceLink . }" +
 						"\nUNION" +
 						"\n{<" +definitionOrImageURI.getURI()+"> <"+HASLINK+"> ?sourceLink . }" +
-						"\nOPTIONAL { <" +definitionOrImageURI.getURI()+"> <"+HASSOURCE+"> ?fromSource . }"+
+						"\nUNION" +
+						"\n{ <" +definitionOrImageURI.getURI()+"> <"+HASSOURCE+"> ?fromSource . }"+
 						"\n}";
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(QueryLanguage.SPARQL, query);
 			
 			TupleBindingsIterator it = tupleQuery.evaluate(true);
 			
-			ARTLiteral oldFromSourceLiteral = null;
+			ARTNode oldFromSource = null;
 			ARTNode oldSourceLink = null;
 			if(!it.hasNext()){
 				String type;
@@ -1587,9 +1705,11 @@ public class VOCBENCH extends SKOSXL {
 			} else{
 				TupleBindings tuple = it.getNext();
 				if(tuple.hasBinding("fromSource")){
-					oldFromSourceLiteral = tuple.getBinding("fromSource").getBoundValue().asLiteral();
+					oldFromSource = tuple.getBinding("fromSource").getBoundValue();
 				}
-				oldSourceLink = tuple.getBinding("sourceLink").getBoundValue();
+				if(tuple.hasBinding("sourceLink")){
+					oldSourceLink = tuple.getBinding("sourceLink").getBoundValue();
+				}
 			}
 			it.close();
 			
@@ -1606,17 +1726,18 @@ public class VOCBENCH extends SKOSXL {
 			skosxlModel.addTriple(definitionOrImageURI, dateUpdatedURI, dateLiteral, graph);
 			
 			//delete the old link
-			if(oldFromSourceLiteral!=null){
+			if(oldFromSource!=null){
 				ARTURIResource fromSourceURI = skosxlModel.createURIResource(HASSOURCE);
-				skosxlModel.deleteTriple(definitionOrImageURI, fromSourceURI, oldFromSourceLiteral, graph);
+				skosxlModel.deleteTriple(definitionOrImageURI, fromSourceURI, oldFromSource, graph);
 			}
-			ARTURIResource sourceLinkURIpropNew = skosxlModel.createURIResource(SOURCE);
-			ARTURIResource sourceLinkURIpropOld = skosxlModel.createURIResource(SOURCE);
-			skosxlModel.deleteTriple(definitionOrImageURI, sourceLinkURIpropNew, oldSourceLink, graph);
-			skosxlModel.deleteTriple(definitionOrImageURI, sourceLinkURIpropOld, oldSourceLink, graph);
+			if(oldSourceLink!=null){
+				ARTURIResource sourceLinkURIpropNew = skosxlModel.createURIResource(SOURCE);
+				ARTURIResource sourceLinkURIpropOld = skosxlModel.createURIResource(HASLINK);
+				skosxlModel.deleteTriple(definitionOrImageURI, sourceLinkURIpropNew, oldSourceLink, graph);
+				skosxlModel.deleteTriple(definitionOrImageURI, sourceLinkURIpropOld, oldSourceLink, graph);
+			}
 			
 			// add the link and source
-			
 			if(isImage)
 				defElem.setAttribute("imageURI", definitionOrImageURI.getURI());
 			else
