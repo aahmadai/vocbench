@@ -2464,7 +2464,8 @@ public class VOCBENCH extends SKOSXL {
 						"\nUNION"+
 						
 						//TABS OTHER
-						"\n{?plainRDFProp <"+TYPE+"> <"+PROPERTY+"> ."+ // all the plainRDFProperty
+						"\n{" +
+						//"\n?plainRDFProp <"+TYPE+"> <"+PROPERTY+"> ."+ // all the plainRDFProperty
 						"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+OBJECTPROPERTY+"> }"+ // exclude the ObjectProperties 
 						"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+DATATYPEPROPERTY+"> }"+ // exclude the DatatypeProperies
 						"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+ANNOTATIONPROPERTY+"> }"+ // exclude the AnnotationProperties
@@ -2656,7 +2657,8 @@ public class VOCBENCH extends SKOSXL {
 					"\nUNION"+
 					
 					//TABS OTHER
-					"\n{?plainRDFProp <"+TYPE+"> <"+PROPERTY+"> ."+ // all the plainRDFProperty
+					"\n{" +
+					//"\n?plainRDFProp <"+TYPE+"> <"+PROPERTY+"> ."+ // all the plainRDFProperty
 					"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+OBJECTPROPERTY+"> }"+ // exclude the ObjectProperties 
 					"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+DATATYPEPROPERTY+"> }"+ // exclude the DatatypeProperies
 					"\nFILTER NOT EXISTS{?plainRDFProp <"+TYPE+"> <"+ANNOTATIONPROPERTY+"> }"+ // exclude the AnnotationProperties
