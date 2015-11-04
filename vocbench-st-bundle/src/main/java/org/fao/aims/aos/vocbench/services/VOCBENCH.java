@@ -3455,7 +3455,8 @@ public class VOCBENCH extends SKOSXL {
 		for(String prop : propValuesMap.keySet()){
 			valuesList = propValuesMap.get(prop);
 			if(valuesList!=null && !valuesList.isEmpty()){
-				Element genericPropElem = XMLHelp.newElement(defElem, prop);
+				Element genericPropElem = XMLHelp.newElement(defElem, "genericProp");
+				genericPropElem.setAttribute("prop", prop);
 				for(ARTNode artNode : valuesList){
 					if(artNode.isURIResource()){
 						RDFXMLHelp.addRDFNode(genericPropElem, STRDFNodeFactory.createSTRDFURI(
