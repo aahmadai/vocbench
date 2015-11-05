@@ -3388,6 +3388,7 @@ public class VOCBENCH extends SKOSXL {
 		// - SOURCE
 		// - VALUE
 		// - COMMENT
+		// - HASSOURCE
 		
 		//CREATED
 		valuesList  = propValuesMap.get(CREATED);
@@ -3449,6 +3450,17 @@ public class VOCBENCH extends SKOSXL {
 						STRDFNodeFactory.createSTRDFLiteral(artNode.asLiteral(), true));
 			}
 			propValuesMap.remove(COMMENT);
+		}
+		
+		//HASSHOURCE
+		valuesList = propValuesMap.get(HASSOURCE);
+		if(valuesList!=null){
+			Element hasSourceElem = XMLHelp.newElement(defElem, "hasSource");
+			for(ARTNode artNode : valuesList){
+				RDFXMLHelp.addRDFNode(hasSourceElem, 
+						STRDFNodeFactory.createSTRDFLiteral(artNode.asLiteral(), true));
+			}
+			propValuesMap.remove(HASSOURCE);
 		}
 		
 		//now get all the remaining values
