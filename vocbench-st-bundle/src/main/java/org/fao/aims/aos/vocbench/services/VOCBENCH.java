@@ -4867,6 +4867,16 @@ public class VOCBENCH extends SKOSXL {
 			ARTStatementIterator iter = prepareConceptInfoForExportNew(concept, useConcept,
 					scheme, useScheme, termcode, useTermcode, getChild); 
 			
+			if(iter == null){
+				//generate an expection, since in this case you should call the ST service
+				// it.uniroma2.art.semanticturkey/st-core-services/InputOutput/saveRDF
+				String message = "Since no restriction has been specified, please call the service" +
+						"it.uniroma2.art.semanticturkey/st-core-services/InputOutput/saveRDF";
+				response = createReplyFAIL(message);
+				return response;
+				
+			}
+			
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			Writer writer = new OutputStreamWriter(out, Charset.forName("UTF-8"));
 			SKOSXLModel skosxlModel = getSKOSXLModel();
@@ -5189,6 +5199,9 @@ public class VOCBENCH extends SKOSXL {
 		// will be exported, otherwise, all the thesaurus is exported
 		
 		if(!useConcept && !useTermcode && !useScheme){
+			
+			return null;
+			/*
 			//export all the triples in the repository (there is no way using a CONSTRUCT to esport the info
 			// regarding graphs)
 			query = "CONSTRUCT {" +
@@ -5197,6 +5210,7 @@ public class VOCBENCH extends SKOSXL {
 					"\nWHERE {" +
 					"\n?subj ?pred ?obj . " +
 					"\n}";
+			*/
 		}
 		else{ //one of the filter is set, so proceede accordingly
 			query = "CONSTRUCT {" +
