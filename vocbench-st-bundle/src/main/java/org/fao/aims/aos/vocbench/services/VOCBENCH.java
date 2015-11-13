@@ -971,7 +971,7 @@ public class VOCBENCH extends SKOSXL {
 				//newNode = newNodeAndRandomValue.getArtURIResource();
 				//randomValue = newNodeAndRandomValue.getRandomValue();
 				
-				newNode = generateURI("img", Collections.<String,String>emptyMap());
+				newNode = generateImageURI();
 				
 			} else {
 				//newNode = skosxlModel.createURIResource(skosxlModel.getDefaultNamespace() +"i_def_"+ 
@@ -982,7 +982,7 @@ public class VOCBENCH extends SKOSXL {
 				//newNode = newNodeAndRandomValue.getArtURIResource();
 				//randomValue = newNodeAndRandomValue.getRandomValue();
 				
-				newNode = generateURI("xDefinition", Collections.<String,String>emptyMap());
+				newNode = generateXDefinitionURI(conceptURI);
 			}
 			
 			ARTURIResource defValueURI = skosxlModel.createURIResource(VALUE); 
@@ -6224,7 +6224,50 @@ public class VOCBENCH extends SKOSXL {
 	public SKOSXLModel getSKOSXLModel() {
 		return (SKOSXLModel)getOntModel();
 	}
+
+	/**
+	 * Generates a new URI for a reified definition. The actual generation of the URI is delegated to
+	 * {@link #generateURI(String, Map)}, which in turn invokes the current binding for the extension point
+	 * {@link URIGenerator}. In the end, the <i>URI generator</i> will be provided with the following:
+	 * <ul>
+	 * <li><code>xDefinition</code> as the <code>xRole</code></li>
+	 * <li>a map of additional parameters consisting of <code>annotatedResource</code> (nominal value) if it
+	 * is not <code>null</code></li>
+	 * </ul>
+	 * 
+	 * The parameter <code>annotatedResource</code> should be provided, but in the end is the specific in the
+	 * end is the specific implementation of the extension point that would complain about its absence.
+	 * 
+	 * @param annotatedResource
+	 *            the resource being annotate by this definition
+	 * @return
+	 * @throws URIGenerationException
+	 */
+	public ARTURIResource generateXDefinitionURI(ARTResource annotatedResource) throws URIGenerationException {
+		Map<String, String> valueMapping = new HashMap<String, String>();
+
+		if (annotatedResource != null) {
+			valueMapping.put("annotatedResource", annotatedResource.getNominalValue());
+		}
+
+		return generateURI("xDefinition", valueMapping);
+	}
 	
+	/**
+	 * Generates a new URI for a reified definition. The actual generation of the URI is delegated to
+	 * {@link #generateURI(String, Map)}, which in turn invokes the current binding for the extension point
+	 * {@link URIGenerator}. In the end, the <i>URI generator</i> will be provided with the following:
+	 * <ul>
+	 * <li><code>img</code> as the <code>xRole</code></li>
+	 * <li>an empty map of additional parameters</li>
+	 * </ul>
+	 * 
+	 * @return
+	 * @throws URIGenerationException
+	 */
+	public ARTURIResource generateImageURI() throws URIGenerationException {
+		return generateURI("img", Collections.<String, String>emptyMap());
+	}
 	
 	//functions to generate URI. These function will be moved inside ST in a future release
 	
