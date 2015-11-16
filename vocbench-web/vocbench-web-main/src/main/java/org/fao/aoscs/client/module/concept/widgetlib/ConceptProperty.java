@@ -18,6 +18,7 @@ import org.fao.aoscs.client.utility.Convert;
 import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.GridStyle;
 import org.fao.aoscs.client.utility.ModuleManager;
+import org.fao.aoscs.client.widgetlib.shared.dialog.ClassBrowser;
 import org.fao.aoscs.client.widgetlib.shared.dialog.ConceptBrowser;
 import org.fao.aoscs.client.widgetlib.shared.dialog.FormDialogBox;
 import org.fao.aoscs.client.widgetlib.shared.dialog.PropertyBrowser;
@@ -66,6 +67,7 @@ public class ConceptProperty extends ConceptTemplate{
 	public static String CONCEPTNOTATION = "CONCEPTNOTATION";
 	public static String CONCEPTANNOTATION = "CONCEPTANNOTATION";
 	public static String CONCEPTOTHER = "CONCEPTOTHER";
+	public static String CONCEPTTYPE = "CONCEPTTYPE";
 	
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	private String property ;
@@ -101,6 +103,10 @@ public class ConceptProperty extends ConceptTemplate{
 		}
 		else if(property.equals(ConceptProperty.CONCEPTOTHER)){
 			label = constants.conceptAddOther();
+			permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_ATTRIBUTECREATE, getConceptObject().getStatusID());
+		}
+		else if(property.equals(ConceptProperty.CONCEPTTYPE)){
+			label = constants.conceptAddType();
 			permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_ATTRIBUTECREATE, getConceptObject().getStatusID());
 		}
 		final String txt = label;
@@ -165,6 +171,12 @@ public class ConceptProperty extends ConceptTemplate{
 		    else if(property.equals(ConceptProperty.CONCEPTOTHER)){
 		    	labelEdit = constants.conceptEditOther();
 		    	labelDelete = constants.conceptDeleteOther();
+		    	permissionEdit = false;//permissionTable.contains(OWLActionConstants.CONCEPTEDIT_ATTRIBUTEEDIT, getConceptObject().getStatusID(), value.getLanguage(), MainApp.getPermissionCheck(value.getLanguage())) && isExplicit;
+		    	permissionDelete = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_ATTRIBUTEDELETE, getConceptObject().getStatusID(), value.getLanguage(), MainApp.getPermissionCheck(value.getLanguage())) && isExplicit;
+		    }
+		    else if(property.equals(ConceptProperty.CONCEPTTYPE)){
+		    	labelEdit = constants.conceptEditType();
+		    	labelDelete = constants.conceptDeleteType();
 		    	permissionEdit = false;//permissionTable.contains(OWLActionConstants.CONCEPTEDIT_ATTRIBUTEEDIT, getConceptObject().getStatusID(), value.getLanguage(), MainApp.getPermissionCheck(value.getLanguage())) && isExplicit;
 		    	permissionDelete = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_ATTRIBUTEDELETE, getConceptObject().getStatusID(), value.getLanguage(), MainApp.getPermissionCheck(value.getLanguage())) && isExplicit;
 		    }
@@ -251,6 +263,15 @@ public class ConceptProperty extends ConceptTemplate{
 			else
 				getData();
 		}
+		else if(property.equals(ConceptProperty.CONCEPTTYPE))
+		{
+			if(cDetailObj!=null && cDetailObj.getTypeObject()!=null)
+			{
+				initData(cDetailObj.getTypeObject());
+			}
+			else
+				getData();
+		}
 	}
 	
 	private void getData()
@@ -300,7 +321,7 @@ public class ConceptProperty extends ConceptTemplate{
 		else if(property.equals(ConceptProperty.CONCEPTANNOTATION))
 		{
 			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback = new AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>>()
-					{
+			{
 				public void onSuccess(HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> result) {
 					cDetailObj.setAnnotationObject(result);
 					initData(result);
@@ -314,7 +335,7 @@ public class ConceptProperty extends ConceptTemplate{
 		else if(property.equals(ConceptProperty.CONCEPTOTHER))
 		{
 			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback = new AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>>()
-					{
+			{
 				public void onSuccess(HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> result) {
 					cDetailObj.setOtherObject(result);
 					initData(result);
@@ -322,8 +343,22 @@ public class ConceptProperty extends ConceptTemplate{
 				public void onFailure(Throwable caught) {
 					ExceptionManager.showException(caught, constants.conceptAttributeFail());
 				}
-					};
-					Service.conceptService.getConceptOtherValue(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
+			};
+			Service.conceptService.getConceptOtherValue(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
+		}
+		else if(property.equals(ConceptProperty.CONCEPTTYPE))
+		{
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback = new AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>>()
+			{
+				public void onSuccess(HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> result) {
+					cDetailObj.setTypeObject(result);
+					initData(result);
+				}
+				public void onFailure(Throwable caught) {
+					ExceptionManager.showException(caught, constants.conceptAttributeFail());
+				}
+			};
+			Service.conceptService.getConceptTypeValue(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
 		}
 		
 	}
@@ -373,6 +408,9 @@ public class ConceptProperty extends ConceptTemplate{
 		else if(property.equals(ConceptProperty.CONCEPTOTHER)){
 			table.setWidget(0, 0, new HTML(constants.conceptOther()));
 		}
+		else if(property.equals(ConceptProperty.CONCEPTTYPE)){
+			table.setWidget(0, 0, new HTML(constants.conceptType()));
+		}
 		table.setWidget(0, 1, new HTML(constants.conceptValue()));
 
 		int i=0;
@@ -403,6 +441,10 @@ public class ConceptProperty extends ConceptTemplate{
 				if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.OTHER.getTabIndex(), Convert.replaceSpace(cnt>1? constants.conceptOthers():constants.conceptOther())+"&nbsp;("+(cnt)+")");
 				if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.OTHER.getTabIndex(), Convert.replaceSpace(cnt>1? constants.conceptOthers():constants.conceptOther())+"&nbsp;("+(cnt)+")");
 			}
+			else if(property.equals(ConceptProperty.CONCEPTTYPE)){
+				if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.TYPE.getTabIndex(), Convert.replaceSpace(cnt>1? constants.conceptTypes():constants.conceptType())+"&nbsp;("+(cnt)+")");
+				if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.TYPE.getTabIndex(), Convert.replaceSpace(cnt>1? constants.conceptTypes():constants.conceptType())+"&nbsp;("+(cnt)+")");
+			}
 			conceptRootPanel.add(GridStyle.setTableConceptDetailStyleTop(table,"gstFR1","gstFC1","gstR1","gstPanel1",true));
 		}else{
 			String label = "No value";
@@ -428,6 +470,11 @@ public class ConceptProperty extends ConceptTemplate{
 			else if(property.equals(ConceptProperty.CONCEPTOTHER)){
 				if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.OTHER.getTabIndex(), Convert.replaceSpace(constants.conceptOther())+"&nbsp;(0)");
 				if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.OTHER.getTabIndex(), Convert.replaceSpace(constants.conceptOther())+"&nbsp;(0)");
+				label = constants.conceptNoOther();
+			}
+			else if(property.equals(ConceptProperty.CONCEPTTYPE)){
+				if(conceptObject.getBelongsToModule()==ConceptObject.CONCEPTMODULE) conceptDetailPanel.tabPanel.getTabBar().setTabHTML(ConceptTab.TYPE.getTabIndex(), Convert.replaceSpace(constants.conceptType())+"&nbsp;(0)");
+				if(conceptObject.getBelongsToModule()==ConceptObject.CLASSIFICATIONMODULE) classificationDetailPanel.tab2Panel.getTabBar().setTabHTML(ConceptTab.TYPE.getTabIndex(), Convert.replaceSpace(constants.conceptType())+"&nbsp;(0)");
 				label = constants.conceptNoOther();
 			}
 			Label sayNo = new Label(label);
@@ -467,6 +514,9 @@ public class ConceptProperty extends ConceptTemplate{
             }
             else if(property.equals(ConceptProperty.CONCEPTOTHER)){
             	label = constants.conceptEditOther();
+            }
+            else if(property.equals(ConceptProperty.CONCEPTTYPE)){
+            	label = constants.conceptEditType();
             }
 			this.setText(label);
 			this.initLayout();
@@ -626,6 +676,10 @@ public class ConceptProperty extends ConceptTemplate{
 					{
 						cDetailObj.setOtherObject(results);
 					}
+					else if(property.equals(ConceptProperty.CONCEPTTYPE))
+					{
+						cDetailObj.setTypeObject(results);
+					}
 					ConceptProperty.this.initData();
 					ModuleManager.resetValidation();
 				}
@@ -661,6 +715,11 @@ public class ConceptProperty extends ConceptTemplate{
 				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeEdit);
 				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeEdit));
 				Service.conceptService.editConceptOtherValue(MainApp.userOntology,actionId, status, MainApp.userId, oldValue, nonFuncObj, relURI, drObj, conceptObject, MainApp.isExplicit, callback);
+			}
+			else if(property.equals(ConceptProperty.CONCEPTTYPE)){
+				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeEdit);
+				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeEdit));
+				Service.conceptService.editConceptTypeValue(MainApp.userOntology,actionId, status, MainApp.userId, oldValue, nonFuncObj, relURI, drObj, conceptObject, MainApp.isExplicit, callback);
 			}
 
 		}
@@ -712,6 +771,10 @@ public class ConceptProperty extends ConceptTemplate{
 					{
 						cDetailObj.setOtherObject(results);
 					}
+					else if(property.equals(ConceptProperty.CONCEPTTYPE))
+					{
+						cDetailObj.setTypeObject(results);
+					}
 					ConceptProperty.this.initData();
 					ModuleManager.resetValidation();
 				}
@@ -746,6 +809,11 @@ public class ConceptProperty extends ConceptTemplate{
 				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeDelete);
 				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeDelete));
 				Service.conceptService.deleteConceptOtherValue(MainApp.userOntology,actionId, status, MainApp.userId, value, relURI, conceptObject, MainApp.isExplicit, callback);
+			}
+			else if(property.equals(ConceptProperty.CONCEPTTYPE)){
+				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeDelete);
+				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeDelete));
+				Service.conceptService.deleteConceptTypeValue(MainApp.userOntology,actionId, status, MainApp.userId, value, relURI, conceptObject, MainApp.isExplicit, callback);
 			}
 		}
 
@@ -891,9 +959,15 @@ public class ConceptProperty extends ConceptTemplate{
 						}
 						else if(type.equals(DomainRangeObject.resource))
 						{
-							table.setWidget(1, 0, new HTML(constants.conceptResource()));
-							table.setWidget(1, 1, getConceptBrowseButton());
 							dataTypes = Convert.makeListBoxSingleValueWithValueEmptyDefaultValue(datatype);
+							table.setWidget(1, 0, new HTML(constants.conceptResource()));
+							
+							if(dataTypes.getSelectedValue().equals("http://www.w3.org/2000/01/rdf-schema#Class"))
+								table.setWidget(1, 1, getClassBrowseButton());
+							else
+								table.setWidget(1, 1, getConceptBrowseButton());
+								
+							
 							table.setWidget(2, 0, new HTML(constants.termType()));
 							table.setWidget(2, 1, dataTypes);
 						}
@@ -1057,6 +1131,17 @@ public class ConceptProperty extends ConceptTemplate{
 				};
 				Service.conceptService.getConceptOther(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
 			}
+			else if(property.equals(ConceptProperty.CONCEPTTYPE)){
+				AsyncCallback<HashMap<String, String>> callback = new AsyncCallback<HashMap<String, String>>(){
+					public void onSuccess(HashMap<String, String> results){
+						initLayout(results);
+					}
+					public void onFailure(Throwable caught){
+						ExceptionManager.showException(caught, constants.conceptAttributeFail());
+					}
+				};
+				Service.conceptService.getConceptType(conceptObject.getUri(), MainApp.isExplicit, MainApp.userOntology, callback);
+			}
 		}
 		
 		private HorizontalPanel getPropertyListWidget(HashMap<String, String> results)
@@ -1144,6 +1229,39 @@ public class ConceptProperty extends ConceptTemplate{
 				}
 			});
 
+			HorizontalPanel hp = new HorizontalPanel();
+			hp.add(destConcept);
+			hp.add(browse);
+			hp.setWidth("100%");
+			hp.setCellWidth(destConcept, "100%");
+			hp.setCellHorizontalAlignment(destConcept, HasHorizontalAlignment.ALIGN_LEFT);
+			hp.setCellHorizontalAlignment(browse, HasHorizontalAlignment.ALIGN_RIGHT);
+			
+			return hp;
+		}
+		
+		private HorizontalPanel getClassBrowseButton()
+		{
+			destConcept = new TextBox();
+			destConcept.setWidth("100%");
+			browse = new Image(imgPath);
+			browse.setStyleName(Style.Link);
+			browse.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					final ClassBrowser cb = new ClassBrowser(); 
+					cb.showBrowser();
+					cb.addSubmitClickHandler(new ClickHandler()
+					{
+						public void onClick(ClickEvent event) {
+							if(cb.getSelectedItem()!=null)
+								destConcept.setValue(cb.getSelectedItem());
+						}					
+					});						
+				}
+			});
+			
 			HorizontalPanel hp = new HorizontalPanel();
 			hp.add(destConcept);
 			hp.add(browse);
@@ -1263,6 +1381,10 @@ public class ConceptProperty extends ConceptTemplate{
 					{
 						cDetailObj.setOtherObject(results);
 					}
+					else if(property.equals(ConceptProperty.CONCEPTTYPE))
+					{
+						cDetailObj.setTypeObject(results);
+					}
 
 					ConceptProperty.this.initData();
 					ModuleManager.resetValidation();
@@ -1304,6 +1426,12 @@ public class ConceptProperty extends ConceptTemplate{
 				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeCreate);
 				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeCreate));
 				Service.conceptService.addConceptOtherValue(MainApp.userOntology,actionId, status, MainApp.userId, nonFuncObj, relURI, drObj, conceptObject, MainApp.isExplicit, callback);
+			}
+			else if(property.equals(ConceptProperty.CONCEPTTYPE))
+			{
+				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeCreate);
+				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeCreate));
+				Service.conceptService.addConceptTypeValue(MainApp.userOntology,actionId, status, MainApp.userId, nonFuncObj, relURI, drObj, conceptObject, MainApp.isExplicit, callback);
 			}
 		}
 	}

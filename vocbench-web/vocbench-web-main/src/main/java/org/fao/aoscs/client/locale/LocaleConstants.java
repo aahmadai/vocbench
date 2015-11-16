@@ -1009,6 +1009,8 @@ public interface LocaleConstants extends Constants{
 	public String conceptAttributes();
 	public String conceptNotation();
 	public String conceptNotations();
+	public String conceptType();
+	public String conceptTypes();
 	public String conceptAnnotation();
 	public String conceptAnnotations();
 	public String conceptOther();
@@ -1080,6 +1082,10 @@ public interface LocaleConstants extends Constants{
 	public String conceptEditOther();
 	public String conceptDeleteOther();
 	public String conceptNoOther();
+	public String conceptAddType();
+	public String conceptEditType();
+	public String conceptDeleteType();
+	public String conceptNoType();
 	public String conceptAddAttributes();
 	public String conceptEditAttributes();
 	public String conceptDeleteAttributes();
@@ -1100,6 +1106,7 @@ public interface LocaleConstants extends Constants{
 	public String conceptEditRelationshipToAnotheConcept();
 	public String conceptDestination();
 	public String conceptRelationshipBrowser();
+	public String conceptClassBrowser();
 	public String conceptBrowser();
 	public String conceptAddImage();
 	public String conceptAddNewImage();
@@ -1167,6 +1174,7 @@ public interface LocaleConstants extends Constants{
 	public String conceptRemoveFailOnlyOne();
 	public String conceptReloadFail();
 	public String conceptLoadFail();
+	public String conceptClassLoadFail();
 	public String conceptResourceViewFail();
 	public String conceptDefinitionDeleteWarning();
 	public String conceptDefinitionSourceDeleteWarning();

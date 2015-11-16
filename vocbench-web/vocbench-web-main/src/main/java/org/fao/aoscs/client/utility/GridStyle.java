@@ -256,6 +256,5 @@ public class GridStyle {
 		panel.setWidth("100%");
 		return panel;
 	}
-
 	
 }

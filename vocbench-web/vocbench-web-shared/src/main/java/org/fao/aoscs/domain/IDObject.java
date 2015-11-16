@@ -22,6 +22,8 @@ public class IDObject extends LightEntity {
 	
 	private ArrayList<TranslationObject> IDTranslationList = new ArrayList<TranslationObject>();
 	
+	private HashMap<String, ArrayList<String>> otherPropList = new HashMap<String, ArrayList<String>>();
+	
 	private int IDType;
 	
 	/**
@@ -94,5 +96,35 @@ public class IDObject extends LightEntity {
 			}
 		}
 		return langList;
+	}
+	/**
+	 * @return the otherPropList
+	 */
+	public HashMap<String, ArrayList<String>> getOtherPropList() {
+		return otherPropList;
+	}
+	/**
+	 * @param otherPropList the otherPropList to set
+	 */
+	public void setOtherPropList(HashMap<String, ArrayList<String>> otherPropList) {
+		this.otherPropList = otherPropList;
+	}
+	
+	/**
+	 * @param prop
+	 * @param value
+	 */
+	public void addOtherPropList(String prop, String value) {
+		ArrayList<String> list = otherPropList.get(prop);
+		if(list==null)
+		{
+			list = new ArrayList<String>();
+		}
+		else
+			otherPropList.remove(prop);
+		if(!list.contains(value))
+			list.add(value);
+		otherPropList.put(prop, list);
+		
 	}
 }

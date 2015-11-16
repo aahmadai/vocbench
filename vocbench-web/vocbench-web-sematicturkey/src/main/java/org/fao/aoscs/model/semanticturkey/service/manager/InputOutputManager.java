@@ -10,7 +10,6 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.InputOutputResponseManager;
-import org.fao.aoscs.model.semanticturkey.service.manager.response.RefactorResponseManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.ResponseManager;
 import org.fao.aoscs.model.semanticturkey.util.STUtility;
 import org.slf4j.Logger;

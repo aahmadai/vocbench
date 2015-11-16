@@ -49,8 +49,8 @@ public class SearchServiceSTAdapter implements SearchService {
 	}
 
 	public ArrayList<ArrayList<String>> getSparqlSearchResults(OntologyInfo ontoInfo,
-			String query, String language, boolean infer) throws Exception {
-		return searchService.getSparqlSearchResults(ontoInfo, query, language, infer);
+			String query, String language, boolean infer, String mode) throws Exception {
+		return searchService.getSparqlSearchResults(ontoInfo, query, language, infer, mode);
 	}
 	
 }

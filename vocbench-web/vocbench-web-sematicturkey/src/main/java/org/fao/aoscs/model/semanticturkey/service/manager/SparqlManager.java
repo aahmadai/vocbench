@@ -28,10 +28,10 @@ public class SparqlManager extends ResponseManager {
 	 * @param language
 	 * @param infer
 	 */
-	public static ArrayList<ArrayList<String>> resolveQuery(OntologyInfo ontoInfo, String query, String language, Boolean infer) {
+	public static ArrayList<ArrayList<String>> resolveQuery(OntologyInfo ontoInfo, String query, String language, Boolean infer, String mode) {
 		
 		ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>(); 
-		XMLResponseREPLY reply = SparqlResponseManager.resolveQueryRequest(ontoInfo, query, language, infer);
+		XMLResponseREPLY reply = SparqlResponseManager.resolveQueryRequest(ontoInfo, query, language, infer, mode);
 		if(reply!=null)
 		{
 			Element dataElement = reply.getDataElement();

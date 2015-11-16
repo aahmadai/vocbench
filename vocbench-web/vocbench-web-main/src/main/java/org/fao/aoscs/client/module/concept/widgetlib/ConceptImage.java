@@ -1,6 +1,7 @@
 package org.fao.aoscs.client.module.concept.widgetlib;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
@@ -32,20 +33,23 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpener{
 
@@ -112,6 +116,21 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 		return hp;
 	}
+	
+	private HorizontalPanel getAddSourcFunction(final IDObject dObj){
+		HorizontalPanel hp = new HorizontalPanel();
+
+		boolean permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_IMAGESOURCECREATE, getConceptObject().getStatusID());
+		LinkLabelAOS add = new LinkLabelAOS("images/add-grey.gif", "images/add-grey-disabled.gif",  constants.conceptAddNewSource(), constants.conceptAddNewSource(), permission, new ClickHandler() {
+			public void onClick(ClickEvent event) {
+			if(addExternalSource == null || !addExternalSource.isLoaded)
+				addExternalSource = new AddExternalSource(dObj);
+			addExternalSource.show();
+			}
+		});
+		hp.add(add);
+		return hp;
+	}
 
 	public static native void openURL(String url)/*-{
     $wnd.open(url,'_blank','');
@@ -134,8 +153,105 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 		//DOM.setStyleAttribute(img.getElement(), "marginRight", "3px");
 		return img;
 	}
+	
+	private VerticalPanel getDateTable(IDObject dObj){
 
-	private HorizontalPanel getDateTable(int number, final IDObject dObj){
+		FlexTable table = new FlexTable();
+		table.setWidget(0, 0, new HTML(constants.conceptCreateDate()));
+		table.setWidget(0, 1, new HTML(TimeConverter.formatDate(dObj.getIDDateCreate())));
+		table.setWidget(1, 0, new HTML(constants.conceptUpdateDate()));
+		table.setWidget(1, 1, new HTML(TimeConverter.formatDate(dObj.getIDDateModified())));
+		
+		table.getColumnFormatter().setWidth(1, "80%");
+		table.setWidth("100%");
+		return GridStyle.setTableConceptDetailStyleleft(table, "gslRow1", "gslCol1", "gslPanel1");
+		
+	}
+
+	private VerticalPanel getOtherPropTable(IDObject dObj){
+
+		FlexTable table = new FlexTable();
+		HashMap<String, ArrayList<String>> otherPropList = dObj.getOtherPropList(); 
+		for(String prop : otherPropList.keySet())
+		{
+			ArrayList<String> list = otherPropList.get(prop);
+			VerticalPanel vp = new VerticalPanel();
+			for(String value: list)
+			{
+				vp.add(new HTML(value));
+			}
+			int rowCnt = table.getRowCount();
+			table.setWidget(rowCnt, 0, new HTML(prop));
+			table.setWidget(rowCnt, 1, vp);
+		}
+		
+		table.getColumnFormatter().setWidth(1, "80%");
+		table.setWidth("100%");
+		return GridStyle.setTableConceptDetailStyleleft(table, "gslRow1", "gslCol1", "gslPanel1");
+		
+	}
+	
+	private VerticalPanel getSourceTable(int number, IDObject dObj){
+
+		FlexTable table = new FlexTable();
+		
+		if(dObj!=null && dObj.getIDSourceURL() != null && !dObj.getIDSourceURL().equals(""))
+		{
+			int rowCount = table.getRowCount();
+			table.setWidget(rowCount, 0, new HTML(constants.conceptSource()));
+			table.setWidget(rowCount, 1, getSourcePanel(number, dObj,  "<a href=\""+dObj.getIDSourceURL()+"\" target=\"_blank\">"+dObj.getIDSourceURL()+"</a>", true));
+		}
+		
+		if(dObj!=null && dObj.getIDSource() != null && !dObj.getIDSource().equals(""))
+		{
+			int rowCount = table.getRowCount();
+			table.setWidget(rowCount, 0, new HTML(constants.conceptSource()));
+			table.setWidget(rowCount, 1, getSourcePanel(number, dObj,  dObj.getIDSource(), false));
+		}
+		if(table.getRowCount()>0)
+			table.getColumnFormatter().setWidth(1, "80%");
+		table.setWidth("100%");
+		return GridStyle.setTableConceptDetailStyleleft(table, "gslRow1", "gslCol1", "gslPanel1");
+	}
+	
+	private Widget getSourcePanel(int number, final IDObject dObj, String label, final boolean isSourceURL)
+	{
+		ArrayList<String> langs = langlist.get(number);
+		
+		HorizontalPanel hpURL = new HorizontalPanel();
+		hpURL.setSpacing(3);
+		
+		if(label!=null && !label.equals(""))
+		{
+			boolean permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_IMAGESOURCEEDIT, getConceptObject().getStatusID(), langs, MainApp.getPermissionCheck(langs));
+			LinkLabelAOS edit = new LinkLabelAOS("images/edit-grey.gif", "images/edit-grey-disabled.gif", constants.conceptEditSource(), permission, new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					if(editExternalSource == null || !editExternalSource.isLoaded)
+						editExternalSource = new EditExternalSource(dObj, isSourceURL);
+					editExternalSource.show();
+				}
+			});
+
+			permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_IMAGESOURCEDELETE, getConceptObject().getStatusID(), langs, MainApp.getPermissionCheck(langs));
+			LinkLabelAOS delete = new LinkLabelAOS("images/delete-grey.gif", "images/delete-grey-disabled.gif", constants.conceptDeleteSource(), permission, new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					if(deleteExternalSource == null || !deleteExternalSource.isLoaded)
+						deleteExternalSource = new DeleteExternalSource(dObj);
+					deleteExternalSource.show();
+				}
+			});
+			
+			HTML link =  new HTML(label);
+
+			hpURL.add(edit);
+			hpURL.add(delete);
+			hpURL.add(link);
+		}
+		
+		return hpURL;
+	}
+
+	/*private HorizontalPanel getDateTable(int number, final IDObject dObj){
 		Grid table = new Grid(3,2);
 		table.setWidget(0, 0, new HTML(constants.conceptCreateDate()));
 		table.setWidget(1, 0, new HTML(constants.conceptUpdateDate()));
@@ -190,7 +306,7 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 		panel.add(GridStyle.setTableConceptDetailStyleleft(table,"gslRow1", "gslCol1", "gslPanel1"));
 		panel.setWidth("100%");
 		return panel;
-	}
+	}*/
 
 	private VerticalPanel getTranslationTable(IDObject dObj){
 		ArrayList<TranslationObject> list = dObj.getIDTranslationList();
@@ -275,14 +391,22 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 			for (int i = 0; i < iObjList.size(); i++) {
 				IDObject dObj = (IDObject) iObjList.get(i);
 				
-				VerticalPanel vp = new VerticalPanel();
-
 				HorizontalPanel func = getAddTranslationFunction(dObj);
+				HorizontalPanel funcSource = getAddSourcFunction(dObj);
+				
+				VerticalPanel vp = new VerticalPanel();
 				vp.add(func);
 				vp.setCellHorizontalAlignment(func, HasHorizontalAlignment.ALIGN_RIGHT);
-
 				vp.add(getTranslationTable(dObj));
-				vp.add(getDateTable(i, dObj));
+				if(dObj!=null && (dObj.getIDSource() == null || dObj.getIDSource().equals("")) && (dObj.getIDSourceURL() == null || dObj.getIDSourceURL().equals("")))
+				{
+					vp.add(funcSource);
+					vp.setCellHorizontalAlignment(funcSource, HasHorizontalAlignment.ALIGN_RIGHT);
+				}
+				else
+					vp.add(getSourceTable(i, dObj));
+				vp.add(getDateTable(dObj));
+				vp.add(getOtherPropTable(dObj));
 				vp.setWidth("100%");
 				vp.setSpacing(5);
 				
@@ -339,6 +463,8 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setImageObject(null);
+					ConceptImage.this.initData();
 					ExceptionManager.showException(caught, constants.conceptDeleteExternalSourceFail());
 				}
 			};
@@ -355,6 +481,8 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 		//private TextBox source;
 		private TextBox URL;
 		private IDObject ido;
+		private RadioButton rdoSrc;
+		private RadioButton rdoUrl;
 
 		public AddExternalSource(IDObject ido){
 			super(constants.buttonCreate(), constants.buttonCancel());
@@ -370,10 +498,23 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 			URL = new TextBox();
 			URL.setWidth("100%");
-
-			Grid table = new Grid(1,2);
-			table.setWidget(0, 0, new HTML(constants.conceptUrl()));
-			table.setWidget(0, 1, URL);
+			
+			rdoUrl = new RadioButton("radioGroup", constants.conceptUrl());
+			rdoSrc = new RadioButton("radioGroup", constants.conceptDescription());
+			rdoUrl.setValue(true);
+			
+			HorizontalPanel hpSrcUrl = new HorizontalPanel();
+			hpSrcUrl.setWidth("100%");
+			hpSrcUrl.add(rdoUrl);
+			hpSrcUrl.add(rdoSrc);
+			hpSrcUrl.setCellHorizontalAlignment(rdoUrl, HasAlignment.ALIGN_LEFT);
+			hpSrcUrl.setCellHorizontalAlignment(rdoSrc, HasAlignment.ALIGN_LEFT);
+			
+			FlexTable table = new FlexTable();
+			table.setWidget(0, 0, new HTML(constants.buttonSelect()));
+			table.setWidget(0, 1, hpSrcUrl);
+			table.setWidget(1, 0, new HTML(constants.conceptUrl()));
+			table.setWidget(1, 1, URL);
 			//table.setWidget(1, 1, source);
 			//table.setWidget(1, 0, new HTML(constants.conceptSource()));
 			table.setWidth("100%");
@@ -397,9 +538,12 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 			IDObject idoNew = new IDObject();
 			idoNew.setIDUri(ido.getIDUri());
-			//idoNew.setIDSource(source.getText());
-			idoNew.setIDSourceURL(URL.getText());
 			idoNew.setIDType(IDObject.IMAGE);
+			//idoNew.setIDSource(source.getText());
+			if(rdoUrl.getValue())
+				idoNew.setIDSourceURL(URL.getText());
+			else
+				idoNew.setIDSource(URL.getText());
 
 			AsyncCallback<ImageObject>  callback = new AsyncCallback<ImageObject>(){
 				public void onSuccess(ImageObject results){
@@ -408,6 +552,8 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setImageObject(null);
+					ConceptImage.this.initData();
 					ExceptionManager.showException(caught, constants.conceptAddExternalSourceFail());
 				}
 			};
@@ -425,10 +571,12 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 		//private TextBox source;
 		private TextBox URL;
 		private IDObject ido;
+		private boolean isSourceURL = true;
 
-		public EditExternalSource(IDObject ido){
+		public EditExternalSource(IDObject ido, boolean isSourceURL){
 			super();
 			this.ido = ido;
+			this.isSourceURL = isSourceURL;
 			this.setText(constants.conceptEditExternalSource());
 			setWidth("400px");
 			this.initLayout();
@@ -441,11 +589,19 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 			//source.setWidth("100%");
 
 			URL = new TextBox();
-			URL.setText(ido.getIDSourceURL());
 			URL.setWidth("100%");
+			
+			if(isSourceURL)
+			{
+				URL.setText(ido.getIDSourceURL());
+			}
+			else
+			{
+				URL.setText(ido.getIDSource());
+			}
 
-			Grid table = new Grid(1,2);
-			table.setWidget(0, 0, new HTML(constants.conceptUrl()));
+			FlexTable table = new FlexTable();
+			table.setWidget(0, 0, new HTML(constants.conceptSource()));
 			table.setWidget(0, 1, URL);
 			//table.setWidget(1, 0, new HTML(constants.conceptSource()));
 			//table.setWidget(1, 1, source);
@@ -470,10 +626,18 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 			IDObject idoNew = new IDObject();
 			idoNew.setIDUri(ido.getIDUri());
-			//idoNew.setIDSource(source.getText());
-			idoNew.setIDSourceURL( URL.getText());
 			idoNew.setIDType(IDObject.IMAGE);
-
+			//idoNew.setIDSource(source.getText());
+			if(isSourceURL)
+			{
+				idoNew.setIDSourceURL(URL.getText());
+				idoNew.setIDSource(null);
+			}
+			else 
+			{
+				idoNew.setIDSourceURL(null);
+				idoNew.setIDSource(URL.getText());
+			}
 			AsyncCallback<ImageObject>  callback = new AsyncCallback<ImageObject>(){
 				public void onSuccess(ImageObject results){
 					cDetailObj.setImageObject(results);
@@ -481,6 +645,8 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setImageObject(null);
+					ConceptImage.this.initData();
 					ExceptionManager.showException(caught, constants.conceptEditExternalSourceFail());
 				}
 			};
@@ -601,6 +767,8 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setImageObject(null);
+					ConceptImage.this.initData();
 					ExceptionManager.showException(caught, constants.conceptAddImageFail());
 				}
 			};
@@ -681,6 +849,8 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setImageObject(null);
+					ConceptImage.this.initData();
 					ExceptionManager.showException(caught, constants.conceptAddImageFail());
 				}
 			};
@@ -723,6 +893,8 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setImageObject(null);
+					ConceptImage.this.initData();
 					Window.alert(constants.conceptDeleteImageFail());
 				}
 			};
@@ -743,6 +915,8 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 		//private TextBox source;
 		private TextBox name;
 		private TextBox url;
+		private RadioButton rdoSrc;
+		private RadioButton rdoUrl;
 
 		public AddNewImage(){
 			super(constants.buttonCreate(), constants.buttonCancel());
@@ -768,17 +942,30 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 
 			//source = new TextBox();
 			//source.setWidth("100%");
+			
+			rdoUrl = new RadioButton("radioGroup", constants.conceptUrl());
+			rdoSrc = new RadioButton("radioGroup", constants.conceptDescription());
+			rdoUrl.setValue(true);
+			
+			HorizontalPanel hpSrcUrl = new HorizontalPanel();
+			hpSrcUrl.setWidth("100%");
+			hpSrcUrl.add(rdoUrl);
+			hpSrcUrl.add(rdoSrc);
+			hpSrcUrl.setCellHorizontalAlignment(rdoUrl, HasAlignment.ALIGN_LEFT);
+			hpSrcUrl.setCellHorizontalAlignment(rdoSrc, HasAlignment.ALIGN_LEFT);
 
-			Grid table = new Grid(4,2);
+			FlexTable table = new FlexTable();
 			table.setWidget(0, 0, new HTML(constants.conceptName()));
 			table.setWidget(1, 0, new HTML(constants.conceptDescription()));
 			table.setWidget(2, 0, new HTML(constants.conceptLanguage()));
-			table.setWidget(3, 0, new HTML(constants.conceptUrl()));
+			table.setWidget(3, 0, new HTML(constants.buttonSelect()));
+			table.setWidget(4, 0, new HTML(constants.conceptSource()));
 			//table.setWidget(4, 0, new HTML(constants.conceptSource()));
 			table.setWidget(0, 1, name);
 			table.setWidget(1, 1, description);
 			table.setWidget(2, 1, language);
-			table.setWidget(3, 1, url);
+			table.setWidget(3, 1, hpSrcUrl);
+			table.setWidget(4, 1, url);
 			//table.setWidget(4, 1, source);
 			table.getColumnFormatter().setWidth(1, "80%");
 			table.setWidth("100%");
@@ -805,10 +992,13 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 			transObj.setDescription(description.getText());
 
 			IDObject ido = new IDObject();
-			ido.setIDSourceURL(url.getText());
-			//ido.setIDSource(source.getText());
 			ido.addIDTranslationList(transObj);
 			ido.setIDType(IDObject.IMAGE);
+			//ido.setIDSource(source.getText());
+			if(rdoUrl.getValue())
+				ido.setIDSourceURL(url.getText());
+			else
+				ido.setIDSource(url.getText());
 
 			AsyncCallback<ImageObject>  callback = new AsyncCallback<ImageObject>(){
 				public void onSuccess(ImageObject results){
@@ -817,6 +1007,8 @@ public class ConceptImage extends ConceptTemplate implements ResourceURIPanelOpe
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setImageObject(null);
+					ConceptImage.this.initData();
 					ExceptionManager.showException(caught, constants.conceptAddImageFail());
 				}
 			};

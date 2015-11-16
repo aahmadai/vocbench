@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import org.fao.aoscs.domain.AttributesObject;
 import org.fao.aoscs.domain.ClassObject;
+import org.fao.aoscs.domain.ClassTreeObject;
 import org.fao.aoscs.domain.ConceptDetailObject;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.ConceptShowObject;
@@ -44,6 +45,7 @@ import org.fao.aoscs.hibernate.DatabaseUtil;
 import org.fao.aoscs.hibernate.HibernateUtilities;
 import org.fao.aoscs.hibernate.QueryFactory;
 import org.fao.aoscs.model.semanticturkey.STModelConstants;
+import org.fao.aoscs.model.semanticturkey.service.manager.ClsManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.MetadataManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.ObjectManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.PropertyManager;
@@ -110,9 +112,18 @@ public class ConceptServiceSTImpl {
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#addDefinitionExternalSource(org.fao.aoscs.domain.OntologyInfo, int, org.fao.aoscs.domain.OwlStatus, int, org.fao.aoscs.domain.IDObject, org.fao.aoscs.domain.ConceptObject)
 	 */
-	public DefinitionObject addDefinitionExternalSource(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,IDObject ido,ConceptObject conceptObject){
+	public DefinitionObject addDefinitionExternalSource(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId, IDObject ido, ConceptObject conceptObject){
 		
-		VocbenchManager.addLinkForDefinition(ontoInfo, ido.getIDUri(), ido.getIDSource(), ido.getIDSourceURL());
+		
+		if(ido!=null && ido.getIDSourceURL() != null && !ido.getIDSourceURL().equals(""))
+		{
+			VocbenchManager.addLinkForDefinition(ontoInfo, ido.getIDUri(), ido.getIDSourceURL());
+		}
+		else if(ido!=null && ido.getIDSource() != null && !ido.getIDSource().equals(""))
+		{
+			VocbenchManager.addFromSourceForDefinition(ontoInfo, ido.getIDUri(), ido.getIDSource());
+		}
+		
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		Validation v = new Validation();
@@ -198,7 +209,14 @@ public class ConceptServiceSTImpl {
 	 */
 	public ImageObject addImageExternalSource(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,IDObject ido,ConceptObject conceptObject){
 		
-		VocbenchManager.addLinkForImage(ontoInfo, ido.getIDUri(), ido.getIDSource(), ido.getIDSourceURL());
+		if(ido!=null && ido.getIDSourceURL() != null && !ido.getIDSourceURL().equals(""))
+		{
+			VocbenchManager.addLinkForImage(ontoInfo, ido.getIDUri(), ido.getIDSourceURL());
+		}
+		else if(ido!=null && ido.getIDSource() != null && !ido.getIDSource().equals(""))
+		{
+			VocbenchManager.addFromSourceForImage(ontoInfo, ido.getIDUri(), ido.getIDSource());
+		}
 		
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
@@ -1070,7 +1088,14 @@ public class ConceptServiceSTImpl {
 	 */
 	public DefinitionObject editDefinitionExternalSource(OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId, IDObject oldIdo, IDObject newIdo, ConceptObject conceptObject){
 		
-		VocbenchManager.changeLinkForDefinition(ontoInfo, newIdo.getIDUri(), newIdo.getIDSource(), newIdo.getIDSourceURL());
+		if(newIdo!=null && newIdo.getIDSourceURL() != null && !newIdo.getIDSourceURL().equals(""))
+		{
+			VocbenchManager.changeLinkForDefinition(ontoInfo, newIdo.getIDUri(), newIdo.getIDSourceURL());
+		}
+		else if(newIdo!=null && newIdo.getIDSource() != null && !newIdo.getIDSource().equals(""))
+		{
+			VocbenchManager.changeFromSourceForDefinition(ontoInfo, newIdo.getIDUri(), newIdo.getIDSource());
+		}
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		Validation v = new Validation();
@@ -1129,7 +1154,14 @@ public class ConceptServiceSTImpl {
 	 */
 	public ImageObject editImageExternalSource(OntologyInfo ontoInfo ,int actionId,OwlStatus status,int userId,IDObject oldIdo,IDObject newIdo,ConceptObject conceptObject){
 		
-		VocbenchManager.changeLinkForImage(ontoInfo, newIdo.getIDUri(), newIdo.getIDSource(), newIdo.getIDSourceURL());
+		if(newIdo!=null && newIdo.getIDSourceURL() != null && !newIdo.getIDSourceURL().equals(""))
+		{
+			VocbenchManager.changeLinkForImage(ontoInfo, newIdo.getIDUri(), newIdo.getIDSourceURL());
+		}
+		else if(newIdo!=null && newIdo.getIDSource() != null && !newIdo.getIDSource().equals(""))
+		{
+			VocbenchManager.changeFromSourceForImage(ontoInfo, newIdo.getIDUri(), newIdo.getIDSource());
+		}
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
 		
 		Validation v = new Validation();
@@ -1652,6 +1684,7 @@ public class ConceptServiceSTImpl {
 		cDetailObj.setSchemeObject(null);
 		cDetailObj.setAlignmentObject(null);
 		cDetailObj.setOtherObject(null);
+		cDetailObj.setTypeObject(null);
 		
 		XMLResponseREPLY resp = VocbenchResponseManager.getConceptTabsCountsRequest(ontoInfo, conceptURI);
 		if(resp!=null)
@@ -1666,6 +1699,7 @@ public class ConceptServiceSTImpl {
 				cDetailObj.setNotationCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "notation", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setAnnotationCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "annotation", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setOtherCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "others", isExplicit?"numberExplicit":"number"));
+				cDetailObj.setTypeCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "types", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setRelationCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "related", isExplicit?"countExplicit":"count"));
 				cDetailObj.setImageCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "images", isExplicit?"numberExplicit":"number"));
 				cDetailObj.setAlignmentCount(STXMLUtility.getNodeAttributeIntegerValue(collectionElement, "sameAsMappingRelation", isExplicit?"numberExplicit":"number"));
@@ -1912,7 +1946,11 @@ public class ConceptServiceSTImpl {
 				else if(stNode instanceof STResource)
 				{
 					STResource stResource = (STResource) stNode;
-					nonFuncObj.setValue(stResource.getARTNode().asURIResource().getURI());
+					
+					if(stResource.getARTNode().isURIResource())
+						nonFuncObj.setValue(stResource.getARTNode().asURIResource().getURI());
+					else if(stResource.getARTNode().isBlank())
+						nonFuncObj.setValue(stResource.getARTNode().asBNode().getID());
 				}
 					
 				values.put(nonFuncObj, stNode.isExplicit());
@@ -2132,6 +2170,144 @@ public class ConceptServiceSTImpl {
 		STUtility.setInstanceUpdateDate(ontoInfo, conceptURI);
 		return getConceptAlignmentValue(conceptURI, isExplicit, ontoInfo);
 	}
+	
+	
+	public HashMap<String, String> getConceptType(String resourceURI,
+			boolean isExplicit, OntologyInfo ontoInfo) throws Exception {
+		
+		HashMap<String, String> list = new HashMap<String, String>();
+		list.put(RDF.TYPE, "rdf:type");
+		return list;
+	}
+	
+	/**
+	 * @param resourceURI
+	 * @param isExplicit
+	 * @param ontoInfo
+	 * @return
+	 * @throws Exception
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptTypeValue(
+			String resourceURI, boolean isExplicit, OntologyInfo ontoInfo)
+			throws Exception {
+		return getPropertyValue(ontoInfo, ResourceManager.getValuesOfProperties(ontoInfo, resourceURI, RDF.TYPE, true, false, null, isExplicit));
+	}
+	
+	
+	/**
+	 * @param ontoInfo
+	 * @param actionId
+	 * @param status
+	 * @param userId
+	 * @param value
+	 * @param propertyURI
+	 * @param drObj
+	 * @param conceptObject
+	 * @param isExplicit
+	 * @return
+	 * @throws Exception
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptTypeValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
+			ConceptObject conceptObject, boolean isExplicit) throws Exception {
+		
+		addPropertyValue(ontoInfo, actionId, status, userId, value, propertyURI, drObj, conceptObject, isExplicit);
+		
+		/*IndividualManager.addType(ontoInfo, conceptObject.getUri(), propertyURI);
+		
+		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
+		
+		RelationshipObject rObj = ObjectManager.createRelationshipObject(ontoInfo, propertyURI);
+		
+		AttributesObject attObj = new AttributesObject();
+		attObj.setRelationshipObject(rObj);
+		attObj.setValue(value);
+		
+		Validation v = new Validation();
+		v.setNewValue(DatabaseUtil.setObject(attObj));
+		v.setConcept(DatabaseUtil.setObject(conceptObject));
+		v.setAction(actionId);
+		v.setStatus(status.getId());
+		v.setOwnerId(userId);
+		v.setModifierId(userId);
+		v.setOntologyId(ontoInfo.getOntologyId());
+		v.setDateCreate(DateUtility.getROMEDate());
+		v.setDateModified(DateUtility.getROMEDate());
+		DatabaseUtil.createObject(v);*/
+		
+		
+		return getConceptTypeValue(conceptObject.getUri(), isExplicit, ontoInfo);
+	}
+
+	/**
+	 * @param ontoInfo
+	 * @param actionId
+	 * @param status
+	 * @param userId
+	 * @param oldValue
+	 * @param propertyURI
+	 * @param conceptObject
+	 * @param isExplicit
+	 * @return
+	 * @throws Exception
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptTypeValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, String propertyURI,
+			ConceptObject conceptObject, boolean isExplicit) throws Exception {
+		
+		deletePropertyValue(ontoInfo, actionId, status, userId, oldValue, propertyURI, conceptObject, isExplicit);
+		
+		/*IndividualManager.removeType(ontoInfo, conceptObject.getUri(), propertyURI);
+		
+		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
+		
+		RelationshipObject rObj = ObjectManager.createRelationshipObject(ontoInfo, propertyURI);
+		
+		AttributesObject attObj = new AttributesObject();
+		attObj.setRelationshipObject(rObj);
+		attObj.setValue(oldValue);
+		
+		Validation v = new Validation();
+		v.setNewValue(DatabaseUtil.setObject(attObj));
+		v.setConcept(DatabaseUtil.setObject(conceptObject));
+		v.setAction(actionId);
+		v.setStatus(status.getId());
+		v.setOwnerId(userId);
+		v.setModifierId(userId);
+		v.setOntologyId(ontoInfo.getOntologyId());
+		v.setDateCreate(DateUtility.getROMEDate());
+		v.setDateModified(DateUtility.getROMEDate());
+		DatabaseUtil.createObject(v);*/
+		
+		
+		return getConceptTypeValue(conceptObject.getUri(), isExplicit, ontoInfo);
+	}
+
+	/**
+	 * @param ontoInfo
+	 * @param actionId
+	 * @param status
+	 * @param userId
+	 * @param oldValue
+	 * @param newValue
+	 * @param propertyURI
+	 * @param drObj
+	 * @param conceptObject
+	 * @param isExplicit
+	 * @return
+	 * @throws Exception
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> editConceptTypeValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, NonFuncObject newValue, String propertyURI,
+			DomainRangeObject drObj, ConceptObject conceptObject,
+			boolean isExplicit) throws Exception {
+		return getConceptTypeValue(conceptObject.getUri(), isExplicit, ontoInfo);
+	}
+
+	
 
 	/* (non-Javadoc)
 	 * @see org.fao.aoscs.client.module.concept.service.ConceptService#getTerm(java.lang.String, org.fao.aoscs.domain.OntologyInfo)
@@ -2505,6 +2681,18 @@ public class ConceptServiceSTImpl {
 		}
 		///owlModel.dispose();
 		return getAGROVOCCodeTerm(ontoInfo, oldCls.getName(), ""+oldIns.getPropertyValue(codeAgrovoc));*/
+	}
+	
+
+	/**
+	 * @param ontoInfo
+	 * @return
+	 * @throws Exception
+	 */
+	public ClassTreeObject getClassTree(OntologyInfo ontoInfo) throws Exception {
+		ClassTreeObject ctObj = ClsManager.getClassTree(ontoInfo);
+		return ctObj;
+		
 	}
 	
 	

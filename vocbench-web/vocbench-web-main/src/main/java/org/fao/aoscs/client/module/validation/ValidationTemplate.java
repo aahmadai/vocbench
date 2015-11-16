@@ -302,7 +302,7 @@ public class ValidationTemplate extends Composite{
 					for(Validation v :vTable.getDataTable().getVisibleItems())
 					{
 						
-					if(acceptvalidationList.containsKey(new Integer(v.getStatus())))
+					if(v.getValidatorId()!=-1 && acceptvalidationList.containsKey(new Integer(v.getStatus())))
 						{
 							int newselectedItem = ((Integer)acceptvalidationList.get(new Integer(v.getStatus()))).intValue();
 							v.setStatusLabel(Validator.getStatusFromID(newselectedItem, statusList));
@@ -365,7 +365,7 @@ public class ValidationTemplate extends Composite{
 					
 					for(Validation v :vTable.getDataTable().getVisibleItems())
 					{
-						if(rejectvalidationList.containsKey(new Integer(v.getStatus())))
+						if(v.getValidatorId()!=-1 && rejectvalidationList.containsKey(new Integer(v.getStatus())))
 						{
 							v.setIsAccept(false);
 							if(v.getStatus()==OWLStatusConstants.VALIDATED_ID)

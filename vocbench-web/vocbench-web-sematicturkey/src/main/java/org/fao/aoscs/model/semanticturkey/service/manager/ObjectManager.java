@@ -35,6 +35,7 @@ import org.fao.aoscs.model.semanticturkey.service.manager.response.VocbenchRespo
 import org.fao.aoscs.model.semanticturkey.util.STLiteral;
 import org.fao.aoscs.model.semanticturkey.util.STLiteralImpl;
 import org.fao.aoscs.model.semanticturkey.util.STNode;
+import org.fao.aoscs.model.semanticturkey.util.STResource;
 import org.fao.aoscs.model.semanticturkey.util.STUtility;
 import org.fao.aoscs.model.semanticturkey.util.STXMLUtility;
 import org.slf4j.Logger;
@@ -1121,14 +1122,6 @@ public class ObjectManager extends ResponseManager {
 						}
 					}
 					
-					for(Element sourceElem : STXMLUtility.getChildElementByTagName(definitionElem, "source"))
-					{
-						for(Element elem : STXMLUtility.getChildElementByTagName(sourceElem, RDFTypesEnum.typedLiteral.toString()))
-						{
-							idObj.setIDSource(elem.getTextContent());
-						}
-					}
-					
 					HashMap<String, TranslationObject> tObjList = new HashMap<String, TranslationObject>();
 					
 					for(Element labelElem : STXMLUtility.getChildElementByTagName(definitionElem, "label"))
@@ -1158,6 +1151,39 @@ public class ObjectManager extends ResponseManager {
 								tObjList.remove(stLiteral.getLanguage());
 							tObj.setDescription(stLiteral.getLabel());
 				    		tObjList.put(stLiteral.getLanguage(), tObj);
+						}
+					}
+					
+					for(Element sourceElem : STXMLUtility.getChildElementByTagName(definitionElem, "hasSource"))
+					{
+						for(Element elem : STXMLUtility.getChildElementByTagName(sourceElem, RDFTypesEnum.typedLiteral.toString()))
+						{
+							idObj.setIDSource(elem.getTextContent());
+						}
+					}
+					
+					for(Element genericPropElem : STXMLUtility.getChildElementByTagName(definitionElem, "genericProp"))
+					{
+						String prop = genericPropElem.getAttribute("prop");
+						
+						for(STLiteral stLiteral : STXMLUtility.getPlainLiteral(genericPropElem))
+						{
+							String show = stLiteral.getLabel();
+							if(!stLiteral.getLanguage().isEmpty())
+								show += " ("+stLiteral.getLanguage()+")";
+							idObj.addOtherPropList(prop, show);
+						}
+						
+						for(STLiteral typedLiteral : STXMLUtility.getTypedLiteral(genericPropElem))
+						{
+							String show = typedLiteral.getLabel();
+							idObj.addOtherPropList(prop, show);
+						}
+						
+						for(STResource res : STXMLUtility.getURIResource(genericPropElem))
+						{
+							String show = res.getARTNode().asURIResource().getURI();
+							idObj.addOtherPropList(prop, show);
 						}
 					}
 					
@@ -1229,7 +1255,7 @@ public class ObjectManager extends ResponseManager {
 						}
 					}
 					
-					for(Element sourceElem : STXMLUtility.getChildElementByTagName(definitionElem, "source"))
+					for(Element sourceElem : STXMLUtility.getChildElementByTagName(definitionElem, "hasSource"))
 					{
 						for(Element elem : STXMLUtility.getChildElementByTagName(sourceElem, RDFTypesEnum.typedLiteral.toString()))
 						{
@@ -1247,6 +1273,31 @@ public class ObjectManager extends ResponseManager {
 				    		tObj.setType(TranslationObject.DEFINITIONTRANSLATION);
 				    		tObj.setUri(idObj.getIDUri());
 				    		idObj.addIDTranslationList(tObj);
+						}
+					}
+					
+					for(Element genericPropElem : STXMLUtility.getChildElementByTagName(definitionElem, "genericProp"))
+					{
+						String prop = genericPropElem.getAttribute("prop");
+						
+						for(STLiteral stLiteral : STXMLUtility.getPlainLiteral(genericPropElem))
+						{
+							String show = stLiteral.getLabel();
+							if(!stLiteral.getLanguage().isEmpty())
+								show += " ("+stLiteral.getLanguage()+")";
+							idObj.addOtherPropList(prop, show);
+						}
+						
+						for(STLiteral typedLiteral : STXMLUtility.getTypedLiteral(genericPropElem))
+						{
+							String show = typedLiteral.getLabel();
+							idObj.addOtherPropList(prop, show);
+						}
+						
+						for(STResource res : STXMLUtility.getURIResource(genericPropElem))
+						{
+							String show = res.getARTNode().asURIResource().getURI();
+							idObj.addOtherPropList(prop, show);
 						}
 					}
 					

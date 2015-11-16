@@ -14,8 +14,10 @@ import org.fao.aoscs.client.MainApp;
 		SCHEME (8, MainApp.constants.conceptScheme(), MainApp.constants.conceptSchemes()),
 		OTHER (9, MainApp.constants.conceptOther(), MainApp.constants.conceptOthers()),
 		NOTATION (10, MainApp.constants.conceptNotation(), MainApp.constants.conceptNotations()),
-		HIERARCHY (11, MainApp.constants.conceptHierarchy(), MainApp.constants.conceptNotations()),
-		HISTORY (12, MainApp.constants.conceptHistory(), MainApp.constants.conceptHistory());
+		TYPE (11, MainApp.constants.conceptType(), MainApp.constants.conceptTypes()),
+		RESOURCEVIEW (12, MainApp.constants.conceptResourceView(), MainApp.constants.conceptResourceView()),
+		HIERARCHY (13, MainApp.constants.conceptHierarchy(), MainApp.constants.conceptHierarchy()),
+		HISTORY (14, MainApp.constants.conceptHistory(), MainApp.constants.conceptHistory());
 	
 	private final int sortIndex;
 	private final String singularText;

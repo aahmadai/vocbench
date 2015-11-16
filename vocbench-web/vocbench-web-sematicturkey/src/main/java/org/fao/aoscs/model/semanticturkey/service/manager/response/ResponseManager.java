@@ -35,7 +35,10 @@ public class ResponseManager {
 			if(resp instanceof XMLResponseREPLY)
 			{
 				logger.debug("\n----- ST RESPONSE -----\n"+resp.getResponseContent());
-				return ((XMLResponseREPLY) resp);
+				if(((XMLResponseREPLY) resp).getReplyStatus().equals(RepliesStatus.fail))
+					throw new RuntimeException(((XMLResponseREPLY) resp).getReplyMessage());
+				else
+					return ((XMLResponseREPLY) resp);
 			}
 			else if(resp instanceof XMLResponseERROR)
 			{

@@ -18,12 +18,12 @@ import org.fao.aoscs.domain.PredicateObjects;
 import org.fao.aoscs.domain.ResourceViewObject;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -119,7 +119,7 @@ public class ResourceView extends Composite implements ManageResourceURIOpener {
 					
 					if(rdfResource.isResource())
 					{
-						DOM.setStyleAttribute(txtValue.getElement(), "cursor", "pointer");
+						txtValue.getElement().getStyle().setCursor(Cursor.POINTER);
 						txtValue.addClickHandler(new ClickHandler() {
 							
 							@Override

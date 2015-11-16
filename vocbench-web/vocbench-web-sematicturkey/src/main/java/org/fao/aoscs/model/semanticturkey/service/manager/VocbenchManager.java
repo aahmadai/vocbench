@@ -211,21 +211,46 @@ public class VocbenchManager extends ResponseManager {
 	 * @param sourceLink
 	 * @return
 	 */
-	public static IDObject addLinkForDefinition(OntologyInfo ontoInfo, String definition, String fromSource, String sourceLink)
+	public static IDObject addLinkForDefinition(OntologyInfo ontoInfo, String definition, String sourceLink)
 	{
-		return STXMLUtility.getImageDefinition(VocbenchResponseManager.addLinkForDefinitionRequest(ontoInfo, definition, fromSource, sourceLink), IDObject.DEFINITION);
+		
+		XMLResponseREPLY reply = VocbenchResponseManager.addLinkForDefinitionRequest(ontoInfo, definition, sourceLink);
+		return STXMLUtility.getImageDefinition(reply, IDObject.DEFINITION);
 	}
 	
 	/**
 	 * @param ontoInfo
 	 * @param definition
 	 * @param fromSource
+	 * @return
+	 */
+	public static IDObject addFromSourceForDefinition(OntologyInfo ontoInfo, String definition, String fromSource)
+	{
+		
+		XMLResponseREPLY reply = VocbenchResponseManager.addFromSourceForDefinitionRequest(ontoInfo, definition, fromSource);
+		return STXMLUtility.getImageDefinition(reply, IDObject.DEFINITION);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param definition
 	 * @param sourceLink
 	 * @return
 	 */
-	public static IDObject changeLinkForDefinition(OntologyInfo ontoInfo, String definition, String fromSource, String sourceLink)
+	public static IDObject changeLinkForDefinition(OntologyInfo ontoInfo, String definition, String sourceLink)
 	{
-		return STXMLUtility.getImageDefinition(VocbenchResponseManager.changeLinkForDefinitionRequest(ontoInfo, definition, fromSource, sourceLink), IDObject.DEFINITION);
+		return STXMLUtility.getImageDefinition(VocbenchResponseManager.changeLinkForDefinitionRequest(ontoInfo, definition, sourceLink), IDObject.DEFINITION);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param definition
+	 * @param fromSource
+	 * @return
+	 */
+	public static IDObject changeFromSourceForDefinition(OntologyInfo ontoInfo, String definition, String fromSource)
+	{
+		return STXMLUtility.getImageDefinition(VocbenchResponseManager.changeFromSourceForDefinitionRequest(ontoInfo, definition, fromSource), IDObject.DEFINITION);
 	}
 
 	/**
@@ -307,21 +332,42 @@ public class VocbenchManager extends ResponseManager {
 	 * @param sourceLink
 	 * @return
 	 */
-	public static IDObject addLinkForImage(OntologyInfo ontoInfo, String image, String fromSource, String sourceLink)
+	public static IDObject addLinkForImage(OntologyInfo ontoInfo, String image, String sourceLink)
 	{
-		return STXMLUtility.getImageDefinition(VocbenchResponseManager.addLinkForImageRequest(ontoInfo, image, fromSource, sourceLink), IDObject.IMAGE);
+		return STXMLUtility.getImageDefinition(VocbenchResponseManager.addLinkForImageRequest(ontoInfo, image, sourceLink), IDObject.IMAGE);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param image
+	 * @param fromSource
+	 * @return
+	 */
+	public static IDObject addFromSourceForImage(OntologyInfo ontoInfo, String image, String fromSource)
+	{
+		return STXMLUtility.getImageDefinition(VocbenchResponseManager.addFromSourceForImageRequest(ontoInfo, image, fromSource), IDObject.IMAGE);
 	}
 	
 	/**
 	 * @param ontoInfo
 	 * @param definition
-	 * @param fromSource
 	 * @param sourceLink
 	 * @return
 	 */
-	public static IDObject changeLinkForImage(OntologyInfo ontoInfo, String image, String fromSource, String sourceLink)
+	public static IDObject changeLinkForImage(OntologyInfo ontoInfo, String image, String sourceLink)
 	{
-		return STXMLUtility.getImageDefinition(VocbenchResponseManager.changeLinkForImageRequest(ontoInfo, image, fromSource, sourceLink), IDObject.IMAGE);
+		return STXMLUtility.getImageDefinition(VocbenchResponseManager.changeLinkForImageRequest(ontoInfo, image, sourceLink), IDObject.IMAGE);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param image
+	 * @param fromSource
+	 * @return
+	 */
+	public static IDObject changeFromSourceForImage(OntologyInfo ontoInfo, String image, String fromSource)
+	{
+		return STXMLUtility.getImageDefinition(VocbenchResponseManager.changeFromSourceForImageRequest(ontoInfo, image, fromSource), IDObject.IMAGE);
 	}
 
 	/**

@@ -115,7 +115,7 @@ public class ProjectServiceSTImpl {
 	 * @param extensionPoint
 	 * @return
 	 */
-	public static ArrayList<String> getAvailablePlugins(OntologyInfo ontoInfo, String extensionPoint)
+	public ArrayList<String> getAvailablePlugins(OntologyInfo ontoInfo, String extensionPoint)
 	{
 		return PluginsManager.getAvailablePlugins(ontoInfo, extensionPoint);
 	}
@@ -125,7 +125,7 @@ public class ProjectServiceSTImpl {
 	 * @param factoryID
 	 * @return
 	 */
-	public static ArrayList<PluginConfiguration> getPluginConfigurations(OntologyInfo ontoInfo, String factoryID)
+	public ArrayList<PluginConfiguration> getPluginConfigurations(OntologyInfo ontoInfo, String factoryID)
 	{
 		return PluginsManager.getPluginConfigurations(ontoInfo, factoryID);
 	}

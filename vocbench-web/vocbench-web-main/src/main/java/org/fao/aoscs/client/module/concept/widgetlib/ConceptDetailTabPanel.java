@@ -49,8 +49,10 @@ public class ConceptDetailTabPanel extends Composite{
 	public ConceptProperty cNotation;
 	public ConceptProperty cAnnotation;
 	public ConceptProperty cOther;
+	public ConceptProperty cType;
 	public ConceptSchemes cScheme;
 	public ConceptAlignment cAlign;
+	public ConceptResourceView cResourceView;
 	public ConceptHierarchy cHier;
 	public Term t ;
 	
@@ -67,8 +69,10 @@ public class ConceptDetailTabPanel extends Composite{
 		cNotation.sayLoading();
 		cAnnotation.sayLoading();
 		cOther.sayLoading();
+		cType.sayLoading();
 		cScheme.sayLoading();
 		cAlign.sayLoading();
+		cResourceView.sayLoading();
 		cHier.sayLoading();
 	}
 	
@@ -105,8 +109,10 @@ public class ConceptDetailTabPanel extends Composite{
 		cNotation.reload();
 		cAnnotation.reload();
 		cOther.reload();
+		cType.reload();
 		cScheme.reload();
 		cAlign.reload();
+		cResourceView.reload();
 		cHier.reload();
 	}
 	
@@ -161,11 +167,19 @@ public class ConceptDetailTabPanel extends Composite{
 					tabPanel.add(cNotation, Convert.replaceSpace(constants.conceptNotation()));
 					ConceptTab.NOTATION.setTabIndex(tabPanel.getWidgetCount()-1);
 					break;
-				case 11://Hierarchy
+				case 11: //Type
+					tabPanel.add(cType, Convert.replaceSpace(constants.conceptType()));
+					ConceptTab.TYPE.setTabIndex(tabPanel.getWidgetCount()-1);
+					break;
+				case 12://Resource view
+					tabPanel.add(cResourceView, Convert.replaceSpace(constants.conceptResourceView()));
+					ConceptTab.RESOURCEVIEW.setTabIndex(tabPanel.getWidgetCount()-1);
+					break;
+				case 13://Hierarchy
 					tabPanel.add(cHier, Convert.replaceSpace(constants.conceptHierarchy()));
 					ConceptTab.HIERARCHY.setTabIndex(tabPanel.getWidgetCount()-1);
 					break;
-				case 12://History
+				case 14://History
 					tabPanel.add(cInfo, Convert.replaceSpace(constants.conceptHistory()));	
 					ConceptTab.HISTORY.setTabIndex(tabPanel.getWidgetCount()-1);
 					break;
@@ -195,8 +209,10 @@ public class ConceptDetailTabPanel extends Composite{
 		cNotation = new ConceptProperty(ConceptProperty.CONCEPTNOTATION, permisstionTable, initData, this, null);
 		cAnnotation = new ConceptProperty(ConceptProperty.CONCEPTANNOTATION, permisstionTable, initData, this, null);
 		cOther = new ConceptProperty(ConceptProperty.CONCEPTOTHER, permisstionTable, initData, this, null);
+		cType = new ConceptProperty(ConceptProperty.CONCEPTTYPE, permisstionTable, initData, this, null);
 		cScheme = new ConceptSchemes(permisstionTable, initData, this, null);
 		cAlign = new ConceptAlignment(permisstionTable, initData, this, null);
+		cResourceView = new ConceptResourceView(permisstionTable, initData, this, null);
 		cHier = new ConceptHierarchy(permisstionTable, initData, this, null);
 		t = new Term(permisstionTable,initData, this, null);
 		
@@ -211,7 +227,10 @@ public class ConceptDetailTabPanel extends Composite{
 		tabVisibleList.add(ConceptTab.SCHEME);
 		//tabVisibleList.add(ConceptTab.OTHER);
 		//tabVisibleList.add(ConceptTab.NOTATION);
+		//tabVisibleList.add(ConceptTab.TYPE);
 		tabVisibleList.add(ConceptTab.HIERARCHY);
+		//tabVisibleList.add(ConceptTab.TYPE);
+		//tabVisibleList.add(ConceptTab.RESOURCEVIEW);
 		tabVisibleList.add(ConceptTab.HISTORY);
 		
 		tabShowHide();
@@ -328,11 +347,13 @@ public class ConceptDetailTabPanel extends Composite{
 			cNotation.setConceptObject(cDetailObj.getConceptObject());
 			cAnnotation.setConceptObject(cDetailObj.getConceptObject());
 			cOther.setConceptObject(cDetailObj.getConceptObject());
+			cType.setConceptObject(cDetailObj.getConceptObject());
 			cRel.setConceptObject(cDetailObj.getConceptObject());
 			cInfo.setConceptObject(cDetailObj.getConceptObject());
 			cImage.setConceptObject(cDetailObj.getConceptObject());
 			cScheme.setConceptObject(cDetailObj.getConceptObject());
 			cAlign.setConceptObject(cDetailObj.getConceptObject());
+			cResourceView.setConceptObject(cDetailObj.getConceptObject());
 			cHier.setConceptObject(cDetailObj.getConceptObject());
 			
 			t.setConceptDetailObject(cDetailObj);
@@ -342,11 +363,13 @@ public class ConceptDetailTabPanel extends Composite{
 			cNotation.setConceptDetailObject(cDetailObj);
 			cAnnotation.setConceptDetailObject(cDetailObj);
 			cOther.setConceptDetailObject(cDetailObj);
+			cType.setConceptDetailObject(cDetailObj);
 			cRel.setConceptDetailObject(cDetailObj);
 			cInfo.setConceptDetailObject(cDetailObj);
 			cImage.setConceptDetailObject(cDetailObj);
 			cScheme.setConceptDetailObject(cDetailObj);
 			cAlign.setConceptDetailObject(cDetailObj);
+			cResourceView.setConceptDetailObject(cDetailObj);
 			cHier.setConceptDetailObject(cDetailObj);
 			
 			//t.initData();
@@ -395,10 +418,16 @@ public class ConceptDetailTabPanel extends Composite{
 				case 10: //Notation
 					setTabHTML(tab, cDetailObj.getNotationCount());
 					break;
-				case 11://Hierarchy
+				case 11: //Type
+					setTabHTML(tab, cDetailObj.getTypeCount());
+					break;
+				case 12://Resource 
 					setTabHTML(tab, -1);
 					break;
-				case 12://History
+				case 13://Hierarchy
+					setTabHTML(tab, -1);
+					break;
+				case 14://History
 					setTabHTML(tab, cDetailObj.getHistoryCount());
 					break;
 			}
@@ -446,11 +475,13 @@ public class ConceptDetailTabPanel extends Composite{
 		cNotation.sayLoading();
 		cAnnotation.sayLoading();
 		cOther.sayLoading();
+		cType.sayLoading();
 		cRel.sayLoading();
 		cInfo.sayLoading();
 		cImage.sayLoading();
 		cScheme.sayLoading();
 		cAlign.sayLoading();
+		cResourceView.sayLoading();
 		cHier.sayLoading();
 	}
 }

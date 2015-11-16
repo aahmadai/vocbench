@@ -221,11 +221,10 @@ public class VocbenchResponseManager extends ResponseManager {
 	 * @param sourceLink
 	 * @return
 	 */
-	public static XMLResponseREPLY addLinkForDefinitionRequest(OntologyInfo ontoInfo, String definition, String fromSource, String sourceLink)
+	public static XMLResponseREPLY addLinkForDefinitionRequest(OntologyInfo ontoInfo, String definition, String sourceLink)
 	{
 		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addLinkForDefinitionRequest, 
 				STModel.par(VOCBENCH.ParVocBench.definition, definition), 
-				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
 				STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
@@ -235,15 +234,43 @@ public class VocbenchResponseManager extends ResponseManager {
 	 * @param ontoInfo
 	 * @param definition
 	 * @param fromSource
+	 * @return
+	 */
+	public static XMLResponseREPLY addFromSourceForDefinitionRequest(OntologyInfo ontoInfo, String definition, String fromSource)
+	{
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addFromSourceForDefinitionRequest, 
+				STModel.par(VOCBENCH.ParVocBench.definition, definition), 
+				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param definition
 	 * @param sourceLink
 	 * @return
 	 */
-	public static XMLResponseREPLY changeLinkForDefinitionRequest(OntologyInfo ontoInfo, String definition, String fromSource, String sourceLink)
+	public static XMLResponseREPLY changeLinkForDefinitionRequest(OntologyInfo ontoInfo, String definition, String sourceLink)
 	{
 		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeLinkForDefinitionRequest, 
 				STModel.par(VOCBENCH.ParVocBench.definition, definition), 
-				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
 				STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param definition
+	 * @param fromSource
+	 * @return
+	 */
+	public static XMLResponseREPLY changeFromSourceForDefinitionRequest(OntologyInfo ontoInfo, String definition, String fromSource)
+	{
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeFromSourceForDefinitionRequest, 
+				STModel.par(VOCBENCH.ParVocBench.definition, definition), 
+				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}
@@ -352,11 +379,40 @@ public class VocbenchResponseManager extends ResponseManager {
 	 * @param sourceLink
 	 * @return
 	 */
-	public static XMLResponseREPLY addLinkForImageRequest(OntologyInfo ontoInfo, String image, String fromSource, String sourceLink)
+	public static XMLResponseREPLY addLinkForImageRequest(OntologyInfo ontoInfo, String image, String sourceLink)
 	{
 		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addLinkForImageRequest, 
 				STModel.par(VOCBENCH.ParVocBench.image, image), 
+				STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param image
+	 * @param fromSource
+	 * @return
+	 */
+	public static XMLResponseREPLY addFromSourceForImageRequest(OntologyInfo ontoInfo, String image, String fromSource)
+	{
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.addFromSourceForImageRequest, 
+				STModel.par(VOCBENCH.ParVocBench.image, image), 
 				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
+	 * @param ontoInfo
+	 * @param definition
+	 * @param sourceLink
+	 * @return
+	 */
+	public static XMLResponseREPLY changeLinkForImageRequest(OntologyInfo ontoInfo, String image, String sourceLink)
+	{
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeLinkForImageRequest, 
+				STModel.par(VOCBENCH.ParVocBench.image, image), 
 				STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
@@ -366,15 +422,13 @@ public class VocbenchResponseManager extends ResponseManager {
 	 * @param ontoInfo
 	 * @param definition
 	 * @param fromSource
-	 * @param sourceLink
 	 * @return
 	 */
-	public static XMLResponseREPLY changeLinkForImageRequest(OntologyInfo ontoInfo, String image, String fromSource, String sourceLink)
+	public static XMLResponseREPLY changeFromSourceForImageRequest(OntologyInfo ontoInfo, String image, String fromSource)
 	{
-		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeLinkForImageRequest, 
+		Response resp = getSTModel(ontoInfo).vocbenchService.makeRequest(VOCBENCH.Req.changeFromSourceForImageRequest, 
 				STModel.par(VOCBENCH.ParVocBench.image, image), 
 				STModel.par(VOCBENCH.ParVocBench.fromSource, fromSource), 
-				STModel.par(VOCBENCH.ParVocBench.sourceLink, sourceLink), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}

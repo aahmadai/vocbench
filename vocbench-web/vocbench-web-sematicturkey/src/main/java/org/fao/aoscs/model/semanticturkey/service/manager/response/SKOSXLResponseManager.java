@@ -282,7 +282,7 @@ public class SKOSXLResponseManager extends ResponseManager {
 	public static XMLResponseREPLY getAllSchemesListRequest(OntologyInfo ontoInfo, String schemeLang)
 	{
 		Response resp= getSTModel(ontoInfo).skosXLService.makeRequest(SKOS.Req.getAllSchemesListRequest,  
-				//STModel.par(SKOS.Par.lang, schemeLang), 
+				STModel.par(SKOS.Par.lang, schemeLang), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}

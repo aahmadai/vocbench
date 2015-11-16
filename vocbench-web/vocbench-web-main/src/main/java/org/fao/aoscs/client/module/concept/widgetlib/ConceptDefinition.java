@@ -1,6 +1,7 @@
 package org.fao.aoscs.client.module.concept.widgetlib;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.Service;
@@ -29,21 +30,23 @@ import org.fao.aoscs.domain.PermissionObject;
 import org.fao.aoscs.domain.TranslationObject;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class ConceptDefinition extends ConceptTemplate implements ResourceURIPanelOpener{
 
@@ -78,28 +81,82 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 		});
 		functionPanel.add(addFunc);
 	}
+	
+	private VerticalPanel getDateTable(IDObject dObj){
 
-	private VerticalPanel getDateTable(int number, final IDObject dObj){
-		Grid table = new Grid(3,2);
+		FlexTable table = new FlexTable();
 		table.setWidget(0, 0, new HTML(constants.conceptCreateDate()));
-		table.setWidget(1, 0, new HTML(constants.conceptUpdateDate()));
-		table.setWidget(2, 0, new HTML(constants.conceptSource()));
 		table.setWidget(0, 1, new HTML(TimeConverter.formatDate(dObj.getIDDateCreate())));
+		table.setWidget(1, 0, new HTML(constants.conceptUpdateDate()));
 		table.setWidget(1, 1, new HTML(TimeConverter.formatDate(dObj.getIDDateModified())));
+		
+		table.getColumnFormatter().setWidth(1, "80%");
+		table.setWidth("100%");
+		return GridStyle.setTableConceptDetailStyleleft(table, "gslRow1", "gslCol1", "gslPanel1");
+		
+	}
 
-		HorizontalPanel hp = new HorizontalPanel();
+	private VerticalPanel getOtherPropTable(IDObject dObj){
 
-		hp.setSpacing(3);
+		FlexTable table = new FlexTable();
+		HashMap<String, ArrayList<String>> otherPropList = dObj.getOtherPropList(); 
+		for(String prop : otherPropList.keySet())
+		{
+			ArrayList<String> list = otherPropList.get(prop);
+			VerticalPanel vp = new VerticalPanel();
+			for(String value: list)
+			{
+				vp.add(new HTML(value));
+			}
+			int rowCnt = table.getRowCount();
+			table.setWidget(rowCnt, 0, new HTML(prop));
+			table.setWidget(rowCnt, 1, vp);
+		}
+		
+		table.getColumnFormatter().setWidth(1, "80%");
+		table.setWidth("100%");
+		return GridStyle.setTableConceptDetailStyleleft(table, "gslRow1", "gslCol1", "gslPanel1");
+		
+	}
+	
+	private VerticalPanel getSourceTable(int number, IDObject dObj){
+
+		FlexTable table = new FlexTable();
+		
+		if(dObj!=null && dObj.getIDSourceURL() != null && !dObj.getIDSourceURL().equals(""))
+		{
+			int rowCount = table.getRowCount();
+			table.setWidget(rowCount, 0, new HTML(constants.conceptSource()));
+			table.setWidget(rowCount, 1, getSourcePanel(number, dObj,  "<a href=\""+dObj.getIDSourceURL()+"\" target=\"_blank\">"+dObj.getIDSourceURL()+"</a>", true));
+		}
+		
+		if(dObj!=null && dObj.getIDSource() != null && !dObj.getIDSource().equals(""))
+		{
+			int rowCount = table.getRowCount();
+			table.setWidget(rowCount, 0, new HTML(constants.conceptSource()));
+			table.setWidget(rowCount, 1, getSourcePanel(number, dObj,  dObj.getIDSource(), false));
+		}
+		if(table.getRowCount()>0)
+			table.getColumnFormatter().setWidth(1, "80%");
+		table.setWidth("100%");
+		return GridStyle.setTableConceptDetailStyleleft(table, "gslRow1", "gslCol1", "gslPanel1");
+	}
+	
+	private Widget getSourcePanel(int number, final IDObject dObj, String label, final boolean isSourceURL)
+	{
 		ArrayList<String> langs = langlist.get(number);
-		//if(dObj.hasSource())
-		if(dObj!=null && dObj.getIDSourceURL()!=null && !dObj.getIDSourceURL().equals(""))
+		
+		HorizontalPanel hpURL = new HorizontalPanel();
+		hpURL.setSpacing(3);
+		
+		if(label!=null && !label.equals(""))
 		{
 			boolean permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_EXTSOURCEEDIT, getConceptObject().getStatusID(), langs, MainApp.getPermissionCheck(langs));
 			// Source edit
 			LinkLabelAOS edit = new LinkLabelAOS("images/edit-grey.gif", "images/edit-grey-disabled.gif", constants.conceptEditSource(), permission, new ClickHandler(){;
 				public void onClick(ClickEvent event) {
 					if(editExternalSource == null || !editExternalSource.isLoaded)
-						editExternalSource = new EditExternalSource(dObj);
+						editExternalSource = new EditExternalSource(dObj, isSourceURL);
 					editExternalSource.show();
 				}
 			});
@@ -113,41 +170,15 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 					deleteExternalSource.show();
 				}
 			});
+			
+			HTML link =  new HTML(label);
 
-			hp.add(edit);
-			hp.add(delete);
-			/*if(dObj.getIDSource().equals("Book"))
-			{
-			    HTML link =  new HTML(dObj.getIDSource()+" (" + dObj.getIDSourceURL() +")");
-			    hp.add(link);
-			}else*/
-			{
-				HTML link =  new HTML("");
-				if(dObj!=null && dObj.getIDSourceURL()!=null && !dObj.getIDSourceURL().equals(""))
-					link.setHTML("<A HREF=\""+dObj.getIDSourceURL()+"\" target=\"_blank\">"+dObj.getIDSourceURL()+"</A>");
-				else
-					link.setHTML(dObj.getIDSourceURL());
-				hp.add(link);
-			}
-		}else
-		{
-
-			boolean permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_EXTSOURCECREATE, getConceptObject().getStatusID());
-			// Source Create
-			LinkLabelAOS add = new LinkLabelAOS("images/add-grey.gif", "images/add-grey-disabled.gif", constants.conceptAddNewSource(), permission, new ClickHandler(){
-				public void onClick(ClickEvent event) {
-					if(addExternalSource == null || !addExternalSource.isLoaded)
-						addExternalSource = new AddExternalSource(dObj);
-					addExternalSource.show();
-				}
-			});
-			hp.add(add);
+			hpURL.add(edit);
+			hpURL.add(delete);
+			hpURL.add(link);
 		}
-
-		table.setWidget(2, 1,hp);
-		table.getColumnFormatter().setWidth(1, "80%");
-		table.setWidth("100%");
-		return GridStyle.setTableConceptDetailStyleleft(table, "gslRow1", "gslCol1", "gslPanel1");
+		
+		return hpURL;
 	}
 
 	private VerticalPanel getTranslationTable(IDObject dObj){
@@ -229,6 +260,22 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 				if(addDefinitionLabel == null || !addDefinitionLabel.isLoaded)
 					addDefinitionLabel = new AddDefinitionLabel(dObj);
 				addDefinitionLabel.show();
+			}
+		});
+		hp.add(add);
+		return hp;
+	}
+	
+	private HorizontalPanel getAddSourcFunction(final IDObject dObj){
+		HorizontalPanel hp = new HorizontalPanel();
+
+		boolean permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_EXTSOURCECREATE, getConceptObject().getStatusID());
+		// Source Create
+		LinkLabelAOS add = new LinkLabelAOS("images/add-grey.gif", "images/add-grey-disabled.gif", constants.conceptAddNewSource(), constants.conceptAddNewSource(), permission, new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				if(addExternalSource == null || !addExternalSource.isLoaded)
+					addExternalSource = new AddExternalSource(dObj);
+				addExternalSource.show();
 			}
 		});
 		hp.add(add);
@@ -317,7 +364,7 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 		hp.setCellHorizontalAlignment(editURI, HasHorizontalAlignment.ALIGN_RIGHT);
 		return hp;
 	}*/
-
+	
 	private void initData(DefinitionObject dfObj)
 	{
 		clearPanel();
@@ -332,12 +379,22 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 			for (int i = 0; i < dObjList.size(); i++) {
 				IDObject dObj = (IDObject) dObjList.get(i);
 				
-				VerticalPanel vp = new VerticalPanel();
 				HorizontalPanel func = getAddTranslationFunction(dObj);
+				HorizontalPanel funcSource = getAddSourcFunction(dObj);
+				
+				VerticalPanel vp = new VerticalPanel();
 				vp.add(func);
 				vp.setCellHorizontalAlignment(func, HasHorizontalAlignment.ALIGN_RIGHT);
 				vp.add(getTranslationTable(dObj));
-				vp.add(getDateTable(i, dObj));
+				if(dObj!=null && (dObj.getIDSource() == null || dObj.getIDSource().equals("")) && (dObj.getIDSourceURL() == null || dObj.getIDSourceURL().equals("")))
+				{
+					vp.add(funcSource);
+					vp.setCellHorizontalAlignment(funcSource, HasHorizontalAlignment.ALIGN_RIGHT);
+				}
+				else
+					vp.add(getSourceTable(i, dObj));
+				vp.add(getDateTable(dObj));
+				vp.add(getOtherPropTable(dObj));
 				vp.setWidth("100%");
 				vp.setSpacing(5);
 				
@@ -398,6 +455,8 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setDefinitionObject(null);
+					ConceptDefinition.this.initData();
 					ExceptionManager.showException(caught, constants.conceptDeleteExternalSourceFail());
 				}
 			};
@@ -416,6 +475,8 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 		//private ListBox source;
 		private TextBox URL;
 		private IDObject ido;
+		private RadioButton rdoSrc;
+		private RadioButton rdoUrl;
 
 		public AddExternalSource(IDObject ido){
 			super(constants.buttonCreate(), constants.buttonCancel());
@@ -426,16 +487,30 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 		}
 
 		public void initLayout() {
+			
+			final FlexTable table = new FlexTable();
 			//source = new ListBox();
 			//source = Convert.makeSourceListBox((ArrayList<String[]>)initData.getSource());
 			//source.setWidth("100%");
 
 			URL = new TextBox();
 			URL.setWidth("100%");
+			
+			rdoUrl = new RadioButton("radioGroup", constants.conceptUrl());
+			rdoSrc = new RadioButton("radioGroup", constants.conceptDescription());
+			rdoUrl.setValue(true);
+			
+			HorizontalPanel hpSrcUrl = new HorizontalPanel();
+			hpSrcUrl.setWidth("100%");
+			hpSrcUrl.add(rdoUrl);
+			hpSrcUrl.add(rdoSrc);
+			hpSrcUrl.setCellHorizontalAlignment(rdoUrl, HasAlignment.ALIGN_LEFT);
+			hpSrcUrl.setCellHorizontalAlignment(rdoSrc, HasAlignment.ALIGN_LEFT);
 
-			final Grid table = new Grid(1,2);
-			table.setWidget(0, 0, new HTML(constants.conceptUrl()));
-			table.setWidget(0, 1, URL);
+			table.setWidget(0, 0, new HTML(constants.buttonSelect()));
+			table.setWidget(0, 1, hpSrcUrl);
+			table.setWidget(1, 0, new HTML(constants.conceptSource()));
+			table.setWidget(1, 1, URL);
 			//table.setWidget(1, 0, new HTML(constants.conceptSource()));
 			//table.setWidget(1, 1, source);
 			table.setWidth("100%");
@@ -470,7 +545,10 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 
 		public void onSubmit() {
 			sayLoading();
-			ido.setIDSourceURL(URL.getText());
+			if(rdoUrl.getValue())
+				ido.setIDSourceURL(URL.getText());
+			else
+				ido.setIDSource(URL.getText());
 			//ido.setIDSource(source.getValue(source.getSelectedIndex()));
 
 			AsyncCallback<DefinitionObject>  callback = new AsyncCallback<DefinitionObject>(){
@@ -480,6 +558,8 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setDefinitionObject(null);
+					ConceptDefinition.this.initData();
 					ExceptionManager.showException(caught, constants.conceptAddExternalSourceFail());
 				}
 			};
@@ -498,26 +578,39 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 		//private ListBox source ;
 		private TextBox URL;
 		private IDObject ido;
+		private boolean isSourceURL = true;
 
-		public EditExternalSource(IDObject ido){
+		public EditExternalSource(IDObject ido, boolean isSourceURL){
 			super();
 			this.ido = ido;
+			this.isSourceURL = isSourceURL;
 			this.setText(constants.conceptEditExternalSource());
 			setWidth("400px");
 			initLayout();
 		}
 
 		public void initLayout() {
+			
+			final FlexTable table = new FlexTable();
+			
 			//source = new ListBox();
 			//source =  Convert.makeSelectedSourceListBox((ArrayList<String[]>)initData.getSource(),ido.getIDSource());
 			//source.setWidth("100%");
 
 			URL = new TextBox();
-			URL.setText(ido.getIDSourceURL());
 			URL.setWidth("100%");
+			
+			if(isSourceURL)
+			{
+				URL.setText(ido.getIDSourceURL());
+			}
+			else 
+			{
+				URL.setText(ido.getIDSource());
+			}
+			
 
-			final Grid table = new Grid(1,2);
-			table.setWidget(0, 0, new HTML(constants.conceptUrl()));
+			table.setWidget(0, 0, new HTML(constants.conceptSource()));
 			table.setWidget(0, 1, URL);
 			//table.setWidget(1, 0, new HTML(constants.conceptSource()));
 			//table.setWidget(1, 1, source);
@@ -557,8 +650,15 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 			IDObject idoNew = new IDObject();
 			idoNew.setIDType(IDObject.DEFINITION);
 			idoNew.setIDUri(ido.getIDUri());
+			if(isSourceURL)
+			{
+				idoNew.setIDSourceURL(URL.getText());
+			}
+			else 
+			{
+				idoNew.setIDSource(URL.getText());
+			}
 			//idoNew.setIDSource(source.getValue(source.getSelectedIndex()));
-			idoNew.setIDSourceURL(URL.getText());
 
 			AsyncCallback<DefinitionObject>  callback = new AsyncCallback<DefinitionObject>(){
 				public void onSuccess(DefinitionObject results){
@@ -567,6 +667,8 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setDefinitionObject(null);
+					ConceptDefinition.this.initData();
 					ExceptionManager.showException(caught, constants.conceptEditTranslationFail());
 				}
 			};
@@ -602,8 +704,6 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 			def.setWidth("100%");
 			def.setVisibleLines(3);
 			
-			
-
 			language = new ListBox();
 			language = Convert.makeListWithUserLanguagesFilterOutAdded(MainApp.languageDict, MainApp.getUserLanguagePermissionList(), Convert.getUsedLangList(ido));
 			language.setWidth("100%");
@@ -645,6 +745,8 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setDefinitionObject(null);
+					ConceptDefinition.this.initData();
 					ExceptionManager.showException(caught, constants.conceptAddTranslationFail());
 				}
 			};
@@ -690,6 +792,8 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setDefinitionObject(null);
+					ConceptDefinition.this.initData();
 					ExceptionManager.showException(caught, constants.conceptAddDefinitionFail());
 				}
 			};
@@ -733,6 +837,8 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setDefinitionObject(null);
+					ConceptDefinition.this.initData();
 					ExceptionManager.showException(caught, constants.conceptDeleteDefinitionFail());
 				}
 			};
@@ -807,6 +913,8 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setDefinitionObject(null);
+					ConceptDefinition.this.initData();
 					ExceptionManager.showException(caught, constants.conceptAddDefinitionFail());
 				}
 			};
@@ -824,6 +932,8 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 		public TextArea def ;
 		//private ListBox source;
 		private TextBox URL;
+		private RadioButton rdoSrc;
+		private RadioButton rdoUrl;
 
 		public AddNewDefinition(){
 			super(constants.buttonCreate(), constants.buttonCancel());
@@ -833,6 +943,9 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 		}
 
 		public void initLayout(){
+			
+			final FlexTable table = new FlexTable();
+			
 			language = new ListBox();
 			language = Convert.makeListWithUserLanguages(MainApp.languageDict, MainApp.getUserLanguagePermissionList());
 			language.setWidth("100%");
@@ -847,16 +960,26 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 
 			URL = new TextBox();
 			URL.setWidth("100%");
-
-
-			final Grid table = new Grid(3,2);
+			
+			rdoUrl = new RadioButton("radioGroup", constants.conceptUrl());
+			rdoSrc = new RadioButton("radioGroup", constants.conceptDescription());
+			rdoUrl.setValue(true);
+			
+			HorizontalPanel hpSrcUrl = new HorizontalPanel();
+			hpSrcUrl.setWidth("100%");
+			hpSrcUrl.add(rdoUrl);
+			hpSrcUrl.add(rdoSrc);
+			hpSrcUrl.setCellHorizontalAlignment(rdoUrl, HasAlignment.ALIGN_LEFT);
+			hpSrcUrl.setCellHorizontalAlignment(rdoSrc, HasAlignment.ALIGN_LEFT);
+			
 			table.setWidget(0, 0, new HTML(constants.conceptDefinition()));
 			table.setWidget(1, 0, new HTML(constants.conceptLanguage()));
-			table.setWidget(2, 0, new HTML(constants.conceptUrl()));
-			//table.setWidget(3, 0, new HTML(constants.conceptSource()));
+			table.setWidget(2, 0, new HTML(constants.buttonSelect()));
+			table.setWidget(3, 0, new HTML(constants.conceptSource()));
 			table.setWidget(0, 1, def);
 			table.setWidget(1, 1, language);
-			table.setWidget(2, 1, URL);
+			table.setWidget(2, 1, hpSrcUrl);
+			table.setWidget(3, 1, URL);
 			//table.setWidget(3, 1, source);
 			table.getColumnFormatter().setWidth(1, "80%");
 			table.setWidth("100%");
@@ -885,7 +1008,7 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 			else {
 				if(ConfigConstants.MANDATORY_DEFINITION_NAMESPACES.contains(MainApp.defaultNamespace))
 				{
-					 if(/*source.getValue((source.getSelectedIndex())).equals("") || */URL.getText().length()==0)
+					if(/*source.getValue((source.getSelectedIndex())).equals("") || */URL.getText().length()==0)
 						 pass = false;
 					 else
 						 pass = true;
@@ -907,7 +1030,10 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 			IDObject ido = new IDObject();
 			ido.setIDType(IDObject.DEFINITION);
 			ido.addIDTranslationList(transObj);
-			ido.setIDSourceURL(URL.getText());
+			if(rdoUrl.getValue())
+				ido.setIDSourceURL(URL.getText());
+			else
+				ido.setIDSource(URL.getText());
 			//ido.setIDSource(source.getValue(source.getSelectedIndex()));
 
 			AsyncCallback<DefinitionObject>  callback = new AsyncCallback<DefinitionObject>(){
@@ -917,6 +1043,8 @@ public class ConceptDefinition extends ConceptTemplate implements ResourceURIPan
 					ModuleManager.resetValidation();
 				}
 				public void onFailure(Throwable caught){
+					cDetailObj.setDefinitionObject(null);
+					ConceptDefinition.this.initData();
 					ExceptionManager.showException(caught, constants.conceptAddDefinitionFail());
 				}
 			};

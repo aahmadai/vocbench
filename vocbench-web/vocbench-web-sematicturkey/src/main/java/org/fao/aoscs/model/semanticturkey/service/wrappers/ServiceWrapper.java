@@ -2,7 +2,6 @@ package org.fao.aoscs.model.semanticturkey.service.wrappers;
 
 import it.uniroma2.art.semanticturkey.servlet.Response;
 
-import org.apache.http.HttpResponse;
 import org.fao.aoscs.model.semanticturkey.util.ParameterPair;
 
 public interface ServiceWrapper extends ServletExtensionWrapper {

@@ -557,6 +557,11 @@ public class MainApp extends Composite { // Application container
      */
     public void goToModule(String name, String... params)
     {     
+    	GWT.log("module:"+name);
+    	if(name != null && !name.equals("") && !userMenu.contains(name))
+    	{
+			new LogManager().endLog();
+    	}
     	
         if (name.equals("Search"))
         {
@@ -1586,5 +1591,23 @@ public class MainApp extends Composite { // Application container
 		}
 		return flag;
 	}
+    
+    public static String getPriorityLang()
+    {
+    	String priorityLang = userLanguage;
+    	int order = -1;
+    	for(LanguageCode langCode : languageCode)
+    	{
+    		if(userSelectedLanguage.contains(langCode.getLanguageCode()))
+    		{
+    			if(order==-1 || langCode.getLanguageOrder()<order)
+    			{
+    				priorityLang = langCode.getLanguageCode();
+    				order = langCode.getLanguageOrder();
+    			}
+    		}
+    	}
+    	return priorityLang;
+    }
     
 }

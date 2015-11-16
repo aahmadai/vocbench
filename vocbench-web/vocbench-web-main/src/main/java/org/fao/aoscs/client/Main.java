@@ -27,11 +27,12 @@ import org.fao.aoscs.domain.VBInitConstants;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
@@ -105,8 +106,8 @@ public class Main implements EntryPoint {
 				
 				//Main Content
 				HTML descTitle = new HTML(constants.mainWelcome());
-				DOM.setStyleAttribute(descTitle.getElement(), "fontWeight", "bold");
-				DOM.setStyleAttribute(descTitle.getElement(), "fontSize", "13px");
+				descTitle.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+				descTitle.getElement().getStyle().setFontSize(13, Unit.PX);
 
 				VerticalPanel briefLeft = new VerticalPanel();
 				briefLeft.setSpacing(2);
@@ -370,6 +371,7 @@ public class Main implements EntryPoint {
 				panel.setCellHorizontalAlignment(centerContainer, HasHorizontalAlignment.ALIGN_CENTER);
 				panel.setCellVerticalAlignment(footer, HasVerticalAlignment.ALIGN_BOTTOM);
 
+				RootPanel.get().clear();
 				RootPanel.get().add(panel);
 			}
 		    public void onFailure(Throwable caught) {
@@ -470,7 +472,7 @@ public class Main implements EntryPoint {
 
 	private static VerticalPanel getVocbenchDescription(){
 		HTML desc = new HTML(constants.mainBrief());
-		DOM.setStyleAttribute(desc.getElement(), "fontSize", "12px");
+		desc.getElement().getStyle().setFontSize(12, Unit.PX);
 
 		LinkLabel learnMore = new LinkLabel(null, constants.mainLearnMore(), constants.mainLearnMore());
 		learnMore.setLabelStyle("toolbar-link");
@@ -504,9 +506,9 @@ public class Main implements EntryPoint {
 		briefHp.add(ca);
 		briefHp.add(ca1);
 
-		DOM.setStyleAttribute(ca0.getElement(), "fontSize", "12px");
-		DOM.setStyleAttribute(ca.getElement(), "fontSize", "12px");
-		DOM.setStyleAttribute(ca1.getElement(), "fontSize", "12px");
+		ca0.getElement().getStyle().setFontSize(12, Unit.PX);
+		ca.getElement().getStyle().setFontSize(12, Unit.PX);
+		ca1.getElement().getStyle().setFontSize(12, Unit.PX);
 
 		VerticalPanel vp = new VerticalPanel();
 		vp.add(briefHp);
@@ -516,7 +518,7 @@ public class Main implements EntryPoint {
 
 	private static VerticalPanel getSandboxInfo(){
 		HTML sandboxText = new HTML(constants.mainSandboxInfo());
-		DOM.setStyleAttribute(sandboxText.getElement(), "fontSize", "12px");
+		sandboxText.getElement().getStyle().setFontSize(12, Unit.PX);
 
 		LinkLabel sandboxLink = new LinkLabel(null, "Click here for Sandbox", "Click here for Sandbox");
 		sandboxLink.setLabelStyle("toolbar-link");
@@ -535,7 +537,7 @@ public class Main implements EntryPoint {
 
 	private static VerticalPanel getAnonymousInfo(){
 		HTML text = new HTML(constants.mainAnonymousInfo());
-		DOM.setStyleAttribute(text.getElement(), "fontSize", "12px");
+		text.getElement().getStyle().setFontSize(12, Unit.PX);
 		VerticalPanel vp = new VerticalPanel();
 		vp.add(text);
 		vp.setSpacing(8);

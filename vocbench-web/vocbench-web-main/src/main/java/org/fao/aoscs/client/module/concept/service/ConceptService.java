@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.fao.aoscs.domain.ClassObject;
+import org.fao.aoscs.domain.ClassTreeObject;
 import org.fao.aoscs.domain.ConceptDetailObject;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.ConceptTermObject;
@@ -60,6 +61,11 @@ public interface ConceptService extends RemoteService {
 			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
 			ConceptObject conceptObject, boolean isExplicit) throws Exception;
 
+	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptTypeValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
+			ConceptObject conceptObject, boolean isExplicit) throws Exception;
+	
 	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptAttributeValue(
 			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
 			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
@@ -142,6 +148,11 @@ public interface ConceptService extends RemoteService {
 			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
 			NonFuncObject oldValue, String propertyURI,
 			ConceptObject conceptObject, boolean isExplicit) throws Exception;
+	
+	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptTypeValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, String propertyURI,
+			ConceptObject conceptObject, boolean isExplicit) throws Exception;
 
 	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptAttributeValue(
 			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
@@ -198,6 +209,12 @@ public interface ConceptService extends RemoteService {
 			boolean isExplicit) throws Exception;
 
 	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> editConceptOtherValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, NonFuncObject newValue, String propertyURI,
+			DomainRangeObject drObj, ConceptObject conceptObject,
+			boolean isExplicit) throws Exception;
+	
+	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> editConceptTypeValue(
 			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
 			NonFuncObject oldValue, NonFuncObject newValue, String propertyURI,
 			DomainRangeObject drObj, ConceptObject conceptObject,
@@ -312,6 +329,12 @@ public interface ConceptService extends RemoteService {
 
 	PropertyTreeObject getConceptOther(String resourceURI,
 			boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
+	
+	HashMap<String, String> getConceptType(String resourceURI,
+			boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
+	
+	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptTypeValue(String resourceURI,
+			boolean isExplicit, OntologyInfo ontoInfo) throws Exception;
 
 	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptOtherValue(
 			String cls, boolean isExplicit, OntologyInfo ontoInfo)
@@ -362,4 +385,7 @@ public interface ConceptService extends RemoteService {
 
 	ArrayList<RecentChanges> requestConceptHistoryRows(Request request,
 			int ontologyId, String uri, int type) throws Exception;
+	
+	
+	ClassTreeObject getClassTree(OntologyInfo ontoInfo) throws Exception;
 }

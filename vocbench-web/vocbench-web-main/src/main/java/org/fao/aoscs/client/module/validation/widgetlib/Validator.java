@@ -176,12 +176,27 @@ public class Validator extends ValidationTemplate {
 	}
 	public static Widget getExtLinkLabelPanel(String text, String title, String link, String style)
 	{
-		if(link!=null && !link.startsWith("http://"))
-			link = "http://"+link;
-		HTML label = new HTML("<a href=\""+link+"\" target=\"_blank\">"+text+"</a>");
-			label.setStyleName(style);
-			label.setTitle(title);
-			return label;
+		String txt = "";
+		String titleLabel = "";
+		
+		if(link==null || link.isEmpty())
+		{
+			txt = text;
+		}
+		else
+		{
+			if(link!=null && !link.startsWith("http://"))
+				link = "http://"+link;
+			if(text==null || text.isEmpty())
+				text = link;
+			txt = "<a href=\""+link+"\" target=\"_blank\">"+text+"</a>";
+			titleLabel = title;
+		}
+		
+		HTML label = new HTML(txt);
+		label.setStyleName(style);
+		label.setTitle(titleLabel);
+		return label;
 	}
 	public static Widget makeConceptLabel(ConceptObject cObj, String style, final boolean isAddAction, final int tab, final int objectType)
 	{

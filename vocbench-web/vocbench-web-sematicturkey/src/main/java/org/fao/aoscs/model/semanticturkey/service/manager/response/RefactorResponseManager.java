@@ -3,12 +3,6 @@ package org.fao.aoscs.model.semanticturkey.service.manager.response;
 import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 
-import java.io.IOException;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpResponseException;
-import org.apache.http.util.EntityUtils;
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.model.semanticturkey.util.STModel;
 import org.slf4j.Logger;

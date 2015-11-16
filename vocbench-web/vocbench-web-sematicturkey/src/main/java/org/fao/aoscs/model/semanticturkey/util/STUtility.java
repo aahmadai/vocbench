@@ -25,6 +25,7 @@ import org.fao.aoscs.domain.ARTBNodeObject;
 import org.fao.aoscs.domain.ARTLiteralObject;
 import org.fao.aoscs.domain.ARTURIResourceObject;
 import org.fao.aoscs.domain.ClassObject;
+import org.fao.aoscs.domain.ClassTreeObjectItem;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.DanglingConceptObject;
 import org.fao.aoscs.domain.DomainRangeObject;
@@ -243,6 +244,22 @@ public class STUtility {
 		classObj.setName(name);
 		classObj.setHasChild(hasChild);
 		return classObj;
+	}
+	
+	/**
+	 * @param name
+	 * @param deleteForbidden
+	 * @param numInst
+	 * @return
+	 */
+	public static ClassTreeObjectItem createClassTreeObjectItem(String name, boolean deleteForbidden, String numInst, boolean rootItem)
+	{
+		ClassTreeObjectItem cObj = new ClassTreeObjectItem();
+		cObj.setName(name);
+		cObj.setNumInst(numInst);
+		cObj.setDeleteForbidden(deleteForbidden);
+		cObj.setRootItem(rootItem);
+		return cObj;
 	}
 	
 	/**

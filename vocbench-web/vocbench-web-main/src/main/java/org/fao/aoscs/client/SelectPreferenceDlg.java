@@ -21,13 +21,14 @@ import org.fao.aoscs.domain.UsersPreference;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -96,14 +97,13 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 		txtlang.setReadOnly(true);
 		txtontology.setReadOnly(true);
 		
-		DOM.setStyleAttribute(lstgroups.getElement(), "cursor", "pointer");
-	    DOM.setStyleAttribute(lstlang.getElement(), "cursor", "pointer");
-	    DOM.setStyleAttribute(lstontology.getElement(), "cursor", "pointer");
-	    
-		DOM.setStyleAttribute(txtgroups.getElement(), "marginTop", "0px");
-		DOM.setStyleAttribute(txtlang.getElement(), "marginTop", "0px");
-		DOM.setStyleAttribute(txtontology.getElement(), "marginTop", "0px");
-	    
+		lstgroups.getElement().getStyle().setCursor(Cursor.POINTER);
+		lstlang.getElement().getStyle().setCursor(Cursor.POINTER);
+		lstontology.getElement().getStyle().setCursor(Cursor.POINTER);
+		
+		txtgroups.getElement().getStyle().setMarginTop(0, Unit.PX);
+		txtlang.getElement().getStyle().setMarginTop(0, Unit.PX);
+		txtontology.getElement().getStyle().setMarginTop(0, Unit.PX);
 		
 		ImageAOS addButton = new ImageAOS(constants.buttonAdd(), "images/add-grey.gif", "images/add-grey-disabled.gif", isAdmin, new ClickHandler() {
 			public void onClick(ClickEvent event) {

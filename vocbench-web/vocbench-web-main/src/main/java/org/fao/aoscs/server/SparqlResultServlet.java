@@ -39,6 +39,7 @@ public class SparqlResultServlet extends HttpServlet{
             String ontology = "";
             String query = "";
             String language = "";
+            String mode = "";
             boolean infer = false;
             
         	Enumeration<?> itr = request.getParameterNames();
@@ -53,11 +54,13 @@ public class SparqlResultServlet extends HttpServlet{
                 	infer = value.equals("true")?true:false;
                 else if(name.equals("ontology"))
                 	ontology = value;
+                else if(name.equals("mode"))
+                	mode = value;
             }
             
             
             
-            byte[] responseStr = getSparqlExportData(getOntology(ontology), query, language, infer);
+            byte[] responseStr = getSparqlExportData(getOntology(ontology), query, language, infer, mode);
             
             response.setContentType("application/octet-stream");
 			response.setHeader("Content-Disposition", "attachment; filename=result.txt"); 
@@ -78,9 +81,9 @@ public class SparqlResultServlet extends HttpServlet{
 	 * @return
 	 * @throws UnsupportedEncodingException 
 	 */
-	private byte[] getSparqlExportData(OntologyInfo ontoInfo, String query, String language, boolean infer) throws UnsupportedEncodingException
+	private byte[] getSparqlExportData(OntologyInfo ontoInfo, String query, String language, boolean infer, String mode) throws UnsupportedEncodingException
 	{
-		ArrayList<ArrayList<String>> result =  SparqlManager.resolveQuery(ontoInfo, query, language, infer);
+		ArrayList<ArrayList<String>> result =  SparqlManager.resolveQuery(ontoInfo, query, language, infer, mode);
 		StringBuffer strBuffer = new StringBuffer();
 		for(ArrayList<String> row : result)
 		{

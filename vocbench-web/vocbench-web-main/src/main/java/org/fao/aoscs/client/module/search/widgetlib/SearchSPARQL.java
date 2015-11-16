@@ -15,6 +15,8 @@ import org.fao.aoscs.client.widgetlib.shared.dialog.LoadingDialog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ButtonElement;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.TextAreaElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -46,7 +48,7 @@ public class SearchSPARQL extends Composite{
 		
 	private LocaleConstants constants = (LocaleConstants) GWT.create(LocaleConstants.class);
 	
-	private ListBox langList = new ListBox();
+	private ListBox queryModes = new ListBox();
 	VerticalPanel queryPanel = new VerticalPanel();
 	private TextArea textArea = new TextArea();
 	private TextBox statusArea = new TextBox();
@@ -65,6 +67,7 @@ public class SearchSPARQL extends Composite{
     private TextBox languageTXT = new TextBox();
     private TextBox ontologyTXT = new TextBox();
     private TextBox inferTXT = new TextBox();
+    private TextBox modeTXT = new TextBox();
     
 	
 	private JSONObject nsPrefixMappings = new JSONObject();
@@ -104,7 +107,7 @@ public class SearchSPARQL extends Composite{
 						{
 							namedGraphs.set(i, new JSONString(result.get(i)));
 						}
-						wrapper = loadFlintEditor(textArea, statusArea, submit, createJSONObjectString(langList.getValue(langList.getSelectedIndex()), nsPrefixMappings, namedGraphs));
+						wrapper = loadFlintEditor(textArea, statusArea, submit, createJSONObjectString(queryModes.getValue(queryModes.getSelectedIndex()), nsPrefixMappings, namedGraphs));
 						
 						displayPanel.clear();
 						displayPanel.add(mainPanel);
@@ -138,12 +141,12 @@ public class SearchSPARQL extends Composite{
 	{
 		loadForm();
 		
-		langList.addItem("SPARQL 1.0","sparql10");
-		langList.addItem("SPARQL 1.1 Query", "sparql11query");
-		langList.addItem("SPARQL 1.1 Update", "sparql11update");
-		langList.addChangeHandler(new ChangeHandler() {
+		queryModes.addItem("SPARQL 1.0","sparql10");
+		queryModes.addItem("SPARQL 1.1 Query", "sparql11query");
+		queryModes.addItem("SPARQL 1.1 Update", "sparql11update");
+		queryModes.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
-				wrapper.setEditorMode(langList.getValue(langList.getSelectedIndex()));
+				wrapper.setEditorMode(queryModes.getValue(queryModes.getSelectedIndex()));
 			}
 		});
 		
@@ -188,7 +191,10 @@ public class SearchSPARQL extends Composite{
 		bodyPanel.setWidth("100%");
 		bodyPanel.setSpacing(5);
 		bodyPanel.add(getSparqlSearchPanel());
-		DOM.setStyleAttribute(bodyPanel.getElement(), "border", "1px solid #F59131");
+		bodyPanel.getElement().getStyle().setBorderColor("#F59131");
+		bodyPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+		bodyPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+		//DOM.setStyleAttribute(bodyPanel.getElement(), "border", "1px solid #F59131");
 		
 		HorizontalPanel buttonPanel = new HorizontalPanel();
 		buttonPanel.setSpacing(5);
@@ -262,6 +268,8 @@ public class SearchSPARQL extends Composite{
 				languageTXT.setValue("SPARQL");
 				ontologyTXT.setValue(""+MainApp.userOntology.getOntologyId());
 				inferTXT.setValue(chkBox.getValue().toString());
+				modeTXT.setValue(checkMode(queryModes.getValue(queryModes.getSelectedIndex())));
+				
 				
 				form.submit();
 			}
@@ -322,7 +330,7 @@ public class SearchSPARQL extends Composite{
 							ExceptionManager.showException(caught, constants.searchSparqlResultFail());
 						}
 					};
-					Service.searchSerice.getSparqlSearchResults(MainApp.userOntology, wrapper.getValue(), "SPARQL", chkBox.getValue(), callback);
+					Service.searchSerice.getSparqlSearchResults(MainApp.userOntology, wrapper.getValue(), "SPARQL", chkBox.getValue(), checkMode(queryModes.getValue(queryModes.getSelectedIndex())), callback);
 				}
 			}
 		});
@@ -340,6 +348,18 @@ public class SearchSPARQL extends Composite{
 		mainPanel.setCellHeight(outputPanel, "100%");
 	}
 	
+	private String checkMode(String value)
+	{
+		if(value.equals("sparql10"))
+			return "query";
+		else if(value.equals("sparql11query"))
+			return "query";
+		else if(value.equals("sparql11update"))
+			return "update";
+		else
+			return "";
+	}
+	
 	private Widget getSparqlSearchPanel()
 	{		
 		FlexTable table = new FlexTable();
@@ -352,7 +372,7 @@ public class SearchSPARQL extends Composite{
 		table.setWidget(1, 0, new HTML(constants.searchSparqlQuery()));
 		//table.setWidget(2, 0, new HTML("Result"));	
 		
-		table.setWidget(0, 1, langList);
+		table.setWidget(0, 1, queryModes);
 		table.setWidget(1, 1, queryPanel);
 		//table.setWidget(2, 1, resultPanel);
 		
@@ -394,6 +414,10 @@ public class SearchSPARQL extends Composite{
 		inferTXT.setVisible(false);
 		inferTXT.setName("infer");
 		holder.add(inferTXT);
+		
+		modeTXT.setVisible(false);
+		modeTXT.setName("mode");
+		holder.add(modeTXT);
 		
 		form.add(holder);
 		form.setAction(GWT.getHostPageBaseURL()+"sparqlresult");

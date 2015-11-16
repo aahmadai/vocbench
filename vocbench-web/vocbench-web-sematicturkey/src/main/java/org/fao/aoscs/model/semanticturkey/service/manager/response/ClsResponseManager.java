@@ -18,6 +18,17 @@ public class ClsResponseManager extends ResponseManager {
 	protected static Logger logger = LoggerFactory.getLogger(ClsResponseManager.class);
 	
 	/**
+	 * @param ontoInfo
+	 * @return
+	 */
+	public static XMLResponseREPLY getClassTreeRequest(OntologyInfo ontoInfo)
+	{
+		Response resp = getSTModel(ontoInfo).clsService.makeRequest(ClsOld.getClassTreeRequest, 
+				STModel.par("ctx_project", ontoInfo.getDbTableName()));
+		return getXMLResponseREPLY(resp);
+	}
+	
+	/**
 	 * @param clsName
 	 * @param tree
 	 * @param instNum

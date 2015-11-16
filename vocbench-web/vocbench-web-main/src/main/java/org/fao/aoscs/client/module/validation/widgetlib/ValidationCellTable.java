@@ -14,6 +14,7 @@ import org.fao.aoscs.client.utility.ExceptionManager;
 import org.fao.aoscs.client.utility.ModuleManager;
 import org.fao.aoscs.client.widgetlib.shared.table.CellTablePagerAOS;
 import org.fao.aoscs.client.widgetlib.shared.table.DataGridAOS;
+import org.fao.aoscs.client.widgetlib.shared.table.DynamicSelectionCell;
 import org.fao.aoscs.client.widgetlib.shared.table.HTMLCellAOS;
 import org.fao.aoscs.client.widgetlib.shared.table.HTMLClickableCellAOS;
 import org.fao.aoscs.client.widgetlib.shared.table.ResizableHeader;
@@ -28,7 +29,6 @@ import org.fao.aoscs.domain.ValidationFilter;
 
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.cell.client.SelectionCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -383,26 +383,40 @@ public class ValidationCellTable {
 			table.addColumn(valStatusColumn, new ResizableHeader<Validation>(constants.valStatus(), table, valStatusColumn));
 			
 			// Validation Panel
-			List<String> functionNames = new ArrayList<String>();
+			final List<String> functionNames = new ArrayList<String>();
 			functionNames.add("Select");
 		    functionNames.add(constants.buttonAccept());
 		    functionNames.add(constants.buttonReject());
-		    final SelectionCell sc = new SelectionCell(functionNames);
+		    
+		   // final SelectionCell sc = new SelectionCell(functionNames);
+		    final DynamicSelectionCell sc = new DynamicSelectionCell(functionNames);
 		    Column<Validation, String> valValidateColumn = new Column<Validation, String>(sc) {
 		        @Override
 		        public String getValue(Validation v) {
-		        	if(v.getIsAccept() == null)
-		        		return "Select";
-		        	else if(v.getIsAccept())
+		        	sc.removeAllOptions();
+		        	if(v.getValidatorId()==-1)
 		        	{
-		        		return constants.buttonAccept();
+		        		sc.setTitle(v.getNote());
+		        		sc.addOption("Unvalidable");
+		        		return "Unvalidable";
 		        	}
-		        	else if(!v.getIsAccept())
+		        	else
 		        	{
-		        		return constants.buttonReject();
+		        		sc.setTitle("");
+		        		sc.setOptions(functionNames);
+		        		if(v.getIsAccept() == null)
+			        		return "Select";
+			        	else if(v.getIsAccept())
+			        	{
+			        		return constants.buttonAccept();
+			        	}
+			        	else if(!v.getIsAccept())
+			        	{
+			        		return constants.buttonReject();
+			        	}
+			        	else 
+			        		return "Select";
 		        	}
-		        	else 
-		        		return "Select";
 	        		/*int acceptItem = -1;
 		        	int rejectItem = -1;
 		        	
@@ -462,6 +476,8 @@ public class ValidationCellTable {
 		        		v.setIsAccept(null);
 		        	}
 			        table.redraw();
+			        
+			        
 		        	//Window.alert(index+" : "+value+":"+constants.buttonAccept());
 		        	if(value.equals(constants.buttonAccept()))
 		        	{
@@ -519,9 +535,9 @@ public class ValidationCellTable {
 		        	
 		        }
 		    });
-
+		    
 			valValidateColumn.setSortable(false);
-		    table.setColumnWidth(valValidateColumn, 80, Unit.PX);
+		    table.setColumnWidth(valValidateColumn, 100, Unit.PX);
 			//table.addColumn(valValidateColumn, constants.valValidate());
 			table.addColumn(valValidateColumn, new ResizableHeader<Validation>(constants.valValidate(), table, valValidateColumn));
 			/*{

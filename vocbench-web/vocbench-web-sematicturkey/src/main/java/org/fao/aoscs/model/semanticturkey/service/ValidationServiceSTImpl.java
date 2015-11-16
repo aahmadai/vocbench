@@ -423,8 +423,7 @@ public class ValidationServiceSTImpl {
 								}
 								else
 								{
-									v.setIsValidate(new Boolean(true));
-									DatabaseUtil.update(v, false);
+									updateCheckNull(v, tobj.getUri(), "Term", vList);
 								}
 							}
 						}
@@ -440,8 +439,7 @@ public class ValidationServiceSTImpl {
 								}
 								else
 								{
-									v.setIsValidate(new Boolean(true));
-									DatabaseUtil.update(v, false);
+									updateCheckNull(v, uri, "Definition/Image", vList);
 								}
 							}
 							else
@@ -452,14 +450,28 @@ public class ValidationServiceSTImpl {
 					}
 					else
 					{
-						v.setIsValidate(new Boolean(true));
-						DatabaseUtil.update(v, false);
+						updateCheckNull(v, cobj.getUri(), "Concept", vList);
 					}
+					
 				}
 			}	
 		}
 		return vList;
 	}
+	
+	private void updateCheckNull(Validation v, String uri, String item, ArrayList<Validation> vList)
+	{
+		/*System.out.println("getIsAccept: "+v.getIsAccept());
+		v.setIsAccept(null);
+		System.out.println("getIsAccept: "+v.getIsAccept());
+		*/
+		v.setValidatorId(-1);
+		v.setNote(item+" with URI: "+uri+" has not been found. Pls check that the corresponding resource has not been renamed. In case, rename it again to this URI, validate it, and then rename it to the URI you desire");
+		vList.add(v);
+		//v.setIsValidate(new Boolean(true));
+		//DatabaseUtil.update(v, false);
+	}
+	
 	/*private ArrayList<Validation> checkNullValidation(OntologyInfo ontoInfo, ArrayList<Validation> list, ValidationFilter vFilter)
 	{
 		ArrayList<Validation> vList = new ArrayList<Validation>();
@@ -1418,7 +1430,14 @@ public class ValidationServiceSTImpl {
 	{
 		IDObject ido = (IDObject) val.getOldObject().get(0);
 		
-		VocbenchManager.addLinkForDefinition(ontoInfo, ido.getIDUri(), ido.getIDSource(), ido.getIDSourceURL());
+		if(ido!=null && ido.getIDSourceURL() != null && !ido.getIDSourceURL().equals(""))
+		{
+			VocbenchManager.addLinkForDefinition(ontoInfo, ido.getIDUri(), ido.getIDSourceURL());
+		}
+		else if(ido!=null && ido.getIDSource() != null && !ido.getIDSource().equals(""))
+		{
+			VocbenchManager.addFromSourceForDefinition(ontoInfo, ido.getIDUri(), ido.getIDSource());
+		}
 		
 		STUtility.setInstanceUpdateDate(ontoInfo, val.getConceptObject().getUri());
 		
@@ -1549,7 +1568,14 @@ public class ValidationServiceSTImpl {
 	{
 		IDObject ido = (IDObject) val.getOldObject().get(0);
 		
-		VocbenchManager.addLinkForImage(ontoInfo, ido.getIDUri(), ido.getIDSource(), ido.getIDSourceURL());
+		if(ido!=null && ido.getIDSourceURL() != null && !ido.getIDSourceURL().equals(""))
+		{
+			VocbenchManager.addLinkForImage(ontoInfo, ido.getIDUri(), ido.getIDSourceURL());
+		}
+		else if(ido!=null && ido.getIDSource() != null && !ido.getIDSource().equals(""))
+		{
+			VocbenchManager.addFromSourceForImage(ontoInfo, ido.getIDUri(), ido.getIDSource());
+		}
 		
 		STUtility.setInstanceUpdateDate(ontoInfo, val.getConceptObject().getUri());
 		

@@ -12,6 +12,9 @@ public interface AOSImageBundle extends ClientBundle {
 	  
 	@Source("org/fao/aoscs/client/image/icons/st/skosConcept.png")
 	public ImageResource conceptIcon();
+	
+	@Source("org/fao/aoscs/client/image/icons/st/class.png")
+	public ImageResource classIcon();
 
 	//@Source("org/fao/aoscs/client/image/icons/category_logo.gif")
 	//public ImageResource categoryIcon();

@@ -18,7 +18,7 @@ public class DomainRangeObject extends LightEntity{
 	
 	public static String resource = "resource";
 	public static String literal = "literal";
-	public static String plainliteral = "plainliteral";
+	public static String plainliteral = "plainLiteral";
 	public static String typedLiteral = "typedLiteral";
 	public static String undetermined = "undetermined";
 	

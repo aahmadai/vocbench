@@ -23,7 +23,7 @@ public interface SearchService extends RemoteService{
 	public SearchResultObjectList requestSearchResultsRows (Request request, SearchParameterObject searchObj, OntologyInfo ontoInfo) throws Exception; 
 	public SearchResponse getSuggestions(SearchRequest req, boolean includeNotes, ArrayList<String> languages, OntologyInfo ontoInfo) throws Exception;
 	public Integer indexOntology(OntologyInfo ontoInfo) throws Exception;
-	public ArrayList<ArrayList<String>> getSparqlSearchResults(OntologyInfo ontoInfo, String query, String language, boolean infer) throws Exception;
+	public ArrayList<ArrayList<String>> getSparqlSearchResults(OntologyInfo ontoInfo, String query, String language, boolean infer, String mode) throws Exception;
 	
 	public static class SearchServiceUtil{
 		private static SearchServiceAsync<?> instance;

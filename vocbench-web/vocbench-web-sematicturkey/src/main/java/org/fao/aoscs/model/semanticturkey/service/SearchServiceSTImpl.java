@@ -400,9 +400,9 @@ public class SearchServiceSTImpl {
 		return suggestions;
 	}
 	
-	public ArrayList<ArrayList<String>> getSparqlSearchResults(OntologyInfo ontoInfo, String query, String language, boolean infer)
+	public ArrayList<ArrayList<String>> getSparqlSearchResults(OntologyInfo ontoInfo, String query, String language, boolean infer, String mode)
 	{
-		return SparqlManager.resolveQuery(ontoInfo, query, language, infer);
+		return SparqlManager.resolveQuery(ontoInfo, query, language, infer, mode);
 	}
 	
 

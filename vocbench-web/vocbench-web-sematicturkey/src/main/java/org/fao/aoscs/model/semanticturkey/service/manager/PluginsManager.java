@@ -1,22 +1,14 @@
 package org.fao.aoscs.model.semanticturkey.service.manager;
 
-import java.util.ArrayList;
-
-import it.uniroma2.art.semanticturkey.project.ProjectACL;
-import it.uniroma2.art.semanticturkey.project.ProjectConsumer;
-import it.uniroma2.art.semanticturkey.services.core.Plugins;
-import it.uniroma2.art.semanticturkey.servlet.Response;
-import it.uniroma2.art.semanticturkey.servlet.XMLResponseEXCEPTION;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
-import it.uniroma2.art.semanticturkey.servlet.ServiceVocabulary.RepliesStatus;
+
+import java.util.ArrayList;
 
 import org.fao.aoscs.domain.OntologyInfo;
 import org.fao.aoscs.domain.PluginConfiguration;
 import org.fao.aoscs.domain.PluginConfigurationParameter;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.PluginsResponseManager;
-import org.fao.aoscs.model.semanticturkey.service.manager.response.ProjectResponseManager;
 import org.fao.aoscs.model.semanticturkey.service.manager.response.ResponseManager;
-import org.fao.aoscs.model.semanticturkey.util.STModel;
 import org.fao.aoscs.model.semanticturkey.util.STXMLUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

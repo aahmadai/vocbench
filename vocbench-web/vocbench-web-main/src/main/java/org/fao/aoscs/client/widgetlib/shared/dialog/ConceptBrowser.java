@@ -17,10 +17,10 @@ import org.fao.aoscs.domain.SearchParameterObject;
 import org.fao.aoscs.domain.TreeObject;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DeckPanel;
@@ -309,8 +309,10 @@ public class ConceptBrowser extends FormDialogBox {
         hp.add(simpleSearch);
         hp.add(linkPanel);
         hp.setCellWidth(linkPanel, "100%");
-        DOM.setStyleAttribute(hp.getElement(), "paddingRight", "10px");
-        DOM.setStyleAttribute(hp.getElement(), "paddingLeft", "10px");
+        hp.getElement().getStyle().setPaddingRight(10, Unit.PX);
+        hp.getElement().getStyle().setPaddingLeft(10, Unit.PX);
+        //DOM.setStyleAttribute(hp.getElement(), "paddingRight", "10px");
+        //DOM.setStyleAttribute(hp.getElement(), "paddingLeft", "10px");
         hp.setCellVerticalAlignment(simpleSearch, HasVerticalAlignment.ALIGN_MIDDLE);
         return hp;
     }

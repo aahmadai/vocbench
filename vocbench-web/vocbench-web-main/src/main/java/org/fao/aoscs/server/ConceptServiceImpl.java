@@ -11,6 +11,7 @@ import net.sf.gilead.gwt.PersistentRemoteService;
 
 import org.fao.aoscs.client.module.concept.service.ConceptService;
 import org.fao.aoscs.domain.ClassObject;
+import org.fao.aoscs.domain.ClassTreeObject;
 import org.fao.aoscs.domain.ConceptDetailObject;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.ConceptTermObject;
@@ -561,5 +562,47 @@ public class ConceptServiceImpl extends PersistentRemoteService implements Conce
 		return conceptService.getConceptOtherValue(cls, isExplicit, ontoInfo);
 	}
 
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptTypeValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
+			ConceptObject conceptObject, boolean isExplicit) throws Exception {
+		return conceptService.addConceptTypeValue(ontoInfo, actionId, status, userId, value, propertyURI, drObj, conceptObject, isExplicit);
+	}
+
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> deleteConceptTypeValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, String propertyURI,
+			ConceptObject conceptObject, boolean isExplicit) throws Exception {
+		return conceptService.deleteConceptTypeValue(ontoInfo, actionId, status, userId, oldValue, propertyURI, conceptObject, isExplicit);
+	}
+
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> editConceptTypeValue(
+			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
+			NonFuncObject oldValue, NonFuncObject newValue, String propertyURI,
+			DomainRangeObject drObj, ConceptObject conceptObject,
+			boolean isExplicit) throws Exception {
+		return conceptService.editConceptTypeValue(ontoInfo, actionId, status, userId, oldValue, newValue, propertyURI, drObj, conceptObject, isExplicit);
+	}
+
+	@Override
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getConceptTypeValue(
+			String resourceURI, boolean isExplicit, OntologyInfo ontoInfo)
+			throws Exception {
+		return conceptService.getConceptTypeValue(resourceURI, isExplicit, ontoInfo);
+	}
+	
+	@Override
+	public HashMap<String, String> getConceptType(String resourceURI,
+			boolean isExplicit, OntologyInfo ontoInfo) throws Exception {
+		return conceptService.getConceptType(resourceURI, isExplicit, ontoInfo);
+	}
+
+	@Override
+	public ClassTreeObject getClassTree(OntologyInfo ontoInfo) throws Exception {
+		return conceptService.getClassTree(ontoInfo);
+	}
 
 }

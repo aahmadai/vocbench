@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.fao.aoscs.domain.ClassObject;
+import org.fao.aoscs.domain.ClassTreeObject;
 import org.fao.aoscs.domain.ConceptDetailObject;
 import org.fao.aoscs.domain.ConceptObject;
 import org.fao.aoscs.domain.ConceptTermObject;
@@ -348,5 +349,47 @@ public interface ConceptServiceAsync<T> {
 			boolean isExplicit,
 			OntologyInfo ontoInfo,
 			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void editConceptTypeValue(
+			OntologyInfo ontoInfo,
+			int actionId,
+			OwlStatus status,
+			int userId,
+			NonFuncObject oldValue,
+			NonFuncObject newValue,
+			String propertyURI,
+			DomainRangeObject drObj,
+			ConceptObject conceptObject,
+			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void getConceptTypeValue(
+			String resourceURI,
+			boolean isExplicit,
+			OntologyInfo ontoInfo,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void addConceptTypeValue(
+			OntologyInfo ontoInfo,
+			int actionId,
+			OwlStatus status,
+			int userId,
+			NonFuncObject value,
+			String propertyURI,
+			DomainRangeObject drObj,
+			ConceptObject conceptObject,
+			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void deleteConceptTypeValue(
+			OntologyInfo ontoInfo,
+			int actionId,
+			OwlStatus status,
+			int userId,
+			NonFuncObject oldValue,
+			String propertyURI,
+			ConceptObject conceptObject,
+			boolean isExplicit,
+			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);
+	void getConceptType(String resourceURI, boolean isExplicit,
+			OntologyInfo ontoInfo, AsyncCallback<HashMap<String, String>> callback);
+	void getClassTree(OntologyInfo ontoInfo,
+			AsyncCallback<ClassTreeObject> callback);
 	
 }

@@ -292,7 +292,7 @@ public class Scheme extends Composite implements SchemeDialogBoxOpener, SchemeLa
         				ExceptionManager.showException(caught, constants.conceptSchemeGetSchemeFail());
         			}
         		};
-        		Service.schemeService.getSchemes(MainApp.userOntology, MainApp.userLanguage, callback);
+        		Service.schemeService.getSchemes(MainApp.userOntology, MainApp.getPriorityLang(), callback);
 		
 		
 	}

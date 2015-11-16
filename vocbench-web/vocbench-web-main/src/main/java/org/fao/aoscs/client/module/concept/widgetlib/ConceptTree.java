@@ -154,6 +154,7 @@ public class ConceptTree extends Composite implements ResourceURIPanelOpener{
 	{
 		formInit();
 		resURIPanel = new ResourceURIPanel(ConceptTree.this); 
+		resURIPanel.setVisible(false);
 		hSplit.ensureDebugId("cwHorizontalSplitPanel");
 	    hSplit.setSplitPosition("100%");
 	    hSplit.setLeftWidget(panel);

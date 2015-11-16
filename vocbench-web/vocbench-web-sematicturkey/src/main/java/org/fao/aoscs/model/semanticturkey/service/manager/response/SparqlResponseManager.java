@@ -24,11 +24,12 @@ public class SparqlResponseManager extends ResponseManager {
 	 * @param infer
 	 * @return
 	 */
-	public static XMLResponseREPLY resolveQueryRequest(OntologyInfo ontoInfo, String query, String language, Boolean infer) {
+	public static XMLResponseREPLY resolveQueryRequest(OntologyInfo ontoInfo, String query, String language, Boolean infer, String mode) {
 		Response resp = getSTModel(ontoInfo).sparqlService.makeRequest(SPARQL.resolveQueryRequest,
 				STModel.par(SPARQL.queryPar, query), 
 				STModel.par(SPARQL.languagePar, language), 
 				STModel.par(SPARQL.inferPar, infer.toString()), 
+				STModel.par(SPARQL.modePar, mode), 
 				STModel.par("ctx_project", ontoInfo.getDbTableName()));
 		return getXMLResponseREPLY(resp);
 	}

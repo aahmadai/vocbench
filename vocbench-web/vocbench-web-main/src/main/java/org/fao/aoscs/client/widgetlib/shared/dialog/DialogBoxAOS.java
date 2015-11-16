@@ -14,6 +14,7 @@ public class DialogBoxAOS extends DialogBox implements ClickHandler{
 	public DialogBoxAOS(){
 		super(false, true);
 		this.setGlassEnabled(true);
+	    this.setAnimationEnabled(true);
 	}
 
 	@Override

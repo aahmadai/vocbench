@@ -1,8 +1,5 @@
 package org.fao.aoscs.model.semanticturkey.service.manager.response;
 
-import it.uniroma2.art.semanticturkey.project.ProjectACL;
-import it.uniroma2.art.semanticturkey.project.ProjectConsumer;
-import it.uniroma2.art.semanticturkey.services.core.Plugins;
 import it.uniroma2.art.semanticturkey.servlet.Response;
 import it.uniroma2.art.semanticturkey.servlet.XMLResponseREPLY;
 

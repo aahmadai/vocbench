@@ -20,6 +20,7 @@ public class ConceptDetailObject extends LightEntity{
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> notationObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> annotationObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> otherObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
+	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> typeObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> alignmentObject = new HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>();
 	private HashMap<String, String> schemeObject = null;
 	
@@ -30,6 +31,7 @@ public class ConceptDetailObject extends LightEntity{
 	private int notationCount = 0;
 	private int annotationCount = 0;
 	private int otherCount = 0;
+	private int typeCount = 0;
 	private int relationCount = 0;
 	private int historyCount = 0;
 	private int imageCount = 0;
@@ -253,6 +255,30 @@ public class ConceptDetailObject extends LightEntity{
 	}
 	public void setOtherObject(HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> otherObject) {
 		this.otherObject = otherObject;
+	}
+	/**
+	 * @return the typeObject
+	 */
+	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> getTypeObject() {
+		return typeObject;
+	}
+	/**
+	 * @param typeObject the typeObject to set
+	 */
+	public void setTypeObject(HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> typeObject) {
+		this.typeObject = typeObject;
+	}
+	/**
+	 * @return the typeCount
+	 */
+	public int getTypeCount() {
+		return typeCount;
+	}
+	/**
+	 * @param typeCount the typeCount to set
+	 */
+	public void setTypeCount(int typeCount) {
+		this.typeCount = typeCount;
 	}
 }
 
