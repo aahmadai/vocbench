@@ -483,6 +483,12 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	public ArrayList<OntologyInfo> getOntologyList() throws Exception {
 		return systemServiceSystemImpl.getOntologyList();
 	}
+	
+	@Override
+	public ArrayList<OntologyInfo> getOntologyList(int userId)
+			throws Exception {
+		return systemServiceSystemImpl.getOntologyList(userId);
+	}
 
 	@Override
 	public void deleteUsersFromOntology(String ontologyId, String userId)
@@ -512,5 +518,6 @@ public class SystemServiceImpl extends PersistentRemoteService  implements Syste
 	public PermissionObject getPermisions(String groupId) throws Exception {
 		return systemServiceSystemImpl.getPermissions(groupId);
 	}
+
 }
 

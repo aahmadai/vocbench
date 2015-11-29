@@ -144,29 +144,26 @@ public class ManageResourceURI extends FormDialogBox implements ClickHandler{
 	}
 	
 	public void onSubmit() {
-	 	if(Window.confirm(constants.refactorRenameURIWaring()))
-		{
-			showLoading(true);
-			AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>(){
-				public void onSuccess(Boolean result){
-					showLoading(false);
-					if(result)
+		showLoading(true);
+		AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>(){
+			public void onSuccess(Boolean result){
+				showLoading(false);
+				if(result)
+				{
+					ManageResourceURI.this.hide();
+					if(opener!=null)
 					{
-						ManageResourceURI.this.hide();
-						if(opener!=null)
-						{
-							opener.manageResourceURISubmit(newURI.getValue());
-						}
+						opener.manageResourceURISubmit(newURI.getValue());
 					}
-					else
-						Window.alert(constants.refactorActionFailed());
 				}
-				public void onFailure(Throwable caught){
-					ExceptionManager.showException(caught, constants.refactorActionFailed());
-				}
-			};
-			Service.refactorService.renameResource(MainApp.userOntology, oldURI.getValue(), newURI.getValue(), callback);
-		}
+				else
+					Window.alert(constants.refactorActionFailed());
+			}
+			public void onFailure(Throwable caught){
+				ExceptionManager.showException(caught, constants.refactorActionFailed());
+			}
+		};
+		Service.refactorService.renameResource(MainApp.userOntology, oldURI.getValue(), newURI.getValue(), callback);
 		
 	}
 	

@@ -75,6 +75,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
@@ -122,6 +123,8 @@ public class MainApp extends Composite { // Application container
     public static ArrayList<LanguageCode> languageCode = new ArrayList<LanguageCode>();
     public static HashMap<String, String> languageDict = new HashMap<String, String>();
     public static HashMap<String, String> customDatatype = new HashMap<String, String>();
+    public static ArrayList<ConceptTab> tabVisibleList = new ArrayList<ConceptTab>();
+    public static final String TAB_COOKIE_NAME = "AGROVOCTABLIST";
 	
     public static PermissionObject permissionTable = new PermissionObject();
     public static UsersPreference userPreference;
@@ -179,6 +182,7 @@ public class MainApp extends Composite { // Application container
     public static boolean dataChanged = false;
     HashMap<String, String> menuMap = new HashMap<String, String>();
     
+    
     public MainApp(final UserLogin userLoginObj)
     {
         uo = userLoginObj;
@@ -221,6 +225,8 @@ public class MainApp extends Composite { // Application container
                 groupId = Integer.parseInt(userLoginObj.getGroupid());
                 groupName = userLoginObj.getGroupname();
                 userPreference = userLoginObj.getUsersPreference();
+                
+                initVisibleConceptTab();
                 
                 keyword.setOntoInfo(userOntology);
                 
@@ -1608,6 +1614,54 @@ public class MainApp extends Composite { // Application container
     		}
     	}
     	return priorityLang;
+    }
+    
+    private void initVisibleConceptTab()
+    {
+    	tabVisibleList = new ArrayList<ConceptTab>();
+    	String s = Cookies.getCookie(MainApp.TAB_COOKIE_NAME+"_"+MainApp.userId);
+    	if(s!=null && s.length()>0)
+    	{
+    		ArrayList<String> list = new ArrayList<String>();
+    		//Window.alert("str: "+s.length()+" : "+s);
+    		if(s.length()>0 && s.startsWith("[") && s.endsWith("]"))
+    			s = s.substring(1, s.length()-1);
+    		//Window.alert("str1: "+s.length()+" : "+s);
+    		
+    		for(String val : s.split(","))
+    		{
+    			list.add(val.trim());
+    		}
+    		//Window.alert("str1: "+list.size()+" : "+s.split(",").length+" :: "+list.toString());
+    		
+	    	for(ConceptTab ct : ConceptTab.values())
+	    	{
+	    		if(list.contains(ct.name()))
+	    		{
+	    			//Window.alert(s+" --- "+ct.name());
+	    			tabVisibleList.add(ct);
+	    		}
+	    	}
+    	}
+    	else
+    	{
+	    	MainApp.tabVisibleList.add(ConceptTab.TERM);
+			MainApp.tabVisibleList.add(ConceptTab.DEFINITION);
+			MainApp.tabVisibleList.add(ConceptTab.ATTRIBUTE);
+			MainApp.tabVisibleList.add(ConceptTab.RELATIONSHIP);
+			MainApp.tabVisibleList.add(ConceptTab.ALIGNMENT);
+			MainApp.tabVisibleList.add(ConceptTab.NOTE);
+			//MainApp.tabVisibleList.add(ConceptTab.ANNOTATION);
+			MainApp.tabVisibleList.add(ConceptTab.IMAGE);
+			MainApp.tabVisibleList.add(ConceptTab.SCHEME);
+			//MainApp.tabVisibleList.add(ConceptTab.OTHER);
+			//MainApp.tabVisibleList.add(ConceptTab.NOTATION);
+			//MainApp.tabVisibleList.add(ConceptTab.TYPE);
+			MainApp.tabVisibleList.add(ConceptTab.HIERARCHY);
+			//MainApp.tabVisibleList.add(ConceptTab.TYPE);
+			//MainApp.tabVisibleList.add(ConceptTab.RESOURCEVIEW);
+			MainApp.tabVisibleList.add(ConceptTab.HISTORY);
+    	}
     }
     
 }

@@ -242,7 +242,7 @@ public class ManageNSImport extends FormDialogBox implements ClickHandler{
 				case 0:
 					return (baseURI.getText().length()!=0);
 				case 1:
-					return (baseURI.getText().length()!=0 && mirrorFile.getText().length()!=0 && uploader.getServerInfo().message.length()!=0/*&& localFile.getFilename().length()!=0*/);
+					return (baseURI.getText().length()!=0 && mirrorFile.getText().length()!=0 && uploader.getServerMessage().getMessage().length()!=0/*&& localFile.getFilename().length()!=0*/);
 				case 2:
 					return (baseURI.getText().length()!=0 && mirrorFile.getText().length()!=0);
 				case 3:
@@ -299,7 +299,7 @@ public class ManageNSImport extends FormDialogBox implements ClickHandler{
 					Service.ontologyService.addFromWeb(MainApp.userOntology, baseURI.getText(), altURL.getText(), callback);
 					break;
 				case 1:
-					Service.ontologyService.addFromLocalFile(MainApp.userOntology, baseURI.getText(), uploader.getServerInfo().message, mirrorFile.getText(), callback);
+					Service.ontologyService.addFromLocalFile(MainApp.userOntology, baseURI.getText(), uploader.getServerMessage().getMessage(), mirrorFile.getText(), callback);
 					break;
 				case 2:
 					Service.ontologyService.addFromWebToMirror(MainApp.userOntology, baseURI.getText(), mirrorFile.getText(), altURL.getText(), callback);

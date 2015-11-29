@@ -361,7 +361,10 @@ public class StatisticsView extends Composite{
 		
 				listBox.addChangeHandler(new ChangeHandler(){
 			public void onChange(ChangeEvent event) {
-				getData(listBox.getSelectedIndex());
+				if(MainApp.schemeUri.isEmpty())
+					Window.alert(constants.conceptSchemeNotSelected());
+				else
+					getData(listBox.getSelectedIndex());
 			}
 		});
 		

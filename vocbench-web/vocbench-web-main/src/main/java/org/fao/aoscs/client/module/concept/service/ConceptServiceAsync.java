@@ -372,8 +372,6 @@ public interface ConceptServiceAsync<T> {
 			OwlStatus status,
 			int userId,
 			NonFuncObject value,
-			String propertyURI,
-			DomainRangeObject drObj,
 			ConceptObject conceptObject,
 			boolean isExplicit,
 			AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback);

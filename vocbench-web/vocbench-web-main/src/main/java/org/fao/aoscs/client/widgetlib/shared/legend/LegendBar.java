@@ -13,9 +13,10 @@ import org.fao.aoscs.client.widgetlib.shared.label.LinkLabel;
 import org.fao.aoscs.client.widgetlib.shared.panel.Spacer;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -173,9 +174,11 @@ public class LegendBar extends AbsolutePanel{
 	{
 		HTML box = new HTML("&nbsp;");
 		box.setSize("10px", "10px");
-		DOM.setStyleAttribute(box.getElement(), "fontSize", "1px");
-		DOM.setStyleAttribute(box.getElement(), "backgroundColor", color);
-		DOM.setStyleAttribute(box.getElement(), "border", "#666666 1 solid");
+		box.getElement().getStyle().setFontSize(1, Unit.PX);
+		box.getElement().getStyle().setBackgroundColor(color);
+		box.getElement().getStyle().setBorderColor("#666666");
+		box.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+		box.getElement().getStyle().setBorderWidth(1, Unit.PX);
 		return box;
 	}
 

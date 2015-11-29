@@ -9,7 +9,7 @@
                 <column name="user_id" />
             </key-property>
             <key-property name="languageCode" type="string">
-                <column name="language_code" length="2" />
+                <column name="language_code" length="10" />
             </key-property>
             <key-property name="status" type="java.lang.Integer">
                 <column name="status" />

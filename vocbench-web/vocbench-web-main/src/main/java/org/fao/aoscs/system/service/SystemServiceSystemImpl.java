@@ -588,6 +588,7 @@ public class SystemServiceSystemImpl {
 			ArrayList<String> list = new ArrayList<String>();
 			list.add(""+ontoInfo.getOntologyId());
 			addOntologiesToUser(userId, list);
+			copyGroupLanguageToUser(userId);
 		}
 		catch(Exception e)
 		{
@@ -596,7 +597,6 @@ public class SystemServiceSystemImpl {
 		return ontoInfo;
 
 	}
-	
 	
 	public ArrayList<OntologyInfo> deleteOntology(String userid, int ontologyId){
 		try
@@ -609,6 +609,21 @@ public class SystemServiceSystemImpl {
 			e.printStackTrace();
 		}
 		return  getOntology(userid);
+	}
+	
+	public void copyGroupLanguageToUser(String userId)
+	{
+		try
+		{
+			String sql = "INSERT IGNORE INTO users_language_projects SELECT ul.user_id, ul.language_code, uo.ontology_id FROM users_language ul INNER JOIN users_ontology uo WHERE (ul.user_id=uo.user_id AND ul.user_id='"+userId+"')";
+			QueryFactory.hibernateExecuteSQLUpdate(sql);
+			String sql1 = "INSERT IGNORE INTO users_groups_projects SELECT ug.users_id, ug.users_group_id, uo.ontology_id FROM users_groups_map ug INNER JOIN users_ontology uo WHERE (ug.users_id=uo.user_id AND ug.users_id='"+userId+"')";
+			QueryFactory.hibernateExecuteSQLUpdate(sql1);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public OntologyInfo manageOntologyIndexing(boolean isIndexing, OntologyInfo ontoInfo)
@@ -1909,6 +1924,23 @@ public class SystemServiceSystemImpl {
 			ArrayList<OntologyInfo> list = (ArrayList<OntologyInfo>) s.createSQLQuery(sqlStr).addEntity(OntologyInfo.class).list();
 			return list;
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<OntologyInfo>();
+		} finally {
+			HibernateUtilities.closeSession();
+		}
+	}
+	
+	public ArrayList<OntologyInfo> getOntologyList(int userId) throws Exception {
+		try {
+			String sqlStr = "SELECT DISTINCT oi.* FROM ontology_info oi INNER JOIN users_ontology uo WHERE oi.ontology_id=uo.ontology_id AND uo.user_id='"+userId+"' AND oi.version ='2.0' AND oi.ontology_show='1' order by oi.ontology_name";
+			
+			Session s = HibernateUtilities.currentSession();
+			@SuppressWarnings("unchecked")
+			ArrayList<OntologyInfo> list = (ArrayList<OntologyInfo>) s.createSQLQuery(sqlStr).addEntity(OntologyInfo.class).list();
+			return list;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ArrayList<OntologyInfo>();

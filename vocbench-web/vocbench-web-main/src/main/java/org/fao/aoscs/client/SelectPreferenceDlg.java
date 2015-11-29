@@ -55,7 +55,7 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 	private VerticalPanel panellang = new VerticalPanel();		
 	private VerticalPanel panelontology = new VerticalPanel();
 	
-	private boolean isAdmin = false;
+	//private boolean isAdmin = false;
 	
 	private Button btnSubmit = new Button(constants.buttonSubmit());
 	private Button btnCancel = new Button(constants.buttonCancel());
@@ -70,7 +70,8 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 	public SelectPreferenceDlg(final UserLogin  userLoginObj) {				
 		this.userLoginObj = userLoginObj;
 		//load initial data
-		checkAdmin(userLoginObj.getUserid());
+		load();
+		//checkAdmin(userLoginObj.getUserid());
 	}
 	
 	public void initPanels(){
@@ -105,7 +106,7 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 		txtlang.getElement().getStyle().setMarginTop(0, Unit.PX);
 		txtontology.getElement().getStyle().setMarginTop(0, Unit.PX);
 		
-		ImageAOS addButton = new ImageAOS(constants.buttonAdd(), "images/add-grey.gif", "images/add-grey-disabled.gif", isAdmin, new ClickHandler() {
+		ImageAOS addButton = new ImageAOS(constants.buttonAdd(), "images/add-grey.gif", "images/add-grey-disabled.gif", userLoginObj.isAdministrator(), new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if(addManageProject == null || !addManageProject.isLoaded )
 					addManageProject = new ManageProject(ManageProject.ADD, null, userLoginObj.getUserid());
@@ -113,7 +114,7 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 			}
 		});
 		
-		ImageAOS deleteButton = new ImageAOS(constants.buttonDelete(), "images/delete-grey.gif", "images/delete-grey-disabled.gif", isAdmin, new ClickHandler() {
+		ImageAOS deleteButton = new ImageAOS(constants.buttonDelete(), "images/delete-grey.gif", "images/delete-grey-disabled.gif", userLoginObj.isAdministrator(), new ClickHandler() {
 			public void onClick(ClickEvent event) 
 			{
 				if(lstontology.getSelectedIndex()!=-1)
@@ -328,7 +329,7 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 		
 	}*/
 	
-	private void checkAdmin(String userId)
+	/*private void checkAdmin(String userId)
 	{
 		AsyncCallback<ArrayList<UsersGroups>> callback = new AsyncCallback<ArrayList<UsersGroups>>() {
 			public void onSuccess(ArrayList<UsersGroups> listgroups) {
@@ -345,7 +346,7 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 		};
 		SystemServiceUtil.getInstance().getUserGroup(Integer.parseInt(userId), 0, callback);
 		
-	}
+	}*/
 	
 	public void loadOntologyList(ArrayList<OntologyInfo> ontolist, final String userId, final int selectedOntologyId)
 	{
@@ -489,8 +490,8 @@ public class SelectPreferenceDlg extends DialogBoxAOS implements ProjectDialogBo
 		for(int i=0;i<listgroups.size();i++){
     		UsersGroups userGroups = (UsersGroups) listgroups.get(i);
     		lstgroups.addItem(userGroups.getUsersGroupsName(),userGroups);
-    		if(userGroups.getUsersGroupsId()==1)
-    			isAdmin = true;
+    		//if(userGroups.getUsersGroupsId()==1)
+    			//isAdmin = true;
     	}
 		
     	if(lstgroups.getItemCount()>0)

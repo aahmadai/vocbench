@@ -651,9 +651,8 @@ public class ConceptServiceSTAdapter implements ConceptService {
 	@Override
 	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptTypeValue(
 			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
-			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
-			ConceptObject conceptObject, boolean isExplicit) throws Exception {
-		return conceptService.addConceptTypeValue(ontoInfo, actionId, status, userId, value, propertyURI, drObj, conceptObject, isExplicit);
+			NonFuncObject value, ConceptObject conceptObject, boolean isExplicit) throws Exception {
+		return conceptService.addConceptTypeValue(ontoInfo, actionId, status, userId, value, conceptObject, isExplicit);
 	}
 
 	@Override

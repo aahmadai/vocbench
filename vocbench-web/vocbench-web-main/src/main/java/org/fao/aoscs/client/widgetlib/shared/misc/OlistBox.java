@@ -12,7 +12,8 @@ public class OlistBox extends ListBox{
 	}
 	
 	public OlistBox(boolean isMultipleSelect) {
-	    super(isMultipleSelect);
+	    super();
+	    super.setMultipleSelect(isMultipleSelect);
 	  }
 	
 	public void addItem(String item, Object obj) {

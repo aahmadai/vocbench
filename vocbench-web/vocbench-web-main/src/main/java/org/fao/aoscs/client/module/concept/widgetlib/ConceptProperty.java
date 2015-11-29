@@ -113,14 +113,47 @@ public class ConceptProperty extends ConceptTemplate{
 		//permission = permissionTable.contains(OWLActionConstants.CONCEPTEDIT_NOTECREATE, getConceptObject().getStatusID());
 		LinkLabelAOS add = new LinkLabelAOS("images/add-grey.gif", "images/add-grey-disabled.gif", label, label, permission, new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				if(addValue == null || !addValue.isLoaded)
-					addValue = new AddValue();
-				addValue.show(txt);
+				
+				if(property.equals(ConceptProperty.CONCEPTTYPE))
+				{
+					final ClassBrowser cb = new ClassBrowser(); 
+					cb.showBrowser();
+					cb.addSubmitClickHandler(new ClickHandler()
+					{
+						public void onClick(ClickEvent event) {
+							if(cb.getSelectedItem()!=null)
+							{
+								NonFuncObject nonFuncObj = new NonFuncObject();
+								nonFuncObj.setValue(cb.getSelectedItem());
+
+								AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>> callback = new AsyncCallback<HashMap<ClassObject, HashMap<NonFuncObject, Boolean>>>(){
+									public void onSuccess(HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> results){
+										cDetailObj.setTypeObject(results);
+										ConceptProperty.this.initData();
+										ModuleManager.resetValidation();
+									}
+									public void onFailure(Throwable caught){
+										ExceptionManager.showException(caught, constants.conceptAddValueFail());
+									}
+								};
+
+								OwlStatus status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeCreate);
+								int	actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeCreate));
+								Service.conceptService.addConceptTypeValue(MainApp.userOntology,actionId, status, MainApp.userId, nonFuncObj, conceptObject, MainApp.isExplicit, callback);
+							}
+						}					
+					});	
+				}
+				else
+				{
+					if(addValue == null || !addValue.isLoaded)
+						addValue = new AddValue();
+					addValue.show(txt);
+				}
 			}
 		});
 		add.setLabelText(label);
 		this.functionPanel.add(add);
-
 	}
 
 	private VerticalPanel getFuncButtons(String rObj, HashMap<NonFuncObject, Boolean> values)
@@ -945,7 +978,8 @@ public class ConceptProperty extends ConceptTemplate{
 								}
 								else 
 								{
-									list.add(clsObj);
+									if(!clsObj.getUri().equals("http://www.w3.org/2000/01/rdf-schema#Resource") && !clsObj.getUri().equals("http://www.w3.org/2002/07/owl#Thing"))
+										list.add(clsObj);
 								}
 							}
 						}
@@ -1431,7 +1465,7 @@ public class ConceptProperty extends ConceptTemplate{
 			{
 				status = (OwlStatus) initData.getActionStatus().get(ConceptActionKey.conceptEditAttributeCreate);
 				actionId = Integer.parseInt((String)initData.getActionMap().get(ConceptActionKey.conceptEditAttributeCreate));
-				Service.conceptService.addConceptTypeValue(MainApp.userOntology,actionId, status, MainApp.userId, nonFuncObj, relURI, drObj, conceptObject, MainApp.isExplicit, callback);
+				Service.conceptService.addConceptTypeValue(MainApp.userOntology,actionId, status, MainApp.userId, nonFuncObj, conceptObject, MainApp.isExplicit, callback);
 			}
 		}
 	}

@@ -317,8 +317,8 @@ public class ProjectsAssignment extends Composite implements ClickHandler, Chang
 				ExceptionManager.showException(caught, constants.userListUserFail());
 			}
 		};
-		Service.systemService.getUserAssignedtoOntology(ontologyid, callback);
 		
+		Service.systemService.getUserAssignedtoOntology(ontologyid, callback);
 	}
 
 	private void initUserOntology() {
@@ -341,7 +341,10 @@ public class ProjectsAssignment extends Composite implements ClickHandler, Chang
 		    	ExceptionManager.showException(caught, constants.projectListProjectFail());
 		    }
 		};
-		Service.systemService.getOntologyList(callback);
+		if(MainApp.groupId==1)
+			Service.systemService.getOntologyList(callback);
+		else
+			Service.systemService.getOntologyList(MainApp.userId, callback);
 	}   
 	
 	public void generateListData(final Widget sender,String querystr,final String errmsg){

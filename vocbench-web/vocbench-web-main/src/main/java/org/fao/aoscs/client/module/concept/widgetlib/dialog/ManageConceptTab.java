@@ -90,8 +90,18 @@ public class ManageConceptTab extends FormDialogBox implements ClickHandler{
 		return this.submit.addClickHandler(handler);
 	}
 	
-	public boolean passCheckInput() {
-		return true;
+	
+	public void onClick(ClickEvent event) 
+	{
+		Widget sender = (Widget) event.getSource();
+		if(sender.equals(submit))
+		{
+			onSubmit();
+		}else if(sender.equals(cancel))
+		{
+			onCancel();			
+		}
+		onButtonClicked(sender);
 	}
 	
 	public void show(ArrayList<ConceptTab> tabVisibleList)

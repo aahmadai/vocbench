@@ -5,7 +5,7 @@
 <hibernate-mapping>
     <class name="org.fao.aoscs.domain.LanguageInterface" table="language_interface">
         <id name="languageCode" type="string">
-            <column name="language_code" length="3" />
+            <column name="language_code" length="10" />
             <generator class="assigned" />
         </id>
         <property name="languageNote" type="string">

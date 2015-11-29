@@ -11,6 +11,7 @@ import org.fao.aoscs.client.module.constant.Style;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -57,7 +58,10 @@ public class ResourceURIPanel extends Composite implements ManageResourceURIOpen
 			public void onClick(ClickEvent event) {
 				if(manageResourceURI == null || !manageResourceURI.isLoaded)
 					manageResourceURI = new ManageResourceURI();
-				manageResourceURI.show(URI.getText(), ResourceURIPanel.this);
+				if(Window.confirm(constants.refactorRenameURIWaring()))
+				{
+					manageResourceURI.show(URI.getText(), ResourceURIPanel.this);
+				}
 			}
 		});
 		HorizontalPanel hp = new HorizontalPanel();

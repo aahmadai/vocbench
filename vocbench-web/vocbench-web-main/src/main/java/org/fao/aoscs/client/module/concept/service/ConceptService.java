@@ -63,8 +63,7 @@ public interface ConceptService extends RemoteService {
 
 	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptTypeValue(
 			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
-			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
-			ConceptObject conceptObject, boolean isExplicit) throws Exception;
+			NonFuncObject value, ConceptObject conceptObject, boolean isExplicit) throws Exception;
 	
 	HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptAttributeValue(
 			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,

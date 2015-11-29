@@ -177,7 +177,7 @@ public class Login extends Composite {
     				else 
     				{
     					UserLogin userLoginObj = (UserLogin) result;
-    					if(userLoginObj.getNoOfGroup()==0)
+    					if(!userLoginObj.isAdministrator() && userLoginObj.getNoOfGroup()==0)
     					{
 			    			Window.alert(constants.loginNoAssignGroup());
 			    		}

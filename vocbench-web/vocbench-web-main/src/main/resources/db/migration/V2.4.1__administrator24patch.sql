@@ -45,4 +45,4 @@ ALTER TABLE `users_language_projects`
 --
 -- Add User module permission to group 'Project Manager'
 --     
-INSERT INTO `permission_group_map` VALUES ('13', '11');
+INSERT IGNORE INTO `permission_group_map` (`users_groups_id`, `permission_id`) SELECT users_groups_id, '11' FROM users_groups WHERE users_groups_name='Project manager';

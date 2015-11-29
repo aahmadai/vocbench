@@ -99,7 +99,8 @@ public interface SystemServiceAsync<T> {
 			AsyncCallback<Void> callback);
 	void getUserAssignedtoOntology(String ontologyId,
 			AsyncCallback<ArrayList<String[]>> callback);
-	void getOntologyList(AsyncCallback<ArrayList<OntologyInfo>> callback);
+	void getOntologyList(
+			AsyncCallback<ArrayList<OntologyInfo>> callback);
 	void deleteUsersFromOntology(String ontologyId, String userId,
 			AsyncCallback<Void> callback);
 	void getUser(String userId, AsyncCallback<Users> callback);
@@ -110,5 +111,7 @@ public interface SystemServiceAsync<T> {
 	void SendMail(String to, String cc, String subject, String body,
 			AsyncCallback<Void> callback);
 	void getPermisions(String groupId, AsyncCallback<PermissionObject> callback);
+	void getOntologyList(int userId,
+			AsyncCallback<ArrayList<OntologyInfo>> callback);
 	
 }

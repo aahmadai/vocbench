@@ -95,6 +95,7 @@ public interface SystemService extends RemoteService {
 	public Boolean deleteSTServer(OntologyInfo ontoInfo, StInstances stInstances);
 	
 	public ArrayList<OntologyInfo> getOntologyList() throws Exception;
+	public ArrayList<OntologyInfo> getOntologyList(int userId) throws Exception;
 	public ArrayList<String[]> getUserAssignedtoOntology(String ontologyId) throws Exception;
 	public void addUsersToOntology(String ontologyId, ArrayList<String> users) throws Exception;
 	public void deleteUsersFromOntology(String ontologyId, String userId) throws Exception;

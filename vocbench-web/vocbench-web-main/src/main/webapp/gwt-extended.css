@@ -299,156 +299,166 @@ html>body .gwt-DialogBox .dialogBottomRight {
 
 /* ------------------GWTUPLOAD----------------------- */
 
+@external GWTUpld;
+@external gwt-*;
+@external upld*;
+@external DecoratedFileUpload*;
+@external status*;
+@external prgbar*;
+@external cancel;
+@external changed;
+@external filename;
+
 .GWTUpld, table.GWTUpld td {
-	font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
-  	font-size: 11px;
+	font-family: Arial,  sans-serif, Tahoma, Trebuchet MS !important;
+  	font-size: 11px !important;
 }
 
 .GWTUpld form, 
 .GWTUpld .upld-form-elements {
-	padding: 0px;
-	vertical-align: top;
-	margin-top: 0; 
-	margin-bottom: 0; 
+	padding: 0px !important;
+	vertical-align: top !important;
+	margin-top: 0 !important; 
+	margin-bottom: 0 !important; 
 }
 
 .GWTUpld .upld-status {
-	font-family: Arial,  sans-serif, Tahoma, Trebuchet MS;
-  	font-size: 11px;
-	font-weight: normal;
+	font-family: Arial,  sans-serif, Tahoma, Trebuchet MS !important;
+  	font-size: 11px !important;
+	font-weight: normal !important;
 }
 .GWTUpld .upld-status div.cancel {
-	background: url(images/delete-grey.gif) no-repeat;
-	width: 16px;
-	height: 16px;
-	cursor: pointer;
-	margin-top: 1px;
+	background: url(images/delete-grey.gif) no-repeat !important;
+	width: 16px !important;
+	height: 16px !important;
+	cursor: pointer !important;
+	margin-top: 1px !important;
 }
 
 * html .GWTUpld .upld-status div.cancel {
-	width: 18px;
-	height: 18px;
-	margin-top: 2px;
+	width: 18px !important;
+	height: 18px !important;
+	margin-top: 2px !important;
 }
 
 .GWTUpld .upld-status div.cancel:hover {
-	background: url(images/delete-grey.gif) no-repeat;
+	background: url(images/delete-grey.gif) no-repeat !important;
 }
 
 .GWTUpld .upld-status .filename {
-	overflow: hidden;
-	white-space: nowrap;
-	margin-left: 8px;
-	margin-right: 11px;
-	height: 100%;
-	font-size: 11px;
+	overflow: hidden !important;
+	white-space: nowrap !important;
+	margin-left: 8px !important;
+	margin-right: 11px !important;
+	height: 100% !important;
+	font-size: 11px !important;
 }
 .GWTUpld .upld-status .status {
-	padding-left: 8px;
-	white-space: nowrap;
-	height: 100%;
-	font-size: 11px;
+	padding-left: 8px !important;
+	white-space: nowrap !important;
+	height: 100% !important;
+	font-size: 11px !important;
 }
 .GWTUpld .upld-status .status-success {
-	color: green;
+	color: green !important;
 }
 .GWTUpld .upld-status .status-error,
 .GWTUpld .upld-status .status-canceled {
-	color: red;
+	color: red !important;
 }
 
 .GWTUpld .prgbar-back {
-	background: #ffffff none repeat scroll 0 0;
-	border: 1px solid #999999;
-	height: 11px;
-	overflow: hidden;
-	padding: 1px;
-	width: 100px;
-	float: left;
+	background: #ffffff none repeat scroll 0 0 !important;
+	border: 1px solid #999999 !important;
+	height: 11px !important;
+	overflow: hidden !important;
+	padding: 1px !important;
+	width: 100px !important;
+	float: left !important;
 }
 * html .GWTUpld .prgbar-back {
-	height: 12px;
-	margin-top: 2px;
+	height: 12px !important;
+	margin-top: 2px !important;
 }
 .GWTUpld .prgbar-done {
-	background: #d4e4ff none repeat scroll 0 0;
-	font-size: 0;
-	height: 100%;
-	float: left;
+	background: #d4e4ff none repeat scroll 0 0 !important;
+	font-size: 0 !important;
+	height: 100% !important;
+	float: left !important;
 }
 .GWTUpld .prgbar-msg {
-	position: absolute;
-	z-index: 9;
-	font-size: 9px;
-	font-weight: normal;
-	margin-left: 3px;
+	position: absolute !important;
+	z-index: 9 !important;
+	font-size: 9px !important;
+	font-weight: normal !important;
+	margin-left: 3px !important;
 }
 
 * html .GWTUpld .prgbar-msg {
-	top: 0px;
-	left: 4px;
+	top: 0px !important;
+	left: 4px !important;
 }
 
 .GWTUpld .changed {
-	color: red;
-	font-weight: bold;  
-	text-decoration: blink;
+	color: red !important;
+	font-weight: bold !important;  
+	text-decoration: blink !important;
 }
 .gwt-PopupPanel .GWTUpld {
-	border: 2px groove #F6A828;
-	padding: 11px;
-	background: #bf984c;
-  -moz-border-radius-bottomleft: 6px;
-  -moz-border-radius-bottomright: 6px;
-  -moz-border-radius-topleft: 6px;
-  -moz-border-radius-topright: 6px;
+	border: 2px groove #F6A828 !important;
+	padding: 11px !important;
+	background: #bf984c !important;
+  -moz-border-radius-bottomleft: 6px !important;
+  -moz-border-radius-bottomright: 6px !important;
+  -moz-border-radius-topleft: 6px !important;
+  -moz-border-radius-topright: 6px !important;
 	
 }
 
 .GWTUpld .DecoratedFileUpload {
-	margin-right: 5px;
+	margin-right: 5px !important;
 }
 
 .GWTUpld .DecoratedFileUpload .gwt-Button,
 .GWTUpld .DecoratedFileUpload .gwt-Anchor,
 .GWTUpld .DecoratedFileUpload .gwt-Label {
-	white-space: nowrap;
-	font-size: 11px;
+	white-space: nowrap !important;
+	font-size: 11px !important;
 }
 
 .GWTUpld .gwt-Button, .GWTUpld .gwt-FileUpload {
-	font-size: 11px;
-	min-height: 15px;
+	font-size: 11px !important;
+	min-height: 15px !important;
 }
 
 .GWTUpld .DecoratedFileUpload .gwt-Anchor,
 .GWTUpld .DecoratedFileUpload .gwt-Label {
-	color: blue;
-	text-decoration: underline;
-	cursor: pointer;
+	color: blue !important;
+	text-decoration: underline !important;
+	cursor: pointer !important;
 }
 
 .GWTUpld .gwt-Button:HOVER,
 .GWTUpld .DecoratedFileUpload .gwt-Button-over,
 .GWTUpld .DecoratedFileUpload .gwt-Anchor-over,
 .GWTUpld .DecoratedFileUpload .gwt-Label-over {
-	color: #af6b29;
+	color: #af6b29 !important;
 }
 
 .GWTUpld .DecoratedFileUpload-disabled .gwt-Button,
 .GWTUpld .DecoratedFileUpload-disabled .gwt-Anchor,
 .GWTUpld .DecoratedFileUpload-disabled .gwt-Label {
-	color: grey;
+	color: grey !important;
 }
 
 .gwt-PopupPanelGlass {
-  background-color: #d4e4ff;
-  opacity: 0.3;
-  filter: alpha(opacity=30);
+  background-color: #d4e4ff !important;
+  opacity: 0.3 !important;
+  filter: alpha(opacity=30) !important;
 }
 
 .GWTUpld input[type="file"] {
-	cursor: pointer;
+	cursor: pointer !important;
 }
     
 

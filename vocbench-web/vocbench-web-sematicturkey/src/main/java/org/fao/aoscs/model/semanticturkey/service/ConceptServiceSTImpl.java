@@ -2209,34 +2209,9 @@ public class ConceptServiceSTImpl {
 	 */
 	public HashMap<ClassObject, HashMap<NonFuncObject, Boolean>> addConceptTypeValue(
 			OntologyInfo ontoInfo, int actionId, OwlStatus status, int userId,
-			NonFuncObject value, String propertyURI, DomainRangeObject drObj,
-			ConceptObject conceptObject, boolean isExplicit) throws Exception {
+			NonFuncObject value, ConceptObject conceptObject, boolean isExplicit) throws Exception {
 		
-		addPropertyValue(ontoInfo, actionId, status, userId, value, propertyURI, drObj, conceptObject, isExplicit);
-		
-		/*IndividualManager.addType(ontoInfo, conceptObject.getUri(), propertyURI);
-		
-		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
-		
-		RelationshipObject rObj = ObjectManager.createRelationshipObject(ontoInfo, propertyURI);
-		
-		AttributesObject attObj = new AttributesObject();
-		attObj.setRelationshipObject(rObj);
-		attObj.setValue(value);
-		
-		Validation v = new Validation();
-		v.setNewValue(DatabaseUtil.setObject(attObj));
-		v.setConcept(DatabaseUtil.setObject(conceptObject));
-		v.setAction(actionId);
-		v.setStatus(status.getId());
-		v.setOwnerId(userId);
-		v.setModifierId(userId);
-		v.setOntologyId(ontoInfo.getOntologyId());
-		v.setDateCreate(DateUtility.getROMEDate());
-		v.setDateModified(DateUtility.getROMEDate());
-		DatabaseUtil.createObject(v);*/
-		
-		
+		addPropertyValue(ontoInfo, actionId, status, userId, value, RDF.TYPE, getPropertyRange(RDF.TYPE, ontoInfo), conceptObject, isExplicit);
 		return getConceptTypeValue(conceptObject.getUri(), isExplicit, ontoInfo);
 	}
 
@@ -2258,30 +2233,6 @@ public class ConceptServiceSTImpl {
 			ConceptObject conceptObject, boolean isExplicit) throws Exception {
 		
 		deletePropertyValue(ontoInfo, actionId, status, userId, oldValue, propertyURI, conceptObject, isExplicit);
-		
-		/*IndividualManager.removeType(ontoInfo, conceptObject.getUri(), propertyURI);
-		
-		STUtility.setInstanceUpdateDate(ontoInfo, conceptObject.getUri());
-		
-		RelationshipObject rObj = ObjectManager.createRelationshipObject(ontoInfo, propertyURI);
-		
-		AttributesObject attObj = new AttributesObject();
-		attObj.setRelationshipObject(rObj);
-		attObj.setValue(oldValue);
-		
-		Validation v = new Validation();
-		v.setNewValue(DatabaseUtil.setObject(attObj));
-		v.setConcept(DatabaseUtil.setObject(conceptObject));
-		v.setAction(actionId);
-		v.setStatus(status.getId());
-		v.setOwnerId(userId);
-		v.setModifierId(userId);
-		v.setOntologyId(ontoInfo.getOntologyId());
-		v.setDateCreate(DateUtility.getROMEDate());
-		v.setDateModified(DateUtility.getROMEDate());
-		DatabaseUtil.createObject(v);*/
-		
-		
 		return getConceptTypeValue(conceptObject.getUri(), isExplicit, ontoInfo);
 	}
 

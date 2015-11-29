@@ -1,11 +1,14 @@
 package org.fao.aoscs.client.module.concept.widgetlib;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import org.fao.aoscs.client.MainApp;
 import org.fao.aoscs.client.locale.LocaleConstants;
 import org.fao.aoscs.client.module.concept.ConceptTemplate;
 import org.fao.aoscs.client.module.concept.widgetlib.dialog.ManageConceptTab;
 import org.fao.aoscs.client.utility.Convert;
+import org.fao.aoscs.client.utility.CookieManager;
 import org.fao.aoscs.client.widgetlib.shared.panel.Spacer;
 import org.fao.aoscs.domain.ConceptDetailObject;
 import org.fao.aoscs.domain.InitializeConceptData;
@@ -16,6 +19,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -37,7 +42,6 @@ public class ConceptDetailTabPanel extends Composite{
 	public Button tabShowHide = new Button(constants.conceptShowHideTabs());
 	public DecoratedTabPanel tabPanel ; 
 	public ManageConceptTab manageConceptTab;
-	private ArrayList<ConceptTab> tabVisibleList = new ArrayList<ConceptTab>();
 	private ConceptDetailObject cDetailObj = new ConceptDetailObject();
 	
 	public ConceptInformation cInfo;
@@ -87,7 +91,7 @@ public class ConceptDetailTabPanel extends Composite{
 	
 	public ArrayList<ConceptTab> getVisibleTab()
 	{
-		return tabVisibleList;
+		return MainApp.tabVisibleList;
 	}
 	
 	public void setTabHTML(ConceptTab tab, int cnt)
@@ -120,7 +124,7 @@ public class ConceptDetailTabPanel extends Composite{
 	{
 		tabPanel.clear();
 		
-		for (ConceptTab tab : tabVisibleList) {
+		for (ConceptTab tab : MainApp.tabVisibleList) {
 			switch(tab.getSortIndex())
 			{
 				case 0: //Term
@@ -216,29 +220,12 @@ public class ConceptDetailTabPanel extends Composite{
 		cHier = new ConceptHierarchy(permisstionTable, initData, this, null);
 		t = new Term(permisstionTable,initData, this, null);
 		
-		tabVisibleList.add(ConceptTab.TERM);
-		tabVisibleList.add(ConceptTab.DEFINITION);
-		tabVisibleList.add(ConceptTab.ATTRIBUTE);
-		tabVisibleList.add(ConceptTab.RELATIONSHIP);
-		tabVisibleList.add(ConceptTab.ALIGNMENT);
-		tabVisibleList.add(ConceptTab.NOTE);
-		//tabVisibleList.add(ConceptTab.ANNOTATION);
-		tabVisibleList.add(ConceptTab.IMAGE);
-		tabVisibleList.add(ConceptTab.SCHEME);
-		//tabVisibleList.add(ConceptTab.OTHER);
-		//tabVisibleList.add(ConceptTab.NOTATION);
-		//tabVisibleList.add(ConceptTab.TYPE);
-		tabVisibleList.add(ConceptTab.HIERARCHY);
-		//tabVisibleList.add(ConceptTab.TYPE);
-		//tabVisibleList.add(ConceptTab.RESOURCEVIEW);
-		tabVisibleList.add(ConceptTab.HISTORY);
-		
 		tabShowHide();
 
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>()
 		{
 			public void onSelection(SelectionEvent<Integer> event) {
-				selectedTab = tabVisibleList.get(event.getSelectedItem());
+				selectedTab = MainApp.tabVisibleList.get(event.getSelectedItem());
 				ConceptTemplate w = (ConceptTemplate) tabPanel.getWidget(event.getSelectedItem());
 				if(w.getConceptObject()!=null)
 					w.initData();
@@ -252,12 +239,21 @@ public class ConceptDetailTabPanel extends Composite{
 			public void onClick(ClickEvent event) {
 				if(manageConceptTab == null || !manageConceptTab.isLoaded)
 					manageConceptTab = new ManageConceptTab();
-				manageConceptTab.show(tabVisibleList);
+				manageConceptTab.show(MainApp.tabVisibleList);
 				manageConceptTab.addSubmitClickHandler(new ClickHandler()
 				{
 					public void onClick(ClickEvent event) {
-						tabVisibleList = manageConceptTab.getSelectedTab();
-						tabShowHide();
+						if(manageConceptTab.getSelectedTab().size()<1)
+						{
+							Window.alert("Select at least one tab");
+						}
+						else
+						{
+							MainApp.tabVisibleList = manageConceptTab.getSelectedTab();
+							Cookies.setCookie(MainApp.TAB_COOKIE_NAME+"_"+MainApp.userId, MainApp.tabVisibleList.toString(), new Date((new Date()).getTime() + CookieManager.COOKIE_TIMEOUT));
+							tabShowHide();
+							manageConceptTab.hide();
+						}
 					}					
 				});		
 			}
@@ -301,7 +297,7 @@ public class ConceptDetailTabPanel extends Composite{
 	
 	public void resetTab()
 	{
-		for(ConceptTab tab : tabVisibleList)
+		for(ConceptTab tab : MainApp.tabVisibleList)
 		{
 			setTabHTML(tab, 0);
 		}
@@ -382,7 +378,7 @@ public class ConceptDetailTabPanel extends Composite{
 		this.cDetailObj = cDetailObj;
 		tabPanel.selectTab(selectedTab.getTabIndex());
 		
-		for (ConceptTab tab : tabVisibleList) {
+		for (ConceptTab tab : MainApp.tabVisibleList) {
 			switch(tab.getSortIndex())
 			{
 				case 0: //Term
@@ -463,7 +459,7 @@ public class ConceptDetailTabPanel extends Composite{
 	
 	public void loadHistoryTab(int historyCount)
 	{
-		if(tabVisibleList.contains(ConceptTab.HISTORY.getTabIndex()))
+		if(MainApp.tabVisibleList.contains(ConceptTab.HISTORY.getTabIndex()))
 			tabPanel.getTabBar().setTabHTML(ConceptTab.HISTORY.getTabIndex(), Convert.replaceSpace((historyCount)>1? constants.conceptHistory():constants.conceptHistory() ) +"&nbsp;("+(historyCount)+")" );
 	}
 	
