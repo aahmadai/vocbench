@@ -4445,7 +4445,7 @@ public class VOCBENCH extends SKOSXL {
 			boolean oldApproach){
 		
 		if(!useSearchString && !useCode){
-			String text = "It is not posibile to execute a search if both the Search String and the " +
+			String text = "It is not possible to execute a search if both the Search String and the " +
 							"Term Code are not properly set, please set at least one of them. "+
 							"\nIf the Search String is set, please remember to specify also a Search Mode " +
 							"and one or more languages (use \"all\" to have no restriction)";
