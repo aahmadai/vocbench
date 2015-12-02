@@ -87,10 +87,12 @@ public class Agrovoc extends ServiceAdapter {
 			
 			String query ;
 			// Numbers of available subvocabularies;
+			//@formatter:off
 			query = "SELECT DISTINCT ?subVoc" + 
 					"\nWHERE{" + 
 					"\n?subj <" + ISPARTOFSUBVOCABULARY + "> ?subVoc . " + 
 					"\n}";
+			//@formatter:on
 			TupleQuery tupleQuery = skosxlModel.createTupleQuery(query);
 			TupleBindingsIterator iter = tupleQuery.evaluate(true);
 
@@ -107,11 +109,13 @@ public class Agrovoc extends ServiceAdapter {
 			Element subVocabulariesElem = XMLHelp.newElement(dataElement, "SubVocabularies");
 			subVocabulariesElem.setAttribute("number", subVocList.size() + "");
 			for (ARTLiteral subvoc : subVocList) {
+				//@formatter:off
 				query = "SELECT ?subj " + 
 						"\nWHERE{" + 
 						"\n?termSubj <" + ISPARTOFSUBVOCABULARY + "> \""+ subvoc.getLabel() + 
 							"\"^^<" + subvoc.getDatatype().getURI() + ">" + 
 						"\n}";
+				//@formatter:on
 				tupleQuery = skosxlModel.createTupleQuery(query);
 				TupleBindingsIterator tupleIter = tupleQuery.evaluate(true);
 				int count = 0;
@@ -127,11 +131,13 @@ public class Agrovoc extends ServiceAdapter {
 			}
 
 			// Numbers of terms belonging to each subvocabulary, possibly distinguished by language;
+			//@formatter:off
 			query = "SELECT ?termType ?label" + 
 					"\nWHERE{" + 
 					"\n?xlabel <" + HASTERMTYPE + "> ?termType ." + 
 					"\n?xlabel <" + LITERALFORM + "> ?label ." + 
 					"\n}";
+			//@formatter:on
 			tupleQuery = skosxlModel.createTupleQuery(query);
 			TupleBindingsIterator tupleIter = tupleQuery.evaluate(true);
 			Map<String, Map<String, Integer>> termTypeLangCountMap = new HashMap<String, Map<String, Integer>>();

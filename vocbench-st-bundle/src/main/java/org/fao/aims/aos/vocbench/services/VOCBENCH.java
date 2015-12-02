@@ -1077,10 +1077,12 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource definitionOrImageURI = retrieveExistingURIResource(skosxlModel, definitionOrImage, 
 					graph); 
 			
+			//@formatter:off
 			String query = "SELECT ?label"+
 						"\nWHERE{" +
 						"\n<" +definitionOrImageURI.getURI()+"> <"+VALUE+"> ?label ."+ 
 						"\n}";
+			//@formatter:on
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(QueryLanguage.SPARQL, query);
 			
@@ -1096,8 +1098,7 @@ public class VOCBENCH extends SKOSXL {
 					if(isImage){
 						type = "image";
 						changeMethod = "changeTranslationForImage";
-					}
-					else{
+					} else{
 						type = "definition";
 						changeMethod = "changeTranslationForDefinition";
 					}
@@ -1176,6 +1177,7 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource definitionOrImageURI = retrieveExistingURIResource(skosModel, definitionOrImage, 
 					graph);
 			
+			//@formatter:off
 			String query = "SELECT ?label ?comment"+
 						"\nWHERE{" +
 						"\n<" +definitionOrImageURI.getURI()+"> <"+VALUE+"> ?label ."+ 
@@ -1183,6 +1185,7 @@ public class VOCBENCH extends SKOSXL {
 						"\nOPTIONAL {<"+definitionOrImageURI.getURI()+"> <"+COMMENT+"> ?comment ." +
 						"\nFILTER (langMatches(lang(?comment), \""+lang+"\") ) }"+ 
 						"\n}";
+			//@formatter:on
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosModel.createTupleQuery(QueryLanguage.SPARQL, query);
 			
@@ -1287,6 +1290,7 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource definitionOrImageURI = retrieveExistingURIResource(skosxlModel, definitionOrImage, 
 					graph);
 			
+			//@formatter:off
 			String query = "SELECT ?label ?comment"+
 						"\nWHERE{" +
 						"\n<" +definitionOrImageURI.getURI()+"> <"+VALUE+"> ?label ."+ 
@@ -1294,6 +1298,7 @@ public class VOCBENCH extends SKOSXL {
 						"\nOPTIONAL {<"+definitionOrImageURI.getURI()+"> <"+COMMENT+"> ?comment ." +
 						"\nFILTER (langMatches(lang(?comment), \""+lang+"\") ) }"+ 
 						"\n}";
+			//@formatter:on
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(QueryLanguage.SPARQL, query);
 			
@@ -1385,6 +1390,7 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource definitionOrImageURI = retrieveExistingURIResource(skosxlModel, definitionOrImage, 
 					graph);
 			
+			//@formatter:off
 			//check if there is already a value for the definition (check both the new SOURCE or the old HASLINK)
 			// (we are interested that at lest one of them is present, not which one)
 			String query = "SELECT ?sourceLink"+
@@ -1398,6 +1404,7 @@ public class VOCBENCH extends SKOSXL {
 						"\nUNION" +
 						"\n{<"+definitionOrImageURI.getURI()+"> <"+HASSOURCE+"> ?value .}" +*/
 						"\n}";
+			//@formatter:on
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(QueryLanguage.SPARQL, query);
 			
@@ -1497,6 +1504,7 @@ public class VOCBENCH extends SKOSXL {
 					graph);
 			
 			//check if there is already a value for the HASSOURCE
+			//@formatter:off
 			String query = "SELECT ?sourceLink"+
 						"\nWHERE{"+
 						
@@ -1507,6 +1515,7 @@ public class VOCBENCH extends SKOSXL {
 						"\nUNION" +
 						"\n{<"+definitionOrImageURI.getURI()+"> <"+HASSOURCE+"> ?value .}" +*/
 						"\n}";
+			//@formatter:on
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(QueryLanguage.SPARQL, query);
 			
@@ -1603,12 +1612,14 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource definitionOrImageURI = retrieveExistingURIResource(model, definitionOrImage, 
 					graph);
 			
+			//@formatter:off
 			String query = "SELECT ?sourceLink "+
 						"\nWHERE{"+
 						"\n{<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?sourceLink . }" +
 						"\nUNION" +
 						"\n{<" +definitionOrImageURI.getURI()+"> <"+HASLINK+"> ?sourceLink . }" +
 						"\n}";
+			//@formatter:on
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)model.createTupleQuery(QueryLanguage.SPARQL, query);
 			
@@ -1699,10 +1710,12 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource definitionOrImageURI = retrieveExistingURIResource(model, definitionOrImage, 
 					graph);
 			
+			//@formatter:on
 			String query = "SELECT ?fromSource"+
 						"\nWHERE{" +
 						"\n<" +definitionOrImageURI.getURI()+"> <"+HASSOURCE+"> ?fromSource ." +
 						"\n}";
+			//@formatter:on
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)model.createTupleQuery(QueryLanguage.SPARQL, query);
 			
@@ -1790,6 +1803,7 @@ public class VOCBENCH extends SKOSXL {
 			ARTURIResource definitionOrImageURI = retrieveExistingURIResource(skosxlModel, definitionOrImage, 
 					graph);
 			
+			//@formatter:off
 			String query = "SELECT ?sourceLink ?fromSource"+
 						"\nWHERE{"+
 						"\n{<" +definitionOrImageURI.getURI()+"> <"+SOURCE+"> ?sourceLink . }" +
@@ -1798,6 +1812,7 @@ public class VOCBENCH extends SKOSXL {
 						"\nUNION" +
 						"\n{ <" +definitionOrImageURI.getURI()+"> <"+HASSOURCE+"> ?fromSource . }"+
 						"\n}";
+			//@formatter:on
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(QueryLanguage.SPARQL, query);
 			
@@ -1881,6 +1896,7 @@ public class VOCBENCH extends SKOSXL {
 	}
 	
 	
+	//@formatter:off
 	/*public Response changeDefinition(String conceptName, String definition, String lang, String fromSource,
 			String sourceLink, boolean isImage){
 		SKOSXLModel model = getSKOSXLModel();
@@ -2016,8 +2032,9 @@ public class VOCBENCH extends SKOSXL {
 		}
 		return response;
 	}*/
-	
+	//@formatter:on
 		
+	//@formatter:off
 	/*public Response changeImageDefinition(String conceptName, String definition, String lang, String fromSource,
 			String sourceLink, String comment){
 		SKOSXLModel model = getSKOSXLModel();
@@ -2165,6 +2182,7 @@ public class VOCBENCH extends SKOSXL {
 		}
 		return response;
 	}*/
+	//@formatter:on
 	
 	public Response getTopConcepts(String schemeUri, String defaultLanguage) {
 		SKOSXLModel skosxlModel = getSKOSXLModel();
@@ -2464,6 +2482,7 @@ public class VOCBENCH extends SKOSXL {
 					getUserNamedGraphs());
 			String conceptUri = concept.getURI();
 			
+			//@formatter:off
 			String query = 	"SELECT " +
 						"\n(COUNT (DISTINCT ?xlabel) AS ?xlabelCount) " +
 						"\n(COUNT (DISTINCT ?definition) AS ?definitionCount) " +
@@ -2595,7 +2614,7 @@ public class VOCBENCH extends SKOSXL {
 						
 						"\n}" +
 						"\nGROUP BY ?objProp";
-			
+			//@formatter:on
 			logger.debug("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(query);
 			
@@ -2660,6 +2679,7 @@ public class VOCBENCH extends SKOSXL {
 			
 			
 			//now execute the query for the explicit values
+			//@formatter:off
 			query = 	"SELECT " +
 					"\n(COUNT (DISTINCT ?xlabel) AS ?xlabelCount) " +
 					"\n(COUNT (DISTINCT ?definition) AS ?definitionCount) " +
@@ -2788,6 +2808,7 @@ public class VOCBENCH extends SKOSXL {
 						
 					"\n}" +
 					"\nGROUP BY ?objProp";
+			//@formatter:on
 			
 			logger.debug("query = "+query); // DEBUG
 			tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(query);
@@ -2955,7 +2976,7 @@ public class VOCBENCH extends SKOSXL {
 					getUserNamedGraphs());
 			String xlabelUri = xlabel.getURI();
 			
-			
+			//@formatter:off
 			String query = 	"SELECT " +
 					"\n(COUNT (?labelRelation) AS ?labelRelationCount) " +
 					"\n(COUNT (?attributes) AS ?attributesCount) " +
@@ -2975,7 +2996,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n{?subPropNotation <"+SUBPROPERTY+">+ <"+NOTATION+"> . "+ //notation and its SUBPROPERTY 
 					"\n<"+xlabelUri+"> ?subPropNotation ?notation . }"+
 					"\n}";
-			
+			//@formatter:on
 			logger.debug("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(query);
 			
@@ -2999,6 +3020,7 @@ public class VOCBENCH extends SKOSXL {
 			
 			
 			//now execute the query for the explicit values
+			//@formatter:off
 			query = 	"SELECT " +
 					"\n(COUNT (?labelRelation) AS ?labelRelationCount) " +
 					"\n(COUNT (?attributes) AS ?attributesCount) " +
@@ -3018,6 +3040,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n{?subPropNotation <"+SUBPROPERTY+">* <"+NOTATION+"> . "+ //notation and its SUBPROPERTY 
 					"\n<"+xlabelUri+"> ?subPropNotation ?notation . }"+
 					"\n}";
+			//@formatter:on
 			
 			logger.debug("query = "+query); // DEBUG
 			tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(query);
@@ -3082,6 +3105,7 @@ public class VOCBENCH extends SKOSXL {
 				propList.add(skosxlModel.createURIResource(skosxlModel.expandQName(prop)));
 			}
 			
+			//@formatter:off
 			String query = "SELECT ";
 			for(ARTURIResource prop : propList){
 				query+="\n(COUNT (DISTINCT ?"+prop.getLocalName()+"Value) AS ?"+prop.getLocalName()+"Count)";
@@ -3098,6 +3122,7 @@ public class VOCBENCH extends SKOSXL {
 				++count;
 			}
 			query+="\n}";
+			//@formatter:on
 			
 			logger.debug("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(query);
@@ -3265,6 +3290,7 @@ public class VOCBENCH extends SKOSXL {
 			//crete a sparql query to retrieve the definitionURI, the created date, 
 			//the modified date (OPTIONAL), the source link, the source and the labels with languages
 			//be careful that each definitionOrImageURI can have more than one ?label and ?comment
+			//@formatter:off
 			String query = "SELECT ?definitionOrImageURI ?created ?modified ?sourceLink ?source ?label ?comment"+
 					"\nWHERE{";
 			if(isImage)
@@ -3280,6 +3306,7 @@ public class VOCBENCH extends SKOSXL {
 					"\nOPTIONAL{?definitionOrImageURI <"+COMMENT+"> ?comment . } ." +
 					"\n}"+
 					"\nORDER BY ?definitionOrImageURI";
+			//@formatter:on
 			//System.out.println("query = "+query); // DEBUG
 			TupleQuery tupleQuery = (TupleQuery)skosxlModel.createTupleQuery(QueryLanguage.SPARQL, query);
 			TupleBindingsIterator it = tupleQuery.evaluate(true);
@@ -3416,7 +3443,7 @@ public class VOCBENCH extends SKOSXL {
 			
 			//create a SPARQL construct to get all the triple associated to each definition or image given
 			// a specific concept
-			
+			//@formatter:off
 			String query = "CONSTRUCT { ?definitionOrImageURI ?property ?value . }"+
 					"\nWHERE{";
 			if(isImage)
@@ -3426,7 +3453,7 @@ public class VOCBENCH extends SKOSXL {
 			query += "\n?definitionOrImageURI ?property ?value ." +
 					"\n}" +
 					"\nORDER BY ?definitionOrImageURI";
-			
+			//@formatter:on
 			
 			Element conceptElem = XMLHelp.newElement(dataElement, "concept");
 			RDFXMLHelp.addRDFNode(conceptElem, conceptURI);
@@ -3675,6 +3702,7 @@ public class VOCBENCH extends SKOSXL {
 		}
 	}
 
+	//@formatter:off
 	/*public Response getConceptImageDefinition(String conceptName){
 		// It is important to remember that to every concept there can be associated more than one 
 		// definition (with its relative informarmation, such as):
@@ -3789,6 +3817,7 @@ public class VOCBENCH extends SKOSXL {
 		
 		return response;
 	}*/
+	//@formatter:on
 	
 	public Response getStatsA(String schemeUri) {
 		SKOSXLModel skosxlModel = getSKOSXLModel();
@@ -3834,12 +3863,14 @@ public class VOCBENCH extends SKOSXL {
 			// Number of languages available (= language tag occurs at least once);
 			// Number of terms available in each language;
 			// used a SPARQL 1.1 query
+			//@formatter:off
 			queryString = "SELECT ?form" + 
 					"\nWHERE {" + 
 					"\n{?s <" + PREFLABEL + "> ?label}" + 
 					"\nUNION" + 
 					"\n{?s <" + ALTLABEL + "> ?label}" +
 					"\n" + "	?label <" + LITERALFORM + "> ?form\n" + "}";
+			//@formatter:on
 			query = (TupleQuery) skosxlModel.createQuery(QueryLanguage.SPARQL, queryString);
 			results = query.evaluate(true);
 			int termsNumber = 0;
@@ -3969,10 +4000,12 @@ public class VOCBENCH extends SKOSXL {
 
 			// Numbers of concepts with multiple parentage;
 			//used a SPARQL 1.1 query
+			//@formatter:off
 			queryString = "SELECT (COUNT (distinct ?concept) as ?count) " + "\nWHERE { " + 
 					"\n ?concept <"+ BROADER + "> ?c1 ."+
 					"\n ?concept <"+ BROADER + "> ?c2 ."+
 					"\n FILTER(?c1 != ?c2) . }";
+			//@formatter:on
 			query = (TupleQuery) skosxlModel.createQuery(QueryLanguage.SPARQL, queryString);
 			results = query.evaluate(true);
 			tuple = results.next();
@@ -3987,10 +4020,12 @@ public class VOCBENCH extends SKOSXL {
 			// Numbers of concepts bottom level (leaves of the graph).
 			//used a SPARQL 1.1 query
 			//get all the leaves of the graph, because they are important for the depth of hierarchy
+			//@formatter:off
 			queryString = "SELECT distinct ?concept " + "\nWHERE { " + 
 					"\n ?concept <"+ BROADER+"> ?c1 ."+
 					"\n FILTER NOT EXISTS {?c2 <"+ BROADER+"> ?concept  } ."+
 					"\n }";
+			//@formatter:on
 			query = (TupleQuery) skosxlModel.createQuery(QueryLanguage.SPARQL, queryString);
 			results = query.evaluate(true);
 			List <String>leafConceptsList = new ArrayList<String>();
@@ -4120,12 +4155,14 @@ public class VOCBENCH extends SKOSXL {
 			
 			// Numbers of C-C relations (i.e. relations of the type "hasPest")
 			//used a SPARQL 1.1 query
+			//@formatter:off
 			query = "SELECT distinct ?p " + 
 					"\nWHERE { " + 
 					"\n ?p <" + DOMAIN + "> <" + CONCEPT_CLASS + "> ."+
 					"\n ?p <" + RANGE + "> <" + CONCEPT_CLASS + "> ."+
 					//"\n FILTER REGEX(str(?p) , \"^"+STARTURIFORSTATSFILTER+"\")\n" + 
 					"\n }";
+			//@formatter:on
 			tupleQuery = skosxlModel.createTupleQuery(query);
 			iter = tupleQuery.evaluate(true);
 			
@@ -4151,10 +4188,12 @@ public class VOCBENCH extends SKOSXL {
 						"\nWHERE{" +
 						"\n?conceptSubj <"+propCC.getURI()+"> ?concepObj ." +
 						"\n}";*/
+				//@formatter:off
 				query = "SELECT?conceptSubj ?concepObj "+
 						"\nWHERE{" +
 						"\n?conceptSubj <"+propCC.getURI()+"> ?concepObj ." +
 						"\n}";
+				//@formatter:on
 				
 				tupleQuery = skosxlModel.createTupleQuery(query);
 				TupleBindingsIterator tupleIter = tupleQuery.evaluate(true);
@@ -4173,12 +4212,14 @@ public class VOCBENCH extends SKOSXL {
 
 			
 			// Numbers of T-T relations;
+			//@formatter:off
 			query = "SELECT distinct ?p " + 
 					"\nWHERE { " + 
 					"\n ?p <" + DOMAIN + "> <" + LABEL_CLASS + "> ."+
 					"\n ?p <" + RANGE + "> <" + LABEL_CLASS + "> ."+
 					//"\n FILTER REGEX(str(?p) , \"^"+STARTURIFORSTATSFILTER+"\")\n" + 
 					"\n }";
+			//@formatter:on
 			tupleQuery = skosxlModel.createTupleQuery(query);
 			iter = tupleQuery.evaluate(true);
 			
@@ -4196,10 +4237,12 @@ public class VOCBENCH extends SKOSXL {
 
 			// Numbers of T-T relationships (= pairs of terms linked by each relation);
 			for(ARTURIResource propTT : propertyTTList){
+				//@formatter:off
 				query = "SELECT ?termSubj ?termObj "+
 						"\nWHERE{" +
 						"\n?termSubj <"+propTT.getURI()+"> ?termObj ." +
 						"\n}";
+				//@formatter:on
 				tupleQuery = skosxlModel.createTupleQuery(query);
 				TupleBindingsIterator tupleIter = tupleQuery.evaluate(true);
 				int count = 0;
@@ -4216,11 +4259,13 @@ public class VOCBENCH extends SKOSXL {
 			}
 
 			// Numbers of attributes of concepts;
+			//@formatter:off
 			query = "SELECT ?prop"+
 					"\nWHERE{"+
 					"\n?prop <"+TYPE+"> <"+DATATYPEPROPERTY+"> ." + 
 					"\n?prop <"+DOMAIN+"> <"+CONCEPT_CLASS+"> ."+
 					"\n}";
+			//@formatter:on
 			tupleQuery = skosxlModel.createTupleQuery(query);
 			TupleBindingsIterator tupleIter = tupleQuery.evaluate(true);
 			Map<String, String> attrConceptNumberMap = new HashMap<String, String>();
@@ -4232,7 +4277,7 @@ public class VOCBENCH extends SKOSXL {
 			}
 			tupleIter.close();
 			
-			
+			//@formatter:off
 			query = "SELECT ?prop (COUNT (?prop) AS ?count)"+
 					"\nWHERE{"+
 					"\n?prop <"+TYPE+"> <"+DATATYPEPROPERTY+"> ." + 
@@ -4240,6 +4285,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n?sub ?prop ?obj ."+
 					"\n}" +
 					"\nGROUP BY ?prop";
+			//@formatter:on
 			tupleQuery = skosxlModel.createTupleQuery(query);
 			tupleIter = tupleQuery.evaluate(true);
 			//List <String>attrConceptNameList = new ArrayList<String>();
@@ -4265,12 +4311,14 @@ public class VOCBENCH extends SKOSXL {
 			
 			
 			// Numbers of attributes of terms.
+			//@formatter:off
 			query = "SELECT ?prop"+
 					"\nWHERE{"+
 					"\n?prop <"+TYPE+"> <"+DATATYPEPROPERTY+"> ." + 
 					"\n?prop <"+DOMAIN+"> <"+LABEL_CLASS+"> ." +
 					//"\n FILTER REGEX(str(?prop) , \"^"+STARTURIFORSTATSFILTER+"\")\n" + 
 					"\n}";
+			//@formatter:on
 			tupleQuery = skosxlModel.createTupleQuery(query);
 			tupleIter = tupleQuery.evaluate(true);
 			Map<String, String> attrTermNumberMap = new HashMap<String, String>();
@@ -4283,7 +4331,7 @@ public class VOCBENCH extends SKOSXL {
 			}
 			tupleIter.close();
 			
-			
+			//@formatter:off
 			query = "SELECT ?prop (COUNT (?prop) AS ?count)"+
 					"\nWHERE{"+
 					"\n?prop <"+TYPE+"> <"+DATATYPEPROPERTY+"> ." + 
@@ -4292,6 +4340,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n?sub ?prop ?obj . "+
 					"\n}"+
 					"\nGROUP BY ?prop";
+			//@formatter:on
 			tupleQuery = skosxlModel.createTupleQuery(query);
 			tupleIter = tupleQuery.evaluate(true);
 			while(tupleIter.streamOpen()){
@@ -4340,7 +4389,7 @@ public class VOCBENCH extends SKOSXL {
 		String query = "";
 		
 		try {
-			
+			//@formatter:off
 			query = "PREFIX luc: <"+LUCENEIMPORT+">" +
 					"\nINSERT DATA {" +
 					"\nluc:moleculeSize luc:setParam \"1\" ."+
@@ -4348,16 +4397,19 @@ public class VOCBENCH extends SKOSXL {
 					"\nluc:include luc:setParam \"centre\" . "+
 					"\nluc:index luc:setParam \"literals\" . "+
 					"\n}";
+			//@formatter:on
 			//execute this query
 			Update insertDataQuery = model.createUpdateQuery(QueryLanguage.SPARQL, query);
 			insertDataQuery.evaluate(true);
 			
 			// prepare a query to create the index 
 			// the name of the index is luc:vocbench
+			//@formatter:off
 			query = "PREFIX luc: <"+LUCENEIMPORT+">" + 
 					"\nINSERT DATA { " + 
 					"\n<"+LUCENEINDEX+"> luc:createIndex \"true\" . " + 
 					"\n}";
+			//@formatter:on
 			//execute this query
 			Update insertDataQuery2 = model.createUpdateQuery(QueryLanguage.SPARQL, query);
 			insertDataQuery2.evaluate(true);
@@ -4405,11 +4457,12 @@ public class VOCBENCH extends SKOSXL {
 		Element dataElement = response.getDataElement();
 		SKOSXLModel model = getSKOSXLModel();
 		try {
+			//@formatter:off
 			String query = 	"PREFIX luc: <"+LUCENEIMPORT+">" + 
 							"\nINSERT DATA { " +
 							"\n<"+LUCENEINDEX+"> luc:updateIndex _:b1 . " +
 							"\n}";
-			
+			//@formatter:on
 			Update insertDataQuery = model.createUpdateQuery(QueryLanguage.SPARQL, query);
 			insertDataQuery.evaluate(true);
 			
@@ -4465,6 +4518,7 @@ public class VOCBENCH extends SKOSXL {
 			ARTResource[] graphs = getUserNamedGraphs();
 			//do the search using just a SPARQL query
 			
+			//@formatter:off
 			String query = "SELECT DISTINCT ?conceptURI ";
 			//String query = "CONSTRUCT { ?conceptURI ?propLabel ?label . }";
 					
@@ -4680,6 +4734,7 @@ public class VOCBENCH extends SKOSXL {
 			
 			query += "\n}"+
 					"\nORDER BY ?conceptURI";
+			//@formatter:on
 			
 			//System.out.println("query : "+query);
 			logger.debug("query = "+query); // DEBUG
@@ -4800,6 +4855,7 @@ public class VOCBENCH extends SKOSXL {
 			//ARTResource[] graphs = getUserNamedGraphs();
 			//do the search using just a SPARQL query
 			
+			//@formatter:off
 			String query = "SELECT DISTINCT ?label ";
 					
 			query +="\nWHERE { ";
@@ -4896,6 +4952,7 @@ public class VOCBENCH extends SKOSXL {
 			}
 			
 			query += "\n}";
+			//@formatter:on
 			
 			//System.out.println("query : "+query);
 			logger.debug("query = "+query); // DEBUG
@@ -5033,7 +5090,7 @@ public class VOCBENCH extends SKOSXL {
 		
 		SKOSXLModel skosxlModel = getSKOSXLModel();
 		List<ARTStatementIterator> iterList = new ArrayList<ARTStatementIterator>();
-		
+		//@formatter:off
 		//Prepare a SPARQL query to obtain the information to export regarding the selected concept
 		//CONSTRUCT
 		/*String query = "CONSTRUCT{" +
@@ -5149,7 +5206,9 @@ public class VOCBENCH extends SKOSXL {
 		query+=	"\n}"+
 				"\n}"+
 				"\n}";*/
+		//@formatter:on
 		
+		//@formatter:off
 		String query="CONSTRUCT{" +
 				"\n?conceptURI <"+TYPE+"> <"+CONCEPT_CLASS+"> ." + 
 				"\n?conceptURI ?genericProp ?genericValue ." +
@@ -5208,7 +5267,7 @@ public class VOCBENCH extends SKOSXL {
 				"\n?xlabelForRelatedConcept <"+LITERALFORM+"> ?labelForRelatedConcept ."+
 				"\n}" ; 
 		}
-				
+		//@formatter:on		
 		query+="\n}";
 		
 		logger.debug("query = "+query); // DEBUG
@@ -5236,6 +5295,7 @@ public class VOCBENCH extends SKOSXL {
 				//conceptUri = skosxlModel.expandQName(concept);
 				listOfConcept.add(skosxlModel.expandQName(concept));
 			} else{
+				//@formatter:off
 				query ="SELECT DISTINCT ?conceptURI"+
 						"\nWHERE{"+
 						"\n?conceptURI <"+TYPE+"> <"+CONCEPT_CLASS+"> ." ;
@@ -5252,6 +5312,7 @@ public class VOCBENCH extends SKOSXL {
 							"\n{ ?conceptURI <"+ALTLABEL+"> ?xlabel . }  ";
 				}
 				query +="\n}";
+				//@formatter:on
 				
 				TupleQuery tupleQueryTemp = skosxlModel.createTupleQuery(query);
 				TupleBindingsIterator it = tupleQueryTemp.evaluate(true);
@@ -5270,6 +5331,7 @@ public class VOCBENCH extends SKOSXL {
 				Iterator<String> conceptIter = listOfConcept.iterator();
 				while(conceptIter.hasNext()){
 					String conceptUri = conceptIter.next();
+					//@formatter:off
 					query = "SELECT DISTINCT ?narrowerConcept" +
 							"\nWHERE{" +
 							"{<"+conceptUri+"> <"+NARROWER+"> ?narrowerConcept}" +
@@ -5279,7 +5341,7 @@ public class VOCBENCH extends SKOSXL {
 					if(useScheme){
 						query +="\n?narrowerConcept <"+INSCHEME+"> <"+scheme+"> .";
 					}
-					
+					//@formatter:on
 					TupleQuery tupleQuery = skosxlModel.createTupleQuery(query);
 					TupleBindingsIterator tupleIter = tupleQuery.evaluate(true);
 					List<String> narrowerList = new ArrayList<String>();
@@ -5318,6 +5380,7 @@ public class VOCBENCH extends SKOSXL {
 		if(!useConcept && !useTermcode && !useScheme){
 			
 			return null;
+			//@formatter:off
 			/*
 			//export all the triples in the repository (there is no way using a CONSTRUCT to esport the info
 			// regarding graphs)
@@ -5328,8 +5391,10 @@ public class VOCBENCH extends SKOSXL {
 					"\n?subj ?pred ?obj . " +
 					"\n}";
 			*/
+			//@formatter:on
 		}
 		else{ //one of the filter is set, so proceede accordingly
+			//@formatter:off
 			query = "CONSTRUCT {" +
 					"\n?conceptURI <"+TYPE+"> <"+CONCEPT_CLASS+"> ." + 
 					"\n?conceptURI ?genericProp ?genericValue ." +
@@ -5404,6 +5469,7 @@ public class VOCBENCH extends SKOSXL {
 					"\n}";
 			
 			query+="\n}";
+			//@formatter:on
 		}
 		
 		logger.debug("query = "+query); // DEBUG
@@ -5863,6 +5929,7 @@ public class VOCBENCH extends SKOSXL {
 		// and then return an XML element for the responce
 		String conceptUri = concept.getURI();
 		
+		//@formatter:off
 		String query = "CONSTRUCT{" +
 				"\n<"+conceptUri+"> <"+HASSTATUS+"> ?statusConcept . "+
 				"\n<"+conceptUri+"> <"+CREATED+"> ?createdConcept . "+
@@ -5968,7 +6035,7 @@ public class VOCBENCH extends SKOSXL {
 				"\nOPTIONAL{ ?altXLabel <"+HASSTATUS+"> ?statusAltXLabel . }" +
 				"\n}"+
 				"\n}";
-		
+		//@formatter:on
 		logger.debug("query = "+query); // DEBUG
 		
 		GraphQuery graphQuery = skosxlModel.createGraphQuery(query);
@@ -6266,6 +6333,7 @@ public class VOCBENCH extends SKOSXL {
 		return generateURI("img", Collections.<String, ARTNode> emptyMap());
 	}
 	
+	//@formatter:off
 	//functions to generate URI. These function will be moved inside ST in a future release
 	
 	//moved to SKOS.java
@@ -6404,4 +6472,5 @@ public class VOCBENCH extends SKOSXL {
 			return artURIResource;
 		}
 	}*/
+	//@formatter:on
 }
